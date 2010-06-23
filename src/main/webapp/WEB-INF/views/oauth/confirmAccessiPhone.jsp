@@ -1,9 +1,7 @@
-<html
-    xmlns:jsp="http://java.sun.com/JSP/Page"
-    xmlns:c="http://java.sun.com/jstl/core_rt" 
-    xmlns:authz="http://www.springframework.org/security/tags"
-    xmlns:spring="http://www.springframework.org/tags">
-  <jsp:directive.page contentType="text/html;charset=UTF-8" />  
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="authz" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<html xmlns:jsp="http://java.sun.com/JSP/Page">
 
   <head>
      <title>Authorization</title>

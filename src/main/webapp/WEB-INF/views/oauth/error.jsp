@@ -1,7 +1,3 @@
-<%@ page import="org.springframework.security.core.AuthenticationException" %>
-<%@ page import="org.springframework.security.oauth.consumer.OAuthConsumerProcessingFilter" %>
-<%@ page import="java.io.PrintWriter" %>
-<%@ page import="java.io.StringWriter" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
         
 <c:if test="${!empty sessionScope.OAUTH_FAILURE_KEY}">

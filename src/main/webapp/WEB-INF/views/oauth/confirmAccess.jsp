@@ -1,8 +1,7 @@
-<div xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:c="http://java.sun.com/jstl/core_rt" xmlns:authz="http://www.springframework.org/security/tags"
-      xmlns:spring="http://www.springframework.org/tags">
-
-    <page:page id="title" title="Authorize">
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="authz" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<div>
   <c:if test="${!empty sessionScope.SPRING_SECURITY_LAST_EXCEPTION}">
     <div class="error">
       <h2>Woops!</h2>
@@ -29,5 +28,4 @@
       <input name="authorize" value="Authorize" type="submit"/>
     </form>
     
-    </page:page>
 </div>
