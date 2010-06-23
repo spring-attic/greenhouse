@@ -68,7 +68,6 @@ public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenS
         OAuthConsumerToken accessToken = null;
         if(accessTokens.size() > 0) {
             accessToken = accessTokens.get(0);
-            System.out.println("***************GOT ME AN ACCESS TOKEN FROM THE DB!!!   " + accessToken.getValue());
         }
         
         return accessToken;
