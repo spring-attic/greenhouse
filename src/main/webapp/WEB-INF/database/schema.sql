@@ -10,20 +10,27 @@ create table User (id identity,
 					username varchar(15) unique,
 					primary key (id));
 
-create table App (id identity,
+create table Consumer (consumerKey varchar not null,
 					name varchar not null unique, 
-					ownerId bigint not null,
 					description varchar not null,
 					website varchar not null unique,
 					callbackUrl varchar,
-					consumerKey varchar not null unique,
 					secret varchar not null,
-					primary key (id),
+					ownerId bigint not null,
+					primary key (consumerKey),
 					foreign key (ownerId) references User(id));
 					
-create table UserApp (userId bigint not null,
-					appId bigint not null,
-					token varchar not null unique,
-					primary key (userId, appId),
+create table UserAuthorizedConsumer (userId bigint not null,
+					consumerKey varchar not null,
+					accessToken varchar not null unique,
+					primary key (userId, consumerKey),
 					foreign key (userId) references User(id),
-					foreign key (appId) references App(id));
+					foreign key (consumerKey) references Consumer(consumerKey));
+					
+create table OAuthToken (tokenValue varchar not null unique,
+					consumerKey varchar not null,
+					secret varchar not null,
+					verifier varchar not null,
+					callbackUrl varchar,
+					primary key (tokenValue),
+					foreign key (consumerKey) references Consumer(consumerKey));
