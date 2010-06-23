@@ -28,6 +28,6 @@
 		<beans:constructor-arg ref="jdbcTemplate" />
 	</beans:bean>
 	
-	<beans:import resource="security-oauth.xml" />
+	<beans:import resource="security-oauth-provider.xml" />
 		
 </beans:beans>
