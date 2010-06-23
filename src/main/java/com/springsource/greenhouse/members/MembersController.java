@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/members/*")
 public class MembersController {
 
-	@RequestMapping(value="/{id}", headers="Accept=application/json")
-	public @ResponseBody Member memberData(@PathVariable String id) {
-		return getMember(id);
+	@RequestMapping(value="/@self", headers="Accept=application/json")
+	public @ResponseBody Member memberData() {
+		return null;
 	}
 
 	@RequestMapping("/{id}")
