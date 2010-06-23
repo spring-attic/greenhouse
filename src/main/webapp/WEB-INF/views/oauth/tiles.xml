@@ -5,8 +5,8 @@
 
 <tiles-definitions>
 
-	<definition name="oauth/confirmAccess" extends="page">
-		<put-attribute name="content" value="/WEB-INF/tiles/oauth/confirmAccess.jsp" />
+	<definition name="oauth/confirmAccess" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/oauth/confirmAccess.jsp" />
 	</definition>
 	
 	<definition name="oauth/confirmAccessiPhone" template="/WEB-INF/views/oauth/confirmAccessiPhone.jsp" />
