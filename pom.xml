@@ -14,7 +14,7 @@
 		<org.aspectj-version>1.6.8</org.aspectj-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
 	</properties>
-	<dependencies>	
+	<dependencies>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -25,14 +25,14 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				 </exclusion>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework-version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -47,8 +47,8 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				 </exclusion>
-			</exclusions>						
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -59,22 +59,22 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				 </exclusion>
-			</exclusions>						
-        </dependency>
-	    <dependency>
-	      <groupId>org.codehaus.spring-security-oauth</groupId>
-	      <artifactId>spring-security-oauth</artifactId>
-	      <version>3.16.SS3</version>
-	    </dependency>        
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.spring-security-oauth</groupId>
+			<artifactId>spring-security-oauth</artifactId>
+			<version>3.16.SS3</version>
+		</dependency>
 
 		<!-- @Inject -->
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
-		</dependency>				
-		
+		</dependency>
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -125,7 +125,7 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-	
+
 		<!-- Apache Tiles -->
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
@@ -136,10 +136,10 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging-api</artifactId>
-				 </exclusion>
-			</exclusions>			
+				</exclusion>
+			</exclusions>
 		</dependency>
-				
+
 		<!-- JSR 303 with Hibernate Validator -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -151,7 +151,7 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.0.2.GA</version>
 		</dependency>
-				
+
 		<!--  Joda Time -->
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -163,7 +163,7 @@
 			<artifactId>joda-time-jsptags</artifactId>
 			<version>1.0.2</version>
 			<scope>runtime</scope>
-		</dependency>		
+		</dependency>
 
 		<!-- Jackson JSON Mapper -->
 		<dependency>
@@ -171,7 +171,7 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.5.3</version>
 		</dependency>
-		
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -185,7 +185,7 @@
 			<version>${org.springframework-version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
@@ -193,37 +193,49 @@
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
 			<url>http://maven.springframework.org/snapshot</url>
-			<releases><enabled>false</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 		<!-- For developing against latest Spring milestones -->
-        <repository>
+		<repository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
 			<url>http://maven.springframework.org/milestone</url>
-			<snapshots><enabled>false</enabled></snapshots>
-		</repository>		
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 		<!-- For Hibernate Validator -->
 		<repository>
 			<id>org.jboss.repository.releases</id>
-			<name>JBoss Maven Release Repository</name>			
+			<name>JBoss Maven Release Repository</name>
 			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
-			<snapshots><enabled>false</enabled></snapshots>			
-		</repository>		
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 		<!-- For Rome -->
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
 			<name>Java.net Repository for Maven</name>
 			<url>http://download.java.net/maven/2/</url>
-			<snapshots><enabled>false</enabled></snapshots>			
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<!-- Maven Central -->
 		<repository>
 			<id>org.maven.central</id>
 			<name>Maven Central Repository</name>
 			<url>http://repo1.maven.org/maven2</url>
-			<snapshots><enabled>false</enabled></snapshots>
-		</repository>		
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<build>
 		<plugins>
@@ -252,7 +264,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.0-beta-1</version>
-			</plugin>						
+			</plugin>
 		</plugins>
 	</build>
 </project>
