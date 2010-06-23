@@ -30,7 +30,7 @@
 		<beans:constructor-arg ref="jdbcTemplate" />
 	</beans:bean>           
 
-	<beans:bean id="tokenServices" class="com.springsource.greenhouse.oauth.GreenhouseTokenServices">
+	<beans:bean id="tokenServices" class="com.springsource.greenhouse.oauth.GreenhouseOAuthProviderTokenServices">
 		<beans:constructor-arg ref="jdbcTemplate" />	
 	</beans:bean>
 	
