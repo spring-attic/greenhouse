@@ -72,7 +72,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 					holder.setConsumerKey(rs.getString("consumerKey"));
 					holder.setSecret(rs.getString("secret"));
 					holder.setCallbackUrl(rs.getString("callbackUrl"));
-					holder.setTimestamp(rs.getTimestamp("updateTimestamp").getTime());
+					holder.setTimestamp(rs.getLong("updateTimestamp"));
 					holder.setVerifier(rs.getString("verifier"));
 					return holder;
 				}

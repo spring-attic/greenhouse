@@ -8,6 +8,7 @@
 		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
 	
 	<!-- Root Context: defines shared resources accessible to all other web components -->
+	<context:annotation-config />
 	
 	<!-- Local, JDBC-based TransactionManager -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

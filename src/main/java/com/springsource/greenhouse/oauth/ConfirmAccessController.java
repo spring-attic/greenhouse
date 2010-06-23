@@ -38,7 +38,7 @@ public class ConfirmAccessController {
 		model.addAttribute("consumer", consumer);
 
 		if (userAgent.contains("iPhone")) {
-			return "oauth/confirmAccessiPhone";
+			return "outh/confirmAccessiPhone";
 		} else {
 			return "oauth/confirmAccess";
 		}
