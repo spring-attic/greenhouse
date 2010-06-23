@@ -12,7 +12,9 @@
   </consumer>
   
   <beans:bean id="consumerTokenServicesFactory" 
-        class="com.springsource.greenhouse.oauth.GreenhouseOAuthConsumerTokenServicesFactory"/>
+        class="com.springsource.greenhouse.oauth.GreenhouseOAuthConsumerTokenServicesFactory">
+     <beans:constructor-arg ref="jdbcTemplate" />        
+  </beans:bean>
 
   <resource-details-service id="resourceDetails">
     <resource id="twitter"

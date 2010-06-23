@@ -14,18 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SocialNetworksController {
   @RequestMapping("/twitter")
   public void authorizeTwitter(HttpServletRequest request, Authentication authentication) {
-      // TODO: Seems that I shouldn't have to do this here. Should be a filter/aspect that does this for me.
-      
-      String oauthToken = request.getParameter("oauth_token");
-      String oauthVerifier = request.getParameter("oauth_verifier");
-      OAuthConsumerToken token = new OAuthConsumerToken();
-      token.setAccessToken(true);
-      token.setResourceId("twitter");
-      token.setValue(oauthToken);
-      token.setSecret(oauthVerifier);
-      
-      tokenServicesFactory.getTokenServices(authentication, request).storeToken("twitter", token);
-      
+      String oauthToken = request.getParameter("oauth_token");      
+      if(oauthToken != null && !oauthToken.isEmpty()) {
+          String oauthVerifier = request.getParameter("oauth_verifier");
+          OAuthConsumerToken token = new OAuthConsumerToken();
+          token.setAccessToken(true);
+          token.setResourceId("twitter");
+          token.setValue(oauthToken);
+          token.setSecret(oauthVerifier);          
+          tokenServicesFactory.getTokenServices(authentication, request).storeToken("twitter", token);
+      }
   }
   
   @Autowired

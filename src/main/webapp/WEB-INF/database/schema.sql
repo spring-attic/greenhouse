@@ -34,3 +34,10 @@ create table OAuthToken (tokenValue varchar not null unique,
 					callbackUrl varchar,
 					primary key (tokenValue),
 					foreign key (consumerKey) references Consumer(consumerKey));
+					
+create table OAuthConsumerToken (userId bigint not null,
+                    resource varchar not null,
+                    tokenValue varchar not null,
+                    secret varchar not null,
+                    primary key (userId, resource),
+                    foreign key (userId) references User(id));
