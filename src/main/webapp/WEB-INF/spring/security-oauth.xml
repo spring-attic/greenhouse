@@ -5,6 +5,14 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                         http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
 
+	<!-- Steps of OAuth
+	
+		POST /oauth/request_token?oauth_consumer_key&oauth_callback (returns unauthorized token)
+		GET /oauth/confirm_access?oauth_token (returns secure authorization form)
+		(User) POST /oauth/authorize?requestToken&callbackUrl (authorizes oauth token, redirect to callbackUrl)
+		POST /oauth/access_token?oauth_consumer_key&oauth_token&oauth_verifier
+	 -->
+	 
 	<!-- OAuth Provider Configuration -->	
 	<provider consumer-details-service-ref="consumerDetails"
 		token-services-ref="tokenServices"
