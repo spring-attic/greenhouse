@@ -1,0 +1,1 @@
+<p>Your Greenhouse profile is now linked with your Twitter profile.</p>

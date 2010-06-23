@@ -11,12 +11,12 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenImpl;
 import org.springframework.security.oauth.provider.token.RandomValueProviderTokenServices;
 
 // we need to think through persistence here... are we sure we want to be storing oauth tokens and access tokens in the same table?
-public class GreenhouseTokenServices extends RandomValueProviderTokenServices {
+public class GreenhouseOAuthProviderTokenServices extends RandomValueProviderTokenServices {
 	
 	private JdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public GreenhouseTokenServices(JdbcTemplate jdbcTemplate) {
+	public GreenhouseOAuthProviderTokenServices(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
