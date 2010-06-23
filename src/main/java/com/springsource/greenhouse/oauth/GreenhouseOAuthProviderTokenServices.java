@@ -11,13 +11,13 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.codec.Base64;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenImpl;
@@ -35,7 +35,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	public GreenhouseOAuthProviderTokenServices(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
-
+	
 	public OAuthProviderToken createUnauthorizedRequestToken(String consumerKey, String callbackUrl) throws AuthenticationException {
 	    OAuthProviderTokenImpl token = new OAuthProviderTokenImpl();
 	    token.setValue(UUID.randomUUID().toString());
@@ -95,8 +95,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	private String generateSecret() {
 	    byte[] secretBytes = new byte[80];
 	    random.nextBytes(secretBytes);
-	    String secret = new String(Base64.encodeBase64(secretBytes));
+	    String secret = new String(Base64.encode(secretBytes));
 	    return secret;
 	}
-
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://spring-security-oauth.codehaus.org/3.0"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
+
+  <consumer resource-details-service-ref="resourceDetails" 
+                  oauth-failure-page="/oauthError"
+                  token-services-factory-ref="consumerTokenServicesFactory">
+    <url pattern="/networks/twitter" resources="twitter"/>
+  </consumer>
+  
+  <beans:bean id="consumerTokenServicesFactory" 
+        class="com.springsource.greenhouse.oauth.GreenhouseOAuthConsumerTokenServicesFactory"/>
+
+  <resource-details-service id="resourceDetails">
+    <resource id="twitter"
+                    key="QLM4vX68dBRLG1sE7zSJiA"
+                    secret="4Ah41ojlwi249GCI1UU5oKolmNDpjLLXgPKwGfVs0"                    
+                    request-token-url="https://twitter.com/oauth/request_token"
+                    user-authorization-url="https://twitter.com/oauth/authorize"
+                    access-token-url="https://twitter.com/oauth/access_token"/>
+  </resource-details-service>
+
+</beans:beans>
+
+
