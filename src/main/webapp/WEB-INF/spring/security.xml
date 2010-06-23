@@ -30,5 +30,4 @@
 	
 	<beans:import resource="security-oauth-provider.xml" />
     <beans:import resource="security-oauth-consumer.xml" />
-		
 </beans:beans>

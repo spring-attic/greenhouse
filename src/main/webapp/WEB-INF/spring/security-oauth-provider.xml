@@ -30,16 +30,10 @@
 		<constructor-arg ref="jdbcTemplate" />
 	</bean>           
 
-<<<<<<< HEAD
-	<bean id="tokenServices" class="com.springsource.greenhouse.oauth.GreenhouseOAuthProviderTokenServices">
-		<constructor-arg ref="jdbcTemplate" />	
-	</bean>
-=======
-	<beans:bean id="tokenServices" class="com.springsource.greenhouse.oauth.GreenhouseOAuthProviderTokenServices">
-		<beans:constructor-arg ref="jdbcTemplate" />	
-	</beans:bean>
->>>>>>> d0051b4ee0f4c6494647d0d5be966ba6a8e2c7f1
-	
+    <bean id="tokenServices" class="com.springsource.greenhouse.oauth.GreenhouseOAuthProviderTokenServices">
+        <constructor-arg ref="jdbcTemplate" />  
+    </bean>
+    
 	<!-- Temporary hack to inject an iPhone/custom-scheme friendly redirect processor.
 		 This can go away once Spring Security's DefaultRedirectStrategy can handle non-HTTP(S) schemes. -->
 	<bean class="com.springsource.greenhouse.oauth.RedirectStrategyPostProcessor" />
