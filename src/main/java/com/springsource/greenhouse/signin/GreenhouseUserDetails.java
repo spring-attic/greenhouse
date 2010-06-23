@@ -9,19 +9,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 public final class GreenhouseUserDetails implements UserDetails {
 	
+	private final Long entityId;
+	
 	private final String username;
 	
 	private final String password;
 	
-	private final String id;
-	
 	private final String firstName;
 	
-	public GreenhouseUserDetails(String username, String password, String id, String firstName) {
+	public GreenhouseUserDetails(Long entityId, String username, String password, String firstName) {
+		this.entityId = entityId;
 		this.username = username;
 		this.password = password;
-		this.id = id;
 		this.firstName = firstName;
+	}
+	
+	public Long getEntityId() {
+		return entityId;
 	}
 	
 	public String getUsername() {
@@ -32,14 +36,18 @@ public final class GreenhouseUserDetails implements UserDetails {
 		return password;
 	}
 
-	public String getId() {
-		return id;
-	}
-	
 	public String getFirstName() {
 		return firstName;
 	}
 
+	public String getProfileKey() {
+		if (username != null && username.length() == 0) {
+			return username;
+		} else {
+			return entityId.toString();
+		}
+	}
+	
 	public Collection<GrantedAuthority> getAuthorities() {
 		return Collections.emptySet();
 	}

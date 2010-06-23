@@ -15,16 +15,16 @@ public class MembersController {
 		return null;
 	}
 
-	@RequestMapping("/{id}")
-	public String memberView(@PathVariable String id, Model model) {
-		model.addAttribute(getMember(id));
+	@RequestMapping("/{profileKey}")
+	public String memberView(@PathVariable String profileKey, Model model) {
+		model.addAttribute(getMember(profileKey));
 		return "members/view";
 	}
 
 	// internal helpers
 	
-	private Member getMember(String id) {
-		Long entityId = getEntityId(id);
+	private Member getMember(String profileKey) {
+		Long entityId = getEntityId(profileKey);
 		return entityId != null ? new Member() : new Member();
 	}
 	

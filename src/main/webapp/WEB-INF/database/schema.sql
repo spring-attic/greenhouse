@@ -20,7 +20,7 @@ create table Consumer (consumerKey varchar not null,
 					primary key (consumerKey),
 					foreign key (ownerId) references User(id));
 					
-create table UserAuthorizedConsumer (userId bigint not null,
+create table AuthorizedConsumer (userId bigint not null,
 					consumerKey varchar not null,
 					accessToken varchar not null unique,
 					primary key (userId, consumerKey),
@@ -30,11 +30,14 @@ create table UserAuthorizedConsumer (userId bigint not null,
 create table OAuthToken (tokenValue varchar not null unique,
 					consumerKey varchar not null,
 					secret varchar not null,
-					verifier varchar not null,
 					callbackUrl varchar,
+					updateTimestamp bigint not null,
+					verifier varchar,
+					userId bigint, 
 					primary key (tokenValue),
-					foreign key (consumerKey) references Consumer(consumerKey));
-					
+					foreign key (consumerKey) references Consumer(consumerKey),
+					foreign key (userId) references User(id));
+
 create table OAuthConsumerToken (userId bigint not null,
                     resource varchar not null,
                     tokenValue varchar not null,

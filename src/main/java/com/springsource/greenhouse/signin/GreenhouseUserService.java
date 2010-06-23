@@ -61,16 +61,7 @@ public class GreenhouseUserService implements UserDetailsService {
 
 		public GreenhouseUserDetails mapRow(ResultSet rs, int rowNum)
 				throws SQLException {
-			return new GreenhouseUserDetails(username, rs.getString("password"), getId(rs), rs.getString("firstName"));
-		}
-		
-		private String getId(ResultSet rs) throws SQLException {
-			String username = rs.getString("username");
-			if (username != null && username.length() == 0) {
-				return username;
-			} else {
-				return rs.getString("id");
-			}
+			return new GreenhouseUserDetails(rs.getLong("id"), username, rs.getString("password"), rs.getString("firstName"));
 		}
 		
 	}
