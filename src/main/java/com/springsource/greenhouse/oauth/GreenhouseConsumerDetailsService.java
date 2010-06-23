@@ -31,7 +31,6 @@ public class GreenhouseConsumerDetailsService implements ConsumerDetailsService 
 				consumerDetails.setConsumerName(rs.getString("name"));
 				consumerDetails.setConsumerKey(key);
 				consumerDetails.setSignatureSecret(new SharedConsumerSecret(rs.getString("secret")));
-				consumerDetails.setRequiredToObtainAuthenticatedToken(true);
 		        consumerDetails.setResourceName("Your Greenhouse Profile");
 		        consumerDetails.setResourceDescription("Everything Greenhouse knows about you.");
 		        consumerDetails.setAuthorities(new ArrayList<GrantedAuthority>());        
