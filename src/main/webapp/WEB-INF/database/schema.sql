@@ -24,8 +24,6 @@ create table App (id identity,
 create table UserApp (userId bigint not null,
 					appId bigint not null,
 					token varchar not null unique,
-					access boolean not null,
-					created timestamp not null,
 					primary key (userId, appId),
 					foreign key (userId) references User(id),
 					foreign key (appId) references App(id));
