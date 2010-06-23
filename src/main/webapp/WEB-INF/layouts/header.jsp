@@ -6,8 +6,8 @@
 		<a href="<c:url value="/signin" />">Sign In</a>
 	</c:if>
 	<c:if test="${currentUser != null}">
-		<s:url var="profileUrl" value="/members/{id}">
-			<s:param name="id" value="${currentUser.id}" />
+		<s:url var="profileUrl" value="/members/{profileKey}">
+			<s:param name="id" value="${currentUser.profileKey}" />
 		</s:url>
 		<a href="${profileUrl}">${currentUser.firstName}</a> | <a href="<c:url value="/signout" />">Sign Out</a>
 	</c:if>
