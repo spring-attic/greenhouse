@@ -6,7 +6,7 @@
                         http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
 
   <consumer resource-details-service-ref="resourceDetails" 
-                  oauth-failure-page="/static/oauth_error.jsp"
+                  oauth-failure-page="/oauthError"
                   token-services-factory-ref="consumerTokenServicesFactory">
     <url pattern="/networks/twitter" resources="twitter"/>
   </consumer>
