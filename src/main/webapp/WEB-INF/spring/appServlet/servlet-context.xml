@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd		
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+		 
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+	<!-- Configures the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources />
+
+	<!-- Interceptors that execute common control logic across multiple requests -->
+	<interceptors>
+		<beans:bean class="com.springsource.greenhouse.signin.CurrentUserHandlerInterceptor" />
+	</interceptors>
+		
+	<!-- Maps view names to Tiles Definitions -->
+	<beans:bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
+	</beans:bean>
+		
+	<!-- Initializes the Apache Tiles CompositeView system -->
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<beans:property name="definitions">
+			<beans:value>
+				/WEB-INF/layouts/tiles.xml,
+				/WEB-INF/views/**/tiles.xml
+			</beans:value>
+		</beans:property>
+		<beans:property name="checkRefresh" value="true" />
+	</beans:bean>
+	
+	<!-- Configures transaction management around @Transactional components -->
+	<tx:annotation-driven />
+
+	<!-- Imports the application controllers that process client requests -->
+	<beans:import resource="controllers.xml" />
+	
+</beans:beans>

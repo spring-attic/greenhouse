@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://spring-security-oauth.codehaus.org/3.0"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
+
+	<!-- OAuth Provider Configuration -->	
+	<provider consumer-details-service-ref="consumerDetails"
+		token-services-ref="tokenServices"
+		request-token-url="/oauth/request_token"
+		authenticate-token-url="/oauth/authorize"
+		authentication-failed-url="/oauth/confirm_access"
+		access-token-url="/oauth/access_token"
+		require10a="false" />
+
+	<beans:bean class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
+		<beans:property name="realmName" value="Greenhouse" />
+	</beans:bean>
+			
+	<beans:bean id="consumerDetails" class="com.springsource.greenhouse.oauth.GreenhouseConsumerDetailsService">
+		<beans:constructor-arg ref="jdbcTemplate" />
+	</beans:bean>           
+
+	<beans:bean id="tokenServices" class="com.springsource.greenhouse.oauth.GreenhouseTokenServices">
+		<beans:constructor-arg ref="jdbcTemplate" />	
+	</beans:bean>
+	
+	<!-- Temporary hack to inject an iPhone/custom-scheme friendly redirect processor.
+		 This can go away once Spring Security's DefaultRedirectStrategy can handle non-HTTP(S) schemes. -->
+	<beans:bean class="com.springsource.greenhouse.oauth.RedirectStrategyPostProcessor" />
+	
+</beans:beans>
+
+

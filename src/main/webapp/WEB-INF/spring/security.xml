@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<http use-expressions="true">
+		<!-- Authentication policy -->
+    	<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="authenticationFailureHandler" />
+		<logout logout-url="/signout" />
+		<!-- Authorization policy -->
+		<intercept-url pattern="/" access="permitAll" />
+		<intercept-url pattern="/signup" access="permitAll" />
+		<intercept-url pattern="/signin" filters="none" method="GET" />
+		<intercept-url pattern="/resources/**" access="permitAll" />
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="userService" />
+	</authentication-manager>
+
+	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.GreenhouseAuthenticationFailureHandler" />
+
+	<beans:bean id="userService" class="com.springsource.greenhouse.signin.GreenhouseUserService">
+		<beans:constructor-arg ref="jdbcTemplate" />
+	</beans:bean>
+	
+	<beans:import resource="security-oauth.xml" />
+		
+</beans:beans>

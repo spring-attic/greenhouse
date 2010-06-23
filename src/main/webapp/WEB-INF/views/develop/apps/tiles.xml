@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="develop/apps/register" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/develop/apps/register.jsp" />
+	</definition>
+
+</tiles-definitions>
