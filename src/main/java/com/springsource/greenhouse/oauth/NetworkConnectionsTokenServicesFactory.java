@@ -10,18 +10,22 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServi
 
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
-public class GreenhouseOAuthConsumerTokenServicesFactory implements OAuthConsumerTokenServicesFactory {
+public class NetworkConnectionsTokenServicesFactory implements OAuthConsumerTokenServicesFactory {
   
   private JdbcTemplate jdbcTemplate;
+
+  public JdbcTemplate getJdbcTemplate() {
+      return jdbcTemplate;
+  }
     
   @Inject
-  public GreenhouseOAuthConsumerTokenServicesFactory(JdbcTemplate jdbcTemplate) {
+  public NetworkConnectionsTokenServicesFactory(JdbcTemplate jdbcTemplate) {
       this.jdbcTemplate = jdbcTemplate;
   }
     
   public OAuthConsumerTokenServices getTokenServices(Authentication authentication,
                                                      HttpServletRequest request) {
       GreenhouseUserDetails userDetails = (GreenhouseUserDetails) authentication.getPrincipal();
-      return new GreenhouseOAuthConsumerTokenServices(jdbcTemplate, request.getSession(true), userDetails.getUsername());
+      return new NetworkConnectionsTokenServices(jdbcTemplate, request.getSession(true), userDetails.getEntityId());
   }
 }

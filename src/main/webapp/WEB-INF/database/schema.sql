@@ -38,9 +38,9 @@ create table OAuthToken (tokenValue varchar not null unique,
 					foreign key (consumerKey) references Consumer(consumerKey),
 					foreign key (userId) references User(id));
 
-create table OAuthConsumerToken (userId bigint not null,
-                    resource varchar not null,
-                    tokenValue varchar not null,
+create table NetworkConnection (userId bigint not null,
+                    network varchar not null,
+                    accessToken varchar not null,
                     secret varchar not null,
-                    primary key (userId, resource),
+                    primary key (userId, network),
                     foreign key (userId) references User(id));

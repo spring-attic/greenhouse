@@ -8,11 +8,11 @@
   <consumer resource-details-service-ref="resourceDetails" 
                   oauth-failure-page="/oauthError"
                   token-services-factory-ref="consumerTokenServicesFactory">
-    <url pattern="/networks/twitter" resources="twitter"/>
+    <url pattern="/settings/twitterconnect/authorize" resources="twitter"/>
   </consumer>
   
   <beans:bean id="consumerTokenServicesFactory" 
-        class="com.springsource.greenhouse.oauth.GreenhouseOAuthConsumerTokenServicesFactory">
+        class="com.springsource.greenhouse.oauth.NetworkConnectionsTokenServicesFactory">
      <beans:constructor-arg ref="jdbcTemplate" />        
   </beans:bean>
 

@@ -12,16 +12,25 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 
-import com.springsource.greenhouse.utils.EmailUtils;
-
-public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenServices {
-    private String userName;
+public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServices {
+    static final String INSERT_TOKEN_SQL = "insert into NetworkConnection (userId, network, accessToken, secret) values (?, ?, ?, ?)";
+    static final String SELECT_TOKEN_SQL = "select network, accessToken, secret from NetworkConnection where userId=? and network=?";
+    
+    private Long userId;
     private JdbcTemplate jdbcTemplate;
     
-    public GreenhouseOAuthConsumerTokenServices(JdbcTemplate jdbcTemplate, HttpSession session, String userName) {
+    public NetworkConnectionsTokenServices(JdbcTemplate jdbcTemplate, HttpSession session, Long userId) {
         super(session);
-        this.userName = userName;
+        this.userId = userId;
         this.jdbcTemplate = jdbcTemplate;
+    }
+    
+    public Long getUserId() {
+        return userId;
+    }
+    
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
     }
     
     @Override
@@ -30,7 +39,7 @@ public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenS
         
         OAuthConsumerToken token = super.getToken(resourceId);
         if(token == null) {
-            token = getTokenFromDatabase(resourceId, userName);
+            token = getTokenFromDatabase(resourceId);
             if(token != null) {
                 super.storeToken(resourceId, token);
             }
@@ -43,23 +52,22 @@ public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenS
         
         // Don't bother storing request tokens in the DB...session-storage is fine
         if(token.isAccessToken()) {
-            storeTokenInDB(userName, token);
+            storeTokenInDB(token);
         }
         
         super.storeToken(resourceId, token);
     }
     
-    private OAuthConsumerToken getTokenFromDatabase(String resourceId, String userName) {
-        String userId = getUserId(userName);
-        
-        List<OAuthConsumerToken> accessTokens = jdbcTemplate.query("select resource, tokenValue, secret from OAuthConsumerToken where userId=? and resource=?", 
+    private OAuthConsumerToken getTokenFromDatabase(String resourceId) {        
+        List<OAuthConsumerToken> accessTokens = jdbcTemplate.query(
+            SELECT_TOKEN_SQL, 
             new RowMapper<OAuthConsumerToken>() {
                 public OAuthConsumerToken mapRow(ResultSet rs, int rowNum)
                         throws SQLException {
                     OAuthConsumerToken token = new OAuthConsumerToken();
                     token.setAccessToken(true); // we don't persist anything else
-                    token.setResourceId(rs.getString("resource"));
-                    token.setValue(rs.getString("tokenValue"));
+                    token.setResourceId(rs.getString("network"));
+                    token.setValue(rs.getString("accessToken"));
                     token.setSecret(rs.getString("secret"));
                     return token;
                 }
@@ -73,16 +81,8 @@ public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenS
         return accessToken;
     }
     
-    private void storeTokenInDB(String userName, OAuthConsumerToken token) {
-        jdbcTemplate.update("insert into OAuthConsumerToken (userId, resource, tokenValue, secret) values (?, ?, ?, ?)", 
-                getUserId(userName), token.getResourceId(), token.getValue(), token.getSecret());
-    }
-    
-    private String getUserId(String userName) {
-        if(EmailUtils.isEmail(userName)) {
-            return jdbcTemplate.queryForObject("select id from User where email = ?", String.class, userName);
-        } else {
-            return jdbcTemplate.queryForObject("select id from User where username = ?", String.class, userName);
-        }
+    private void storeTokenInDB(OAuthConsumerToken token) {
+        jdbcTemplate.update(INSERT_TOKEN_SQL, 
+                userId, token.getResourceId(), token.getValue(), token.getSecret());
     }
 }

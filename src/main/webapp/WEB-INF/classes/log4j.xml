@@ -29,12 +29,12 @@
 	</logger>
 
 	<logger name="org.springframework.web">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 	

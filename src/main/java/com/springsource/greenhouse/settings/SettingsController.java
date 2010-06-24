@@ -18,5 +18,4 @@ public class SettingsController {
 	public void removeAppLink(@PathVariable String id) {
 		
 	}
-	
 }

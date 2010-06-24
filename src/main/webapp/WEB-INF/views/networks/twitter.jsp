@@ -1,1 +1,0 @@
-<p>Your Greenhouse profile is now linked with your Twitter profile. (Not really...but it will be once Craig implements persistent token storage...stay tuned.)</p>
