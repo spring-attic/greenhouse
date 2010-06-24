@@ -48,7 +48,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	}
 
 	public void authorizeRequestToken(String requestToken, String verifier, Authentication authentication) throws AuthenticationException {
-		Long userId = ((GreenhouseUserDetails) authentication.getDetails()).getEntityId();
+		Long userId = ((GreenhouseUserDetails) authentication.getPrincipal()).getEntityId();
 		jdbcTemplate.update("update OAuthToken set verifier = ?, timestamp = ?, userId = ? where tokenValue = ?", verifier, System.currentTimeMillis(), userId, requestToken);
 	}
 	
