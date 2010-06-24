@@ -15,7 +15,7 @@ public class SocialNetworksController {
   @RequestMapping("/twitter")
   public void authorizeTwitter(HttpServletRequest request, Authentication authentication) {
       String oauthToken = request.getParameter("oauth_token");      
-      if(oauthToken != null && !oauthToken.isEmpty()) {
+      if(oauthToken != null && oauthToken.length() > 0) {
           String oauthVerifier = request.getParameter("oauth_verifier");
           OAuthConsumerToken token = new OAuthConsumerToken();
           token.setAccessToken(true);
