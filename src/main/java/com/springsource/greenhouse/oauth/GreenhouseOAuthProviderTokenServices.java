@@ -27,7 +27,9 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenServices {
 	
-	private Random random = new SecureRandom();
+	static final String INSERT_TOKEN_URL = "insert into OAuthToken (tokenValue, consumerKey, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)";
+
+    private Random random = new SecureRandom();
 
 	private JdbcTemplate jdbcTemplate;
 	
@@ -43,13 +45,13 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	    token.setSecret(generateSecret());	    
 	    token.setCallbackUrl(callbackUrl);
 	    token.setTimestamp(System.currentTimeMillis());
-	    jdbcTemplate.update("insert into OAuthToken (tokenValue, consumerKey, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)", token.getValue(), token.getConsumerKey(), token.getSecret(), token.getCallbackUrl(), token.getTimestamp());
+	    jdbcTemplate.update(INSERT_TOKEN_URL, token.getValue(), token.getConsumerKey(), token.getSecret(), token.getCallbackUrl(), token.getTimestamp());
 		return token;
 	}
 
 	public void authorizeRequestToken(String requestToken, String verifier, Authentication authentication) throws AuthenticationException {
 		Long userId = ((GreenhouseUserDetails) authentication.getPrincipal()).getEntityId();
-		jdbcTemplate.update("update OAuthToken set verifier = ?, timestamp = ?, userId = ? where tokenValue = ?", verifier, System.currentTimeMillis(), userId, requestToken);
+		jdbcTemplate.update("update OAuthToken set verifier = ?, updateTimestamp = ?, userId = ? where tokenValue = ?", verifier, System.currentTimeMillis(), userId, requestToken);
 	}
 	
 	public OAuthAccessProviderToken createAccessToken(String requestToken) throws AuthenticationException {
