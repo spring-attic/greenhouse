@@ -17,7 +17,9 @@ import com.springsource.greenhouse.utils.EmailUtils;
 
 public class GreenhouseUserService implements UserDetailsService {
 
-	private JdbcTemplate jdbcTemplate;
+	static final String SELECT_USER_BY_USERNAME = "select id, firstName, username, password from User where username = ?";
+    static final String SELECT_USER_BY_EMAIL = "select id, firstName, username, password from User where email = ?";
+    private JdbcTemplate jdbcTemplate;
 	
 	@Inject
 	public GreenhouseUserService(JdbcTemplate jdbcTemplate) {
@@ -37,7 +39,7 @@ public class GreenhouseUserService implements UserDetailsService {
 	
 	private GreenhouseUserDetails findByEmail(String email) {
 		try {
-			return jdbcTemplate.queryForObject("select id, firstName, username, password from User where email = ?", new UserDetailsMapper(email), email);
+			return jdbcTemplate.queryForObject(SELECT_USER_BY_EMAIL, new UserDetailsMapper(email), email);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}		
@@ -45,13 +47,13 @@ public class GreenhouseUserService implements UserDetailsService {
 	
 	private GreenhouseUserDetails findByUsername(String username) {
 		try {
-			return jdbcTemplate.queryForObject("select id, firstName, username, password from User where username = ?", new UserDetailsMapper(username), username);
+			return jdbcTemplate.queryForObject(SELECT_USER_BY_USERNAME, new UserDetailsMapper(username), username);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}		
 	}
 	
-	private static class UserDetailsMapper implements RowMapper<GreenhouseUserDetails> {
+	static class UserDetailsMapper implements RowMapper<GreenhouseUserDetails> {
 
 		private String username;
 		

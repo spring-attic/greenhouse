@@ -20,6 +20,7 @@ public class NetworkConnectionsTokenServicesTest {
     private OAuthConsumerToken twitterToken;
     private OAuthConsumerToken linkedInToken;
     private NetworkConnectionsTokenServices tokenServices;
+    private MockHttpSession session;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -27,7 +28,7 @@ public class NetworkConnectionsTokenServicesTest {
         twitterToken = new OAuthConsumerToken();
         linkedInToken = new OAuthConsumerToken();
         
-        MockHttpSession session = new MockHttpSession();      
+        session = new MockHttpSession();      
         session.setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", twitterToken);
 
         jdbcTemplate = mock(JdbcTemplate.class);
@@ -55,6 +56,36 @@ public class NetworkConnectionsTokenServicesTest {
     
     @Test
     public void shouldReturnTokenForKnownResourceInDB() {
+        assertNull(session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn"));
         assertSame(linkedInToken, tokenServices.getToken("linkedIn"));
+        assertSame(linkedInToken, session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn"));
+    }
+    
+    @Test
+    public void shouldStoreRequestToken() {
+        OAuthConsumerToken requestToken = new OAuthConsumerToken();
+        requestToken.setAccessToken(false);
+        requestToken.setResourceId("myspace");
+        requestToken.setSecret("someSecret");
+        requestToken.setValue("someToken");
+        
+        tokenServices.storeToken("myspace", requestToken);
+        
+        assertSame(requestToken, session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));        
+        verifyZeroInteractions(jdbcTemplate);//.update(NetworkConnectionsTokenServices.INSERT_TOKEN_SQL, "myspace", "someToken", "someSecret");
+    }
+    
+    @Test
+    public void shouldStoreAccessToken() {
+        OAuthConsumerToken requestToken = new OAuthConsumerToken();
+        requestToken.setAccessToken(true);
+        requestToken.setResourceId("myspace");
+        requestToken.setSecret("someSecret");
+        requestToken.setValue("someToken");
+        
+        tokenServices.storeToken("myspace", requestToken);
+        
+        assertSame(requestToken, session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));        
+        verify(jdbcTemplate).update(NetworkConnectionsTokenServices.INSERT_TOKEN_SQL, 1234L, "myspace", "someToken", "someSecret");
     }
 }
