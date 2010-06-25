@@ -5,7 +5,14 @@
 <form:form id="signup" cssClass="cleanform" method="post" modelAttribute="signupForm">
 	<div class="formInfo">
   		<h3>Sign up</h3>
-  		<p>Please complete the following form to create a Greenhouse account.</p>
+  		<s:bind path="*">
+  			<c:if test="${status.error}">
+		  		<p>Unable to sign up.  Please complete all fields.</p>
+  			</c:if>
+  			<c:if test="${!status.error}">
+		  		<p>Please complete the following form to create a Greenhouse account.</p>
+  			</c:if>  			
+  		</s:bind>
 	</div>
   	<fieldset>
   		<form:label path="firstName">First Name</form:label>
@@ -17,7 +24,7 @@
   		<form:label path="email">Email</form:label>
   		<form:input path="email" />
   		
-  		<form:label path="password">Password</form:label>
+  		<form:label path="password">Password (at least 6 characters)</form:label>
   		<form:password path="password" />
   		
   		<form:label path="confirmPassword">Confirm Password</form:label>
