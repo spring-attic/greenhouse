@@ -1,10 +1,13 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<form:form id="signup" method="post" modelAttribute="signupForm">
+<form:form id="signup" cssClass="cleanform" method="post" modelAttribute="signupForm">
+	<div class="formInfo">
+  		<h3>Sign up</h3>
+  		<p>Please complete the following form to create a Greenhouse account.</p>
+	</div>
   	<fieldset>
-  		<legend>Sign up</legend>
-  		
   		<form:label path="firstName">First Name</form:label>
   		<form:input path="firstName" />
   		
@@ -18,9 +21,8 @@
   		<form:password path="password" />
   		
   		<form:label path="confirmPassword">Confirm Password</form:label>
-  		<form:password path="confirmPassword" />
-  		
-		<input type="submit" value="Sign up">
-		
+  		<form:password path="confirmPassword" />	
 	</fieldset>
+	<input type="submit" value="Sign up">
+		
 </form:form>
