@@ -27,15 +27,6 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenServices {
 	
-	static final String SELECT_ACCESS_TOKEN_DETAILS_SQL = "select userId, consumerKey from AuthorizedConsumer where accessToken = ?";
-    static final String SELECT_REQUEST_TOKEN_SQL = "select consumerKey, secret, callbackUrl, updateTimestamp, verifier from OAuthToken where tokenValue = ?";
-    static final String SELECT_REQUEST_TOKEN_COUNT_SQL = "select count(*) from OAuthToken where tokenValue = ?";
-    static final String SELECT_REQUEST_TOKEN_DETAILS_SQL = "select consumerKey, userId from OAuthToken where tokenValue = ?";
-    static final String INSERT_ACCESS_TOKEN_SQL = "insert into AuthorizedConsumer (userId, consumerKey, accessToken) values (?, ?, ?)";
-    static final String DELETE_REQUEST_TOKEN_SQL = "delete from OAuthToken where tokenValue = ?";
-    static final String AUTHORIZE_TOKEN_SQL = "update OAuthToken set verifier = ?, updateTimestamp = ?, userId = ? where tokenValue = ?";
-    static final String INSERT_REQUEST_TOKEN_SQL = "insert into OAuthToken (tokenValue, consumerKey, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)";
-
     private Random random = new SecureRandom();
 
 	private JdbcTemplate jdbcTemplate;
@@ -58,14 +49,15 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 
 	public void authorizeRequestToken(String requestToken, String verifier, Authentication authentication) throws AuthenticationException {
 		Long userId = ((GreenhouseUserDetails) authentication.getPrincipal()).getEntityId();
-		jdbcTemplate.update(AUTHORIZE_TOKEN_SQL, verifier, System.currentTimeMillis(), userId, requestToken);
+		jdbcTemplate.update(AUTHORIZE_REQUEST_TOKEN_SQL, verifier, System.currentTimeMillis(), userId, requestToken);
 	}
 	
 	public OAuthAccessProviderToken createAccessToken(String requestToken) throws AuthenticationException {
-		Map<String, Object> row = jdbcTemplate.queryForMap(SELECT_REQUEST_TOKEN_DETAILS_SQL, requestToken);	
+		Map<String, Object> row = jdbcTemplate.queryForMap("select consumerKey, userId from OAuthToken where tokenValue = ?", requestToken);	
 		jdbcTemplate.update(DELETE_REQUEST_TOKEN_SQL, requestToken);
 		OAuthProviderTokenImpl token = new OAuthProviderTokenImpl();
 	    token.setValue(UUID.randomUUID().toString());
+	    token.setAccessToken(true);
 	    token.setConsumerKey((String) row.get("consumerKey"));
 	    token.setSecret(generateSecret());
 	    jdbcTemplate.update(INSERT_ACCESS_TOKEN_SQL, row.get("userId"), token.getConsumerKey(), token.getValue());
@@ -73,7 +65,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	}	
 	
 	public OAuthProviderToken getToken(final String token) throws AuthenticationException {
-		if (jdbcTemplate.queryForInt(SELECT_REQUEST_TOKEN_COUNT_SQL, token) == 1) {
+		if (jdbcTemplate.queryForInt("select count(*) from OAuthToken where tokenValue = ?", token) == 1) {
 			return jdbcTemplate.queryForObject(SELECT_REQUEST_TOKEN_SQL, new RowMapper<OAuthProviderToken>() {
 				public OAuthProviderToken mapRow(ResultSet rs, int rowNum) throws SQLException {
 					OAuthProviderTokenImpl holder = new OAuthProviderTokenImpl();
@@ -87,7 +79,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 				}
 			}, token);
 		} else {
-			return jdbcTemplate.queryForObject(SELECT_ACCESS_TOKEN_DETAILS_SQL, new RowMapper<OAuthProviderToken>() {
+			return jdbcTemplate.queryForObject(SELECT_ACCESS_TOKEN_SQL, new RowMapper<OAuthProviderToken>() {
 				public OAuthProviderToken mapRow(ResultSet rs, int rowNum) throws SQLException {
 					OAuthProviderTokenImpl holder = new OAuthProviderTokenImpl();
 					holder.setValue(token);
@@ -107,4 +99,13 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	    String secret = new String(Base64.encode(secretBytes));
 	    return secret;
 	}
+	
+    private static final String INSERT_REQUEST_TOKEN_SQL = "insert into OAuthToken (tokenValue, consumerKey, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)";
+    private static final String AUTHORIZE_REQUEST_TOKEN_SQL = "update OAuthToken set verifier = ?, updateTimestamp = ?, userId = ? where tokenValue = ?";
+    private static final String DELETE_REQUEST_TOKEN_SQL = "delete from OAuthToken where tokenValue = ?";
+    private static final String INSERT_ACCESS_TOKEN_SQL = "insert into AuthorizedConsumer (userId, consumerKey, accessToken) values (?, ?, ?)";
+
+    private static final String SELECT_REQUEST_TOKEN_SQL = "select consumerKey, secret, callbackUrl, updateTimestamp, verifier from OAuthToken where tokenValue = ?";
+	private static final String SELECT_ACCESS_TOKEN_SQL = "select userId, consumerKey from AuthorizedConsumer where accessToken = ?";
+
 }

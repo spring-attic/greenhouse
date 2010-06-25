@@ -1,7 +1,3 @@
-drop table UserApp if exists;
-drop table App if exists;
-drop table User if exists;
-
 create table User (id identity,
 					firstName varchar not null, 
 					lastName varchar not null,

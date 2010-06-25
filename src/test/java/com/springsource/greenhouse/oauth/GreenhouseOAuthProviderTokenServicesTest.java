@@ -1,101 +1,85 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
-import org.springframework.security.oauth.provider.token.OAuthProviderTokenImpl;
+import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 public class GreenhouseOAuthProviderTokenServicesTest {
-    private JdbcTemplate jdbcTemplate;
+	
     private GreenhouseOAuthProviderTokenServices tokenServices;
     
-	@Test
-	public void shouldCreateAnUnauthorizedTokenAndInsertItIntoDatabase() {
-	    prepareTokenServices();
-		
-		OAuthProviderTokenImpl token = (OAuthProviderTokenImpl) tokenServices.createUnauthorizedRequestToken("consumerKey", "http://callbackurl");
-		assertEquals("http://callbackurl", token.getCallbackUrl());
-		assertEquals("consumerKey", token.getConsumerKey());
-		
-		verify(jdbcTemplate).update(GreenhouseOAuthProviderTokenServices.INSERT_REQUEST_TOKEN_SQL, 
-		        token.getValue(), token.getConsumerKey(), token.getSecret(), token.getCallbackUrl(), token.getTimestamp());
-	}
-	
-	@Test
-	public void shouldAuthorizeToken() {
-        prepareTokenServices();
-        
-        Authentication authentication = mock(Authentication.class);
-        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1234L, "someuser", "password", "Chuck");
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        
-        tokenServices.authorizeRequestToken("someToken", "someVerifier", authentication);
-        
-        verify(jdbcTemplate).update(eq(GreenhouseOAuthProviderTokenServices.AUTHORIZE_TOKEN_SQL),
-                eq("someVerifier"), any(Long.class), eq(1234L), eq("someToken"));
-	}
-	
-	@Test
-	public void shouldCreateAccessToken() {
-        prepareTokenServices();
-        
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("consumerKey", "someKey");
-        resultMap.put("userId", 1234L);
-        when(jdbcTemplate.queryForMap(GreenhouseOAuthProviderTokenServices.SELECT_REQUEST_TOKEN_DETAILS_SQL, "requestToken")).thenReturn(resultMap);
-        
-        OAuthAccessProviderToken token = tokenServices.createAccessToken("requestToken");
-        
-        assertNotNull(token.getValue());
-        assertEquals("someKey", token.getConsumerKey());
-        assertNotNull(token.getSecret());
-        verify(jdbcTemplate).update(GreenhouseOAuthProviderTokenServices.DELETE_REQUEST_TOKEN_SQL, "requestToken");
-        verify(jdbcTemplate).update(GreenhouseOAuthProviderTokenServices.INSERT_ACCESS_TOKEN_SQL, 1234L, "someKey", token.getValue());
-	}
-	
-    @Test
-    @SuppressWarnings("unchecked")
-	public void shouldGetRequestToken() {
-	    prepareTokenServices();
-	    
-	    OAuthProviderTokenImpl expectedRequestToken = new OAuthProviderTokenImpl();
-	    
-	    when(jdbcTemplate.queryForInt(GreenhouseOAuthProviderTokenServices.SELECT_REQUEST_TOKEN_COUNT_SQL, "requestToken")).thenReturn(1);
-	    when(jdbcTemplate.queryForObject(eq(GreenhouseOAuthProviderTokenServices.SELECT_REQUEST_TOKEN_SQL), any(RowMapper.class), eq("requestToken"))).
-	            thenReturn(expectedRequestToken);
-	    
-	    assertSame(expectedRequestToken, tokenServices.getToken("requestToken"));
-	    assertNotSame(expectedRequestToken, tokenServices.getToken("accessToken"));
-	}
+    @Before
+    public void setup() {
+    	EmbeddedDatabaseFactory dbFactory = new EmbeddedDatabaseFactory();
+    	dbFactory.setDatabaseType(EmbeddedDatabaseType.H2);
+    	ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+    	populator.addScript(new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
+    	dbFactory.setDatabasePopulator(populator);
+    	tokenServices = new GreenhouseOAuthProviderTokenServices(new JdbcTemplate(dbFactory.getDatabase()));
+    }
     
     @Test
-    @SuppressWarnings("unchecked")
-    public void shouldGetAccessToken() {
-        prepareTokenServices();
-        
-        OAuthProviderTokenImpl expectedAccessToken = new OAuthProviderTokenImpl();
-        
-        when(jdbcTemplate.queryForInt(GreenhouseOAuthProviderTokenServices.SELECT_REQUEST_TOKEN_COUNT_SQL, "accessToken")).thenReturn(0);
-        when(jdbcTemplate.queryForObject(eq(GreenhouseOAuthProviderTokenServices.SELECT_ACCESS_TOKEN_DETAILS_SQL), any(RowMapper.class), eq("accessToken"))).
-                thenReturn(expectedAccessToken);
-        
-        assertSame(expectedAccessToken, tokenServices.getToken("accessToken"));
-        assertNotSame(expectedAccessToken, tokenServices.getToken("requestToken"));
+    public void testOAuthInteraction() {
+    	OAuthProviderToken token = tokenServices.createUnauthorizedRequestToken("a08318eb478a1ee31f69a55276f3af64", "x-com-springsource-greenhouse://oauth-response");
+    	assertFalse(token.isAccessToken());
+    	assertNotNull(token.getValue());
+    	assertEquals("a08318eb478a1ee31f69a55276f3af64", token.getConsumerKey());
+    	assertNotNull(token.getSecret());
+    	assertEquals("x-com-springsource-greenhouse://oauth-response", token.getCallbackUrl());
+    	assertNull(token.getVerifier());
+    	
+    	OAuthProviderToken token2 = tokenServices.getToken(token.getValue());
+    	assertEquals(token.isAccessToken(), token2.isAccessToken());
+    	assertEquals(token.getValue(), token2.getValue());
+    	assertEquals(token.getConsumerKey(), token2.getConsumerKey());
+    	assertEquals(token.getSecret(), token2.getSecret());
+    	assertEquals(token.getCallbackUrl(), token2.getCallbackUrl());
+    	assertEquals(token.getVerifier(), token.getVerifier());
+    	
+    	Authentication auth = new TestingAuthenticationToken(new GreenhouseUserDetails(1L, "rclarkson@vmware.com", "rclarkson", "Roy"), "atlanta");
+    	tokenServices.authorizeRequestToken(token.getValue(), "12345", auth);
+
+    	OAuthProviderToken token3 = tokenServices.getToken(token.getValue());
+    	assertEquals(token.isAccessToken(), token3.isAccessToken());
+    	assertEquals(token.getValue(), token3.getValue());
+    	assertEquals(token.getConsumerKey(), token3.getConsumerKey());
+    	assertEquals(token.getSecret(), token3.getSecret());
+    	assertEquals(token.getCallbackUrl(), token3.getCallbackUrl());
+    	assertEquals("12345", token3.getVerifier());
+
+    	OAuthProviderToken accessToken = tokenServices.createAccessToken(token3.getValue());
+    	assertEquals(true, accessToken.isAccessToken());
+    	assertFalse(token.getValue().equals(accessToken.getValue()));
+    	assertEquals(token.getConsumerKey(), accessToken.getConsumerKey());
+    	assertNotNull(accessToken.getSecret());
+    	assertNull(accessToken.getVerifier());
+    	assertNull(accessToken.getCallbackUrl());
+    	
+    	OAuthAccessProviderToken accessToken2 = (OAuthAccessProviderToken) tokenServices.getToken(accessToken.getValue());
+    	assertEquals(accessToken.isAccessToken(), accessToken2.isAccessToken());
+    	assertEquals(accessToken.getValue(), accessToken2.getValue());
+    	assertEquals(accessToken.getConsumerKey(), accessToken2.getConsumerKey());
+    	assertNull(accessToken2.getSecret());
+    	assertNull(accessToken2.getCallbackUrl());
+    	assertNull(accessToken2.getVerifier());
+    	assertNotNull(accessToken2.getUserAuthentication());
+    	assertEquals("doesnt-matter-yet", accessToken2.getUserAuthentication().getPrincipal());
+    	assertEquals("doesnt-matter-yet", accessToken2.getUserAuthentication().getCredentials());
     }
-	
-    private void prepareTokenServices() {
-        jdbcTemplate = mock(JdbcTemplate.class);                
-        tokenServices = new GreenhouseOAuthProviderTokenServices(jdbcTemplate);
-    }
+    
 }
