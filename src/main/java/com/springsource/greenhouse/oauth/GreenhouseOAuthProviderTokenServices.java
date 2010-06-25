@@ -60,6 +60,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	    token.setAccessToken(true);
 	    token.setConsumerKey((String) row.get("consumerKey"));
 	    token.setSecret(generateSecret());
+	    jdbcTemplate.update("delete from AuthorizedConsumer where userId=? and consumerKey=?", row.get("userId"), token.getConsumerKey());	    
 	    jdbcTemplate.update(INSERT_ACCESS_TOKEN_SQL, row.get("userId"), token.getConsumerKey(), token.getValue());
 		return token;
 	}	
