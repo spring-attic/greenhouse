@@ -1,91 +1,111 @@
 package com.springsource.greenhouse.oauth;
 
-import static java.util.Arrays.*;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.mock.web.MockHttpSession;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
+import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
+
+import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 public class NetworkConnectionsTokenServicesTest {
     private JdbcTemplate jdbcTemplate;
-    private OAuthConsumerToken twitterToken;
-    private OAuthConsumerToken linkedInToken;
-    private NetworkConnectionsTokenServices tokenServices;
-    private MockHttpSession session;
+    private NetworkConnectionsTokenServicesFactory tokenServicesFactory;
 
     @Before
-    @SuppressWarnings("unchecked")
-    public void setup() {
-        twitterToken = new OAuthConsumerToken();
-        linkedInToken = new OAuthConsumerToken();
-        
-        session = new MockHttpSession();      
-        session.setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", twitterToken);
+    public void setupDatabase() {
+        EmbeddedDatabaseFactory dbFactory = new EmbeddedDatabaseFactory();
+        dbFactory.setDatabaseType(EmbeddedDatabaseType.H2);
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(new ClassPathResource("NetworkConnectionsTokenServicesTest.sql", getClass()));
+        dbFactory.setDatabasePopulator(populator);
+        jdbcTemplate = new JdbcTemplate(dbFactory.getDatabase());
+        tokenServicesFactory = new NetworkConnectionsTokenServicesFactory(jdbcTemplate);
+    }
 
-        jdbcTemplate = mock(JdbcTemplate.class);
-        List<OAuthConsumerToken> linkedInTokenList = asList(linkedInToken);
-        when(jdbcTemplate.query(eq(NetworkConnectionsTokenServices.SELECT_TOKEN_SQL), any(RowMapper.class), eq(1234L), eq("linkedIn"))).
-                thenReturn(linkedInTokenList);
-        tokenServices = new NetworkConnectionsTokenServices(jdbcTemplate, session, 1234L);
-    }
-        
-    @Test
-    public void shouldCreateNetworkConnectionsTokenServices() {
-        assertSame(jdbcTemplate, tokenServices.getJdbcTemplate());
-        assertEquals(1234L, tokenServices.getUserId().longValue());
-    }
-      
     @Test
     public void shouldReturnNullTokenForUnknownResource() {
+        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
+        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("ohloh"));
     }
-      
+
     @Test
-    public void shouldReturnTokenForKnownResourceInSession() {
-        assertSame(twitterToken, tokenServices.getToken("twitter"));
+    public void shouldReturnNullTokenForUnknownUser() {
+        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(2L, "rclarkson@vmware.com", "atlanta", "Roy");
+        Authentication authentication = new TestingAuthenticationToken(userDetails, "atlanta");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        assertNull(tokenServices.getToken("twitter"));
     }
-    
+
     @Test
     public void shouldReturnTokenForKnownResourceInDB() {
-        assertNull(session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn"));
-        assertSame(linkedInToken, tokenServices.getToken("linkedIn"));
-        assertSame(linkedInToken, session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn"));
+        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
+        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        OAuthConsumerToken token = tokenServices.getToken("twitter");
+        assertNotNull(token);
+        assertEquals("twitter", token.getResourceId());
+        assertEquals("twitterToken", token.getValue());
+        assertEquals("twitterTokenSecret", token.getSecret());
+    }
+
+    @Test
+    public void shouldReturnTokenForKnownResourceInSession() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerToken linkedInToken = new OAuthConsumerToken();
+        request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn", linkedInToken);
+        
+        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
+        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        OAuthConsumerToken token = tokenServices.getToken("linkedIn");
+        assertSame(linkedInToken, token);
     }
     
     @Test
     public void shouldStoreRequestToken() {
-        OAuthConsumerToken requestToken = new OAuthConsumerToken();
-        requestToken.setAccessToken(false);
-        requestToken.setResourceId("myspace");
-        requestToken.setSecret("someSecret");
-        requestToken.setValue("someToken");
-        
-        tokenServices.storeToken("myspace", requestToken);
-        
-        assertSame(requestToken, session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));        
-        verifyZeroInteractions(jdbcTemplate);//.update(NetworkConnectionsTokenServices.INSERT_TOKEN_SQL, "myspace", "someToken", "someSecret");
+      OAuthConsumerToken requestToken = new OAuthConsumerToken();
+      requestToken.setAccessToken(false);
+      requestToken.setResourceId("myspace");
+      requestToken.setSecret("someSecret");
+      requestToken.setValue("someToken"); 
+      MockHttpServletRequest request = new MockHttpServletRequest();
+      GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
+      Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+      OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+      tokenServices.storeToken("myspace", requestToken);      
+      assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
+      assertEquals(0, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='someToken'"));
     }
     
     @Test
     public void shouldStoreAccessToken() {
-        OAuthConsumerToken requestToken = new OAuthConsumerToken();
-        requestToken.setAccessToken(true);
-        requestToken.setResourceId("myspace");
-        requestToken.setSecret("someSecret");
-        requestToken.setValue("someToken");
-        
-        tokenServices.storeToken("myspace", requestToken);
-        
-        assertSame(requestToken, session.getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));        
-        verify(jdbcTemplate).update(NetworkConnectionsTokenServices.INSERT_TOKEN_SQL, 1234L, "myspace", "someToken", "someSecret");
+      OAuthConsumerToken requestToken = new OAuthConsumerToken();
+      requestToken.setAccessToken(true);
+      requestToken.setResourceId("myspace");
+      requestToken.setSecret("someSecret");
+      requestToken.setValue("someToken"); 
+      MockHttpServletRequest request = new MockHttpServletRequest();
+      GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
+      Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+      OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+      tokenServices.storeToken("myspace", requestToken);      
+      assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
+      assertEquals(1, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='someToken'"));
     }
 }
