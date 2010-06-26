@@ -1,3 +1,10 @@
+<h4>Welcome to the Greenhouse!</h4>
+
 <p>
-The Greenhouse is...
+We make it fun to be an application developer.
+</p>
+
+<p>
+We help you connect with fellow developers and take advantage
+of everything the Spring community has to offer.
 </p>

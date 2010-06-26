@@ -13,4 +13,3 @@
 	</c:if>
 </div>
 <h1><a href="<c:url value="/" />">The Greenhouse</a></h1>
-<h2>Spring devs hang here</h2>
