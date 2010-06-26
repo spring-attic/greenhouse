@@ -1,25 +1,34 @@
 package com.springsource.greenhouse.settings;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.flash.FlashMap;
 
 @Controller
 @RequestMapping("/settings")
 public class NetworkConnectionsController {
     
-    @RequestMapping("/twitterconnect")
-    public void showPreAuthorization() {}
+    private OAuthConsumerTokenServicesFactory tokenServicesFactory;
+
+    @Inject
+    public NetworkConnectionsController(OAuthConsumerTokenServicesFactory tokenServicesFactory) {
+		this.tokenServicesFactory = tokenServicesFactory;
+	}
+
+	@RequestMapping(value="/twitter", method=RequestMethod.GET)
+    public void twitterConnectView() {}
     
     @RequestMapping("/twitterconnect/authorize")
-    public void authorizeTwitter(HttpServletRequest request, Authentication authentication) {
+    public String authorizeTwitter(HttpServletRequest request, Authentication authentication) {
         String oauthToken = request.getParameter("oauth_token");      
-        if(oauthToken != null && oauthToken.length() > 0) {
+        if (oauthToken != null && oauthToken.length() > 0) {
             String oauthVerifier = request.getParameter("oauth_verifier");
             OAuthConsumerToken token = new OAuthConsumerToken();
             token.setAccessToken(true);
@@ -28,8 +37,8 @@ public class NetworkConnectionsController {
             token.setSecret(oauthVerifier);          
             tokenServicesFactory.getTokenServices(authentication, request).storeToken("twitter", token);
         }
+        FlashMap.getCurrent(request).put("connectedMessage", "Your Twitter account is now linked to your Greenhouse account!");
+        return "redirect:/settings/twitter";
     }
   
-    @Autowired
-    OAuthConsumerTokenServicesFactory tokenServicesFactory;
 }
