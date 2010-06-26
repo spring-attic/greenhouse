@@ -10,7 +10,7 @@
 	</definition>
    
     <definition name="settings/twitter" extends="standard">
-        <put-attribute name="content" value="/WEB-INF/views/settings/twitterconnect.jsp" />
+        <put-attribute name="content" value="/WEB-INF/views/settings/twitter.jsp" />
     </definition>
 
 </tiles-definitions>
