@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
+import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+
 @Controller
 @RequestMapping("/settings")
 public class NetworkConnectionsController {
@@ -23,9 +25,15 @@ public class NetworkConnectionsController {
 	}
 
 	@RequestMapping(value="/twitter", method=RequestMethod.GET)
-    public void twitterConnectView() {}
+    public String twitterConnectView(Authentication auth) {
+		if (isConnected((GreenhouseUserDetails) auth.getPrincipal())) {
+			return "settings/twitterConnected";
+		} else {
+			return "settings/twitterConnect";
+		}
+	}
     
-    @RequestMapping("/twitterconnect/authorize")
+	@RequestMapping("/twitterconnect/authorize")
     public String authorizeTwitter(HttpServletRequest request, Authentication authentication) {
         String oauthToken = request.getParameter("oauth_token");      
         if (oauthToken != null && oauthToken.length() > 0) {
@@ -36,9 +44,22 @@ public class NetworkConnectionsController {
             token.setValue(oauthToken);
             token.setSecret(oauthVerifier);          
             tokenServicesFactory.getTokenServices(authentication, request).storeToken("twitter", token);
+            FlashMap.getCurrent(request).put("connectedMessage", "Your Twitter account is now linked to your Greenhouse account!");
         }
-        FlashMap.getCurrent(request).put("connectedMessage", "Your Twitter account is now linked to your Greenhouse account!");
         return "redirect:/settings/twitter";
     }
-  
+	
+	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
+    public String disconnectTwitter(Authentication auth) {
+		// TODO
+		return "redirect:/settings/twitter";
+	}
+
+	// internal helpers
+	
+    private boolean isConnected(GreenhouseUserDetails principal) {
+    	// TODO
+		return false;
+	}
+
 }
