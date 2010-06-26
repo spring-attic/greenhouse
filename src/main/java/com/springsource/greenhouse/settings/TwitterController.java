@@ -3,6 +3,7 @@ package com.springsource.greenhouse.settings;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
@@ -15,17 +16,20 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 @Controller
 @RequestMapping("/settings")
-public class NetworkConnectionsController {
+public class TwitterController {
     
     private OAuthConsumerTokenServicesFactory tokenServicesFactory;
 
+    private JdbcTemplate jdbcTemplate;
+    
     @Inject
-    public NetworkConnectionsController(OAuthConsumerTokenServicesFactory tokenServicesFactory) {
+    public TwitterController(OAuthConsumerTokenServicesFactory tokenServicesFactory, JdbcTemplate jdbcTemplate) {
 		this.tokenServicesFactory = tokenServicesFactory;
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@RequestMapping(value="/twitter", method=RequestMethod.GET)
-    public String twitterConnectView(Authentication auth) {
+    public String connectView(Authentication auth) {
 		if (isConnected((GreenhouseUserDetails) auth.getPrincipal())) {
 			return "settings/twitterConnected";
 		} else {
@@ -34,7 +38,7 @@ public class NetworkConnectionsController {
 	}
     
 	@RequestMapping("/twitterconnect/authorize")
-    public String authorizeTwitter(HttpServletRequest request, Authentication authentication) {
+    public String authorize(HttpServletRequest request, Authentication authentication) {
         String oauthToken = request.getParameter("oauth_token");      
         if (oauthToken != null && oauthToken.length() > 0) {
             String oauthVerifier = request.getParameter("oauth_verifier");
@@ -51,15 +55,15 @@ public class NetworkConnectionsController {
 	
 	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
     public String disconnectTwitter(Authentication auth) {
-		// TODO
+		GreenhouseUserDetails principal = (GreenhouseUserDetails) auth.getPrincipal();
+		jdbcTemplate.update("delete from NetworkConnection where userId = ? and network = 'twitter'", principal.getEntityId());
 		return "redirect:/settings/twitter";
 	}
 
 	// internal helpers
 	
     private boolean isConnected(GreenhouseUserDetails principal) {
-    	// TODO
-		return false;
+    	return jdbcTemplate.queryForInt("select count(*) from NetworkConnection where userId = ? and network = 'twitter'", principal.getEntityId()) == 1;
 	}
 
 }
