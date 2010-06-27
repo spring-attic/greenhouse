@@ -9,12 +9,12 @@
 		<put-attribute name="content" value="/WEB-INF/views/settings/settings.jsp" />
 	</definition>
    
-    <definition name="settings/twitterconnect" extends="standard">
+    <definition name="settings/twitterConnect" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/settings/twitterConnect.jsp" />
     </definition>
 
-    <definition name="settings/twitterconnect/authorize" extends="standard">
-        <put-attribute name="content" value="/WEB-INF/views/settings/twitterAuthorized.jsp" />
+    <definition name="settings/twitterConnected" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/settings/twitterConnected.jsp" />
     </definition>
 
 </tiles-definitions>

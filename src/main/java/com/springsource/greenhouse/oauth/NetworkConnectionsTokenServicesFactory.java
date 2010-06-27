@@ -14,10 +14,6 @@ public class NetworkConnectionsTokenServicesFactory implements OAuthConsumerToke
   
   private JdbcTemplate jdbcTemplate;
 
-  public JdbcTemplate getJdbcTemplate() {
-      return jdbcTemplate;
-  }
-    
   @Inject
   public NetworkConnectionsTokenServicesFactory(JdbcTemplate jdbcTemplate) {
       this.jdbcTemplate = jdbcTemplate;

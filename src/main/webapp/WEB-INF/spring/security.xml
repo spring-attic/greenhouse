@@ -24,10 +24,10 @@
 
 	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.GreenhouseAuthenticationFailureHandler" />
 
-	<beans:bean id="userService" class="com.springsource.greenhouse.signin.GreenhouseUserService">
-		<beans:constructor-arg ref="jdbcTemplate" />
-	</beans:bean>
+	<beans:bean id="userService" class="com.springsource.greenhouse.signin.GreenhouseUserService" />
 	
 	<beans:import resource="security-oauth-provider.xml" />
+	
     <beans:import resource="security-oauth-consumer.xml" />
+    
 </beans:beans>
