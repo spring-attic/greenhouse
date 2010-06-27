@@ -12,6 +12,6 @@
 	<context:component-scan base-package="com.springsource.greenhouse" />
 	 
 	<!-- Maps '/signin' requests to the 'signin' view -->
-	<mvc:view-controller path="/signin" />
+	<!-- <mvc:view-controller path="/signin" /> -->
 	
 </beans>

@@ -6,6 +6,8 @@
 <tiles-definitions>
 	
 	<definition name="page" template="/WEB-INF/layouts/page.jsp"/>
+	
+	<definition name="page-iphone" template="/WEB-INF/layouts/page-iphone.jsp"/>
 
 	<definition name="standard" extends="page">
 		<put-attribute name="header" value="/WEB-INF/layouts/header.jsp" />	
