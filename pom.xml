@@ -209,6 +209,11 @@
             <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
+		<dependency>
+ 			<groupId>net.sourceforge.wurfl</groupId>
+ 			<artifactId>wurfl</artifactId>
+ 			<version>1.0.1</version>
+		</dependency>
 
 	</dependencies>
 	<repositories>
