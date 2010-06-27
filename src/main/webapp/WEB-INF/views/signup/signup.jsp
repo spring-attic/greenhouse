@@ -7,10 +7,10 @@
   		<h3>Sign up</h3>
   		<s:bind path="*">
   			<c:if test="${status.error}">
-		  		<p>Unable to sign up.  Please complete all fields.</p>
+		  		<div class="error">Unable to sign up.  Please complete all fields.</div>
   			</c:if>
   			<c:if test="${!status.error}">
-		  		<p>Please complete the following form to create a Greenhouse account.</p>
+		  		<div class="info">Please complete the following form to create a Greenhouse account</div>
   			</c:if>  			
   		</s:bind>
 	</div>

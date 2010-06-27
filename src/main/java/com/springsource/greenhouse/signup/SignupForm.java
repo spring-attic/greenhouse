@@ -2,20 +2,25 @@ package com.springsource.greenhouse.signup;
 
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class SignupForm {
 	
-	@Size(min=1)
+	@NotEmpty
 	private String firstName;
 
-	@Size(min=1)
+	@NotEmpty
 	private String lastName;
 
-	@Size(min=1, max=320)
+	@NotEmpty
+	@Size(max=320)
 	private String email;
 
+	@NotEmpty
 	@Size(min=6)
 	private String password;
 
+	@NotEmpty
 	@Size(min=6)
 	private String confirmPassword;
 
