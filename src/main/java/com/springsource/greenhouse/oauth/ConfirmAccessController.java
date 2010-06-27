@@ -2,6 +2,9 @@ package com.springsource.greenhouse.oauth;
 
 import javax.inject.Inject;
 
+import net.sourceforge.wurfl.core.handlers.AppleHandler;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ConfirmAccessController {
 
+	@Autowired private AppleHandler appleHandler; 
+	
 	private OAuthProviderTokenServices tokenServices;
 
 	private ConsumerDetailsService consumerDetailsService;
@@ -37,7 +42,7 @@ public class ConfirmAccessController {
 		}
 		model.addAttribute("consumer", consumer);
 
-		if (userAgent.contains("iPhone")) {
+		if (appleHandler.canHandle(userAgent)) {
 			return "oauth/confirmAccessiPhone";
 		} else {
 			return "oauth/confirmAccess";
