@@ -28,5 +28,8 @@
 	
 	<!-- Configures Shared Security Layer -->
 	<import resource="security.xml" />
+
+	<!-- Configures Shared WURFL Resources -->
+	<import resource="wurfl-context.xml" />
 		
 </beans>

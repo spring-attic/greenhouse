@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- WURFLModel -->
+	<bean id="wurflModel" class="net.sourceforge.wurfl.core.resource.DefaultWURFLModel" >
+		<constructor-arg index="0">
+			<bean class="net.sourceforge.wurfl.core.resource.SpringXMLResource">
+				<constructor-arg index="0" value="/WEB-INF/wurfl.zip" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<bean class="net.sourceforge.wurfl.core.resource.WURFLResources">
+				<constructor-arg index="0">
+					<list >
+						<bean class="net.sourceforge.wurfl.core.resource.SpringXMLResource">
+							<constructor-arg index="0" value="/WEB-INF/web_browsers_patch.xml" />
+						</bean>
+					</list>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<!-- Handlers, Filters and Matchers -->
+	<bean id="matcherManager" class="net.sourceforge.wurfl.core.handlers.matchers.MatcherManager">
+		<constructor-arg ref="wurflModel" />
+	</bean>
+	
+	<bean id="appleHandler" class="net.sourceforge.wurfl.core.handlers.AppleHandler">
+	</bean>
+
+	<!-- Device -->
+	<bean id="deviceProvider" class="net.sourceforge.wurfl.core.DefaultDeviceProvider">
+		<constructor-arg ref="wurflModel" />
+	</bean>
+
+	<!-- Service -->
+	<bean id="wurflService"	class="net.sourceforge.wurfl.core.DefaultWURFLService">
+		<constructor-arg ref="matcherManager" />
+		<constructor-arg ref="deviceProvider" />
+	</bean>
+	 
+	<!-- WURFL Manager -->
+	<bean id="wurflManager"	class="net.sourceforge.wurfl.core.DefaultWURFLManager">
+		<constructor-arg ref="wurflService" />
+	</bean>
+
+	<!-- WURFL Utils -->
+	<bean id="wurflUtils" class="net.sourceforge.wurfl.core.WURFLUtils">
+		<constructor-arg ref="wurflModel" />
+	</bean>
+
+	<!-- WURFL Holder -->
+	<bean id="wurflHolder" class="net.sourceforge.wurfl.core.DefaultWURFLHolder">
+		<constructor-arg ref="wurflManager" />
+		<constructor-arg ref="wurflUtils" />
+	</bean>
+
+	<!-- Put WURFL Holder in ServletContext -->
+	<bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+		<property name="attributes">
+			<map>
+				<entry key="net.sourceforge.wurfl.core.WURFLHolder" value-ref="wurflHolder" />
+			</map>
+		</property>
+	</bean>
+	
+</beans>
