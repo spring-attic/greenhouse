@@ -12,7 +12,7 @@ public class MembersController {
 
 	@RequestMapping(value="/@self", headers="Accept=application/json")
 	public @ResponseBody Member memberData() {
-		return null;
+		return new Member();
 	}
 
 	@RequestMapping("/{profileKey}")
