@@ -1,11 +1,16 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -19,7 +24,9 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 public class GreenhouseOAuthProviderTokenServicesTest {
 	
     private GreenhouseOAuthProviderTokenServices tokenServices;
-    
+
+	private EmbeddedDatabase db;
+	
     @Before
     public void setup() {
     	EmbeddedDatabaseFactory dbFactory = new EmbeddedDatabaseFactory();
@@ -27,7 +34,13 @@ public class GreenhouseOAuthProviderTokenServicesTest {
     	ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
     	populator.addScript(new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
     	dbFactory.setDatabasePopulator(populator);
-    	tokenServices = new GreenhouseOAuthProviderTokenServices(new JdbcTemplate(dbFactory.getDatabase()));
+    	db = dbFactory.getDatabase();
+    	tokenServices = new GreenhouseOAuthProviderTokenServices(new JdbcTemplate(db));
+    }
+    
+    @After
+    public void destroy() {
+    	db.shutdown();
     }
     
     @Test
@@ -71,7 +84,7 @@ public class GreenhouseOAuthProviderTokenServicesTest {
     	assertEquals(accessToken.isAccessToken(), accessToken2.isAccessToken());
     	assertEquals(accessToken.getValue(), accessToken2.getValue());
     	assertEquals(accessToken.getConsumerKey(), accessToken2.getConsumerKey());
-    	assertNull(accessToken2.getSecret());
+    	assertEquals(accessToken.getSecret(), accessToken2.getSecret());
     	assertNull(accessToken2.getCallbackUrl());
     	assertNull(accessToken2.getVerifier());
     	assertNotNull(accessToken2.getUserAuthentication());
@@ -124,7 +137,7 @@ public class GreenhouseOAuthProviderTokenServicesTest {
         assertEquals(accessToken.isAccessToken(), accessToken2.isAccessToken());
         assertEquals(accessToken.getValue(), accessToken2.getValue());
         assertEquals(accessToken.getConsumerKey(), accessToken2.getConsumerKey());
-        assertNull(accessToken2.getSecret());
+        assertEquals(accessToken.getSecret(), accessToken2.getSecret());
         assertNull(accessToken2.getCallbackUrl());
         assertNull(accessToken2.getVerifier());
         assertNotNull(accessToken2.getUserAuthentication());
@@ -149,7 +162,6 @@ public class GreenhouseOAuthProviderTokenServicesTest {
         
         tokenServices.authorizeRequestToken(reAuthToken.getValue(), "12345", auth);        
         
-        
         OAuthProviderToken reAuthToken3 = tokenServices.getToken(reAuthToken.getValue());
         assertEquals(reAuthToken.isAccessToken(), reAuthToken3.isAccessToken());
         assertEquals(reAuthToken.getValue(), reAuthToken3.getValue());
@@ -170,7 +182,7 @@ public class GreenhouseOAuthProviderTokenServicesTest {
         assertEquals(reAuthAccessToken.isAccessToken(), reAuthAccessToken2.isAccessToken());
         assertEquals(reAuthAccessToken.getValue(), reAuthAccessToken2.getValue());
         assertEquals(reAuthAccessToken.getConsumerKey(), reAuthAccessToken2.getConsumerKey());
-        assertNull(reAuthAccessToken2.getSecret());
+        assertEquals(reAuthAccessToken.getSecret(), reAuthAccessToken2.getSecret());
         assertNull(reAuthAccessToken2.getCallbackUrl());
         assertNull(reAuthAccessToken2.getVerifier());
         assertNotNull(reAuthAccessToken2.getUserAuthentication());
