@@ -1,7 +1,3 @@
-drop table if exists OAuthToken;
-drop table if exists AuthorizedConsumer;
-drop table if exists Consumer;
-drop table if exists User;
 create table User (id identity,
 					firstName varchar not null, 
 					lastName varchar not null,
@@ -10,7 +6,7 @@ create table User (id identity,
 					username varchar(15) unique,
 					primary key (id));
 
-create table Consumer (consumerKey varchar not null,
+create table Consumer (consumerKey varchar,
 					name varchar not null unique, 
 					description varchar not null,
 					website varchar not null unique,
@@ -20,14 +16,15 @@ create table Consumer (consumerKey varchar not null,
 					primary key (consumerKey),
 					foreign key (ownerId) references User(id));
 					
-create table AuthorizedConsumer (userId bigint not null,
-					consumerKey varchar not null,
-					accessToken varchar not null unique,
+create table AuthorizedConsumer (userId bigint,
+					consumerKey varchar,
+					accessToken varchar not null,
+					secret varchar not null,
 					primary key (userId, consumerKey),
 					foreign key (userId) references User(id),
 					foreign key (consumerKey) references Consumer(consumerKey));
 					
-create table OAuthToken (tokenValue varchar not null unique,
+create table OAuthToken (tokenValue varchar,
 					consumerKey varchar not null,
 					secret varchar not null,
 					callbackUrl varchar,

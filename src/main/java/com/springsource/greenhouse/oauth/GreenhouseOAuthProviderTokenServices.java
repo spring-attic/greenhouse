@@ -61,7 +61,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	    token.setConsumerKey((String) row.get("consumerKey"));
 	    token.setSecret(generateSecret());
 	    jdbcTemplate.update("delete from AuthorizedConsumer where userId=? and consumerKey=?", row.get("userId"), token.getConsumerKey());	    
-	    jdbcTemplate.update(INSERT_ACCESS_TOKEN_SQL, row.get("userId"), token.getConsumerKey(), token.getValue());
+	    jdbcTemplate.update(INSERT_ACCESS_TOKEN_SQL, row.get("userId"), token.getConsumerKey(), token.getValue(), token.getSecret());
 		return token;
 	}	
 	
@@ -86,6 +86,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 					holder.setValue(token);
 					holder.setAccessToken(true);
 					holder.setConsumerKey(rs.getString("consumerKey"));
+					holder.setSecret(rs.getString("secret"));
 					Collection<GrantedAuthority> authorities = Collections.emptySet();
 					holder.setUserAuthentication(new UsernamePasswordAuthenticationToken("doesnt-matter-yet", "doesnt-matter-yet", authorities));
 					return holder;
@@ -104,9 +105,9 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
     private static final String INSERT_REQUEST_TOKEN_SQL = "insert into OAuthToken (tokenValue, consumerKey, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)";
     private static final String AUTHORIZE_REQUEST_TOKEN_SQL = "update OAuthToken set verifier = ?, updateTimestamp = ?, userId = ? where tokenValue = ?";
     private static final String DELETE_REQUEST_TOKEN_SQL = "delete from OAuthToken where tokenValue = ?";
-    private static final String INSERT_ACCESS_TOKEN_SQL = "insert into AuthorizedConsumer (userId, consumerKey, accessToken) values (?, ?, ?)";
+    private static final String INSERT_ACCESS_TOKEN_SQL = "insert into AuthorizedConsumer (userId, consumerKey, accessToken, secret) values (?, ?, ?, ?)";
 
     private static final String SELECT_REQUEST_TOKEN_SQL = "select consumerKey, secret, callbackUrl, updateTimestamp, verifier from OAuthToken where tokenValue = ?";
-	private static final String SELECT_ACCESS_TOKEN_SQL = "select userId, consumerKey from AuthorizedConsumer where accessToken = ?";
+	private static final String SELECT_ACCESS_TOKEN_SQL = "select userId, consumerKey, secret from AuthorizedConsumer where accessToken = ?";
 
 }
