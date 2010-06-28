@@ -22,11 +22,11 @@ import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 public class GreenhouseOAuthProviderTokenServicesTest {
-	
-    private GreenhouseOAuthProviderTokenServices tokenServices;
 
 	private EmbeddedDatabase db;
 	
+    private GreenhouseOAuthProviderTokenServices tokenServices;
+
     @Before
     public void setup() {
     	EmbeddedDatabaseFactory dbFactory = new EmbeddedDatabaseFactory();
