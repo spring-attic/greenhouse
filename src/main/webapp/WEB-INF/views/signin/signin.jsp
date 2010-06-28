@@ -9,7 +9,7 @@
 	</div>	
   	<fieldset>
 		<label for="login">Username or Email</label>
-		<input id="login" name="j_username" type="text" size="25" />
+		<input id="login" name="j_username" type="text" size="25" autocorrect="off" autocapitalize="off" />
 		<label for="password">Password</label>
 		<input id="password" name="j_password" type="password" size="12" />
 	</fieldset>
