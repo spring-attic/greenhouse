@@ -21,9 +21,13 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 @Controller
 @RequestMapping("/settings")
 public class TwitterController {
-    private static final String LINKED_TO_TWITTER_MESSAGE = "Signed up at the Greenhouse at ";
+    
+	private static final String LINKED_TO_TWITTER_MESSAGE = "Signed up at the Greenhouse at ";
+
     private OAuthConsumerTokenServicesFactory tokenServicesFactory;
+    
     private TwitterService twitterService;
+    
     private JdbcTemplate jdbcTemplate;
     
     @Inject
@@ -34,8 +38,8 @@ public class TwitterController {
 	}
 
 	@RequestMapping(value="/twitter", method=RequestMethod.GET)
-    public String connectView(Authentication auth) {
-		if (isConnected((GreenhouseUserDetails) auth.getPrincipal())) {
+    public String connectView(GreenhouseUserDetails currentUser) {
+		if (isConnected(currentUser)) {
 			return "settings/twitterConnected";
 		} else {
 			return "settings/twitterConnect";
@@ -48,7 +52,6 @@ public class TwitterController {
         if (oauthToken != null && oauthToken.length() > 0) {
             OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
             OAuthConsumerToken accessToken = tokenServices.getToken("twitter");
-            
             if(accessToken.isAccessToken()) {
                 try {
                     String message = URLEncoder.encode(LINKED_TO_TWITTER_MESSAGE + assembleMemberProfileUrl(request, authentication), "UTF-8");
@@ -62,22 +65,20 @@ public class TwitterController {
     }
 	
 	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
-    public String disconnectTwitter(Authentication auth) {
-		GreenhouseUserDetails principal = (GreenhouseUserDetails) auth.getPrincipal();
-		jdbcTemplate.update("delete from NetworkConnection where userId = ? and network = 'twitter'", principal.getEntityId());
+    public String disconnectTwitter(GreenhouseUserDetails currentUser) {
+		jdbcTemplate.update("delete from NetworkConnection where userId = ? and network = 'twitter'", currentUser.getEntityId());
 		return "redirect:/settings/twitter";
 	}
 
 	// internal helpers
 	
-    private boolean isConnected(GreenhouseUserDetails principal) {
-    	return jdbcTemplate.queryForInt("select count(*) from NetworkConnection where userId = ? and network = 'twitter'", principal.getEntityId()) == 1;
+    private boolean isConnected(GreenhouseUserDetails currentUser) {
+    	return jdbcTemplate.queryForInt("select count(*) from NetworkConnection where userId = ? and network = 'twitter'", currentUser.getEntityId()) == 1;
 	}
     
     private String assembleMemberProfileUrl(HttpServletRequest request, Authentication authentication) {
         GreenhouseUserDetails user = (GreenhouseUserDetails) authentication.getPrincipal();
         String userKey = user.getProfileKey();
-        
         int serverPort = request.getServerPort();
         String portPart = serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort;
         return request.getScheme() + "://" + request.getServerName() + portPart + request.getContextPath() + "/members/" + userKey;
