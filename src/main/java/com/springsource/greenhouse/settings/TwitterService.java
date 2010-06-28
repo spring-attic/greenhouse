@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TwitterService {
+	
     Logger logger = LoggerFactory.getLogger(getClass());
     
     private static final String UPDATE_STATUS_URL = "http://api.twitter.com/1/statuses/update.json";

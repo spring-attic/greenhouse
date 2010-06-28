@@ -5,11 +5,14 @@ import net.sourceforge.wurfl.core.Device;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.mobile.DeviceDetectingHandlerInterceptor;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
+
+import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 // TODO - it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter
 // TODO - support in Spring MVC namespace should be added for that (this would go away then)
@@ -24,7 +27,10 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 	public Object postProcessAfterInitialization(Object bean, String name) throws BeansException {
 		if (bean instanceof AnnotationMethodHandlerAdapter) {
 			AnnotationMethodHandlerAdapter controllerInvoker = (AnnotationMethodHandlerAdapter) bean;
-			controllerInvoker.setCustomArgumentResolver(new DeviceWebArgumentResolver());
+			WebArgumentResolver[] resolvers = new WebArgumentResolver[2];
+			resolvers[0] = new DeviceWebArgumentResolver();
+			resolvers[1] = new GreenhouseUserDetailsWebArgumentResolver();
+			controllerInvoker.setCustomArgumentResolvers(resolvers);
 		}
 		return bean;
 	}
@@ -33,6 +39,17 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
 			if (Device.class.isAssignableFrom(param.getParameterType())) {
 				return request.getAttribute(DeviceDetectingHandlerInterceptor.DEVICE_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+			} else {
+				return WebArgumentResolver.UNRESOLVED;
+			}
+		}
+	}
+	
+	private static class GreenhouseUserDetailsWebArgumentResolver implements WebArgumentResolver {
+		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
+			if (GreenhouseUserDetails.class.isAssignableFrom(param.getParameterType())) {
+				Authentication auth = (Authentication) request.getUserPrincipal();
+				return auth != null && auth.getPrincipal() instanceof GreenhouseUserDetails ? auth.getPrincipal() : null;
 			} else {
 				return WebArgumentResolver.UNRESOLVED;
 			}

@@ -6,6 +6,10 @@ public class Member {
 	
 	private String lastName;
 
+	public String getDisplayName() {
+		return firstName + " " + lastName;
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
