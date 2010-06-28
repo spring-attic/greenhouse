@@ -8,8 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth.consumer.OAuthConsumerSupport;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TwitterService {
+	
     Logger logger = LoggerFactory.getLogger(getClass());
     
     private static final String UPDATE_STATUS_URL = "http://api.twitter.com/1/statuses/update.json";
