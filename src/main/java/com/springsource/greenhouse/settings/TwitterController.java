@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,13 +40,6 @@ public class TwitterController {
     public String authorize(HttpServletRequest request, Authentication authentication) {
         String oauthToken = request.getParameter("oauth_token");      
         if (oauthToken != null && oauthToken.length() > 0) {
-            String oauthVerifier = request.getParameter("oauth_verifier");
-            OAuthConsumerToken token = new OAuthConsumerToken();
-            token.setAccessToken(true);
-            token.setResourceId("twitter");
-            token.setValue(oauthToken);
-            token.setSecret(oauthVerifier);          
-            tokenServicesFactory.getTokenServices(authentication, request).storeToken("twitter", token);
             FlashMap.getCurrent(request).put("connectedMessage", "Your Twitter account is now linked to your Greenhouse account!");
         }
         return "redirect:/settings/twitter";

@@ -14,8 +14,8 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 
 public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServices {
 
-	static final String INSERT_TOKEN_SQL = "insert into NetworkConnection (userId, network, accessToken, secret) values (?, ?, ?, ?)";
-	static final String SELECT_TOKEN_SQL = "select network, accessToken, secret from NetworkConnection where userId=? and network=?";
+    static final String INSERT_TOKEN_SQL = "insert into NetworkConnection (userId, network, accessToken, secret) values (?, ?, ?, ?)";
+    static final String SELECT_TOKEN_SQL = "select network, accessToken, secret from NetworkConnection where userId=? and network=?";
 
 	private Long userId;
 	
@@ -29,7 +29,7 @@ public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServic
 
 	@Override
 	public OAuthConsumerToken getToken(String resourceId) throws AuthenticationException {
-		OAuthConsumerToken token = super.getToken(resourceId);
+        OAuthConsumerToken token = super.getToken(resourceId);
 		if (token == null) {
 			token = getTokenFromDatabase(resourceId);
 			if (token != null) {

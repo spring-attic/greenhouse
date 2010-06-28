@@ -36,10 +36,6 @@
 		<level value="info" />
 	</logger>
 
-	<logger name="org.springframework.security.oauth">
-		<level value="debug" />
-	</logger>
-
 	<!-- Root Logger -->
 	<root>
 		<priority value="info" />
