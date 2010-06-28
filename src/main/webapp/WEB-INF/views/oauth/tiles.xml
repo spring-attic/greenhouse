@@ -9,7 +9,7 @@
 		<put-attribute name="content" value="/WEB-INF/views/oauth/confirmAccess.jsp" />
 	</definition>
 	
-	<definition name="oauth/confirmAccess-iPhone" template="/WEB-INF/views/oauth/confirmAccess-iPhone.jsp" />
+	<definition name="oauth/confirmAccess-iphone" template="/WEB-INF/views/oauth/confirmAccess-iphone.jsp" />
     
 	<definition name="oauth/error" extends="standard">
 		<put-attribute name="content" value="/WEB-INF/views/oauth/error.jsp" />
