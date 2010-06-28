@@ -4,7 +4,7 @@
 	<div class="header">
   		<h2>Sign in</h2>
   		<c:if test="${not empty signinErrorMessage}">
-  			<div class="error">The sign-in info you entered was incorrect.  Please try again or <a href="<c:url value="/signup" />">sign up</a>.</div>
+  			<div class="error">Your sign in information was incorrect.  Please try again or <a href="<c:url value="/signup" />">sign up</a>.</div>
  	 	</c:if>
 	</div>	
   	<fieldset>
