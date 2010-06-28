@@ -5,17 +5,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 	<title>
 		<tiles:insertAttribute name="title" defaultValue="The Greenhouse" />
 	</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 	<link rel="stylesheet" href="<c:url value="/resources/page.css" />" type="text/css" media="screen" />
 	<tiles:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true" />
 	<c:forEach var="style" items="${styles}">
 		<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
 	</c:forEach>	
-	<script type="text/javascript" src="<c:url value="/resources/jquery/jquery-1.4.2.js" />"></script>	
+	<script type="text/javascript" src="<c:url value="/resources/jquery/jquery-1.4.2.js" />"></script>
 </head>
 <body>
 	<div id="header">

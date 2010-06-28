@@ -5,10 +5,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
 	<title>
 		<tiles:insertAttribute name="title" defaultValue="The Greenhouse" />
 	</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" href="<c:url value="/resources/page.css" />" type="text/css" media="screen" />
 	<tiles:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true" />
 	<c:forEach var="style" items="${styles}">
