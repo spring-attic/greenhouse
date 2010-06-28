@@ -10,7 +10,7 @@
 	</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
-	<link rel="stylesheet" href="<c:url value="/resources/page.css" />" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<c:url value="/resources/page-iphone.css" />" type="text/css" media="screen" />
 	<tiles:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true" />
 	<c:forEach var="style" items="${styles}">
 		<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
