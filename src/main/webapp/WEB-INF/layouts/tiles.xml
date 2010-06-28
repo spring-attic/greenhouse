@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
-       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 
 <tiles-definitions>
 	
-	<definition name="page" template="/WEB-INF/layouts/page.jsp"/>
+	<definition name="page" template="/WEB-INF/layouts/page.jsp" />
 	
-	<definition name="page-iphone" template="/WEB-INF/layouts/page-iphone.jsp"/>
+	<definition name="page-iphone" template="/WEB-INF/layouts/page-iphone.jsp" />
 
 	<definition name="standard" extends="page">
 		<put-attribute name="header" value="/WEB-INF/layouts/header.jsp" />	
