@@ -2,9 +2,9 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<form:form id="signup" cssClass="cleanform" method="post" modelAttribute="signupForm">
-	<div class="formInfo">
-  		<h3>Sign up</h3>
+<form:form id="signup" method="post" modelAttribute="signupForm">
+	<div class="header">
+  		<h2>Sign up</h2>
   		<s:bind path="*">
   			<c:if test="${status.error}">
 		  		<div class="error">Unable to sign up.  Please complete all fields.</div>
@@ -31,5 +31,4 @@
   		<form:password path="confirmPassword" />	
 	</fieldset>
 	<input type="submit" value="Sign up">
-		
 </form:form>
