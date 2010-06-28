@@ -21,7 +21,7 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 @Controller
 @RequestMapping("/settings")
 public class TwitterController {
-    private static final String LINKED_TO_TWITTER_MESSAGE = "I'm in the Greenhouse!";
+    private static final String LINKED_TO_TWITTER_MESSAGE = "Signed up at the Greenhouse at ";
     private OAuthConsumerTokenServicesFactory tokenServicesFactory;
     private TwitterService twitterService;
     private JdbcTemplate jdbcTemplate;
@@ -51,7 +51,7 @@ public class TwitterController {
             
             if(accessToken.isAccessToken()) {
                 try {
-                    String message = URLEncoder.encode(LINKED_TO_TWITTER_MESSAGE, "UTF-8");
+                    String message = URLEncoder.encode(LINKED_TO_TWITTER_MESSAGE + assembleMemberProfileUrl(request, authentication), "UTF-8");
                     twitterService.updateStatus(accessToken, message);
                 } catch (UnsupportedEncodingException e) {} // shouldn't happen
                 
@@ -73,5 +73,14 @@ public class TwitterController {
     private boolean isConnected(GreenhouseUserDetails principal) {
     	return jdbcTemplate.queryForInt("select count(*) from NetworkConnection where userId = ? and network = 'twitter'", principal.getEntityId()) == 1;
 	}
+    
+    private String assembleMemberProfileUrl(HttpServletRequest request, Authentication authentication) {
+        GreenhouseUserDetails user = (GreenhouseUserDetails) authentication.getPrincipal();
+        String userKey = user.getProfileKey();
+        
+        int serverPort = request.getServerPort();
+        String portPart = serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort;
+        return request.getScheme() + "://" + request.getServerName() + portPart + request.getContextPath() + "/members/" + userKey;
+    }
 
 }
