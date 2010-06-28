@@ -37,7 +37,7 @@ public class ConfirmAccessController {
 		}
 		model.addAttribute("consumer", consumer);
 		if (new AppleHandler().canHandle(device.getUserAgent())) {
-			return "oauth/confirmAccess-iPhone";
+			return "oauth/confirmAccess-iphone";
 		} else {
 			return "oauth/confirmAccess";
 		}
