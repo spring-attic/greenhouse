@@ -45,7 +45,7 @@ public class SettingsControllerTest {
     	List<Map<String, Object>> apps = (List<Map<String, Object>>) model.get("apps");
     	assertNotNull(apps);   
     	assertEquals(1, apps.size());
-    	assertEquals("Greenhouse for the iPhone", apps.get(0).get("appName"));
+    	assertEquals("Greenhouse for the iPhone", apps.get(0).get("name"));
     	assertEquals("authme", apps.get(0).get("accessToken"));
     }
     
