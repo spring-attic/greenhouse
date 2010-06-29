@@ -1,14 +1,16 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,22 +19,28 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.signup.GreenhouseTestUserDatabaseFactory;
 
 public class NetworkConnectionsTokenServicesTest {
-    private JdbcTemplate jdbcTemplate;
-    private NetworkConnectionsTokenServicesFactory tokenServicesFactory;
+
+	private EmbeddedDatabase db;
+
+	private JdbcTemplate jdbcTemplate;
+    
+	private NetworkConnectionsTokenServicesFactory tokenServicesFactory;
 
     @Before
     public void setupDatabase() {
-        EmbeddedDatabaseFactory dbFactory = new EmbeddedDatabaseFactory();
-        dbFactory.setDatabaseType(EmbeddedDatabaseType.H2);
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("NetworkConnectionsTokenServicesTest.sql", getClass()));
-        dbFactory.setDatabasePopulator(populator);
-        jdbcTemplate = new JdbcTemplate(dbFactory.getDatabase());
+    	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("NetworkConnectionsTokenServicesTest.sql", getClass()));
+        jdbcTemplate = new JdbcTemplate(db);
         tokenServicesFactory = new NetworkConnectionsTokenServicesFactory(jdbcTemplate);
     }
 
+    @After
+    public void destroy() {
+    	db.shutdown();
+    }
+    
     @Test
     public void shouldReturnNullTokenForUnknownResource() {
         GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
