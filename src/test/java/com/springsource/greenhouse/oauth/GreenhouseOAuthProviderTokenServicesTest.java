@@ -11,15 +11,13 @@ import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.signup.GreenhouseTestUserDatabaseFactory;
 
 public class GreenhouseOAuthProviderTokenServicesTest {
 
@@ -29,12 +27,7 @@ public class GreenhouseOAuthProviderTokenServicesTest {
 
     @Before
     public void setup() {
-    	EmbeddedDatabaseFactory dbFactory = new EmbeddedDatabaseFactory();
-    	dbFactory.setDatabaseType(EmbeddedDatabaseType.H2);
-    	ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-    	populator.addScript(new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
-    	dbFactory.setDatabasePopulator(populator);
-    	db = dbFactory.getDatabase();
+    	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
     	tokenServices = new GreenhouseOAuthProviderTokenServices(new JdbcTemplate(db));
     }
     
