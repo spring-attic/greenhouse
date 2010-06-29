@@ -3,6 +3,8 @@ package com.springsource.greenhouse.settings;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +20,14 @@ public class SettingsController {
 
 	private JdbcTemplate jdbcTemplate;
 	
+	@Inject
 	public SettingsController(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@RequestMapping(method=RequestMethod.GET)
 	public void settingsPage(GreenhouseUserDetails currentUser, Model model) {
-		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select c.name as appName, ac.accessToken from AuthorizedConsumer ac, Consumer c where ac.userId = ? and ac.consumerKey = c.consumerKey", currentUser.getEntityId());
+		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select c.name as name, ac.accessToken from AuthorizedConsumer ac, Consumer c where ac.userId = ? and ac.consumerKey = c.consumerKey", currentUser.getEntityId());
 		model.addAttribute("apps", apps);
 	}
 	
