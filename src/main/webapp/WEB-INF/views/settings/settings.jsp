@@ -1,10 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 
-<p>Settings</p>
+<h2>Settings</h2>
 
 <div id="apps">
-	<h2>Connected Apps</h2>
+	<h3>Connected Apps</h3>
 	<ul>
 		<c:forEach var="app" items="${apps}">
 			<li>
@@ -19,9 +19,9 @@
 </div>
 
 <div id="connectedAccounts">
-	<h2>Connected Accounts</h2>
+	<h3>Connected Accounts</h3>
 	<div id="twitter">
-		<h3>Twitter</h3>
+		<h4>Twitter</h4>
 		<a href="<s:url value="/settings/twitter" />">Connect to Twitter</a>	
 	</div>
 </div>

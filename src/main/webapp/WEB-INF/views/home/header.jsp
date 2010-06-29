@@ -3,5 +3,7 @@
 <div id="topbar">
 	Already a member? <a href="<c:url value="/signin" />">Sign In</a>
 </div>
-<h1><a href="<c:url value="/" />">The Greenhouse</a></h1>
+<h1>
+	<a href="<c:url value="/" />">Greenhouse</a>
+</h1>
 <a href="<c:url value="/signup" />">Join Now</a>
