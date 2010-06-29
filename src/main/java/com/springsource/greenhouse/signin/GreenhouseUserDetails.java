@@ -23,31 +23,21 @@ public final class GreenhouseUserDetails implements UserDetails {
 		this.password = password;
 		this.firstName = firstName;
 	}
-	
-	public Long getEntityId() {
-		return entityId;
-	}
+
+	// implementing UserDetails
 	
 	public String getUsername() {
 		return username;
 	}
-
+	
 	public String getPassword() {
 		return password;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public Long getEntityId() {
+		return entityId;
 	}
 
-	public String getProfileKey() {
-		if (username != null && username.length() == 0) {
-			return username;
-		} else {
-			return entityId.toString();
-		}
-	}
-	
 	public Collection<GrantedAuthority> getAuthorities() {
 		return Collections.emptySet();
 	}
@@ -67,4 +57,19 @@ public final class GreenhouseUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}		
+
+	// additional details
+	
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getProfileKey() {
+		if (username != null && username.length() == 0) {
+			return username;
+		} else {
+			return entityId.toString();
+		}
+	}
+	
 }

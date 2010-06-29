@@ -40,7 +40,7 @@ public class SettingsControllerTest {
     @Test
     public void testPrepareSettingsPage() {
     	ExtendedModelMap model = new ExtendedModelMap();
-    	GreenhouseUserDetails currentUser = new GreenhouseUserDetails(1L, "kdonald", "whateveryouwantittobe", "kdonald");
+    	GreenhouseUserDetails currentUser = new GreenhouseUserDetails(1L, "kdonald", "whatever", "Keith");
     	controller.settingsPage(currentUser, model);
     	List<Map<String, Object>> apps = (List<Map<String, Object>>) model.get("apps");
     	assertNotNull(apps);   
@@ -51,7 +51,7 @@ public class SettingsControllerTest {
     
     @Test
     public void testDisconnectApp() {
-    	GreenhouseUserDetails currentUser = new GreenhouseUserDetails(1L, "kdonald", "whateveryouwantittobe", "kdonald");
+    	GreenhouseUserDetails currentUser = new GreenhouseUserDetails(1L, "kdonald", "whatever", "Keith");
     	assertEquals("redirect:/settings", controller.disconnectApp("authme", currentUser));
     	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AuthorizedConsumer"));
     }

@@ -16,7 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 public class CurrentUserHandlerInterceptorTest {
+	
     private CurrentUserHandlerInterceptor interceptor;
+    
     private GreenhouseUserDetails userDetails;
     
     @Before

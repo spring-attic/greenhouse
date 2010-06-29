@@ -24,6 +24,7 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenImpl;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
 
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.signin.GreenhouseUserDetailsRowMapper;
 
 public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenServices {
 	
@@ -87,8 +88,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 					holder.setAccessToken(true);
 					holder.setConsumerKey(rs.getString("consumerKey"));
 					holder.setSecret(rs.getString("secret"));
-					Collection<GrantedAuthority> authorities = Collections.emptySet();
-					holder.setUserAuthentication(new UsernamePasswordAuthenticationToken("doesnt-matter-yet", "doesnt-matter-yet", authorities));
+					holder.setUserAuthentication(createUserAuthentication(rs.getLong("userId")));
 					return holder;
 				}
 			}, token);			
@@ -100,6 +100,12 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	    random.nextBytes(secretBytes);
 	    String secret = new String(Base64.encode(secretBytes));
 	    return secret;
+	}
+	
+	private Authentication createUserAuthentication(Long userId) {
+		GreenhouseUserDetails details = jdbcTemplate.queryForObject("select id, firstName, username, password from User where id = ?", new GreenhouseUserDetailsRowMapper(), userId);
+		Collection<GrantedAuthority> authorities = Collections.emptySet();		
+		return new UsernamePasswordAuthenticationToken(details, "OAuth", authorities);
 	}
 	
     private static final String INSERT_REQUEST_TOKEN_SQL = "insert into OAuthToken (tokenValue, consumerKey, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)";
