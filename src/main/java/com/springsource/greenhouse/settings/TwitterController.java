@@ -14,6 +14,7 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServi
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.oauth.NetworkConnectionsTokenServices;
@@ -48,21 +49,27 @@ public class TwitterController {
 	}
     
 	@RequestMapping("/twitterconnect/authorize")
-    public String authorize(HttpServletRequest request, Authentication authentication) {
+    public String authorize(HttpServletRequest request, Authentication authentication, @RequestParam(value="tweetIt", required=false) boolean tweetIt) {
         String oauthToken = request.getParameter("oauth_token");      
         if (oauthToken != null && oauthToken.length() > 0) {
-            OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-            OAuthConsumerToken accessToken = tokenServices.getToken("twitter");
-            if(accessToken.isAccessToken()) {
-                try {
-                    String message = URLEncoder.encode(LINKED_TO_TWITTER_MESSAGE + assembleMemberProfileUrl(request, authentication), "UTF-8");
-                    twitterService.updateStatus(accessToken, message);
-                } catch (UnsupportedEncodingException e) {} // shouldn't happen
-                
-                FlashMap.getCurrent(request).put("connectedMessage", "Your Twitter account is now linked to your Greenhouse account!");
+            if(tweetIt) {
+                tweetAboutConnection(request, authentication);
             }
+            FlashMap.getCurrent(request).put("connectedMessage", "Your Twitter account is now linked to your Greenhouse account!");
         }
         return "redirect:/settings/twitter";
+    }
+
+    private void tweetAboutConnection(HttpServletRequest request,
+            Authentication authentication) {
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        OAuthConsumerToken accessToken = tokenServices.getToken("twitter");
+        if(accessToken.isAccessToken()) {
+            try {
+                String message = URLEncoder.encode(LINKED_TO_TWITTER_MESSAGE + assembleMemberProfileUrl(request, authentication), "UTF-8");
+                twitterService.updateStatus(accessToken, message);
+            } catch (UnsupportedEncodingException e) {} // shouldn't happen                
+        }
     }
 	
 	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
