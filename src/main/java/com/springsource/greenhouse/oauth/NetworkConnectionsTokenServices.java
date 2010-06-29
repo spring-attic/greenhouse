@@ -16,15 +16,17 @@ public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServic
 
     static final String INSERT_TOKEN_SQL = "insert into NetworkConnection (userId, network, accessToken, secret) values (?, ?, ?, ?)";
     static final String SELECT_TOKEN_SQL = "select network, accessToken, secret from NetworkConnection where userId=? and network=?";
+    static final String DELETE_TOKEN_SQL = "delete from NetworkConnection where userId=? and network=?";
 
-	private Long userId;
-	
+	private Long userId;	
 	private JdbcTemplate jdbcTemplate;
+	private HttpSession session;
 
 	public NetworkConnectionsTokenServices(JdbcTemplate jdbcTemplate, HttpSession session, Long userId) {
 		super(session);
 		this.userId = userId;
 		this.jdbcTemplate = jdbcTemplate;
+		this.session = session;
 	}
 
 	@Override
@@ -46,6 +48,11 @@ public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServic
 			storeTokenInDB(token);
 		}
 		super.storeToken(resourceId, token);
+	}
+	
+	public void removeToken(String resourceId) {
+	    jdbcTemplate.update(DELETE_TOKEN_SQL, userId, resourceId);
+	    session.removeAttribute(KEY_PREFIX + "#" + resourceId);
 	}
 
 	private OAuthConsumerToken getTokenFromDatabase(String resourceId) {
