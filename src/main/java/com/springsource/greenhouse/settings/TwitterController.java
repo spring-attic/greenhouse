@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
+import com.springsource.greenhouse.oauth.NetworkConnectionsTokenServices;
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 @Controller
@@ -65,8 +66,9 @@ public class TwitterController {
     }
 	
 	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
-    public String disconnectTwitter(GreenhouseUserDetails currentUser) {
-		jdbcTemplate.update("delete from NetworkConnection where userId = ? and network = 'twitter'", currentUser.getEntityId());
+    public String disconnectTwitter(GreenhouseUserDetails currentUser, HttpServletRequest request, Authentication authentication) {
+	    NetworkConnectionsTokenServices tokenServices = (NetworkConnectionsTokenServices) tokenServicesFactory.getTokenServices(authentication, request);
+        tokenServices.removeToken("twitter");
 		return "redirect:/settings/twitter";
 	}
 
