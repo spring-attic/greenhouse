@@ -116,4 +116,29 @@ public class NetworkConnectionsTokenServicesTest {
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
       assertEquals(1, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='someToken'"));
     }
+    
+    @Test
+    public void shouldRemoveToken() {
+        OAuthConsumerToken accessToken = new OAuthConsumerToken();
+        accessToken.setAccessToken(true);
+        accessToken.setResourceId("twitter");
+        accessToken.setSecret("twitterTokenSecret");
+        accessToken.setValue("twitterToken"); 
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
+        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");        
+        request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", accessToken);
+        
+        // Token should be available before remove
+        assertEquals(1, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='twitterToken'"));
+        assertNotNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
+
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        ((NetworkConnectionsTokenServices) tokenServices).removeToken("twitter");
+        
+        // Token should be gone after remove
+        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='twitterToken'"));
+        assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
+    }
 }
