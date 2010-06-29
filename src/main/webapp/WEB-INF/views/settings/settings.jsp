@@ -4,19 +4,18 @@
 <p>Settings</p>
 
 <div id="apps">
-	<h2>Connected Applications</h2>
-	<table>
+	<h2>Connected Apps</h2>
+	<ul>
 		<c:forEach var="app" items="${apps}">
-			<tr>
-				<td>${app.name}</td>
-				<td>
-					<form action="apps/${app.accessToken}">
-						<input type="submit" value="Disconnect" />
-					</form>
-				</td>
-			</tr>
+			<li>
+				${app.name}
+				<form action="settings/apps/${app.accessToken}" method="post">
+					<input type="submit" value="Disconnect" />
+					<input type="hidden" name="_method" value="DELETE" />
+				</form>
+			</li>
 		</c:forEach>
-	</table>
+	</ul>
 </div>
 
 <div id="connectedAccounts">

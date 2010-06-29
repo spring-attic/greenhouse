@@ -34,6 +34,6 @@ public class SettingsController {
 	@RequestMapping(value="/apps/{accessToken}", method=RequestMethod.DELETE)
 	public String disconnectApp(@PathVariable String accessToken, GreenhouseUserDetails currentUser) {
 		jdbcTemplate.update("delete from AuthorizedConsumer where accessToken = ? and userId = ?", accessToken, currentUser.getEntityId());
-		return "settings";
+		return "redirect:/settings";
 	}
 }
