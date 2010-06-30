@@ -19,12 +19,12 @@
 	</http>
 
 	<authentication-manager>
-		<authentication-provider user-service-ref="userService" />
+		<authentication-provider user-service-ref="userDetailsService" />
 	</authentication-manager>
 
 	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.GreenhouseAuthenticationFailureHandler" />
 
-	<beans:bean id="userService" class="com.springsource.greenhouse.signin.GreenhouseUserService" />
+	<beans:bean id="userDetailsService" class="com.springsource.greenhouse.signin.GreenhouseUserDetailsService" />
 	
 	<beans:import resource="security-oauth-provider.xml" />
 	
