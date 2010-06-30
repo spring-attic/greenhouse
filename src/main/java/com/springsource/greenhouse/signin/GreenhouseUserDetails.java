@@ -16,7 +16,14 @@ public final class GreenhouseUserDetails implements UserDetails {
 	private final String password;
 	
 	private final String firstName;
-	
+
+	public GreenhouseUserDetails(Long entityId, String username, String firstName) {
+		this.entityId = entityId;
+		this.username = username;
+		this.password = null;
+		this.firstName = firstName;
+	}
+
 	public GreenhouseUserDetails(Long entityId, String username, String password, String firstName) {
 		this.entityId = entityId;
 		this.username = username;
@@ -30,6 +37,8 @@ public final class GreenhouseUserDetails implements UserDetails {
 		return username;
 	}
 	
+	/* Returns password needed to do the initial user authentication 
+	 * After authentication, this field is cleared (null) */
 	public String getPassword() {
 		return password;
 	}

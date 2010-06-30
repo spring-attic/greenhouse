@@ -4,4 +4,10 @@
 body {
 	font-family: Lucida Grande, sans-serif;
 	font-size: .75em;
+	margin: 1em auto;
+	width: 763px;
+}
+
+#topbar {
+	text-align: right;
 }

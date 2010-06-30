@@ -6,7 +6,7 @@
 <html>
 <head>
 	<title>
-		<tiles:insertAttribute name="title" defaultValue="The Greenhouse" />
+		<tiles:insertAttribute name="title" defaultValue="Greenhouse" />
 	</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" href="<c:url value="/resources/page.css" />" type="text/css" media="screen" />

@@ -6,7 +6,7 @@
 <html>
 <head>
 	<title>
-		<tiles:insertAttribute name="title" defaultValue="The Greenhouse" />
+		<tiles:insertAttribute name="title" defaultValue="Greenhouse" />
 	</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
@@ -19,7 +19,7 @@
 </head>
 <body>
 	<div id="header">
-		The Greenhouse
+		<h2>Greenhouse</h2>
 	</div>
 	<div id="content">
 		<tiles:insertAttribute name="content" />

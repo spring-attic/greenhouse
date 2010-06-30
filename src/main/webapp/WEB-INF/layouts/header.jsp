@@ -12,4 +12,6 @@
 		<a href="${profileUrl}">${currentUser.firstName}</a> | <a href="<c:url value="/settings" />">Settings</a> | <a href="<c:url value="/signout" />">Sign Out</a>
 	</c:if>
 </div>
-<h1><a href="<c:url value="/" />">The Greenhouse</a></h1>
+<h1>
+	<a href="<c:url value="/" />">Greenhouse</a>
+</h1>

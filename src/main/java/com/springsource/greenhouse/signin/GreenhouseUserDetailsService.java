@@ -1,23 +1,27 @@
 package com.springsource.greenhouse.signin;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.inject.Inject;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
-public class GreenhouseUserService implements UserDetailsService {
+public class GreenhouseUserDetailsService implements UserDetailsService {
 
     private JdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public GreenhouseUserService(JdbcTemplate jdbcTemplate) {
+	public GreenhouseUserDetailsService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
@@ -46,5 +50,14 @@ public class GreenhouseUserService implements UserDetailsService {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}		
+	}
+	
+	private static class GreenhouseUserDetailsRowMapper implements RowMapper<GreenhouseUserDetails> {
+
+		public GreenhouseUserDetails mapRow(ResultSet rs, int rowNum)
+				throws SQLException {
+			return new GreenhouseUserDetails(rs.getLong("id"), rs.getString("username"), rs.getString("password"), rs.getString("firstName"));
+		}
+		
 	}
 }
