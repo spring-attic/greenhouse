@@ -1,8 +1,5 @@
 package com.springsource.greenhouse.settings;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -52,24 +49,29 @@ public class TwitterController {
     public String authorize(HttpServletRequest request, Authentication authentication, @RequestParam(value="tweetIt", required=false) boolean tweetIt) {
         String oauthToken = request.getParameter("oauth_token");      
         if (oauthToken != null && oauthToken.length() > 0) {
+            OAuthConsumerToken accessToken = getAccessToken(request, authentication);
+
             if(tweetIt) {
-                tweetAboutConnection(request, authentication);
+                tweetAboutConnection(accessToken, request, authentication);
             }
+                        
             FlashMap.getCurrent(request).put("connectedMessage", "Your Twitter account is now linked to your Greenhouse account!");
         }
         return "redirect:/settings/twitter";
     }
 
-    private void tweetAboutConnection(HttpServletRequest request,
-            Authentication authentication) {
-        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-        OAuthConsumerToken accessToken = tokenServices.getToken("twitter");
+    private void tweetAboutConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Authentication authentication) {
         if(accessToken.isAccessToken()) {
-            try {
-                String message = URLEncoder.encode(LINKED_TO_TWITTER_MESSAGE + assembleMemberProfileUrl(request, authentication), "UTF-8");
-                twitterService.updateStatus(accessToken, message);
-            } catch (UnsupportedEncodingException e) {} // shouldn't happen                
+            String message = LINKED_TO_TWITTER_MESSAGE + assembleMemberProfileUrl(request, authentication);
+            twitterService.updateStatus(accessToken, message);
         }
+    }
+
+	private OAuthConsumerToken getAccessToken(HttpServletRequest request,
+            Authentication authentication) {
+	    OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        OAuthConsumerToken accessToken = tokenServices.getToken("twitter");
+	    return accessToken;
     }
 	
 	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
