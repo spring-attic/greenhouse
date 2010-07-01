@@ -30,7 +30,7 @@ public class GreenhouseUpdatesService {
 //		}
 		
 		public List<Update> getUpdates() {
-			 return jdbcTemplate.query("select u.text, u.updateTimestamp from Update u", updateMapper);
+			 return jdbcTemplate.query("select u.text, u.updateTimestamp from Update u order by updateTimestamp desc", updateMapper);
 		}
 		
 		private RowMapper<Update> updateMapper = new RowMapper<Update>() {
