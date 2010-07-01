@@ -4,12 +4,9 @@
 <h2>Your Twitter Friends In the Greenhouse</h2>
 
 <div id="friends">
-	<ul>
+    <ul>
 		<c:forEach var="friend" items="${friends}">
-			<li>
-			    <img src="${friend.profileImageUrl}"/>
-				${friend.name} (${friend.screenName})
-			</li>
+		    <li><a href="<s:url value="/members/${friend.username}" />">${friend.name}</a></li>
 		</c:forEach>
 	</ul>
 </div>

@@ -1,7 +1,6 @@
 package com.springsource.greenhouse.settings;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,21 +54,17 @@ public class TwitterService {
 		return (String) response.get("screen_name");
 	}
 	
-	public List<TwitterUser> getFriends(OAuthConsumerToken accessToken, String screenName) {
+	public String[] getFriends(OAuthConsumerToken accessToken, String screenName) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("screen_name", screenName);
 		List<?> followingResponse = exchangeWithTwitterForList(accessToken, HttpMethod.GET, FRIENDS_IDS_URL, parameters);
-		List<TwitterUser> friends = new ArrayList<TwitterUser>();
+		String[] friends = new String[followingResponse.size()];
 		for(int i=0; i<followingResponse.size(); i++) {
 			Integer twitterId = (Integer) followingResponse.get(i);
 			parameters = new HashMap<String, String>();
 			parameters.put("user_id", twitterId.toString());
 			Map<?, ?> userInfoResponse = exchangeWithTwitterForMap(accessToken, HttpMethod.GET, USER_INFO_URL, parameters);			
-			TwitterUser friend = new TwitterUser();
-			friend.setName((String) userInfoResponse.get("name"));
-			friend.setScreenName((String) userInfoResponse.get("screen_name"));
-			friend.setProfileImageUrl((String) userInfoResponse.get("profile_image_url"));
-			friends.add(friend);
+			friends[i] = (String) userInfoResponse.get("screen_name");
 		}
 		
 		return friends;
