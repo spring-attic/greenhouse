@@ -9,7 +9,7 @@
 	</definition>
 	
 	<definition name="homeSignedIn" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/home/intro.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/home/home.jsp" />
 	</definition>
 	
 </tiles-definitions>

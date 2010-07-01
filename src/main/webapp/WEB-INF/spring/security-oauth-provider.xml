@@ -34,6 +34,10 @@
         <constructor-arg ref="jdbcTemplate" />  
     </bean>
     
+    <bean id="updatesService" class="com.springsource.greenhouse.updates.GreenhouseUpdatesService">
+    	<constructor-arg ref="jdbcTemplate" />
+    </bean>
+    
 	<!-- Temporary hack to inject an iPhone/custom-scheme friendly redirect processor.
 		 This can go away once Spring Security's DefaultRedirectStrategy can handle non-HTTP(S) schemes. -->
 	<bean class="com.springsource.greenhouse.oauth.RedirectStrategyPostProcessor" />

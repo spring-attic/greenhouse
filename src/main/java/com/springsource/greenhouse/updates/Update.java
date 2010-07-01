@@ -1,0 +1,32 @@
+package com.springsource.greenhouse.updates;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Update {
+
+	private String text;
+	private String timestamp;
+	
+	public String getText() {
+		return text;
+	}
+	
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+	public String getTimestamp() {
+		return timestamp;
+	}
+	
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+	public void setTimestamp(Long milliseconds) {
+		Date date = new Date(milliseconds);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd 'at' hh:mm:ss z");
+		this.timestamp = formatter.format(date);
+	}
+}

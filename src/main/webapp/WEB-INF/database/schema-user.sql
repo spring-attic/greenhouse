@@ -41,3 +41,11 @@ create table NetworkConnection (userId bigint,
                     secret varchar not null,
                     primary key (userId, network),
                     foreign key (userId) references User(id));
+                    
+create table Update (id identity, 
+					text varchar not null,
+					updateTimestamp bigint not null,
+					userId bigint,
+					primary key (id),
+					foreign key (userId) references User(id));
+					
