@@ -71,7 +71,7 @@ public class TwitterService {
 
 			// TODO : May need to populate this for other types of Twitter requests
 			HashMap<String, Object> uriVariables = new HashMap<String, Object>();
-
+			
 			return restTemplate.exchange(url, method, statusEntity, Map.class, uriVariables).getBody();
 		} catch (HttpClientErrorException e) {
 			// TODO : Handle this exception more generically
