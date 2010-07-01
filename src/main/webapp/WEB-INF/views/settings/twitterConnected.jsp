@@ -11,3 +11,5 @@
 	<input type="submit" value="Disconnect" />
 	<input type="hidden" name="_method" value="DELETE" />
 </form>
+
+<a href="<s:url value="/import/twitter" />">Find Twitter friends who are in the Greenhouse</a>

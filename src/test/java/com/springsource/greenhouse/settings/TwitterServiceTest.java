@@ -63,7 +63,7 @@ public class TwitterServiceTest {
 		TwitterService twitter = new TwitterService(oauthSupport, resourceDetailsService);		
 		twitter.setRestTemplate(restTemplate);
 		
-		String screenName = twitter.getTwitterUsername(accessToken);
+		String screenName = twitter.getScreenName(accessToken);
 		Assert.assertEquals("s2greenhouse", screenName);
 	}
 
