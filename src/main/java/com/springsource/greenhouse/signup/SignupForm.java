@@ -70,6 +70,4 @@ public class SignupForm {
 	public boolean isMatchingPasswords() {
 		return StringUtils.equals(password, confirmPassword);
 	}
-	
-	public void setMatchingPasswords(boolean matching) {}
 }
