@@ -29,3 +29,8 @@
 	background-color: #FFBABA;
 	background-image: url('error.png');
 }
+
+.fieldError {
+	display: inline;
+	color: #D8000C;
+}

@@ -11,7 +11,7 @@ public final class GreenhouseUserDetails implements UserDetails {
 	
 	private final Long entityId;
 	
-	private final String username;
+	private String username;
 	
 	private final String password;
 	
@@ -35,6 +35,10 @@ public final class GreenhouseUserDetails implements UserDetails {
 	
 	public String getUsername() {
 		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	/* Returns password needed to do the initial user authentication 

@@ -28,7 +28,8 @@
   		<form:password path="password" />
   		
   		<form:label path="confirmPassword">Confirm Password</form:label>
-  		<form:password path="confirmPassword" />	
+  		<form:password path="confirmPassword"/>
+  		<form:errors path="matchingPasswords" cssClass="fieldError"/>
 	</fieldset>
 	<input type="submit" value="Sign up">
 </form:form>
