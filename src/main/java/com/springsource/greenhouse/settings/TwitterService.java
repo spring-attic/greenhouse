@@ -30,6 +30,7 @@ public class TwitterService {
 	static final String UPDATE_STATUS_URL = "http://api.twitter.com/1/statuses/update.json";
 	static final String VERIFY_CREDENTIALS_URL = "http://api.twitter.com/1/account/verify_credentials.json";
 	static final String FRIENDS_IDS_URL = "http://api.twitter.com/1/friends/ids.json?screen_name={screen_name}";
+	static final String FRIENDS_STATUSES_URL = "http://api.twitter.com/1/statuses/friends.json?screen_name={screen_name}";
 	static final String USER_INFO_URL = "http://api.twitter.com/1/users/show.json?user_id={user_id}";
 
 	private OAuthConsumerSupport oauthSupport;
@@ -57,14 +58,12 @@ public class TwitterService {
 	public String[] getFriends(OAuthConsumerToken accessToken, String screenName) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("screen_name", screenName);
-		List<?> followingResponse = exchangeWithTwitterForList(accessToken, HttpMethod.GET, FRIENDS_IDS_URL, parameters);
+		List<?> followingResponse = exchangeWithTwitterForList(accessToken, HttpMethod.GET, FRIENDS_STATUSES_URL, parameters);
 		String[] friends = new String[followingResponse.size()];
+		
 		for(int i=0; i<followingResponse.size(); i++) {
-			Integer twitterId = (Integer) followingResponse.get(i);
-			parameters = new HashMap<String, String>();
-			parameters.put("user_id", twitterId.toString());
-			Map<?, ?> userInfoResponse = exchangeWithTwitterForMap(accessToken, HttpMethod.GET, USER_INFO_URL, parameters);			
-			friends[i] = (String) userInfoResponse.get("screen_name");
+			Map<?, ?> item = (Map<?, ?>) followingResponse.get(i);
+			friends[i] = (String) item.get("screen_name");
 		}
 		
 		return friends;
