@@ -97,6 +97,7 @@ public class TwitterSettingsController {
 
 	private void setUserNameToTwitterName(OAuthConsumerToken accessToken, GreenhouseUserDetails userDetails) {
 		String twitterName = twitterService.getScreenName(accessToken);
+		userDetails.setUsername(twitterName);
 		jdbcTemplate.update("update User set userName = ? where id = ?", twitterName, userDetails.getEntityId());
 	}
 

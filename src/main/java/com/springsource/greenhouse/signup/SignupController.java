@@ -52,12 +52,12 @@ public class SignupController {
 		String updateText = form.getFirstName() + " " + form.getLastName() + " signed up at the Greenhouse.";
 		updatesService.createUpdate(updateText);
 
-		autoLogin(request, form.getEmail(), form.getPassword());
+		loginAfterSignup(request, form.getEmail(), form.getPassword());
 		
 		return "redirect:/";
 	}
 
-	public void autoLogin(HttpServletRequest request, String username, String password) {
+	private void loginAfterSignup(HttpServletRequest request, String username, String password) {
 		try {
 			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
 			token.setDetails(new WebAuthenticationDetails(request));
@@ -67,5 +67,4 @@ public class SignupController {
 			SecurityContextHolder.getContext().setAuthentication(null);
 		}
 	}
-
 }
