@@ -7,6 +7,7 @@ public class Update {
 
 	private String text;
 	private String timestamp;
+	private long userId;
 	
 	public String getText() {
 		return text;
@@ -28,5 +29,13 @@ public class Update {
 		Date date = new Date(milliseconds);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd 'at' hh:mm:ss z");
 		this.timestamp = formatter.format(date);
+	}
+	
+	public long getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-//import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 import org.springframework.jdbc.core.RowMapper;
 
 public class GreenhouseUpdatesService {
@@ -23,14 +23,14 @@ public class GreenhouseUpdatesService {
 			jdbcTemplate.update("insert into update (text, updateTimestamp) values (?, ?)", updateText, System.currentTimeMillis());
 		}
 		
-//		public void createUpdate(String updateText, GreenhouseUserDetails details) {						
-//			if (details != null) {
-//				jdbcTemplate.update("insert into update (text, updateTimestamp) values (?, ?, userId)", updateText, System.currentTimeMillis(), details.getEntityId());
-//			}
-//		}
+		public void createUpdate(String updateText, GreenhouseUserDetails details) {						
+			if (details != null) {
+				jdbcTemplate.update("insert into update (text, updateTimestamp, userId) values (?, ?, ?)", updateText, System.currentTimeMillis(), details.getEntityId());
+			}
+		}
 		
 		public List<Update> getUpdates() {
-			 return jdbcTemplate.query("select u.text, u.updateTimestamp from Update u order by updateTimestamp desc", updateMapper);
+			 return jdbcTemplate.query("select u.text, u.updateTimestamp, u.userId from Update u order by updateTimestamp desc", updateMapper);
 		}
 		
 		private RowMapper<Update> updateMapper = new RowMapper<Update>() {
@@ -38,6 +38,7 @@ public class GreenhouseUpdatesService {
 				Update update = new Update();
 				update.setText(rs.getString("text"));
 				update.setTimestamp(rs.getLong("updateTimestamp"));
+				update.setUserId(rs.getLong("userId"));
 				return update;
 			}
 		};

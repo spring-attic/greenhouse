@@ -8,7 +8,7 @@
 		<c:forEach var="update" items="${updates}">
 			<li>
 				${update.text} <br /> 
-				${update.timestamp}
+				${update.timestamp} | <a href="<s:url value="/members/${update.userId}" />">profile</a> 
 			</li>
 		</c:forEach>
 	</ul>
