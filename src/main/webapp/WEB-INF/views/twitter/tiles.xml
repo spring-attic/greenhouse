@@ -9,4 +9,8 @@
     <definition name="twitter/friends" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/twitter/friends.jsp" />
     </definition>
+    
+    <definition name="twitter/error" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/twitter/error.jsp" />
+    </definition>    
 </tiles-definitions>

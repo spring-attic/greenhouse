@@ -13,3 +13,5 @@ We make it fun to be an application developer.
 We help you connect with fellow developers and take advantage
 of everything the Spring community has to offer.
 </p>
+
+<p><a href="<s:url value="/import/twitter" />">Find your Twitter friends who are also in the Greenhouse</a></p>
