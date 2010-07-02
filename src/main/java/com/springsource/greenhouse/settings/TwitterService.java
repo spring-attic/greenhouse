@@ -1,5 +1,6 @@
 package com.springsource.greenhouse.settings;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth.consumer.OAuthConsumerSupport;
 import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
 import org.springframework.security.oauth.consumer.ProtectedResourceDetailsService;
@@ -20,7 +20,7 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -79,46 +79,43 @@ public class TwitterService {
 		return exchangeWithTwitter(accessToken, method, url, parameters, List.class);
 	}
 
-	private <T> T exchangeWithTwitter(OAuthConsumerToken accessToken, HttpMethod method, String url,
+	private <T> T exchangeWithTwitter(OAuthConsumerToken accessToken, HttpMethod method, String twitterUrl,
 		        Map<String, String> parameters, Class<T> responseType) {
 
-		try {
-			ProtectedResourceDetails details = resourceDetailsService.loadProtectedResourceDetailsById("twitter");
-			String authorizationHeader = oauthSupport.getAuthorizationHeader(details, accessToken, new URL(url), 
-					method.name(), parameters);
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Authorization", authorizationHeader);
-			headers.add("Content-Type", "application/x-www-form-urlencoded");
+		HttpHeaders headers = buildRequestHeaders(accessToken, method, twitterUrl, parameters);
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>();
+		HashMap<String, Object> uriVariables = new HashMap<String, Object>();
 
-			MultiValueMap<String, String> form = new LinkedMultiValueMap<String, String>();
-			HashMap<String, Object> uriVariables = new HashMap<String, Object>();
-			if(method.equals(HttpMethod.POST) || method.equals(HttpMethod.PUT)) {
-				for (String key : parameters.keySet()) {
-					form.add(key, parameters.get(key));
-				}
-			} else {
-				for (String key : parameters.keySet()) {
-					uriVariables.put(key, parameters.get(key));
-				}				
+		if(method.equals(HttpMethod.POST) || method.equals(HttpMethod.PUT)) {
+			for (String key : parameters.keySet()) {
+				form.add(key, parameters.get(key));
 			}
-
-			HttpEntity<MultiValueMap<String, String>> statusEntity = 
-				    new HttpEntity<MultiValueMap<String, String>>(form, headers);
-
-			return restTemplate.exchange(url, method, statusEntity, responseType, uriVariables).getBody();
-		} catch (HttpClientErrorException e) {
-			// TODO : Handle this exception more generically
-			if (e.getStatusCode().equals(HttpStatus.FORBIDDEN)) {
-				// this is normal and expected if two or more duplicate tweets are sent back-to-back
-				logger.info("Tweet forbidden. Probably due to a duplicate tweet or a rate limit being reached.");
-			} else {
-				logger.error("Unable to update Twitter status. Reason: " + e.getMessage());
-			}
-		} catch (Exception e) {
-			logger.error("Unable to update Twitter status. Reason: " + e.getMessage());
+		} else {
+			for (String key : parameters.keySet()) {
+				uriVariables.put(key, parameters.get(key));
+			}				
 		}
-		return null;
+
+		HttpEntity<MultiValueMap<String, String>> statusEntity = 
+			    new HttpEntity<MultiValueMap<String, String>>(form, headers);
+
+		return restTemplate.exchange(twitterUrl, method, statusEntity, responseType, uriVariables).getBody();
 	}
+
+	private HttpHeaders buildRequestHeaders(OAuthConsumerToken accessToken, HttpMethod method, String twitterUrl,
+            Map<String, String> parameters) {
+	    try {
+	        ProtectedResourceDetails details = resourceDetailsService.loadProtectedResourceDetailsById("twitter");
+	        String authorizationHeader = oauthSupport.getAuthorizationHeader(details, accessToken, new URL(twitterUrl), 
+	        		method.name(), parameters);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add("Authorization", authorizationHeader);
+	        headers.add("Content-Type", "application/x-www-form-urlencoded");
+	        return headers;
+        } catch (MalformedURLException e) {
+        	throw new RestClientException("Malformed URL: " +twitterUrl, e);
+        }
+    }
 
 	private RestTemplate restTemplate;
 	public void setRestTemplate(RestTemplate restTemplate) {

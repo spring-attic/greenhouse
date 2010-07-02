@@ -2,7 +2,8 @@ package com.springsource.greenhouse.settings;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
@@ -26,14 +28,14 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 public class TwitterController {
 	private OAuthConsumerTokenServicesFactory tokenServicesFactory;
 	private TwitterService twitterService;
-	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	@Inject
 	public TwitterController(OAuthConsumerTokenServicesFactory tokenServicesFactory, TwitterService twitterService,
 			JdbcTemplate jdbcTemplate) {
 		this.tokenServicesFactory = tokenServicesFactory;
 		this.twitterService = twitterService;		
-		this.jdbcTemplate = jdbcTemplate;
+		this.jdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 	
 	@RequestMapping(value="/import/twitter", method=RequestMethod.GET)
@@ -50,27 +52,23 @@ public class TwitterController {
 			Map<String, Object> model) {
 		OAuthConsumerToken accessToken = getAccessToken(request, authentication);
 		String[] twitterFriends = twitterService.getFriends(accessToken, twitterName);
-
-		List<GreenhouseFriend> greenhouseFriends = new ArrayList<GreenhouseFriend>();
-		for (String twitterFriend : twitterFriends) {
-			List<GreenhouseFriend> friendResults = jdbcTemplate.query(
-					"select username, firstName, lastName from User where username = ?", 
-					new RowMapper<GreenhouseFriend>() {
-						public GreenhouseFriend mapRow(ResultSet rs, int rowNum) throws SQLException {
-							GreenhouseFriend friend = new GreenhouseFriend();
-							friend.setUsername(rs.getString("username"));
-							friend.setName(rs.getString("firstName") + " " + rs.getString("lastName"));
-						    return friend;
-						}
-					}, twitterFriend); 
-			if(friendResults.size() > 0) {
-				greenhouseFriends.add(friendResults.get(0));
-			}
-        }
-
-		model.put("friends", greenhouseFriends);
+		model.put("friends", findGreenhouseTwitterFriends(twitterFriends));
 		return "twitter/friends";
 	}
+	
+	private List<GreenhouseFriend> findGreenhouseTwitterFriends(String[] twitterFriends) {
+	    return jdbcTemplate.query(
+	    		"select username, firstName, lastName from User where username in ( :names )",
+	    		Collections.singletonMap("names", Arrays.asList(twitterFriends)),
+	    		new RowMapper<GreenhouseFriend>() {
+					public GreenhouseFriend mapRow(ResultSet rs, int rowNum) throws SQLException {
+						GreenhouseFriend friend = new GreenhouseFriend();
+						friend.setUsername(rs.getString("username"));
+						friend.setName(rs.getString("firstName") + " " + rs.getString("lastName"));
+					    return friend;
+					}
+				});
+    }
 	
 	// TODO: This is duplicated here and in TwitterSettingsController. Find a common place for it.
 	private OAuthConsumerToken getAccessToken(HttpServletRequest request, Authentication authentication) {
