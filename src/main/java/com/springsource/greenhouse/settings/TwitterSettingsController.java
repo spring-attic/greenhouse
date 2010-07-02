@@ -1,5 +1,8 @@
 package com.springsource.greenhouse.settings;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,9 +10,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.oauth.OAuthUtil;
@@ -65,6 +70,16 @@ public class TwitterSettingsController {
 		return "redirect:/settings/twitter";
 	}
 
+	@ExceptionHandler(HttpStatusCodeException.class)
+	public String handleIOException(HttpStatusCodeException ex, HttpServletRequest request) {
+		request.setAttribute("error", ex.getMessage());
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+		ex.printStackTrace(printWriter);
+		request.setAttribute("stackTrace", stringWriter.getBuffer().toString());
+		return "twitter/error";
+	}
+	
 	// internal helpers
 	private boolean isConnected(GreenhouseUserDetails currentUser) {
 		return jdbcTemplate.queryForInt(
