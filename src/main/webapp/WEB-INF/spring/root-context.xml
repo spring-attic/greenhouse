@@ -10,6 +10,8 @@
 	<!-- Root Context: defines shared resources accessible to all other web components -->
 	<context:annotation-config />
 	
+	<context:property-placeholder location="classpath:application.properties" />
+	
 	<!-- Local, JDBC-based TransactionManager -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
@@ -29,5 +31,9 @@
 	
 	<!-- Configures Shared Security Layer -->
 	<import resource="security.xml" />
+
+	<!-- Configures Email Integration -->
+	<import resource="email.xml" />
+	<import resource="integration.xml" />
 		
 </beans>
