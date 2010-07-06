@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth;
+package org.springframework.oauth.extras;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

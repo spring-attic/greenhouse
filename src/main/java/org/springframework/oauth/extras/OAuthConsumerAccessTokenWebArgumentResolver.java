@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth;
+package org.springframework.oauth.extras;
 
 import javax.servlet.http.HttpServletRequest;
 

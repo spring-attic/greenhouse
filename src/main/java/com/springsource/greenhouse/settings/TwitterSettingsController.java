@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.oauth.extras.OAuthConsumerTokenServicesHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
-import com.springsource.greenhouse.oauth.OAuthConsumerTokenServicesHelper;
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 @Controller

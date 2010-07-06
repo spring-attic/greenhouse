@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
 import org.springframework.mobile.DeviceDetectingHandlerInterceptor;
+import org.springframework.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.web.bind.support.WebArgumentResolver;
@@ -15,7 +16,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
-import com.springsource.greenhouse.oauth.OAuthConsumerAccessTokenWebArgumentResolver;
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 // TODO - it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter

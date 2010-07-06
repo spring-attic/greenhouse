@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth;
+package org.springframework.oauth.extras;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
+
+import com.springsource.greenhouse.oauth.NetworkConnectionsTokenServices;
 
 public class OAuthConsumerTokenServicesHelper {
 	
