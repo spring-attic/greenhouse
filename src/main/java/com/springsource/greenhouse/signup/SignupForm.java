@@ -3,7 +3,6 @@ package com.springsource.greenhouse.signup;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class SignupForm {
@@ -20,11 +19,11 @@ public class SignupForm {
 
 	@NotEmpty
 	@Size(min=6)
-	private String password;
+	private String password = "";
 
 	@NotEmpty
 	@Size(min=6)
-	private String confirmPassword;
+	private String confirmPassword = "";
 
 	public String getFirstName() {
 		return firstName;
@@ -68,6 +67,6 @@ public class SignupForm {
 	
 	@AssertTrue(message="Passwords did not match")
 	public boolean isMatchingPasswords() {
-		return StringUtils.equals(password, confirmPassword);
+		return password.equals(confirmPassword);
 	}
 }
