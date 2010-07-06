@@ -37,6 +37,10 @@ public final class GreenhouseUserDetails implements UserDetails {
 		return username;
 	}
 	
+	/*
+	 * Breaking immutability here seems dirty. But attempts to solve this while maintaining
+	 * immutability all open up a can of worms. Revisit later.
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
