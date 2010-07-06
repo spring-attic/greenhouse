@@ -1,20 +1,17 @@
 package com.springsource.greenhouse.oauth;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
-import org.springframework.stereotype.Component;
 
-@Component
-public class OAuthUtil {
+public class OAuthConsumerTokenServicesHelper {
+	
 	private OAuthConsumerTokenServicesFactory tokenServicesFactory;
 	
-	@Inject
-	public OAuthUtil(OAuthConsumerTokenServicesFactory tokenServicesFactory) {
+	public OAuthConsumerTokenServicesHelper(OAuthConsumerTokenServicesFactory tokenServicesFactory) {
 		this.tokenServicesFactory = tokenServicesFactory;
 	}
 	

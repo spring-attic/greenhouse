@@ -4,8 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- Cache of string templates -->
-	<bean id="stringTemplateFactory" 
-	      class="org.springframework.mail.template.DefaultStringTemplateFactory" />
+	<bean id="stringTemplateFactory"  class="org.springframework.mail.template.DefaultStringTemplateFactory" />
 
 	<!-- Mail sender -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

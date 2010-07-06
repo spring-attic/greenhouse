@@ -1,8 +1,8 @@
-package com.springsource.greenhouse.settings;
+package org.springframework.social.twitter;
 
-import static com.springsource.greenhouse.settings.TwitterService.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.social.twitter.TwitterService.*;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -21,6 +21,7 @@ import org.springframework.security.oauth.consumer.InMemoryProtectedResourceDeta
 import org.springframework.security.oauth.consumer.OAuthConsumerSupport;
 import org.springframework.security.oauth.consumer.ProtectedResourceDetails;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
+import org.springframework.social.twitter.TwitterService;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import edu.emory.mathcs.backport.java.util.Collections;
 
 public class TwitterServiceTest {
+	
 	@Test
 	@SuppressWarnings("unchecked")
 	public void shouldSendUpdateMessageToTwitter() {

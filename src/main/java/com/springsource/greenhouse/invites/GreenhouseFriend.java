@@ -1,9 +1,19 @@
-package com.springsource.greenhouse.settings;
+package com.springsource.greenhouse.invites;
 
 public class GreenhouseFriend {
-	private String username;
+
 	private String name;
 
+	private String username;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -12,11 +22,4 @@ public class GreenhouseFriend {
 		this.username = username;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

@@ -1,4 +1,4 @@
-package org.springframework.web.mobile;
+package org.springframework.mobile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

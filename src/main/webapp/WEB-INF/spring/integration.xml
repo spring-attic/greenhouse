@@ -1,43 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
-				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				xmlns:mail="http://www.springframework.org/schema/integration/mail"
-				xmlns="http://www.springframework.org/schema/integration" xmlns:task="http://www.springframework.org/schema/task"
-				xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-1.0.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mail="http://www.springframework.org/schema/integration/mail"
+	xmlns="http://www.springframework.org/schema/integration" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-1.0.xsd
 		http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail-1.0.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- Gateway that publishes signup messages to the global message channel -->
-	<gateway id="signupMessageGateway" 
-	         service-interface="com.springsource.greenhouse.signup.mail.SignupMessageGateway" 
-	         default-request-channel="globalChannel" />
+	<gateway id="signupMessageGateway" service-interface="com.springsource.greenhouse.signup.SignupMessageGateway" default-request-channel="globalChannel" />
 		 		
 	<!-- Routes SignupMessages to the signupChannel -->
 	<payload-type-router input-channel="globalChannel">
-		<mapping type="com.springsource.greenhouse.signup.mail.SignupMessage" channel="signupChannel" />
+		<mapping type="com.springsource.greenhouse.signup.SignupMessage" channel="welcomeMailerChannel" />
 	</payload-type-router>	
 
-	<!-- Clients subscribe to this channel to receive signup notifications -->
-	<publish-subscribe-channel id="signupChannel" />
-
-	<!-- Forks SignupMessages to an asynchronous mailer -->
-	<bridge input-channel="signupChannel" output-channel="signupMailerChannel" />
-	
 	<!-- Asynchronously dispatches signup notifications for mailing -->
-	<channel id="signupMailerChannel">
-		<dispatcher task-executor="signupMailerExecutor" />
+	<channel id="welcomeMailerChannel">
+		<dispatcher task-executor="welcomeMailerExecutor" />
 	</channel>
 
 	<!-- Mailer thread pool -->
-	<task:executor id="signupMailerExecutor" />
+	<task:executor id="welcomeMailerExecutor" />
 	
 	<!-- Transforms an SignupMessage to a MailMessage -->
-	<transformer input-channel="signupMailerChannel" output-channel="signupMail">
-		<beans:bean class="com.springsource.greenhouse.signup.mail.SignupMailTransformer" />
+	<transformer input-channel="welcomeMailerChannel" output-channel="welcomeMail">
+		<beans:bean class="com.springsource.greenhouse.mail.WelcomeMailTransformer" />
 	</transformer>
 
 	<!-- Sends the MailMessage -->
-	<mail:outbound-channel-adapter id="signupMail" mail-sender="mailSender" />
+	<mail:outbound-channel-adapter id="welcomeMail" mail-sender="mailSender" />
 
 </beans:beans>

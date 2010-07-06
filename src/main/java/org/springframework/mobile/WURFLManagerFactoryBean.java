@@ -1,4 +1,4 @@
-package org.springframework.web.mobile;
+package org.springframework.mobile;
 
 import net.sourceforge.wurfl.core.DefaultDeviceProvider;
 import net.sourceforge.wurfl.core.DefaultWURFLManager;
