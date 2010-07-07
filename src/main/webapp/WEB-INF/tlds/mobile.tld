@@ -7,7 +7,7 @@
 
  	<tag>
  		<name>AppleDevice</name>
- 		<tag-class>org.springframework.web.mobile.tags.AppleDevice</tag-class>
+ 		<tag-class>org.springframework.mobile.tags.AppleDevice</tag-class>
  		<body-content>tagdependent</body-content> 
 	</tag>
 
