@@ -5,11 +5,16 @@
 	
 	<definition name="homeNotSignedIn" extends="page">
 		<put-attribute name="header" value="/WEB-INF/views/home/header.jsp" />			
-		<put-attribute name="content" value="/WEB-INF/views/home/intro.jsp" />
+		<put-attribute name="content">
+			<definition name="content" template="/WEB-INF/views/home/content.jsp">
+				<put-attribute name="intro" value="/WEB-INF/views/home/intro.jsp" />
+				<put-attribute name="updates" value="/WEB-INF/views/home/updates.jsp" />
+			</definition>
+		</put-attribute>
 	</definition>
 	
 	<definition name="homeSignedIn" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/home/home.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/home/intro.jsp" />
 	</definition>
 	
 </tiles-definitions>

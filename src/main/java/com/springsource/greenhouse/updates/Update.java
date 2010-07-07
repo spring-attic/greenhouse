@@ -6,7 +6,9 @@ import java.util.Date;
 public class Update {
 
 	private String text;
+	
 	private String timestamp;
+	
 	private long userId;
 	
 	public String getText() {

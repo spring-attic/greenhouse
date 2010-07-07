@@ -24,12 +24,13 @@
   		<form:label path="email">Email</form:label>
   		<form:input path="email" />
   		
-  		<form:label path="password">Password (at least 6 characters)</form:label>
+  		<form:label path="password">
+  			Password (at least 6 characters) <form:errors path="passwordConfirmed" cssClass="fieldError" />
+  		</form:label>
   		<form:password path="password" />
-  		
+
   		<form:label path="confirmPassword">Confirm Password</form:label>
-  		<form:password path="confirmPassword"/>
-  		<form:errors path="matchingPasswords" cssClass="fieldError"/>
+  		<form:password path="confirmPassword" />
 	</fieldset>
 	<input type="submit" value="Sign up">
 </form:form>

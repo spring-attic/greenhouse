@@ -1,15 +1,19 @@
 package com.springsource.greenhouse.config;
 
+import javax.inject.Inject;
+
 import net.sourceforge.wurfl.core.Device;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
+import org.springframework.mobile.DeviceDetectingHandlerInterceptor;
+import org.springframework.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.mobile.DeviceDetectingHandlerInterceptor;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
@@ -19,6 +23,13 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 // TODO - see SPR-7327
 public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProcessor {
 
+	private OAuthConsumerTokenServicesFactory oauthTokenFactory;
+	
+	@Inject
+	public AnnotationMethodHandlerAdapterPostProcessor(OAuthConsumerTokenServicesFactory oauthTokenFactory) {
+		this.oauthTokenFactory = oauthTokenFactory;
+	}
+
 	public Object postProcessBeforeInitialization(Object bean, String name)
 			throws BeansException {
 		return bean;
@@ -27,9 +38,10 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 	public Object postProcessAfterInitialization(Object bean, String name) throws BeansException {
 		if (bean instanceof AnnotationMethodHandlerAdapter) {
 			AnnotationMethodHandlerAdapter controllerInvoker = (AnnotationMethodHandlerAdapter) bean;
-			WebArgumentResolver[] resolvers = new WebArgumentResolver[2];
+			WebArgumentResolver[] resolvers = new WebArgumentResolver[3];
 			resolvers[0] = new DeviceWebArgumentResolver();
 			resolvers[1] = new GreenhouseUserDetailsWebArgumentResolver();
+			resolvers[2] = new OAuthConsumerAccessTokenWebArgumentResolver(oauthTokenFactory);
 			controllerInvoker.setCustomArgumentResolvers(resolvers);
 		}
 		return bean;

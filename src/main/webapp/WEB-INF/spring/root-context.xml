@@ -9,9 +9,15 @@
 	
 	<!-- Root Context: defines shared resources accessible to all other web components -->
 	<context:annotation-config />
+
+	<!-- Twitter Client API -->
+	<bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
 	
-	<context:property-placeholder location="classpath:application.properties" />
-	
+	<!-- Greenhouse updates -->
+    <bean id="updatesService" class="com.springsource.greenhouse.updates.GreenhouseUpdatesService">
+    	<constructor-arg ref="jdbcTemplate" />
+    </bean>
+    	
 	<!-- Local, JDBC-based TransactionManager -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
@@ -30,11 +36,16 @@
 		<jdbc:script location="/WEB-INF/database/data.sql" />
 	</jdbc:embedded-database>
 	
+	<!-- Configurable application properties -->
+	<context:property-placeholder location="classpath:application.properties" />
+				
 	<!-- Configures Shared Security Layer -->
 	<import resource="security.xml" />
 
-	<!-- Configures Email Integration -->
-	<import resource="email.xml" />
+	<!-- Configures Shared Integration layer -->
 	<import resource="integration.xml" />
-		
+
+	<!-- Configures Mail support -->
+	<import resource="mail.xml" />
+	
 </beans>

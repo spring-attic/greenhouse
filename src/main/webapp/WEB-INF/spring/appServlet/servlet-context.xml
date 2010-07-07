@@ -23,7 +23,7 @@
 	<!-- Interceptors that execute common control logic across multiple requests -->
 	<interceptors>
 		<beans:bean class="com.springsource.greenhouse.signin.CurrentUserHandlerInterceptor" />
-		<beans:bean class="org.springframework.web.mobile.DeviceDetectingHandlerInterceptor">
+		<beans:bean class="org.springframework.mobile.DeviceDetectingHandlerInterceptor">
 			<beans:constructor-arg ref="wurflManager" />
 		</beans:bean>
 	</interceptors>
@@ -45,7 +45,7 @@
 	</beans:bean>
 	
 	<!-- Configures WURFL for detecting mobile device capabilities -->
-	<beans:bean id="wurflManager" class="org.springframework.web.mobile.WURFLManagerFactoryBean" />
+	<beans:bean id="wurflManager" class="org.springframework.mobile.WURFLManagerFactoryBean" />
 		
 	<!-- Configures transaction management around @Transactional components -->
 	<tx:annotation-driven />
