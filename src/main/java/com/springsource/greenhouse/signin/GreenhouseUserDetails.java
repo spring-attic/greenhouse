@@ -82,11 +82,7 @@ public final class GreenhouseUserDetails implements UserDetails {
 	}
 
 	public String getProfileKey() {
-		if (username != null && username.length() == 0) {
-			return username;
-		} else {
-			return entityId.toString();
-		}
+		return username != null ? username : entityId.toString(); 
 	}
 	
 }
