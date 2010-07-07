@@ -17,7 +17,7 @@ public class WelcomeMailTransformer {
 	
 	private StringTemplateFactory templateFactory;
 	
-	private Resource welcomeTemplate = new ClassPathResource("welcome-mail.st", getClass());
+	private Resource welcomeTemplate = new ClassPathResource("welcome.st", getClass());
 
 	@Inject
 	public WelcomeMailTransformer(JdbcTemplate jdbcTemplate, StringTemplateFactory templateFactory) {

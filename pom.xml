@@ -10,8 +10,7 @@
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.0.4.BUILD-SNAPSHOT</org.springframework-version>
-		<org.springframework.security-version>3.0.2.RELEASE</org.springframework.security-version>
-		<org.aspectj-version>1.6.8</org.aspectj-version>
+		<org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
 	</properties>
 	<dependencies>
@@ -85,7 +84,7 @@
         	<artifactId>spring-integration-mail</artifactId>
         	<version>1.0.4.RELEASE</version>
         </dependency>
-
+		
 		<!-- @Inject -->
 		<dependency>
 			<groupId>javax.inject</groupId>
@@ -117,6 +116,14 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- For dynamic class proxies: remove once AspectJ is plugged in -->		
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		
 		<!-- Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -209,6 +216,13 @@
 			<version>1.5.3</version>
 		</dependency>
 
+		<!-- WURFL -->
+		<dependency>
+ 			<groupId>net.sourceforge.wurfl</groupId>
+ 			<artifactId>wurfl</artifactId>
+ 			<version>1.0.1</version>
+		</dependency>
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -234,12 +248,7 @@
             <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
-		<dependency>
- 			<groupId>net.sourceforge.wurfl</groupId>
- 			<artifactId>wurfl</artifactId>
- 			<version>1.0.1</version>
-		</dependency>
-
+        
 	</dependencies>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
@@ -249,6 +258,14 @@
 			<url>http://maven.springframework.org/snapshot</url>
 			<releases><enabled>false</enabled></releases>
 			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+		<!-- For Spring releases -->
+		<repository>
+			<id>org.springframework.maven.release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://maven.springframework.org/release</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>false</enabled></snapshots>
 		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
@@ -301,7 +318,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>

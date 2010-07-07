@@ -13,10 +13,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 
 @Controller
 @RequestMapping("/signup")
@@ -42,6 +42,7 @@ public class SignupController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
+	@Transactional
 	public String signup(@Valid SignupForm form, BindingResult result, HttpServletRequest request) {
 		if (result.hasErrors()) {
 			return null;
@@ -66,5 +67,8 @@ public class SignupController {
 			SecurityContextHolder.getContext().setAuthentication(null);
 		}
 	}
-	
+
+	// neeeded for cglib until AspectJ is plugged in
+	public SignupController() {}
+
 }
