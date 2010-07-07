@@ -8,5 +8,6 @@
 		<label for="username">Twitter Username</label>
 		<input id="username" name="username" type="text" size="25" autocorrect="off" autocapitalize="off" value="${username}" />
 	</fieldset>
+	<!-- TODO Ajax-enable with progress bar -->
 	<input type="submit" value="Go"/>
 </form>
