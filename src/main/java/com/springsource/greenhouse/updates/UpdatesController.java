@@ -26,9 +26,4 @@ public class UpdatesController {
 		return updatesService.getUpdates();
 	}
 
-	@RequestMapping(method=RequestMethod.GET)
-	public void updates(Model model) {
-		List<Update> updates = updatesService.getUpdates();
-		model.addAttribute("updates", updates);
-	}
 }
