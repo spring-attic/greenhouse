@@ -65,8 +65,8 @@ public class SignupForm {
 		this.confirmPassword = confirmPassword;
 	}
 	
-	@AssertTrue(message="Passwords did not match")
-	public boolean isMatchingPasswords() {
+	@AssertTrue(message="could not confirm")
+	public boolean isPasswordConfirmed() {
 		return password.equals(confirmPassword);
 	}
 }
