@@ -23,14 +23,14 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 @Controller
 @RequestMapping("/invite/twitter")
-public class TwitterInvitesController {
+public class TwitterInviteController {
 	
 	private TwitterService twitterService;
 	
 	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public TwitterInvitesController(TwitterService twitterService, JdbcTemplate jdbcTemplate) {
+	public TwitterInviteController(TwitterService twitterService, JdbcTemplate jdbcTemplate) {
 		this.twitterService = twitterService;		
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}

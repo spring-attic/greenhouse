@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/invite")
-public class InvitesController {
+public class InviteController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public void invitePage() {
