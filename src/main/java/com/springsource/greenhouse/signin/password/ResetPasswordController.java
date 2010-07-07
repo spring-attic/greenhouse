@@ -41,7 +41,9 @@ public class ResetPasswordController {
 	@RequestMapping(value="/resetRequest", method=RequestMethod.POST)
 	public String sendResetEmail(@Valid ResetPasswordRequestForm resetRequestForm) {
 		try {
-			String userQuery = EmailUtils.isEmail(resetRequestForm.getUsername()) ? "select id, email from User where email=?" : "select id, email from User where username=?";
+			String userQuery = EmailUtils.isEmail(resetRequestForm.getUsername()) ? 
+								"select id, email from User where email=?" : 
+								"select id, email from User where username=?";
 
 			Map<String, Object> userEmailResults = jdbcTemplate.queryForMap(userQuery, resetRequestForm.getUsername());
 			Long userId = (Long) userEmailResults.get("id");
@@ -58,26 +60,27 @@ public class ResetPasswordController {
 	}
 	
 	@RequestMapping(value="/reset/{requestKey}", method=RequestMethod.GET)
-	public String showResetForm(@PathVariable("requestKey") String requestKey, Map<String, Object> model, HttpServletResponse response) {
+	public String showResetForm(@PathVariable("requestKey") String requestKey, 
+								Map<String, Object> model, 
+								HttpServletResponse response) {
 		int matches = jdbcTemplate.queryForInt("select count(userId) from PasswordResetRequest where requestKey=?", requestKey);
 		if(matches == 1) {
 			model.put("resetPasswordForm", new ResetPasswordForm());
 			return "password/resetForm";
 		} else {
+			// TODO : Is there a better way of handling this?
 			response.setStatus(HttpStatus.NOT_FOUND.value());
-			return ""; // TODO - Handle this case correctly
+			return "errors/notFound";
 		} 		
 	}	
 	
 	@RequestMapping(value="/reset/{requestKey}", method=RequestMethod.POST)
 	@Transactional
-	public String changePassword(@Valid ResetPasswordForm resetPasswordForm, @PathVariable("requestKey") String requestKey, Map<String, Object> model) {
-		long userId = jdbcTemplate.queryForLong("select userId from PasswordResetRequest where requestKey=?", requestKey);
-		
+	public String changePassword(@Valid ResetPasswordForm resetPasswordForm, 
+			                     @PathVariable("requestKey") String requestKey) {
+		long userId = jdbcTemplate.queryForLong("select userId from PasswordResetRequest where requestKey=?", requestKey);		
 		jdbcTemplate.update("update User set password=? where id=?", resetPasswordForm.getPassword(), userId);
-		
-		jdbcTemplate.update("delete from PasswordResetRequest where requestKey=?", requestKey);
-		
+		jdbcTemplate.update("delete from PasswordResetRequest where requestKey=?", requestKey);		
 		return "password/resetComplete";
 	}
 }

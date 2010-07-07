@@ -3,7 +3,7 @@
 
 <tiles-definitions>
 
-	<definition name="errors/notFound.jsp" extends="standard">
+	<definition name="errors/notFound" extends="standard">
 		<put-attribute name="content" value="/WEB-INF/views/errors/notFound.jsp" />
 	</definition>
 
