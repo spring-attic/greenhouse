@@ -3,10 +3,10 @@
 
 <tiles-definitions>
 
-	<definition name="invites/twitter" extends="standard">
+	<definition name="invite/twitter" extends="standard">
 		<put-attribute name="content" value="/WEB-INF/views/invites/twitter/friendFinder.jsp" />
 	</definition>
    
-    <definition name="invites/twitterFriends" template="/WEB-INF/views/invites/twitter/friends.jsp" />
+    <definition name="invite/twitterFriends" template="/WEB-INF/views/invites/twitter/friends.jsp" />
           
 </tiles-definitions>

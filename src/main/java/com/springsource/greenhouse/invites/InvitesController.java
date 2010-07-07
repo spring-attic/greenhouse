@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/invites")
+@RequestMapping("/invite")
 public class InvitesController {
 
 	@RequestMapping(method=RequestMethod.GET)
-	public void invitesPage() {
+	public void invitePage() {
 		
 	}
 }

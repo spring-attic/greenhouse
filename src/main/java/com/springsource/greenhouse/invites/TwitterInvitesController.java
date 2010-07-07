@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 
 @Controller
-@RequestMapping("/invites/twitter")
+@RequestMapping("/invite/twitter")
 public class TwitterInvitesController {
 	
 	private TwitterService twitterService;
@@ -46,7 +46,7 @@ public class TwitterInvitesController {
 	public String findFriends(@OAuthAccessToken("twitter") OAuthConsumerToken accessToken, @RequestParam String username, Model model) {
 		List<String> twitterFriends = twitterService.getFriends(accessToken, username);
 		model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
-		return "invites/twitterFriends";
+		return "invite/twitterFriends";
 	}
 	
 	private List<GreenhouseFriend> findGreenhouseTwitterFriends(List<String> twitterFriends) {
