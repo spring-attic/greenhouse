@@ -1,4 +1,4 @@
-package org.springframework.web.mobile.tags;
+package org.springframework.mobile.tags;
 
 import java.io.StringWriter;
 
