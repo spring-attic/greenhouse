@@ -2,7 +2,7 @@
 
 <form id="friendFinder" action="<c:url value="/invites/twitter" />" method="post">
 	<div class="header">
-  		<h2>Find Twitter Friends in the Greenhouse</h2>
+  		<h2>Find Twitter friends that are members of the Greenhouse</h2>
 	</div>
   	<fieldset>
 		<label for="username">Twitter Username:</label>
