@@ -13,52 +13,52 @@
 	         service-interface="com.springsource.greenhouse.signup.SignupMessageGateway" 
 	         default-request-channel="globalChannel" />
 
-	<gateway id="passwordResetMessageGateway" 
-	         service-interface="com.springsource.greenhouse.signin.password.PasswordResetMessageGateway" 
+	<gateway id="resetPasswordMessageGateway" 
+	         service-interface="com.springsource.greenhouse.signin.password.ResetPasswordMessageGateway" 
 	         default-request-channel="globalChannel" />
 		 		
 	<!-- Routes SignupMessages to the signupChannel -->
 	<payload-type-router input-channel="globalChannel">
 		<mapping type="com.springsource.greenhouse.signup.SignupMessage" channel="signupChannel" />
-		<mapping type="com.springsource.greenhouse.signin.password.PasswordResetMessage" channel="passwordResetChannel" />
+		<mapping type="com.springsource.greenhouse.signin.password.ResetPasswordMessage" channel="resetPasswordChannel" />
 	</payload-type-router>	
 
 	<publish-subscribe-channel id="signupChannel" />
 
-	<publish-subscribe-channel id="passwordResetChannel" />
+	<publish-subscribe-channel id="resetPasswordChannel" />
 
 	<service-activator input-channel="signupChannel" method="insertSignupUpdate" ref="updatesService" />
 		
 	<bridge input-channel="signupChannel" output-channel="welcomeMailerChannel" />
 
-	<bridge input-channel="passwordResetChannel" output-channel="passwordResetMailerChannel" />
+	<bridge input-channel="resetPasswordChannel" output-channel="resetPasswordMailerChannel" />
 	
 	<!-- Asynchronously dispatches welcome emails -->
 	<channel id="welcomeMailerChannel">
 		<dispatcher task-executor="welcomeMailer" />
 	</channel>
 
-	<channel id="passwordResetMailerChannel">
-		<dispatcher task-executor="passwordResetMailerExecutor" />
+	<channel id="resetPasswordMailerChannel">
+		<dispatcher task-executor="resetPasswordMailerExecutor" />
 	</channel>
 
 	<!-- Mailer thread pool -->
 	<task:executor id="welcomeMailer" />
 
-	<task:executor id="passwordResetMailerExecutor" />
+	<task:executor id="resetPasswordMailerExecutor" />
 	
 	<!-- Transforms a SignupMessage to a welcome MailMessage -->
 	<transformer input-channel="welcomeMailerChannel" output-channel="welcomeMail">
 		<beans:bean class="com.springsource.greenhouse.mail.WelcomeMailTransformer" />
 	</transformer>
 
-	<transformer input-channel="passwordResetMailerChannel" output-channel="passwordResetMail">
-		<beans:bean class="com.springsource.greenhouse.signin.password.PasswordResetMailTransformer" />
+	<transformer input-channel="resetPasswordMailerChannel" output-channel="resetPasswordMail">
+		<beans:bean class="com.springsource.greenhouse.signin.password.ResetPasswordMailTransformer" />
 	</transformer>
 
 	<!-- Sends the welcome MailMessage -->
 	<mail:outbound-channel-adapter id="welcomeMail" mail-sender="mailSender" />
 
-	<mail:outbound-channel-adapter id="passwordResetMail" mail-sender="mailSender" />
+	<mail:outbound-channel-adapter id="resetPasswordMail" mail-sender="mailSender" />
 
 </beans:beans>

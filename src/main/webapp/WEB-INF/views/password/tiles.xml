@@ -3,9 +3,20 @@
 
 <tiles-definitions>
 
-	<definition name="password/resetRequestForm" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/password/resetRequestForm.jsp" />
+	<definition name="password/resetRequest" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/password/resetRequest.jsp" />
 	</definition>
 
+	<definition name="password/resetForm" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/password/resetForm.jsp" />
+	</definition>
+
+	<definition name="password/resetComplete" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/password/resetComplete.jsp" />
+	</definition>
+
+	<definition name="password/resetInstructionsSent" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/password/resetInstructionsSent.jsp" />
+	</definition>
 
 </tiles-definitions>
