@@ -7,3 +7,5 @@ insert into Consumer (consumerKey, name, description, website, callbackUrl, secr
 insert into Update (text, updateTimestamp, userId) values ('Keith Donald signed up at the Greenhouse.', 1278019179970, 1);
 insert into Update (text, updateTimestamp, userId) values ('Craig Walls signed up at the Greenhouse.', 1278017173970, 2);
 insert into Update (text, updateTimestamp, userId) values ('Roy Clarkson signed up at the Greenhouse.', 1274015177470, 3);
+
+insert into PasswordResetRequest (requestKey, userId) values ('booger', 2);

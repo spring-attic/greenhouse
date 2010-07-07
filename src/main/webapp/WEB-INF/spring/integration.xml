@@ -12,32 +12,53 @@
 	<gateway id="signupMessageGateway" 
 	         service-interface="com.springsource.greenhouse.signup.mail.SignupMessageGateway" 
 	         default-request-channel="globalChannel" />
+
+	<gateway id="passwordResetMessageGateway" 
+	         service-interface="com.springsource.greenhouse.signin.password.PasswordResetMessageGateway" 
+	         default-request-channel="globalChannel" />
 		 		
 	<!-- Routes SignupMessages to the signupChannel -->
 	<payload-type-router input-channel="globalChannel">
 		<mapping type="com.springsource.greenhouse.signup.mail.SignupMessage" channel="signupChannel" />
+		<mapping type="com.springsource.greenhouse.signin.password.PasswordResetMessage" channel="passwordResetChannel" />
 	</payload-type-router>	
 
 	<!-- Clients subscribe to this channel to receive signup notifications -->
 	<publish-subscribe-channel id="signupChannel" />
 
+	<publish-subscribe-channel id="passwordResetChannel" />
+
 	<!-- Forks SignupMessages to an asynchronous mailer -->
 	<bridge input-channel="signupChannel" output-channel="signupMailerChannel" />
+
+	<bridge input-channel="passwordResetChannel" output-channel="passwordResetMailerChannel" />
 	
 	<!-- Asynchronously dispatches signup notifications for mailing -->
 	<channel id="signupMailerChannel">
 		<dispatcher task-executor="signupMailerExecutor" />
 	</channel>
 
+	<channel id="passwordResetMailerChannel">
+		<dispatcher task-executor="passwordResetMailerExecutor" />
+	</channel>
+
 	<!-- Mailer thread pool -->
 	<task:executor id="signupMailerExecutor" />
+
+	<task:executor id="passwordResetMailerExecutor" />
 	
 	<!-- Transforms an SignupMessage to a MailMessage -->
 	<transformer input-channel="signupMailerChannel" output-channel="signupMail">
 		<beans:bean class="com.springsource.greenhouse.signup.mail.SignupMailTransformer" />
 	</transformer>
 
+	<transformer input-channel="passwordResetMailerChannel" output-channel="passwordResetMail">
+		<beans:bean class="com.springsource.greenhouse.signin.password.PasswordResetMailTransformer" />
+	</transformer>
+
 	<!-- Sends the MailMessage -->
 	<mail:outbound-channel-adapter id="signupMail" mail-sender="mailSender" />
+
+	<mail:outbound-channel-adapter id="passwordResetMail" mail-sender="mailSender" />
 
 </beans:beans>

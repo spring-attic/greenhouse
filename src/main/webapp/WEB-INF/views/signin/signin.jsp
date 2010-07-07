@@ -13,5 +13,6 @@
 		<label for="password">Password</label>
 		<input id="password" name="j_password" type="password" size="25" />
 	</fieldset>
+	<p><a href="#">Forgot your password?</a></p>
 	<input type="submit" value="Sign In"/>
 </form>
