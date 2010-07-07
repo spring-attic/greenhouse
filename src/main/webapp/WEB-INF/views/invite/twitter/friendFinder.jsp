@@ -8,6 +8,19 @@
 		<label for="username">Twitter Username</label>
 		<input id="username" name="username" type="text" size="25" autocorrect="off" autocapitalize="off" value="${username}" />
 	</fieldset>
-	<!-- TODO Ajax-enable with progress bar -->
-	<input type="submit" value="Go"/>
+	<input type="submit" value="Find"/>
 </form>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#friendFinder").submit(function() {
+		$.post(this.action, $(this).serialize(), function(friends) {
+			$("#friends").html(friends);
+		});		
+		return false;
+	});
+});
+</script>
+
+<div id="friends">
+</div>
