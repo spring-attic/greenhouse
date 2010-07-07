@@ -11,6 +11,7 @@
 	<input type="submit" value="Find"/>
 </form>
 
+<!-- TODO consider using load here; apply a spinner effect; make progressive -->
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#friendFinder").submit(function() {
