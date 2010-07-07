@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.invites;
+package com.springsource.greenhouse.invite;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

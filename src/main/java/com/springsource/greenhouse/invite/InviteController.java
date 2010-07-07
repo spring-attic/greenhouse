@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.invites;
+package com.springsource.greenhouse.invite;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
