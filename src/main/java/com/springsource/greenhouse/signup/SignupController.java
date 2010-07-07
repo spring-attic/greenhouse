@@ -48,7 +48,7 @@ public class SignupController {
 		}
 		jdbcTemplate.update("insert into User (firstName, lastName, email, password) values (?, ?, ?, ?)",
 				form.getFirstName(), form.getLastName(), form.getEmail(), form.getPassword());
-		Long userId = jdbcTemplate.queryForLong("call identity");
+		Long userId = jdbcTemplate.queryForLong("call identity()");
 		signupMessageGateway.publish(new SignupMessage(userId, form.getFirstName(), form.getLastName(), form.getEmail()));
 		signIn(form.getEmail(), form.getPassword(), request);
 		return "redirect:/";
