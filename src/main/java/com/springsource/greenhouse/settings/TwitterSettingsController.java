@@ -8,7 +8,7 @@ import org.springframework.oauth.extras.OAuthConsumerTokenServicesHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
-import org.springframework.social.twitter.TwitterService;
+import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +22,12 @@ public class TwitterSettingsController {
 	
 	private OAuthConsumerTokenServicesHelper oauthHelper;
 
-	private TwitterService twitterService;
+	private TwitterOperations twitterService;
 	
 	private JdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public TwitterSettingsController(OAuthConsumerTokenServicesFactory oauthTokenFactory, TwitterService twitterService, JdbcTemplate jdbcTemplate) {
+	public TwitterSettingsController(OAuthConsumerTokenServicesFactory oauthTokenFactory, TwitterOperations twitterService, JdbcTemplate jdbcTemplate) {
 		this.oauthHelper = new OAuthConsumerTokenServicesHelper(oauthTokenFactory);
 		this.jdbcTemplate = jdbcTemplate;
 		this.twitterService = twitterService;

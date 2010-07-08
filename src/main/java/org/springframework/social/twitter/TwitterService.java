@@ -20,7 +20,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-public class TwitterService {
+public class TwitterService implements TwitterOperations {
 	
 	private OAuthConsumerSupport oauthSupport;
 	
@@ -54,6 +54,26 @@ public class TwitterService {
 		Map<String, String> parameters = Collections.singletonMap("status", message);
 		// TODO should we just use post here?
 		exchangeForMap(accessToken, HttpMethod.POST, UPDATE_STATUS_URL, parameters);
+	}
+	
+	public List<Tweet> getTweetsForTag(OAuthConsumerToken accessToken, String tag) {
+		return getTweetsForTag(accessToken, tag, 50, 1);
+	}
+	
+	public List<Tweet> getTweetsForTag(OAuthConsumerToken accessToken, String tag, int resultsPerPage, int page) {
+		Map<String, String> parameters = Collections.singletonMap("query", "#" + tag);
+		Map<String, Object> response = exchangeForMap(accessToken, HttpMethod.GET, SEARCH_URL, parameters);
+		
+		List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
+		
+		List<Tweet> tweets = new ArrayList<Tweet>(response.size());
+		for (Map<String, Object> item : results) {
+	        Tweet tweet = new Tweet();
+	        tweet.setFromUser(item.get("from_user").toString());
+	        tweet.setText(item.get("text").toString());
+        }
+		
+	    return tweets;
 	}
 
 	// internal helpers
@@ -105,5 +125,6 @@ public class TwitterService {
 	static final String VERIFY_CREDENTIALS_URL = "http://api.twitter.com/1/account/verify_credentials.json";
 	static final String FRIENDS_STATUSES_URL = "http://api.twitter.com/1/statuses/friends.json?screen_name={screen_name}";
 	static final String UPDATE_STATUS_URL = "http://api.twitter.com/1/statuses/update.json";
+	static final String SEARCH_URL = "http://api.twitter.com/1/search.json?q={query}";
 
 }

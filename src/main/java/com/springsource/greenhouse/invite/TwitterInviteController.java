@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.oauth.extras.OAuthAccessToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
-import org.springframework.social.twitter.TwitterService;
+import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +25,12 @@ import com.springsource.greenhouse.signin.GreenhouseUserDetails;
 @RequestMapping("/invite/twitter")
 public class TwitterInviteController {
 	
-	private TwitterService twitterService;
+	private TwitterOperations twitterService;
 	
 	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public TwitterInviteController(TwitterService twitterService, JdbcTemplate jdbcTemplate) {
+	public TwitterInviteController(TwitterOperations twitterService, JdbcTemplate jdbcTemplate) {
 		this.twitterService = twitterService;		
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
@@ -44,6 +44,8 @@ public class TwitterInviteController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@OAuthAccessToken("twitter") OAuthConsumerToken accessToken, @RequestParam String username, Model model) {
+		twitterService.getTweetsForTag(accessToken, "lebron");
+		
 		List<String> twitterFriends = twitterService.getFriends(accessToken, username);
 		model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
 		return "invite/twitterFriends";
