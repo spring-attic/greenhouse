@@ -15,7 +15,9 @@
   		</s:bind>
 	</div>
   	<fieldset>
-  		<form:label path="username">Your username or password</form:label>
+  		<form:label path="username">
+  			Your username or password <form:errors path="username" cssClass="fieldError" />
+  		</form:label>
   		<form:password path="username" />
 	</fieldset>
 	<input type="submit" value="Request a Password Reset">

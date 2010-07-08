@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,11 +48,18 @@ public class SignupController {
 		if (result.hasErrors()) {
 			return null;
 		}
-		jdbcTemplate.update("insert into User (firstName, lastName, email, password) values (?, ?, ?, ?)",
-				form.getFirstName(), form.getLastName(), form.getEmail(), form.getPassword());
-		Long userId = jdbcTemplate.queryForLong("call identity()");
-		signupMessageGateway.publish(new SignupMessage(userId, form.getFirstName(), form.getLastName(), form.getEmail()));
-		signIn(form.getEmail(), form.getPassword(), request);
+		
+		try {
+			jdbcTemplate.update("insert into User (firstName, lastName, email, password) values (?, ?, ?, ?)",
+					form.getFirstName(), form.getLastName(), form.getEmail(), form.getPassword());
+			Long userId = jdbcTemplate.queryForLong("call identity()");
+			signupMessageGateway.publish(new SignupMessage(userId, form.getFirstName(), form.getLastName(), form.getEmail()));
+			signIn(form.getEmail(), form.getPassword(), request);
+		} catch (DuplicateKeyException e) {
+			result.rejectValue("email", "error.duplicate.email.constraint", "This email is already used by another user");
+			return null;
+		}
+		
 		return "redirect:/";
 	}
 
