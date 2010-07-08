@@ -1,13 +1,12 @@
 package com.springsource.greenhouse.reset;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -20,6 +19,9 @@ import org.springframework.mail.template.StringTemplate;
 import org.springframework.mail.template.StringTemplateFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,29 +53,31 @@ public class ResetPasswordController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, params="username")
-	public String sendResetEmail(@NotNull @Size(max=320) String username) {
+	public String sendResetEmail(@Valid ResetRequestForm requestForm, Errors errors) {
 		try {
-			String userQuery = EmailUtils.isEmail(username) ? 
+			String userQuery = EmailUtils.isEmail(requestForm.getUsername()) ? 
 								"select id, email from User where email=?" : 
 								"select id, email from User where username=?";
 	
-			Map<String, Object> userEmailResults = jdbcTemplate.queryForMap(userQuery, username);
+			Map<String, Object> userEmailResults = jdbcTemplate.queryForMap(userQuery, requestForm.getUsername());
 			Long userId = (Long) userEmailResults.get("id");
 			String email = (String) userEmailResults.get("email");
 			
 			String requestKey = UUID.randomUUID().toString();
 			jdbcTemplate.update("insert into PasswordResetRequest (userId, requestKey) values (?, ?)", userId, requestKey);
 			
-			mailSender.send(assembleResetMailMessage(email, requestKey));
+			mailSender.send(assembleResetMailMessage(email, requestKey));			
+			return "redirect:/reset?sent";
 		} catch (EmptyResultDataAccessException e) {
-			// do nothing?
+			errors.rejectValue("username", "error.unknown.user", "User not found");
+			return null;
 		}
-
-		return "redirect:/reset/requestSent";
 	}
 	
-	@RequestMapping(value="/requestSent", method=RequestMethod.GET)
-	public void instructionsSent() {}
+	@RequestMapping(method=RequestMethod.GET, params="sent")
+	public String instructionsSent() {
+		return "reset/requestSent";
+	}
 	
 	@RequestMapping(value="/{requestKey}", method=RequestMethod.GET)
 	public String showResetForm(@PathVariable("requestKey") String requestKey, 
@@ -81,7 +85,9 @@ public class ResetPasswordController {
 								HttpServletResponse response) {
 		int matches = jdbcTemplate.queryForInt("select count(userId) from PasswordResetRequest where requestKey=?", requestKey);
 		if(matches == 1) {
-			model.put("resetPasswordForm", new ResetPasswordForm());
+			ResetPasswordForm resetForm = new ResetPasswordForm();
+			resetForm.setRequestKey(requestKey);
+			model.put("resetPasswordForm", resetForm);
 			return "reset/form";
 		} else {
 			response.setStatus(HttpStatus.NOT_FOUND.value());
@@ -92,11 +98,26 @@ public class ResetPasswordController {
 	@RequestMapping(value="/{requestKey}", method=RequestMethod.POST)
 	@Transactional
 	public String changePassword(@Valid ResetPasswordForm resetPasswordForm, 
-			                     @PathVariable("requestKey") String requestKey) {
-		long userId = jdbcTemplate.queryForLong("select userId from PasswordResetRequest where requestKey=?", requestKey);		
+			                     BindingResult bindResult) {
+		if(bindResult.hasErrors()) {
+			List<ObjectError> allErrors = bindResult.getAllErrors();
+			for (ObjectError objectError : allErrors) {
+				System.out.println("ERROR:  " + objectError.getCode() + " : " + objectError.getDefaultMessage());
+            }
+			
+			return "reset/form";
+		}
+		
+		long userId = jdbcTemplate.queryForLong("select userId from PasswordResetRequest where requestKey=?", 
+												resetPasswordForm.getRequestKey());		
 		jdbcTemplate.update("update User set password=? where id=?", resetPasswordForm.getPassword(), userId);
-		jdbcTemplate.update("delete from PasswordResetRequest where requestKey=?", requestKey);		
-		return "reset/complete";
+		jdbcTemplate.update("delete from PasswordResetRequest where requestKey=?", resetPasswordForm.getRequestKey());		
+		return "redirect:/reset?complete";
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, params="complete")
+	public String resetComplete() {
+		return "reset/resetComplete";
 	}
 	
 	// Email message assembly
