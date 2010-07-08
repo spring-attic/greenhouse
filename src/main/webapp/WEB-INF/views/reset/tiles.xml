@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+	<definition name="reset" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/reset/requestForm.jsp" />
+	</definition>
+
+	<definition name="reset/form" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/reset/resetForm.jsp" />
+	</definition>
+
+	<definition name="reset/complete" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/reset/resetComplete.jsp" />
+	</definition>
+
+	<definition name="reset/requestSent" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/reset/requestSent.jsp" />
+	</definition>
+
+</tiles-definitions>

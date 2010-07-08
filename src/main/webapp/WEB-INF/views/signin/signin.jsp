@@ -15,6 +15,6 @@
 		<label for="password">Password</label>
 		<input id="password" name="j_password" type="password" size="25" />
 	</fieldset>
-	<p><a href="<s:url value="/password/resetRequest" />">Forgot your password?</a></p>
+	<p><a href="<s:url value="/reset?request" />">Forgot your password?</a></p>
 	<input type="submit" value="Sign In"/>
 </form>

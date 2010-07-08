@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<form:form id="resetPassword" method="post" modelAttribute="resetPasswordRequestForm">
+<form:form id="resetPassword" method="post" modelAttribute="resetRequestForm">
 	<div class="header">
   		<h2>Sign up</h2>
   		<s:bind path="*">

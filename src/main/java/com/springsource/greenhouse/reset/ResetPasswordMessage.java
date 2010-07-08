@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.signin.password;
+package com.springsource.greenhouse.reset;
 
 public class ResetPasswordMessage {
 	private final String requestKey;

@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.signin.password;
+package com.springsource.greenhouse.reset;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;

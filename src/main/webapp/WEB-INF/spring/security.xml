@@ -13,7 +13,7 @@
 		<!-- Authorization policy -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/signup" access="permitAll" />
-		<intercept-url pattern="/password/**" access="permitAll" />
+		<intercept-url pattern="/reset/**" access="permitAll" />
 		<intercept-url pattern="/signin" filters="none" method="GET" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
