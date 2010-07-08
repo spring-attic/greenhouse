@@ -1,6 +1,5 @@
 package com.springsource.greenhouse.reset;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -100,11 +98,6 @@ public class ResetPasswordController {
 	public String changePassword(@Valid ResetPasswordForm resetPasswordForm, 
 			                     BindingResult bindResult) {
 		if(bindResult.hasErrors()) {
-			List<ObjectError> allErrors = bindResult.getAllErrors();
-			for (ObjectError objectError : allErrors) {
-				System.out.println("ERROR:  " + objectError.getCode() + " : " + objectError.getDefaultMessage());
-            }
-			
 			return "reset/form";
 		}
 		
