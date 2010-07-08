@@ -15,6 +15,7 @@
   		</s:bind>
 	</div>
   	<fieldset>
+  		<form:hidden path="requestKey"/>
   		<form:label path="password">
   			Password (at least 6 characters) <form:errors path="passwordConfirmed" cssClass="fieldError" />
   		</form:label>

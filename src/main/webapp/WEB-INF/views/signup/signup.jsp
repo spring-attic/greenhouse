@@ -15,13 +15,19 @@
   		</s:bind>
 	</div>
   	<fieldset>
-  		<form:label path="firstName">First Name</form:label>
+  		<form:label path="firstName">
+  			First Name <form:errors path="firstName" cssClass="fieldError" />
+ 		</form:label>
   		<form:input path="firstName" />
   		
-  		<form:label path="lastName">Last Name</form:label>
+  		<form:label path="lastName">
+  			Last Name <form:errors path="lastName" cssClass="fieldError" />
+ 		</form:label>
   		<form:input path="lastName" />
   		
-  		<form:label path="email">Email</form:label>
+  		<form:label path="email">
+  			Email <form:errors path="email" cssClass="fieldError" />
+  		</form:label>
   		<form:input path="email" />
   		
   		<form:label path="password">

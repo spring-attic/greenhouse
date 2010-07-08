@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<form:form id="resetPassword" method="post" modelAttribute="resetPasswordRequestForm">
+<form:form id="resetPassword" method="post" modelAttribute="resetRequestForm">
 	<div class="header">
   		<h2>Sign up</h2>
   		<s:bind path="*">
@@ -15,7 +15,9 @@
   		</s:bind>
 	</div>
   	<fieldset>
-  		<form:label path="username">Your username or password</form:label>
+  		<form:label path="username">
+  			Your username or password <form:errors path="username" cssClass="fieldError" />
+  		</form:label>
   		<form:password path="username" />
 	</fieldset>
 	<input type="submit" value="Request a Password Reset">

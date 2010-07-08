@@ -1,10 +1,10 @@
-package com.springsource.greenhouse.signin.password;
+package com.springsource.greenhouse.reset;
 
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class ResetPasswordRequestForm {
+public class ResetRequestForm {
 	@NotEmpty
 	@Size(max=320)
 	private String username;

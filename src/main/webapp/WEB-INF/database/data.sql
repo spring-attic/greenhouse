@@ -8,9 +8,6 @@ insert into Update (text, updateTimestamp, userId) values ('Keith Donald signed 
 insert into Update (text, updateTimestamp, userId) values ('Craig Walls signed up', 1278017173970, 2);
 insert into Update (text, updateTimestamp, userId) values ('Roy Clarkson signed up', 1274015177470, 3);
 
-insert into PasswordResetRequest (requestKey, userId) values ('booger', 2);
-
-
 insert into Event (title, description, startDate, hashtag, createdByUserId, modifiedByUserId, lastModified) 
 values ('Atlanta Spring User Group', 'Cool place to hang out and eat pizza', '2010-08-15', '#atlspring', 3, 3, current_timestamp());
 

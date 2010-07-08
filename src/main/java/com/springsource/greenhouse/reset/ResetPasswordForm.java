@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.signin.password;
+package com.springsource.greenhouse.reset;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
@@ -13,6 +13,10 @@ public class ResetPasswordForm {
 	@NotEmpty
 	@Size(min=6)
 	private String confirmPassword = "";
+	
+	@NotEmpty
+	private String requestKey;
+	
 	
 	public String getPassword() {
 		return password;
@@ -34,4 +38,12 @@ public class ResetPasswordForm {
 	public boolean isPasswordConfirmed() {
 		return password.equals(confirmPassword);
 	}
+
+	public void setRequestKey(String requestKey) {
+	    this.requestKey = requestKey;
+    }
+
+	public String getRequestKey() {
+	    return requestKey;
+    }
 }
