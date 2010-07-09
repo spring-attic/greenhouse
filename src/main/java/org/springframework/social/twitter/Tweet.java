@@ -2,8 +2,6 @@ package org.springframework.social.twitter;
 
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 public class Tweet {
 	private long id;
 	private String text;
@@ -99,9 +97,4 @@ public class Tweet {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 }

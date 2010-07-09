@@ -10,5 +10,6 @@ public interface TwitterOperations {
 	List<String> getFriends(OAuthConsumerToken accessToken, String screenName);
 	void updateStatus(OAuthConsumerToken accessToken, String message);
 	SearchResults search(OAuthConsumerToken accessToken, String query);
+	SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage);
 	SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage, int sinceId, int maxId);
 }

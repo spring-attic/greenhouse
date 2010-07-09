@@ -70,6 +70,10 @@ public class TwitterService implements TwitterOperations {
 		return search(accessToken, query, 1, DEFAULT_RESULTS_PER_PAGE, 0, 0);
 	}
 
+	public SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage) {
+		return search(accessToken, query, page, resultsPerPage, 0, 0);
+	}
+
 	public SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage, int sinceId, int maxId) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("query", query);
@@ -90,7 +94,7 @@ public class TwitterService implements TwitterOperations {
 		List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("results");		
 		List<Tweet> tweets = new ArrayList<Tweet>(response.size());
 		for (Map<String, Object> item : items) {
-	        populateTweet(item);	        
+	        tweets.add(populateTweet(item));	        
         }
 		
 		SearchResults results = new SearchResults();
@@ -106,7 +110,7 @@ public class TwitterService implements TwitterOperations {
 	    return results;		
 	}
 
-	private void populateTweet(Map<String, Object> item) {
+	private Tweet populateTweet(Map<String, Object> item) {
 	    Tweet tweet = new Tweet();
 	    tweet.setId(NumberUtils.parseNumber(ObjectUtils.nullSafeToString(item.get("id")), Long.class));
 	    tweet.setFromUser(ObjectUtils.nullSafeToString(item.get("from_user")));
@@ -120,6 +124,7 @@ public class TwitterService implements TwitterOperations {
 	    tweet.setLanguageCode(ObjectUtils.nullSafeToString(item.get("iso_language_code")));
 	    tweet.setProfileImageUrl(ObjectUtils.nullSafeToString(item.get("profile_image_url")));
 	    tweet.setSource(ObjectUtils.nullSafeToString(item.get("source")));
+	    return tweet;
     }
 	
 	// internal helpers
