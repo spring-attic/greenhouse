@@ -5,7 +5,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class ResetPasswordForm {
+public class ChangePasswordForm {
+	
 	@NotEmpty
 	@Size(min=6)
 	private String password = "";
@@ -13,11 +14,7 @@ public class ResetPasswordForm {
 	@NotEmpty
 	@Size(min=6)
 	private String confirmPassword = "";
-	
-	@NotEmpty
-	private String requestKey;
-	
-	
+		
 	public String getPassword() {
 		return password;
 	}
@@ -39,11 +36,4 @@ public class ResetPasswordForm {
 		return password.equals(confirmPassword);
 	}
 
-	public void setRequestKey(String requestKey) {
-	    this.requestKey = requestKey;
-    }
-
-	public String getRequestKey() {
-	    return requestKey;
-    }
 }

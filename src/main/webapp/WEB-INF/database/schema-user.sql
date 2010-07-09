@@ -42,7 +42,7 @@ create table NetworkConnection (userId bigint,
                     primary key (userId, network),
                     foreign key (userId) references User(id));
                     					
-create table PasswordResetRequest ( requestKey varchar not null unique,
+create table ResetPassword (token varchar not null unique,
 					userId bigint not null,
-					primary key (requestKey),
+					primary key (token),
 					foreign key (userId) references User(id));

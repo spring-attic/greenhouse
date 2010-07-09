@@ -48,7 +48,7 @@
 	<beans:bean id="wurflManager" class="org.springframework.mobile.WURFLManagerFactoryBean" />
 		
 	<!-- Configures transaction management around @Transactional components -->
-	<tx:annotation-driven />
+	<tx:annotation-driven mode="aspectj" />
 
 	<!-- Imports the application controllers that process client requests -->
 	<beans:import resource="controllers.xml" />

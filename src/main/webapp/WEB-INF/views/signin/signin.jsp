@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="MobileTags" prefix="m" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 
 <form id="signin" action="<c:url value="/signin/authenticate" />" method="post">
 	<div class="header">
@@ -15,6 +14,6 @@
 		<label for="password">Password</label>
 		<input id="password" name="j_password" type="password" size="25" />
 	</fieldset>
-	<p><a href="<s:url value="/reset?request" />">Forgot your password?</a></p>
+	<p><a href="<c:url value="/reset" />">Forgot your password?</a></p>
 	<input type="submit" value="Sign In"/>
 </form>
