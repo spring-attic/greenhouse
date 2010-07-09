@@ -58,6 +58,7 @@ public class ResetPasswordController {
 		}
 		String token = UUID.randomUUID().toString();
 		jdbcTemplate.update("insert into ResetPassword (userId, token) values (?, ?)", user.get("id"), token);
+		// TODO make this call in a separate thread
 		mailSender.send(createResetMailMessage((String) user.get("email"), token));	
 		FlashMap.getCurrent(request).put("successMessage", "Email sent");
 		return "redirect:/reset";
