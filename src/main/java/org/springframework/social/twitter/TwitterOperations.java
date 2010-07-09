@@ -9,6 +9,6 @@ public interface TwitterOperations {
 	String getScreenName(OAuthConsumerToken accessToken);
 	List<String> getFriends(OAuthConsumerToken accessToken, String screenName);
 	void updateStatus(OAuthConsumerToken accessToken, String message);
-	List<Tweet> getTweetsForTag(OAuthConsumerToken accessToken, String tag);
-	List<Tweet> getTweetsForTag(OAuthConsumerToken accessToken, String tag, int resultsPerPage, int page);
+	SearchResults search(OAuthConsumerToken accessToken, String query);
+	SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage, int sinceId, int maxId);
 }
