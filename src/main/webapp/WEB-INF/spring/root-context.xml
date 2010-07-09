@@ -17,6 +17,11 @@
     <bean id="updatesService" class="com.springsource.greenhouse.updates.GreenhouseUpdatesService">
     	<constructor-arg ref="jdbcTemplate" />
     </bean>
+
+	<!-- Greenhouse events -->
+    <bean id="eventsService" class="com.springsource.greenhouse.events.GreenhouseEventsService">
+    	<constructor-arg ref="jdbcTemplate" />
+    </bean>
     	
 	<!-- Local, JDBC-based TransactionManager -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -32,6 +37,7 @@
 	<jdbc:embedded-database id="dataSource" type="H2">
 		<jdbc:script location="/WEB-INF/database/schema-user.sql" />
 		<jdbc:script location="/WEB-INF/database/schema-update.sql" />
+		<jdbc:script location="/WEB-INF/database/schema-event.sql" />
 		<jdbc:script location="/WEB-INF/database/data.sql" />
 	</jdbc:embedded-database>
 	
