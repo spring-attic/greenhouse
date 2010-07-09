@@ -47,8 +47,7 @@ public class SignupController {
 	public String signup(@Valid SignupForm form, BindingResult result, HttpServletRequest request) {
 		if (result.hasErrors()) {
 			return null;
-		}
-		
+		}		
 		try {
 			jdbcTemplate.update("insert into User (firstName, lastName, email, password) values (?, ?, ?, ?)",
 					form.getFirstName(), form.getLastName(), form.getEmail(), form.getPassword());
@@ -56,10 +55,9 @@ public class SignupController {
 			signupMessageGateway.publish(new SignupMessage(userId, form.getFirstName(), form.getLastName(), form.getEmail()));
 			signIn(form.getEmail(), form.getPassword(), request);
 		} catch (DuplicateKeyException e) {
-			result.rejectValue("email", "error.duplicate.email.constraint", "This email is already used by another user");
+			result.rejectValue("email", "error.duplicate.email.constraint", "Address already on file");
 			return null;
 		}
-		
 		return "redirect:/";
 	}
 
@@ -75,8 +73,5 @@ public class SignupController {
 			SecurityContextHolder.getContext().setAuthentication(null);
 		}
 	}
-
-	// neeeded for cglib until AspectJ is plugged in
-	public SignupController() {}
 
 }

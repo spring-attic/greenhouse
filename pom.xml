@@ -11,6 +11,7 @@
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.0.4.BUILD-SNAPSHOT</org.springframework-version>
 		<org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version>
+		<org.aspectj-version>1.6.9.RELEASE</org.aspectj-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
 	</properties>
 	<dependencies>
@@ -47,6 +48,11 @@
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
+				<!-- Not required, since we don't use method-level security with pointcut expressions -->
+				<exclusion>
+					<groupId>org.aspectj</groupId>
+					<artifactId>aspectjweaver</artifactId>
+				</exclusion>		
 			</exclusions>
 		</dependency>
         <dependency>
@@ -77,13 +83,31 @@
             <groupId>org.codehaus.spring-security-oauth</groupId>
             <artifactId>spring-security-oauth</artifactId>
             <version>3.16.SS3</version>
-        </dependency>
-        
+        </dependency>        
         <dependency>
         	<groupId>org.springframework.integration</groupId>
         	<artifactId>spring-integration-mail</artifactId>
         	<version>1.0.4.RELEASE</version>
         </dependency>
+
+		<!-- Aspect J -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>3.0.2.RELEASE</version>
+		</dependency>
+		<!-- Remove once spring-aspects marks JPA as optional -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<!-- @Inject -->
 		<dependency>
@@ -116,14 +140,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- For dynamic class proxies: remove once AspectJ is plugged in -->		
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-			<version>2.2</version>
-			<scope>runtime</scope>
-		</dependency>
-		
 		<!-- Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -306,6 +322,43 @@
 					<target>${java-version}</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.2</version>
+				<dependencies>
+					<!-- NB: You must use Maven 2.0.9 or above or these are ignored (see MNG-2972) -->
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjrt</artifactId>
+						<version>${org.aspectj-version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjtools</artifactId>
+						<version>${org.aspectj-version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outxml>true</outxml>
+					<aspectLibraries>
+						<aspectLibrary>
+							<groupId>org.springframework</groupId>
+							<artifactId>spring-aspects</artifactId>
+						</aspectLibrary>
+					</aspectLibraries>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>

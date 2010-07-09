@@ -4,19 +4,15 @@
 <tiles-definitions>
 
 	<definition name="reset" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/reset/requestForm.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/reset/reset.jsp" />
 	</definition>
 
-	<definition name="reset/form" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/reset/resetForm.jsp" />
+	<definition name="reset/changePassword" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/reset/changePassword.jsp" />
 	</definition>
 
-	<definition name="reset/resetComplete" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/reset/resetComplete.jsp" />
-	</definition>
-
-	<definition name="reset/requestSent" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/reset/requestSent.jsp" />
+	<definition name="reset/invalidToken" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/reset/invalidToken.jsp" />
 	</definition>
 
 </tiles-definitions>
