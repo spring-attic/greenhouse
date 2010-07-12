@@ -11,3 +11,17 @@ body {
 #topbar {
 	text-align: right;
 }
+
+li.eventTweet {
+	list-style: none;
+	padding-bottom: 10pt;
+}
+
+dt.event {
+	list-style: none;
+	font-size: 1.2em;
+}
+
+dd.event {
+	padding-bottom: 10pt;
+}
