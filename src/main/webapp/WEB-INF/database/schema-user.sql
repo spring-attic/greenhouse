@@ -1,4 +1,4 @@
-create table User (id identity,
+create table Member (id identity,
 					firstName varchar not null, 
 					lastName varchar not null,
 					email varchar(320) not null unique,
@@ -6,43 +6,43 @@ create table User (id identity,
 					username varchar(15) unique,
 					primary key (id));
 
-create table Consumer (consumerKey varchar,
-					name varchar not null unique, 
-					description varchar not null,
-					website varchar not null unique,
-					callbackUrl varchar,
-					secret varchar not null,
-					ownerId bigint not null,
-					primary key (consumerKey),
-					foreign key (ownerId) references User(id));
+create table App (consumerKey varchar,
+				name varchar not null unique, 
+				description varchar not null,
+				website varchar not null unique,
+				callbackUrl varchar,
+				secret varchar not null,
+				owner bigint not null,
+				primary key (consumerKey),
+				foreign key (owner) references Member(id));
 					
-create table AuthorizedConsumer (userId bigint,
-					consumerKey varchar,
-					accessToken varchar not null,
+create table ConnectedApp (accessToken varchar not null unique,
+					app varchar,
+					member bigint,
 					secret varchar not null,
-					primary key (userId, consumerKey),
-					foreign key (userId) references User(id),
-					foreign key (consumerKey) references Consumer(consumerKey));
+					primary key (app, member),
+					foreign key (member) references Member(id),
+					foreign key (app) references App(consumerKey));
+					
+create table ConnectedAccount (accessToken varchar not null,
+					member bigint not null,
+					accountName varchar,
+					secret varchar not null,
+					primary key (member, accountName),
+					foreign key (member) references Member(id));
+                    					
+create table ResetPassword (token varchar,
+					member bigint not null,
+					primary key (token),
+					foreign key (member) references Member(id));
 					
 create table OAuthToken (tokenValue varchar,
-					consumerKey varchar not null,
+					member bigint,
+					app varchar not null,
 					secret varchar not null,
 					callbackUrl varchar,
 					updateTimestamp bigint not null,
 					verifier varchar,
-					userId bigint, 
 					primary key (tokenValue),
-					foreign key (consumerKey) references Consumer(consumerKey),
-					foreign key (userId) references User(id));
-
-create table NetworkConnection (userId bigint,
-                    network varchar,
-                    accessToken varchar not null,
-                    secret varchar not null,
-                    primary key (userId, network),
-                    foreign key (userId) references User(id));
-                    					
-create table ResetPassword (token varchar not null unique,
-					userId bigint not null,
-					primary key (token),
-					foreign key (userId) references User(id));
+					foreign key (member) references Member(id),
+					foreign key (app) references App(consumerKey));

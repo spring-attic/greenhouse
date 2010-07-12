@@ -53,7 +53,7 @@ public class SettingsControllerTest {
     public void testDisconnectApp() {
     	GreenhouseUserDetails currentUser = new GreenhouseUserDetails(1L, "kdonald", "whatever", "Keith");
     	assertEquals("redirect:/settings", controller.disconnectApp("authme", currentUser));
-    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AuthorizedConsumer"));
+    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp"));
     }
 	
 }

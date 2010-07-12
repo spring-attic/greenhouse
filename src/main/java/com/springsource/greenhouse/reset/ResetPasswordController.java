@@ -48,8 +48,8 @@ public class ResetPasswordController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public String sendResetMail(@RequestParam String username, Model model, HttpServletRequest request) {
-		Map<String, Object> user = findByUsername(username);
-		if (user == null) {
+		Map<String, Object> member = findByUsername(username);
+		if (member == null) {
 			// TODO a dynamically generated PresentationModel would be nice here
 			model.addAttribute("username", username);
 			model.addAttribute("error", true);
@@ -57,9 +57,9 @@ public class ResetPasswordController {
 			return null;
 		}
 		String token = UUID.randomUUID().toString();
-		jdbcTemplate.update("insert into ResetPassword (userId, token) values (?, ?)", user.get("id"), token);
+		jdbcTemplate.update("insert into ResetPassword (token, member) values (?, ?)", token, member.get("id"));
 		// TODO make this call in a separate thread
-		mailSender.send(createResetMailMessage((String) user.get("email"), token));	
+		mailSender.send(createResetMailMessage((String) member.get("email"), token));	
 		FlashMap.getCurrent(request).put("successMessage", "Email sent");
 		return "redirect:/reset";
 	}
@@ -83,8 +83,8 @@ public class ResetPasswordController {
 			model.addAttribute("token", token);
 			return "reset/changePassword";
 		}
-		long userId = jdbcTemplate.queryForLong("select userId from ResetPassword where token = ?", token);		
-		jdbcTemplate.update("update User set password = ? where id = ?", form.getPassword(), userId);
+		Long memberId = jdbcTemplate.queryForLong("select member from ResetPassword where token = ?", token);		
+		jdbcTemplate.update("update Member set password = ? where id = ?", form.getPassword(), memberId);
 		jdbcTemplate.update("delete from ResetPassword where token = ?", token);
 		FlashMap.getCurrent(request).put("successMessage", "Password reset");		
 		return "redirect:/reset";
@@ -94,8 +94,8 @@ public class ResetPasswordController {
 	
 	private Map<String, Object> findByUsername(String username) {
 		String userQuery = EmailUtils.isEmail(username) ? 
-				"select id, email from User where email = ?" : 
-				"select id, email from User where username = ?";
+				"select id, email from Member where email = ?" : 
+				"select id, email from Member where username = ?";
 		try {
 			return jdbcTemplate.queryForMap(userQuery, username);		
 		} catch (EmptyResultDataAccessException e) {

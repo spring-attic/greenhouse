@@ -45,11 +45,11 @@ public class MembersController {
 	}
 	
 	private Member findMemberByUserId(Long userId) {
-		return jdbcTemplate.queryForObject("select firstName, lastName from User where id = ?", memberMapper, userId);
+		return jdbcTemplate.queryForObject("select firstName, lastName from Member where id = ?", memberMapper, userId);
 	}
 
 	private Member findMemberByUsername(String username) {
-		return jdbcTemplate.queryForObject("select firstName, lastName from User where username = ?", memberMapper, username);
+		return jdbcTemplate.queryForObject("select firstName, lastName from Member where username = ?", memberMapper, username);
 	}
 
 	private RowMapper<Member> memberMapper = new RowMapper<Member>() {
