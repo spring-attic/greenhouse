@@ -10,7 +10,7 @@
 		<s:url var="profileUrl" value="/members/{profileKey}">
 			<s:param name="profileKey" value="${currentUser.profileKey}" />
 		</s:url>
-		<a href="${profileUrl}">${currentUser.firstName}</a> | <a href="<c:url value="/invite" />">Invite</a> | <a href="<c:url value="/events" />">Events</a> | <a href="<c:url value="/settings" />">Settings</a> | <a href="<c:url value="/signout" />">Sign Out</a>
+		<a href="${profileUrl}"><c:out value="${currentUser.firstName}" escapeXml="true"/></a> | <a href="<c:url value="/invite" />">Invite</a> | <a href="<c:url value="/events" />">Events</a> | <a href="<c:url value="/settings" />">Settings</a> | <a href="<c:url value="/signout" />">Sign Out</a>
 	</c:if>
 </div>
 <h1>
