@@ -30,6 +30,12 @@ public class EventsController {
 	public @ResponseBody List<Event> eventsData() {
 		return eventsService.getEvents();
 	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public String listEvents(Model model) {
+		model.addAttribute(eventsService.getEvents());
+		return "events/list";
+	}
 
 	@RequestMapping(value="/{eventId}", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody Event eventData(@PathVariable long eventId) {
