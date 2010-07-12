@@ -2,7 +2,7 @@
 <ul>
 	<c:forEach var="update" items="${updates}">
 		<li>
-			${update.text} 
+			<c:out value="${update.text}" escapeXml="true" /> 
 		</li>
 	</c:forEach>
 </ul>
