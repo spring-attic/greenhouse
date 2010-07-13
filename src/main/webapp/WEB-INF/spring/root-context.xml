@@ -9,7 +9,7 @@
 	<context:annotation-config />
 
 	<!-- Configurable application properties -->
-	<context:property-placeholder location="classpath:application.properties" />
+	<context:property-placeholder location="classpath:email.properties" />
 
 	<!-- Twitter Client API -->
 	<bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
