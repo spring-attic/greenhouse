@@ -7,10 +7,6 @@
 	</configSuffixes>
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
-		<config>src/main/webapp/WEB-INF/spring/security-oauth-provider.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/security-oauth-consumer.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/security.xml</config>
-		<config>src/main/webapp/WEB-INF/spring/email.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

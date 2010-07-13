@@ -26,7 +26,8 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenImpl;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
 
 @Transactional
 public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenServices {
@@ -34,10 +35,13 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
     private Random random = new SecureRandom();
 
 	private JdbcTemplate jdbcTemplate;
+
+	private AccountRepository accountRepository;
 	
 	@Inject
-	public GreenhouseOAuthProviderTokenServices(JdbcTemplate jdbcTemplate) {
+	public GreenhouseOAuthProviderTokenServices(JdbcTemplate jdbcTemplate, AccountRepository accountRepository) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.accountRepository = accountRepository;
 	}
 	
 	public OAuthProviderToken createUnauthorizedRequestToken(String consumerKey, String callbackUrl) throws AuthenticationException {
@@ -47,35 +51,35 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	    token.setSecret(generateSecret());	    
 	    token.setCallbackUrl(callbackUrl);
 	    token.setTimestamp(System.currentTimeMillis());
-	    jdbcTemplate.update("insert into OAuthToken (tokenValue, consumerKey, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)", token.getValue(), token.getConsumerKey(), token.getSecret(), token.getCallbackUrl(), token.getTimestamp());
+	    jdbcTemplate.update("insert into OAuthToken (tokenValue, app, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)", token.getValue(), token.getConsumerKey(), token.getSecret(), token.getCallbackUrl(), token.getTimestamp());
 		return token;
 	}
 
 	public void authorizeRequestToken(String requestToken, String verifier, Authentication authentication) throws AuthenticationException {
-		Long userId = ((GreenhouseUserDetails) authentication.getPrincipal()).getEntityId();
-		jdbcTemplate.update("update OAuthToken set verifier = ?, updateTimestamp = ?, userId = ? where tokenValue = ?", verifier, System.currentTimeMillis(), userId, requestToken);
+		Account account = (Account) authentication.getPrincipal();
+		jdbcTemplate.update("update OAuthToken set member = ?, verifier = ?, updateTimestamp = ? where tokenValue = ?", account.getId(), verifier, System.currentTimeMillis(), requestToken);
 	}
 	
 	public OAuthAccessProviderToken createAccessToken(String requestToken) throws AuthenticationException {
-		Map<String, Object> row = jdbcTemplate.queryForMap("select consumerKey, userId from OAuthToken where tokenValue = ?", requestToken);	
+		Map<String, Object> row = jdbcTemplate.queryForMap("select app, member from OAuthToken where tokenValue = ?", requestToken);	
 		jdbcTemplate.update("delete from OAuthToken where tokenValue = ?", requestToken);
 		OAuthProviderTokenImpl token = new OAuthProviderTokenImpl();
 	    token.setValue(UUID.randomUUID().toString());
 	    token.setAccessToken(true);
-	    token.setConsumerKey((String) row.get("consumerKey"));
+	    token.setConsumerKey((String) row.get("app"));
 	    token.setSecret(generateSecret());
-	    jdbcTemplate.update("delete from AuthorizedConsumer where userId = ? and consumerKey = ?", row.get("userId"), token.getConsumerKey());	    
-	    jdbcTemplate.update("insert into AuthorizedConsumer (userId, consumerKey, accessToken, secret) values (?, ?, ?, ?)", row.get("userId"), token.getConsumerKey(), token.getValue(), token.getSecret());
+	    jdbcTemplate.update("delete from ConnectedApp where app = ? and member = ?", token.getConsumerKey(), row.get("member"));	    
+	    jdbcTemplate.update("insert into ConnectedApp (accessToken, app, member, secret) values (?, ?, ?, ?)", token.getValue(), token.getConsumerKey(), row.get("member"), token.getSecret());
 		return token;
 	}	
 	
 	public OAuthProviderToken getToken(final String token) throws AuthenticationException {
 		if (jdbcTemplate.queryForInt("select count(*) from OAuthToken where tokenValue = ?", token) == 1) {
-			return jdbcTemplate.queryForObject("select consumerKey, secret, callbackUrl, updateTimestamp, verifier from OAuthToken where tokenValue = ?", new RowMapper<OAuthProviderToken>() {
+			return jdbcTemplate.queryForObject("select app, secret, callbackUrl, updateTimestamp, verifier from OAuthToken where tokenValue = ?", new RowMapper<OAuthProviderToken>() {
 				public OAuthProviderToken mapRow(ResultSet rs, int rowNum) throws SQLException {
 					OAuthProviderTokenImpl holder = new OAuthProviderTokenImpl();
 					holder.setValue(token);
-					holder.setConsumerKey(rs.getString("consumerKey"));
+					holder.setConsumerKey(rs.getString("app"));
 					holder.setSecret(rs.getString("secret"));
 					holder.setCallbackUrl(rs.getString("callbackUrl"));
 					holder.setTimestamp(rs.getLong("updateTimestamp"));
@@ -85,14 +89,14 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 			}, token);
 		} else {
 			try {
-				return jdbcTemplate.queryForObject("select userId, consumerKey, secret from AuthorizedConsumer where accessToken = ?", new RowMapper<OAuthProviderToken>() {
+				return jdbcTemplate.queryForObject("select app, member, secret from ConnectedApp where accessToken = ?", new RowMapper<OAuthProviderToken>() {
 					public OAuthProviderToken mapRow(ResultSet rs, int rowNum) throws SQLException {
 						OAuthProviderTokenImpl holder = new OAuthProviderTokenImpl();
 						holder.setValue(token);
 						holder.setAccessToken(true);
-						holder.setConsumerKey(rs.getString("consumerKey"));
+						holder.setConsumerKey(rs.getString("app"));
+						holder.setUserAuthentication(createUserAuthentication(rs.getLong("member")));
 						holder.setSecret(rs.getString("secret"));
-						holder.setUserAuthentication(createUserAuthentication(rs.getLong("userId")));
 						return holder;
 					}
 				}, token);
@@ -109,19 +113,10 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	    return secret;
 	}
 	
-	private Authentication createUserAuthentication(Long userId) {
-		GreenhouseUserDetails details = jdbcTemplate.queryForObject("select id, firstName, username from User where id = ?", new GreenhouseUserDetailsRowMapper(), userId);
-		Collection<GrantedAuthority> authorities = Collections.emptySet();		
-		return new UsernamePasswordAuthenticationToken(details, "OAuth", authorities);
-	}
-	
-	private static class GreenhouseUserDetailsRowMapper implements RowMapper<GreenhouseUserDetails> {
-
-		public GreenhouseUserDetails mapRow(ResultSet rs, int rowNum)
-				throws SQLException {
-			return new GreenhouseUserDetails(rs.getLong("id"), rs.getString("username"), rs.getString("firstName"));
-		}
-		
+	private Authentication createUserAuthentication(Long memberId) {
+		Collection<GrantedAuthority> authorities = Collections.emptySet();
+		Account account = accountRepository.findAccount(memberId);
+		return new UsernamePasswordAuthenticationToken(account, "OAuth", authorities);
 	}
 	
 }

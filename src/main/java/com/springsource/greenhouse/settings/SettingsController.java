@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.account.Account;
 
 @Controller
 @RequestMapping("/settings")
@@ -26,14 +26,14 @@ public class SettingsController {
 	}
 
 	@RequestMapping(method=RequestMethod.GET)
-	public void settingsPage(GreenhouseUserDetails currentUser, Model model) {
-		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select c.name as name, ac.accessToken from ConnectedApp ac, App c where ac.member = ? and ac.app = c.consumerKey", currentUser.getEntityId());
+	public void settingsPage(Account account, Model model) {
+		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select c.name as name, ac.accessToken from ConnectedApp ac, App c where ac.member = ? and ac.app = c.consumerKey", account.getId());
 		model.addAttribute("apps", apps);
 	}
 	
 	@RequestMapping(value="/apps/{accessToken}", method=RequestMethod.DELETE)
-	public String disconnectApp(@PathVariable String accessToken, GreenhouseUserDetails currentUser) {
-		jdbcTemplate.update("delete from ConnectedApp where accessToken = ? and member = ?", accessToken, currentUser.getEntityId());
+	public String disconnectApp(@PathVariable String accessToken, Account account) {
+		jdbcTemplate.update("delete from ConnectedApp where accessToken = ? and member = ?", accessToken, account.getId());
 		return "redirect:/settings";
 	}
 }

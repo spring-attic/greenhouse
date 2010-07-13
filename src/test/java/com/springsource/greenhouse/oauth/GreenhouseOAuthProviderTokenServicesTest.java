@@ -16,7 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
-import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.DefaultAccountRepository;
 import com.springsource.greenhouse.signup.GreenhouseTestUserDatabaseFactory;
 
 public class GreenhouseOAuthProviderTokenServicesTest {
@@ -28,7 +29,9 @@ public class GreenhouseOAuthProviderTokenServicesTest {
     @Before
     public void setup() {
     	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
-    	tokenServices = new GreenhouseOAuthProviderTokenServices(new JdbcTemplate(db));
+    	JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
+    	DefaultAccountRepository accountRepository = new DefaultAccountRepository(jdbcTemplate);
+    	tokenServices = new GreenhouseOAuthProviderTokenServices(jdbcTemplate, accountRepository);
     }
     
     @After
@@ -54,7 +57,7 @@ public class GreenhouseOAuthProviderTokenServicesTest {
     	assertEquals(token.getCallbackUrl(), token2.getCallbackUrl());
     	assertEquals(token.getVerifier(), token.getVerifier());
     	
-    	Authentication auth = new TestingAuthenticationToken(new GreenhouseUserDetails(1L, "rclarkson@vmware.com", "atlanta", "Roy"), "atlanta");
+    	Authentication auth = new TestingAuthenticationToken(new Account(1L), "atlanta");
     	tokenServices.authorizeRequestToken(token.getValue(), "12345", auth);
 
     	OAuthProviderToken token3 = tokenServices.getToken(token.getValue());
@@ -81,8 +84,8 @@ public class GreenhouseOAuthProviderTokenServicesTest {
     	assertNull(accessToken2.getCallbackUrl());
     	assertNull(accessToken2.getVerifier());
     	assertNotNull(accessToken2.getUserAuthentication());
-    	GreenhouseUserDetails currentUser = (GreenhouseUserDetails) accessToken2.getUserAuthentication().getPrincipal();
-    	assertEquals("Roy", currentUser.getFirstName());
+    	Account account = (Account) accessToken2.getUserAuthentication().getPrincipal();
+    	assertEquals(1L, (Object) account.getId());
     	assertEquals("OAuth", accessToken2.getUserAuthentication().getCredentials());
     }
     
@@ -108,7 +111,7 @@ public class GreenhouseOAuthProviderTokenServicesTest {
         assertEquals(token.getCallbackUrl(), token2.getCallbackUrl());
         assertEquals(token.getVerifier(), token.getVerifier());
         
-        Authentication auth = new TestingAuthenticationToken(new GreenhouseUserDetails(1L, "rclarkson@vmware.com", "atlanta", "Roy"), "atlanta");
+        Authentication auth = new TestingAuthenticationToken(new Account(1L), "atlanta");
         tokenServices.authorizeRequestToken(token.getValue(), "12345", auth);
 
         OAuthProviderToken token3 = tokenServices.getToken(token.getValue());
@@ -134,8 +137,8 @@ public class GreenhouseOAuthProviderTokenServicesTest {
         assertEquals(accessToken.getSecret(), accessToken2.getSecret());
         assertNull(accessToken2.getCallbackUrl());
         assertNull(accessToken2.getVerifier());
-    	GreenhouseUserDetails currentUser = (GreenhouseUserDetails) accessToken2.getUserAuthentication().getPrincipal();
-    	assertEquals("Roy", currentUser.getFirstName());
+    	Account account = (Account) accessToken2.getUserAuthentication().getPrincipal();
+    	assertEquals(1L, (Object) account.getId());
     	assertEquals("OAuth", accessToken2.getUserAuthentication().getCredentials());
         
         OAuthProviderToken reAuthToken = tokenServices.createUnauthorizedRequestToken("a08318eb478a1ee31f69a55276f3af64", "x-com-springsource-greenhouse://oauth-response");
@@ -179,8 +182,8 @@ public class GreenhouseOAuthProviderTokenServicesTest {
         assertEquals(reAuthAccessToken.getSecret(), reAuthAccessToken2.getSecret());
         assertNull(reAuthAccessToken2.getCallbackUrl());
         assertNull(reAuthAccessToken2.getVerifier());
-    	currentUser = (GreenhouseUserDetails) accessToken2.getUserAuthentication().getPrincipal();
-    	assertEquals("Roy", currentUser.getFirstName());
+    	account = (Account) accessToken2.getUserAuthentication().getPrincipal();
+    	assertEquals(1L, (Object) account.getId());
     	assertEquals("OAuth", accessToken2.getUserAuthentication().getCredentials());
     }
 }

@@ -1,4 +1,4 @@
-package org.springframework.oauth.extras;
+package org.springframework.security.oauth.extras;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

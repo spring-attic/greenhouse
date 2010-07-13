@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.springsource.greenhouse.signup.SignupMessage;
+import com.springsource.greenhouse.account.Account;
 
 public class GreenhouseUpdatesService {
 
@@ -20,13 +20,13 @@ public class GreenhouseUpdatesService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public void insertSignupUpdate(SignupMessage message) {
-		String text = message.getFullName() + " signed up";
-		jdbcTemplate.update("insert into update (text, updateTimestamp, userId) values (?, ?, ?)", text, System.currentTimeMillis(), message.getUserId());
+	public void insertSignupUpdate(Account account) {
+		String text = account.getFullName() + " signed up";
+		jdbcTemplate.update("insert into update (text, updateTimestamp, member) values (?, ?, ?)", text, System.currentTimeMillis(), account.getId());
 	}
 	
 	public List<Update> getUpdates() {
-		return jdbcTemplate.query("select text, updateTimestamp, userId from Update order by updateTimestamp desc", updateMapper);
+		return jdbcTemplate.query("select text, updateTimestamp, member from Update order by updateTimestamp desc", updateMapper);
 	}
 
 	private RowMapper<Update> updateMapper = new RowMapper<Update>() {
@@ -34,7 +34,7 @@ public class GreenhouseUpdatesService {
 			Update update = new Update();
 			update.setText(rs.getString("text"));
 			update.setTimestamp(rs.getLong("updateTimestamp"));
-			update.setUserId(rs.getLong("userId"));
+			update.setUserId(rs.getLong("member"));
 			return update;
 		}
 	};

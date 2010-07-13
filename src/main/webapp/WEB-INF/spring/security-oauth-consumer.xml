@@ -17,7 +17,9 @@
 			access-token-url="https://twitter.com/oauth/access_token" />
 	</resource-details-service>
 
-	<beans:bean id="consumerTokenServicesFactory" class="com.springsource.greenhouse.oauth.NetworkConnectionsTokenServicesFactory" />
+	<beans:bean id="consumerTokenServicesFactory" class="com.springsource.greenhouse.oauth.GreenhouseOAuthConsumerTokenServicesFactory">
+		<beans:constructor-arg ref="jdbcTemplate" />
+	</beans:bean>
 
 </beans:beans>
 

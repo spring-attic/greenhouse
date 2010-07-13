@@ -12,19 +12,21 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 
-public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServices {
+public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenServices {
 
-    static final String INSERT_TOKEN_SQL = "insert into NetworkConnection (userId, network, accessToken, secret) values (?, ?, ?, ?)";
-    static final String SELECT_TOKEN_SQL = "select network, accessToken, secret from NetworkConnection where userId=? and network=?";
-    static final String DELETE_TOKEN_SQL = "delete from NetworkConnection where userId=? and network=?";
+    static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (accessToken, member, accountName, secret) values (?, ?, ?, ?)";
+    static final String SELECT_TOKEN_SQL = "select accessToken, accountName, secret from ConnectedAccount where member = ? and accountName = ?";
+    static final String DELETE_TOKEN_SQL = "delete from ConnectedAccount where member = ? and accountName = ?";
 
-	private Long userId;	
+	private Long memberId;	
+
 	private JdbcTemplate jdbcTemplate;
+	
 	private HttpSession session;
 
-	public NetworkConnectionsTokenServices(JdbcTemplate jdbcTemplate, HttpSession session, Long userId) {
+	public GreenhouseOAuthConsumerTokenServices(JdbcTemplate jdbcTemplate, HttpSession session, Long memberId) {
 		super(session);
-		this.userId = userId;
+		this.memberId = memberId;
 		this.jdbcTemplate = jdbcTemplate;
 		this.session = session;
 	}
@@ -51,7 +53,7 @@ public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServic
 	}
 	
 	public void removeToken(String resourceId) {
-	    jdbcTemplate.update(DELETE_TOKEN_SQL, userId, resourceId);
+	    jdbcTemplate.update(DELETE_TOKEN_SQL, memberId, resourceId);
 	    session.removeAttribute(KEY_PREFIX + "#" + resourceId);
 	}
 
@@ -61,12 +63,12 @@ public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServic
 					public OAuthConsumerToken mapRow(ResultSet rs, int rowNum) throws SQLException {
 						OAuthConsumerToken token = new OAuthConsumerToken();
 						token.setAccessToken(true);
-						token.setResourceId(rs.getString("network"));
 						token.setValue(rs.getString("accessToken"));
+						token.setResourceId(rs.getString("accountName"));
 						token.setSecret(rs.getString("secret"));
 						return token;
 					}
-				}, userId, resourceId);
+				}, memberId, resourceId);
 		OAuthConsumerToken accessToken = null;
 		if (accessTokens.size() > 0) {
 			accessToken = accessTokens.get(0);
@@ -75,7 +77,6 @@ public class NetworkConnectionsTokenServices extends HttpSessionBasedTokenServic
 	}
 
 	private void storeTokenInDB(OAuthConsumerToken token) {
-		jdbcTemplate.update(INSERT_TOKEN_SQL, userId, token.getResourceId(),
-				token.getValue(), token.getSecret());
+		jdbcTemplate.update(INSERT_TOKEN_SQL, token.getValue(), memberId, token.getResourceId(), token.getSecret());
 	}
 }

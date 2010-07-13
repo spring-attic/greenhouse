@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.account.Account;
 
 @Controller
 @RequestMapping("/members/*")
@@ -27,8 +27,8 @@ public class MembersController {
 	}
 
 	@RequestMapping(value="/@self", headers="Accept=application/json")
-	public @ResponseBody Member memberData(GreenhouseUserDetails currentUser) {
-		return findMemberByUserId(currentUser.getEntityId());
+	public @ResponseBody Member memberData(Account account) {
+		return findMemberByUserId(account.getId());
 	}
 
 	@RequestMapping("/{profileKey}")

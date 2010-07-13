@@ -23,5 +23,21 @@ public final class FlashMap {
 	
 	private FlashMap() {
 	}
-	
+
+	public static void put(String name, Object value) {
+		
+	}
+
+	public static void setInfoMessage(String message) {
+	}
+
+	public static void setWarningMessage(String warning) {
+	}
+
+	public static void setErrorMessage(String error) {
+	}
+
+	public static void setSuccessMessage(String error) {
+	}
+
 }

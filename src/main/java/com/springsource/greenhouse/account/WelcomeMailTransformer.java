@@ -1,18 +1,17 @@
-package com.springsource.greenhouse.mail;
+package com.springsource.greenhouse.account;
 
 import javax.inject.Inject;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Transformer;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.template.StringTemplate;
 import org.springframework.mail.template.StringTemplateFactory;
+import org.springframework.stereotype.Component;
 
-import com.springsource.greenhouse.signup.SignupMessage;
-
+@Component
 public class WelcomeMailTransformer {
 	
 	private StringTemplateFactory templateFactory;
@@ -20,21 +19,22 @@ public class WelcomeMailTransformer {
 	private Resource welcomeTemplate = new ClassPathResource("welcome.st", getClass());
 
 	@Inject
-	public WelcomeMailTransformer(JdbcTemplate jdbcTemplate, StringTemplateFactory templateFactory) {
+	public WelcomeMailTransformer(StringTemplateFactory templateFactory) {
 		this.templateFactory = templateFactory;
 	}
 
 	@Transformer
-	public MailMessage transform(SignupMessage signupMessage) {
+	public MailMessage welcomeMail(Account account) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom("noreply@springsource.com");
-		mailMessage.setTo(signupMessage.getEmail());
+		mailMessage.setTo(account.getEmail());
 		mailMessage.setSubject("Welcome to the Greenhouse!");
 		StringTemplate textTemplate;
 		textTemplate = templateFactory.getStringTemplate(welcomeTemplate);
-		textTemplate.put("firstName", signupMessage.getFirstName());
-		textTemplate.put("profileKey", signupMessage.getProfileKey());
+		textTemplate.put("firstName", account.getFirstName());
+		textTemplate.put("profileKey", account.getMemberProfileKey());
 		mailMessage.setText(textTemplate.render());
 		return mailMessage;
 	}
+
 }

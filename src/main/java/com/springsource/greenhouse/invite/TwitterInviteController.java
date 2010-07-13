@@ -10,8 +10,8 @@ import javax.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.oauth.extras.OAuthAccessToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
+import org.springframework.security.oauth.extras.OAuthAccessToken;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.account.Account;
 
 @Controller
 @RequestMapping("/invite/twitter")
@@ -36,9 +36,9 @@ public class TwitterInviteController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public void friendFinder(GreenhouseUserDetails currentUser, Model model) {
-		if (currentUser.getUsername() != null) {
-			model.addAttribute("username", currentUser.getUsername());
+	public void friendFinder(Account account, Model model) {
+		if (account.getUsername() != null) {
+			model.addAttribute("username", account.getUsername());
 		}
 	}
 	
@@ -50,7 +50,7 @@ public class TwitterInviteController {
 	}
 	
 	private List<GreenhouseFriend> findGreenhouseTwitterFriends(List<String> twitterFriends) {
-	    return jdbcTemplate.query("select username, firstName, lastName from User where username in ( :names )",
+	    return jdbcTemplate.query("select username, firstName, lastName from Member where username in ( :names )",
 	    		Collections.singletonMap("names", twitterFriends),
 	    		new RowMapper<GreenhouseFriend>() {
 					public GreenhouseFriend mapRow(ResultSet rs, int rowNum) throws SQLException {

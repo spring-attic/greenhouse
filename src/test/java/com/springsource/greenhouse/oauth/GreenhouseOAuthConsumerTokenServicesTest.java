@@ -18,22 +18,22 @@ import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenSe
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 
-import com.springsource.greenhouse.signin.GreenhouseUserDetails;
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.signup.GreenhouseTestUserDatabaseFactory;
 
-public class NetworkConnectionsTokenServicesTest {
+public class GreenhouseOAuthConsumerTokenServicesTest {
 
 	private EmbeddedDatabase db;
 
 	private JdbcTemplate jdbcTemplate;
     
-	private NetworkConnectionsTokenServicesFactory tokenServicesFactory;
+	private GreenhouseOAuthConsumerTokenServicesFactory tokenServicesFactory;
 
     @Before
     public void setupDatabase() {
-    	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("NetworkConnectionsTokenServicesTest.sql", getClass()));
+    	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("GreenhouseOAuthConsumerTokenServicesTest.sql", getClass()));
         jdbcTemplate = new JdbcTemplate(db);
-        tokenServicesFactory = new NetworkConnectionsTokenServicesFactory(jdbcTemplate);
+        tokenServicesFactory = new GreenhouseOAuthConsumerTokenServicesFactory(jdbcTemplate);
     }
 
     @After
@@ -43,8 +43,7 @@ public class NetworkConnectionsTokenServicesTest {
     
     @Test
     public void shouldReturnNullTokenForUnknownResource() {
-        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
-        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("ohloh"));
@@ -52,8 +51,7 @@ public class NetworkConnectionsTokenServicesTest {
 
     @Test
     public void shouldReturnNullTokenForUnknownUser() {
-        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(2L, "rclarkson@vmware.com", "atlanta", "Roy");
-        Authentication authentication = new TestingAuthenticationToken(userDetails, "atlanta");
+        Authentication authentication = new TestingAuthenticationToken(new Account(2L), "atlanta");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("twitter"));
@@ -61,8 +59,7 @@ public class NetworkConnectionsTokenServicesTest {
 
     @Test
     public void shouldReturnTokenForKnownResourceInDB() {
-        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
-        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         OAuthConsumerToken token = tokenServices.getToken("twitter");
@@ -78,8 +75,7 @@ public class NetworkConnectionsTokenServicesTest {
         OAuthConsumerToken linkedInToken = new OAuthConsumerToken();
         request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn", linkedInToken);
         
-        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
-        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         OAuthConsumerToken token = tokenServices.getToken("linkedIn");
         assertSame(linkedInToken, token);
@@ -93,12 +89,11 @@ public class NetworkConnectionsTokenServicesTest {
       requestToken.setSecret("someSecret");
       requestToken.setValue("someToken"); 
       MockHttpServletRequest request = new MockHttpServletRequest();
-      GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
-      Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+      Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
-      assertEquals(0, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='someToken'"));
+      assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'someToken'"));
     }
     
     @Test
@@ -109,12 +104,11 @@ public class NetworkConnectionsTokenServicesTest {
       requestToken.setSecret("someSecret");
       requestToken.setValue("someToken"); 
       MockHttpServletRequest request = new MockHttpServletRequest();
-      GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
-      Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");
+      Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
-      assertEquals(1, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='someToken'"));
+      assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken='someToken'"));
     }
     
     @Test
@@ -126,19 +120,18 @@ public class NetworkConnectionsTokenServicesTest {
         accessToken.setValue("twitterToken"); 
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        GreenhouseUserDetails userDetails = new GreenhouseUserDetails(1L, "habuma", "plano", "Craig");
-        Authentication authentication = new TestingAuthenticationToken(userDetails, "plano");        
+        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");        
         request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", accessToken);
         
         // Token should be available before remove
-        assertEquals(1, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='twitterToken'"));
+        assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'twitterToken'"));
         assertNotNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
 
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-        ((NetworkConnectionsTokenServices) tokenServices).removeToken("twitter");
+        ((GreenhouseOAuthConsumerTokenServices) tokenServices).removeToken("twitter");
         
         // Token should be gone after remove
-        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from NetworkConnection where accessToken='twitterToken'"));
+        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp where accessToken = 'twitterToken'"));
         assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
     }
 }

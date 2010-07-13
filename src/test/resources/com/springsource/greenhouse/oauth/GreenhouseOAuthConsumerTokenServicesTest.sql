@@ -1,0 +1,2 @@
+insert into Member (firstName, lastName, email, password, username) values ('Craig' , 'Walls', 'cwalls@vmware.com', 'plano', 'habuma');
+insert into ConnectedAccount (accessToken, member, accountName, secret) values ('twitterToken', 1, 'twitter', 'twitterTokenSecret');

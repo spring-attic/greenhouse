@@ -4,17 +4,9 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.signin.SigninService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,18 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/signup")
 public class SignupController {
 
-	private JdbcTemplate jdbcTemplate;
-
-	private AuthenticationManager authenticationManager;
+	private SignupService signupService;
 	
-	private SignupMessageGateway signupMessageGateway;
-
+	private SigninService signinService;
+	
 	@Inject
-	// TODO eliminate the Qualifier
-	public SignupController(JdbcTemplate jdbcTemplate, @Qualifier("org.springframework.security.authenticationManager") AuthenticationManager authenticationManager, SignupMessageGateway signupMessageGateway) {
-		this.jdbcTemplate = jdbcTemplate;
-		this.authenticationManager = authenticationManager;
-		this.signupMessageGateway = signupMessageGateway;
+	public SignupController(SignupService signupService, SigninService signinService) {
+		this.signupService = signupService;
+		this.signinService = signinService;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -43,35 +31,18 @@ public class SignupController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	@Transactional
-	public String signup(@Valid SignupForm form, BindingResult result, HttpServletRequest request) {
-		if (result.hasErrors()) {
-			return null;
-		}		
-		try {
-			jdbcTemplate.update("insert into User (firstName, lastName, email, password) values (?, ?, ?, ?)",
-					form.getFirstName(), form.getLastName(), form.getEmail(), form.getPassword());
-			Long userId = jdbcTemplate.queryForLong("call identity()");
-			signupMessageGateway.publish(new SignupMessage(userId, form.getFirstName(), form.getLastName(), form.getEmail()));
-			signIn(form.getEmail(), form.getPassword(), request);
-		} catch (DuplicateKeyException e) {
-			result.rejectValue("email", "error.duplicate.email.constraint", "Address already on file");
+	public String signup(@Valid SignupForm form, BindingResult formBinding, HttpServletRequest request) {
+		if (formBinding.hasErrors()) {
 			return null;
 		}
-		return "redirect:/";
-	}
-
-	// internal helpers
-	
-	private void signIn(String username, String password, HttpServletRequest request) {
 		try {
-			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-			token.setDetails(new WebAuthenticationDetails(request));
-			Authentication authentication = authenticationManager.authenticate(token);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		} catch (AuthenticationException e) {
-			SecurityContextHolder.getContext().setAuthentication(null);
+			signupService.signup(form.createPerson());
+		} catch (EmailAlreadyOnFileException e) {
+			formBinding.rejectValue("email", "already on file");
+			return null;
 		}
+		signinService.signin(form.getEmail(), form.getPassword(), new WebAuthenticationDetails(request));
+		return "redirect:/";			
 	}
 
 }

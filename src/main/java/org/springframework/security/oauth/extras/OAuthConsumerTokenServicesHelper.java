@@ -1,4 +1,4 @@
-package org.springframework.oauth.extras;
+package org.springframework.security.oauth.extras;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,7 +7,7 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 
-import com.springsource.greenhouse.oauth.NetworkConnectionsTokenServices;
+import com.springsource.greenhouse.oauth.GreenhouseOAuthConsumerTokenServices;
 
 public class OAuthConsumerTokenServicesHelper {
 	
@@ -24,8 +24,8 @@ public class OAuthConsumerTokenServicesHelper {
 	}
 	
 	public void removeToken(String resourceId, HttpServletRequest request, Authentication authentication) {
-		NetworkConnectionsTokenServices tokenServices = 
-				(NetworkConnectionsTokenServices) tokenServicesFactory.getTokenServices(authentication, request);
+		GreenhouseOAuthConsumerTokenServices tokenServices = 
+				(GreenhouseOAuthConsumerTokenServices) tokenServicesFactory.getTokenServices(authentication, request);
 		tokenServices.removeToken(resourceId);
 	}
 }

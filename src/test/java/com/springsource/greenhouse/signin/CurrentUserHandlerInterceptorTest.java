@@ -1,6 +1,8 @@
 package com.springsource.greenhouse.signin;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,18 +16,20 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.signin.AccountHandlerInterceptor;
 
 public class CurrentUserHandlerInterceptorTest {
 	
-    private CurrentUserHandlerInterceptor interceptor;
+    private AccountHandlerInterceptor interceptor;
     
-    private GreenhouseUserDetails userDetails;
+    private Account account;
     
     @Before
     public void setup() {
-        interceptor = new CurrentUserHandlerInterceptor();
-        userDetails = new GreenhouseUserDetails(1234L, "testUser", "password", "Chuck");
-        TestingAuthenticationToken authentication = new TestingAuthenticationToken(userDetails, "password");
+        interceptor = new AccountHandlerInterceptor();
+        account = new Account(1L);
+        TestingAuthenticationToken authentication = new TestingAuthenticationToken(account, "password");
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
     
@@ -38,7 +42,7 @@ public class CurrentUserHandlerInterceptorTest {
     public void postHandleShouldAddCurrentUserToModel() throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         interceptor.postHandle(null, null, null, modelAndView);            
-        assertSame(userDetails, modelAndView.getModelMap().get("currentUser"));
+        assertSame(account, modelAndView.getModelMap().get("account"));
     }
     
     @Test
@@ -51,7 +55,7 @@ public class CurrentUserHandlerInterceptorTest {
         ModelAndView modelAndView = new ModelAndView();
         SecurityContextHolder.getContext().setAuthentication(null);
         interceptor.postHandle(null, null, null, modelAndView);  
-        assertNull(modelAndView.getModelMap().get("currentUser"));
+        assertNull(modelAndView.getModelMap().get("account"));
     }
     
     @Test
@@ -60,7 +64,7 @@ public class CurrentUserHandlerInterceptorTest {
         List<GrantedAuthority> anonymousAuthorities = Arrays.asList(new GrantedAuthority[] {new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
         SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthenticationToken("key", "principal", anonymousAuthorities));
         interceptor.postHandle(null, null, null, modelAndView);  
-        assertNull(modelAndView.getModelMap().get("currentUser"));
+        assertNull(modelAndView.getModelMap().get("account"));
     }
     
     @Test

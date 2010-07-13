@@ -31,7 +31,8 @@
 	</bean>           
 
     <bean id="tokenServices" class="com.springsource.greenhouse.oauth.GreenhouseOAuthProviderTokenServices">
-        <constructor-arg ref="jdbcTemplate" />  
+        <constructor-arg ref="jdbcTemplate" />
+        <constructor-arg ref="accountRepository" />
     </bean>
     
 	<!-- Temporary hack to inject an iPhone/custom-scheme friendly redirect processor.

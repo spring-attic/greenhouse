@@ -2,13 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
 	<!-- Root Context: defines shared resources accessible to all other web components -->
 	<context:annotation-config />
+
+	<!-- Configurable application properties -->
+	<context:property-placeholder location="classpath:application.properties" />
 
 	<!-- Twitter Client API -->
 	<bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
@@ -23,26 +24,8 @@
     	<constructor-arg ref="jdbcTemplate" />
     </bean>
     	
-	<!-- Local, JDBC-based TransactionManager -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
-	<!-- Shared JDBC Data Access Template -->
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<constructor-arg ref="dataSource" />
-	</bean>
-	
-	<!-- Embedded H2 Database -->		
-	<jdbc:embedded-database id="dataSource" type="H2">
-		<jdbc:script location="/WEB-INF/database/schema-user.sql" />
-		<jdbc:script location="/WEB-INF/database/schema-update.sql" />
-		<jdbc:script location="/WEB-INF/database/schema-event.sql" />
-		<jdbc:script location="/WEB-INF/database/data.sql" />
-	</jdbc:embedded-database>
-	
-	<!-- Configurable application properties -->
-	<context:property-placeholder location="classpath:application.properties" />
+	<!-- Configures Shared Data Access Resources -->
+	<import resource="data.xml" />
 				
 	<!-- Configures Shared Security Layer -->
 	<import resource="security.xml" />

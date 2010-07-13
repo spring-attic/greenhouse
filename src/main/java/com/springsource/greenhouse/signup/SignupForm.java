@@ -69,4 +69,8 @@ public class SignupForm {
 	public boolean isPasswordConfirmed() {
 		return password.equals(confirmPassword);
 	}
+
+	public Person createPerson() {
+		return new Person(firstName, lastName, email, password);
+	}
 }

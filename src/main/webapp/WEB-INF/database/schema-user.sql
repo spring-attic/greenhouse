@@ -37,8 +37,8 @@ create table ResetPassword (token varchar,
 					foreign key (member) references Member(id));
 					
 create table OAuthToken (tokenValue varchar,
-					member bigint,
 					app varchar not null,
+					member bigint,
 					secret varchar not null,
 					callbackUrl varchar,
 					updateTimestamp bigint not null,
