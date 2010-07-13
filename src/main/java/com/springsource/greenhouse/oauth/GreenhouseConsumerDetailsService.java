@@ -25,7 +25,7 @@ public class GreenhouseConsumerDetailsService implements ConsumerDetailsService 
 	}
 
 	public ConsumerDetails loadConsumerByConsumerKey(final String key) throws OAuthException {
-		return jdbcTemplate.queryForObject("select name, secret from Consumer where consumerKey = ?", new RowMapper<ConsumerDetails>() {
+		return jdbcTemplate.queryForObject("select name, secret from App where consumerKey = ?", new RowMapper<ConsumerDetails>() {
 			public ConsumerDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
 				BaseConsumerDetails consumerDetails = new BaseConsumerDetails();
 				consumerDetails.setConsumerName(rs.getString("name"));

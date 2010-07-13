@@ -10,8 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class GreenhouseEventsService {
-	private static final String SELECT_EVENT = "select id, title, description, startTime, endTime, location, hashtag from Event";
-	private static final String SELECT_SESSION = "select code, title, description, startTime, endTime, speaker, event, track, hashtag from EventSession";
+	private static final String SELECT_EVENT = 
+			"select id, title, description, startTime, endTime, location, hashtag from Event";
+	private static final String SELECT_SESSION = 
+			"select code, title, description, startTime, endTime, speaker, event, track, hashtag from EventSession";
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -26,8 +28,7 @@ public class GreenhouseEventsService {
 	
 	public Event getEventById(long eventId) {		
 		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + " where id=? order by startTime", 
-				eventMapper,
-				eventId);
+				eventMapper, eventId);
 		
 		if (event != null) {
 			event.setSessions(this.getSessionsByEventId(event.getId()));
@@ -37,7 +38,6 @@ public class GreenhouseEventsService {
 	}
 	
 	public List<EventSession> getSessionsByEventId(long eventId) {
-		
 		return jdbcTemplate.query(SELECT_SESSION + " where event = ? order by startTime desc", 
 				eventSessionMapper, 
 				eventId);
@@ -49,6 +49,7 @@ public class GreenhouseEventsService {
 			event.setId(rs.getLong("id"));
 			event.setTitle(rs.getString("title"));
 			event.setDescription(rs.getString("description"));
+			event.setLocation(rs.getString("location"));
 			event.setStartTime(rs.getTimestamp("startTime"));
 			event.setEndTime(rs.getTimestamp("endTime"));
 			event.setHashtag(rs.getString("hashtag"));

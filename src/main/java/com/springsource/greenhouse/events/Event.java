@@ -9,6 +9,8 @@ public class Event {
 	
 	private String title;
 	
+	private String location;
+	
 	private String description;
 	
 	private Date startTime;
@@ -18,12 +20,6 @@ public class Event {
 	private String hashtag;
 	
 	private List<EventSession> sessions;
-	
-	private long createdByUserId;
-	
-	private long modifiedByUserId;
-	
-	private Date lastUpdated;
 	
 	public long getId() {
 		return this.id;
@@ -80,29 +76,13 @@ public class Event {
 	public void setSessions(List<EventSession> sessions) {
 		this.sessions = sessions;
 	}
-	
-	public long getCreatedByUserId() {
-		return this.createdByUserId;
-	}
-	
-	public void setCreatedByUserId(long createdByUserId) {
-		this.createdByUserId = createdByUserId;
-	}
-	
-	public long getModifiedByUserId() {
-		return this.modifiedByUserId;
-	}
-	
-	public void setModifiedByUserId(long modifiedByUserId) {
-		this.modifiedByUserId = modifiedByUserId;
-	}
-	
-	public Date getLastUpdated() {
-		return this.lastUpdated;
-	}
-	
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
-	}
+
+	public void setLocation(String location) {
+	    this.location = location;
+    }
+
+	public String getLocation() {
+	    return location;
+    }
 	
 }
