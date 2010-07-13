@@ -11,3 +11,7 @@ insert into Update (text, updateTimestamp, member) values ('Roy Clarkson signed 
 insert into MemberGroup (name, description, hashtag, leader) values ('SpringSource', 'This is where the Spring Groovy stuff goes down.', '#spring', 1);
 
 insert into Event (title, description, startTime, endTime, location, memberGroup, hashtag) values ('SpringOne/2GX', 'Come hear Spring experts lay down some mad Spring skillz.', '2010-10-19', '2010-10-22', 'Chicago, IL', 1, '#springone2gx');
+
+insert into EventTrack (name, description, chair, event) values ('Core Spring', 'The low-down on the core Spring Framework', 1, 1);
+
+insert into EventSession (code, title, description, startTime, endTime, speaker, event, track, hashtag) values ('CS1', 'Coming in Spring 3.1', 'Come see what''s coming up in Spring 3.1', '2010-10-19', '2010-10-19', 2, 1, 1, '#s12gxcs1');

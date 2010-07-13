@@ -4,42 +4,24 @@ import java.util.Date;
 
 public class EventSession {
 
-	private long id;
-	
-	private long eventId;
+	private String code;
 	
 	private String title;
 	
 	private String description;
-	
-	private Date sessionDate;
-	
+
 	private Date startTime;
 	
 	private Date endTime;
 	
 	private String hashtag;
-	
-	private long createdByUserId;
-	
-	private long modifiedByUserId;
-	
-	private Date lastUpdated;
-	
-	public long getId() {
-		return this.id;
+		
+	public String getCode() {
+		return this.code;
 	}
 	
-	public void setId(long id) {
-		this.id = id;
-	}
-	
-	public long getEventId() {
-		return this.eventId;
-	}
-	
-	public void setEventId(long eventId) {
-		this.eventId = eventId;
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	public String getTitle() {
@@ -56,14 +38,6 @@ public class EventSession {
 	
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	
-	public Date getSessionDate() {
-		return this.sessionDate;
-	}
-	
-	public void setSessionDate(Date sessionDate) {
-		this.sessionDate = sessionDate;
 	}
 		
 	public Date getStartTime() {
@@ -89,29 +63,4 @@ public class EventSession {
 	public void setHashtag(String hashtag) {
 		this.hashtag = hashtag;
 	}
-	
-	public long getCreatedByUserId() {
-		return this.createdByUserId;
-	}
-	
-	public void setCreatedByUserId(long createdByUserId) {
-		this.createdByUserId = createdByUserId;
-	}
-	
-	public long getModifiedByUserId() {
-		return this.modifiedByUserId;
-	}
-	
-	public void setModifiedByUserId(long modifiedByUserId) {
-		this.modifiedByUserId = modifiedByUserId;
-	}
-	
-	public Date getLastUpdated() {
-		return this.lastUpdated;
-	}
-	
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
-	}
-	
 }
