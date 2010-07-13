@@ -6,7 +6,6 @@ public class SearchResults {
 	private List<Tweet> tweets;
 	private long maxId;
 	private long sinceId;
-	private Integer total;
 	private boolean lastPage;
 
 	public List<Tweet> getTweets() {
@@ -31,14 +30,6 @@ public class SearchResults {
 
 	public void setSinceId(long sinceId) {
 		this.sinceId = sinceId;
-	}
-
-	public Integer getTotal() {
-		return total;
-	}
-
-	public void setTotal(Integer total) {
-		this.total = total;
 	}
 
 	public boolean isLastPage() {
