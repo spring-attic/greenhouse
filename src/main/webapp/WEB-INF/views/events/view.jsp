@@ -1,19 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib tagdir="/WEB-INF/tags/dates" prefix="d" %>
 
 <h2>${event.title}</h2>
 
 <div id="eventInfo">
-	<p><strong>When:</strong>
-		<c:if test="${event.startTime.time / 86400000 == event.endTime.time / 86400000}">
-			<fmt:formatDate value="${event.startTime}" type="date"/>, 
-			<fmt:formatDate value="${event.startTime}" type="time" timeStyle="short"/> - 
-			<fmt:formatDate value="${event.endTime}" type="time" timeStyle="short"/>
-		</c:if>
-		<c:if test="${event.startTime.time / 86400000 != event.endTime.time / 86400000}">
-			<fmt:formatDate value="${event.startTime}" type="date"/> through <fmt:formatDate value="${event.endTime}" type="date"/>
-		</c:if>
-	</p>
+	<p><strong>When:</strong> <d:displayDateRange startDate="${event.startTime}" endDate="${event.endTime}"/></p>
 	<p><strong>Where:</strong> ${event.location}</p>
 	<p>${event.description}</p>		
 </div>
