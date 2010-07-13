@@ -27,6 +27,7 @@ public class DefaultRestPasswordService implements ResetPasswordService {
 	public DefaultRestPasswordService(JdbcTemplate jdbcTemplate, AccountRepository accountRepository, ResetPasswordMailer mailer) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.accountRepository = accountRepository;
+		this.mailer = mailer;
 	}
 
 	public void sendResetMail(String username) throws AccountNotFoundException {
