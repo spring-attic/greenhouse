@@ -5,12 +5,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
+import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -48,5 +50,12 @@ public class EventsController {
 		model.addAttribute(event);
 		model.addAttribute(twitter.search(accessToken, event.getHashtag()));
 		return "events/view";
+	}
+	
+	@RequestMapping(value="/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody SearchResults listEventTweets(OAuthConsumerToken accessToken, @PathVariable long eventId, 
+			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="20") int perPage) {
+		Event event = eventsService.getEventById(eventId);
+		return twitter.search(accessToken, event.getHashtag(), page, perPage);
 	}
 }

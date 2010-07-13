@@ -101,10 +101,7 @@ public class TwitterService implements TwitterOperations {
 		results.setMaxId(NumberUtils.parseNumber(ObjectUtils.nullSafeToString(response.get("max_id")), Long.class));
 		results.setSinceId(NumberUtils.parseNumber(ObjectUtils.nullSafeToString(response.get("since_id")), Long.class));
 		Object total = response.get("total");
-		if(total != null) {
-			results.setTotal(NumberUtils.parseNumber(ObjectUtils.nullSafeToString(response.get("total")), Integer.class));
-		}
-		results.setLastPage(response.get("next_page") != null);
+		results.setLastPage(response.get("next_page") == null);
 		results.setTweets(tweets);
 		
 	    return results;		
