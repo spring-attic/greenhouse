@@ -41,6 +41,7 @@ public class SignupController {
 			formBinding.rejectValue("email", "already on file");
 			return null;
 		}
+		// TODO this results in a redundant call to the db
 		signinService.signin(form.getEmail(), form.getPassword(), new WebAuthenticationDetails(request));
 		return "redirect:/";			
 	}
