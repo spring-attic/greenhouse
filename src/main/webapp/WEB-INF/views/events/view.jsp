@@ -1,10 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib tagdir="/WEB-INF/tags/dates" prefix="d" %>
 
 <h2>${event.title}</h2>
 
 <div id="eventInfo">
-	<p><strong>When:</strong> <d:range event="${event}" /></p>
+	<p><strong>When:</strong> ${event.startTime} through ${event.endTime}</p>
 	<p>${event.description}</p>		
 </div>
 

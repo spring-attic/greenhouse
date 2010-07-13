@@ -9,9 +9,9 @@ import javax.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.springsource.greenhouse.events.Event;
-
 public class GreenhouseEventsService {
+
+	private static final String SELECT_EVENT = "select id, title, description, startTime, endTime, location, hashtag from Event";
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -20,48 +20,19 @@ public class GreenhouseEventsService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public List<Event> getEvents() {
-		
-		return jdbcTemplate.query(
-				"select id, " +
-				"title, " +
-				"description, " +
-				"startDate, " +
-				"endDate, " +
-				"startTime, " +
-				"endTime, " +
-				"hashtag, " +
-				"createdByUserId, " +
-				"modifiedByUserId, " +
-				"lastModified " +
-				"from Event " +
-				"order by startDate, startTime desc", 
-				eventMapper);		
+	public List<Event> getEvents() {		
+		return jdbcTemplate.query(SELECT_EVENT + " order by startTime",	eventMapper);		
 	}
 	
-	public Event getEventById(long eventId) {
-		
-		Event event = jdbcTemplate.queryForObject(
-				"select id, " +
-				"title, " +
-				"description, " +
-				"startDate, " +
-				"endDate, " +
-				"startTime, " +
-				"endTime, " +
-				"hashtag, " +
-				"createdByUserId, " +
-				"modifiedByUserId, " +
-				"lastModified " +
-				"from Event " +
-				"where id = ? " +
-				"order by startDate, startTime desc", 
+	public Event getEventById(long eventId) {		
+		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + " where id=? order by startTime", 
 				eventMapper,
 				eventId);
 		
-		if (event != null) {
-			event.setSessions(this.getSessionsByEventId(event.getId()));
-		}
+// TODO: COME BACK TO FIX THIS
+//		if (event != null) {
+//			event.setSessions(this.getSessionsByEventId(event.getId()));
+//		}
 		
 		return event;
 	}
@@ -91,14 +62,9 @@ public class GreenhouseEventsService {
 			event.setId(rs.getLong("id"));
 			event.setTitle(rs.getString("title"));
 			event.setDescription(rs.getString("description"));
-			event.setStartDate(rs.getDate("startDate"));
-			event.setEndDate(rs.getDate("endDate"));
-			event.setStartTime(rs.getTime("startTime"));
-			event.setEndTime(rs.getTime("endTime"));
+			event.setStartTime(rs.getTimestamp("startTime"));
+			event.setEndTime(rs.getTimestamp("endTime"));
 			event.setHashtag(rs.getString("hashtag"));
-			event.setCreatedByUserId(rs.getLong("createdByUserId"));
-			event.setModifiedByUserId(rs.getLong("modifiedByUserId"));
-			event.setLastUpdated(rs.getTimestamp("lastModified"));
 			return event;
 		}
 	};

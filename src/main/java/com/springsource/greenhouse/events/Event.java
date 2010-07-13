@@ -11,10 +11,6 @@ public class Event {
 	
 	private String description;
 	
-	private Date startDate;
-	
-	private Date endDate;
-	
 	private Date startTime;
 	
 	private Date endTime;
@@ -52,23 +48,7 @@ public class Event {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	public Date getStartDate() {
-		return this.startDate;
-	}
-	
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	
-	public Date getEndDate() {
-		return this.endDate;
-	}
-	
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	
+
 	public Date getStartTime() {
 		return this.startTime;
 	}
