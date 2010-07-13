@@ -37,10 +37,6 @@
 		<beans:constructor-arg ref="jdbcTemplate" />
 	</beans:bean>
 
-	<beans:bean id="signinService" class="org.springframework.security.signin.DefaultSigninService">
-		<beans:constructor-arg ref="authenticationManager" />
-	</beans:bean>
-		
 	<beans:import resource="security-oauth-provider.xml" />
 	
     <beans:import resource="security-oauth-consumer.xml" />

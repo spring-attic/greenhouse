@@ -71,15 +71,14 @@ public class TwitterSettingsController {
 	}
 
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
-		String message = "Signed up at the Greenhouse at " + assembleMemberProfileUrl(request, account);
+		String message = "Linked with the Greenhouse at " + assembleMemberProfileUrl(request, account);
 		twitterService.updateStatus(accessToken, message);
 	}
 	
 	private String assembleMemberProfileUrl(HttpServletRequest request, Account account) {
-		String profileKey = account.getMemberProfileKey();
 		int serverPort = request.getServerPort();
 		String portPart = serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort;
-		return request.getScheme() + "://" + request.getServerName() + portPart + request.getContextPath() + "/members/" + profileKey;
+		return request.getScheme() + "://" + request.getServerName() + portPart + request.getContextPath() + "/members/" + account.getMemberProfileKey();
 	}
 
 	private void makeTwitterScreenameGreenhouseUsername(OAuthConsumerToken accessToken, Account account) {

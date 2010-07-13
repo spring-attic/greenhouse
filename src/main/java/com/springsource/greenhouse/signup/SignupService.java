@@ -1,7 +1,9 @@
 package com.springsource.greenhouse.signup;
 
+import com.springsource.greenhouse.account.Account;
+
 public interface SignupService {
 
-	void signup(Person person) throws EmailAlreadyOnFileException;
+	Account signup(Person person) throws EmailAlreadyOnFileException;
 
 }
