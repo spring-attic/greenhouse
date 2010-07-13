@@ -1,15 +1,20 @@
 package com.springsource.greenhouse.signup;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.security.signin.SigninService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.springsource.greenhouse.account.Account;
 
 @Controller
 @RequestMapping("/signup")
@@ -17,12 +22,9 @@ public class SignupController {
 
 	private SignupService signupService;
 	
-	private SigninService signinService;
-	
 	@Inject
-	public SignupController(SignupService signupService, SigninService signinService) {
+	public SignupController(SignupService signupService) {
 		this.signupService = signupService;
-		this.signinService = signinService;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -36,14 +38,19 @@ public class SignupController {
 			return null;
 		}
 		try {
-			signupService.signup(form.createPerson());
+			Account account = signupService.signup(form.createPerson());
+			signin(account);
 		} catch (EmailAlreadyOnFileException e) {
-			formBinding.rejectValue("email", "already on file");
+			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
 			return null;
 		}
-		// TODO this results in a redundant call to the db
-		signinService.signin(form.getEmail(), form.getPassword(), new WebAuthenticationDetails(request));
 		return "redirect:/";			
 	}
 
+	private void signin(Account account) {
+		List<GrantedAuthority> authorities = null;
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(account, null, authorities);
+		SecurityContextHolder.getContext().setAuthentication(token);
+	}
+	
 }

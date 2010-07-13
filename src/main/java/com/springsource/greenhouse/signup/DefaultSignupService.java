@@ -23,7 +23,7 @@ public class DefaultSignupService implements SignupService {
 		this.messageGateway = messageGateway;
 	}
 
-	public void signup(Person person) throws EmailAlreadyOnFileException {
+	public Account signup(Person person) throws EmailAlreadyOnFileException {
 		try {
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password) values (?, ?, ?, ?)",
 					person.getFirstName(), person.getLastName(), person.getEmail(), encrypt(person.getPassword()));
@@ -33,6 +33,7 @@ public class DefaultSignupService implements SignupService {
 		Long memberId = jdbcTemplate.queryForLong("call identity()");
 		Account account = new Account(memberId, person.getFirstName(), person.getLastName(), person.getEmail());
 		messageGateway.signedUp(account);
+		return account;
 	}
 
 	private String encrypt(String password) {
