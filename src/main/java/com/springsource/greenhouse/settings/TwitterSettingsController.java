@@ -85,7 +85,7 @@ public class TwitterSettingsController {
 	private void makeTwitterScreenameGreenhouseUsername(OAuthConsumerToken accessToken, Account account) {
 		String screenName = twitterService.getScreenName(accessToken);
 		jdbcTemplate.update("update Member set username = ? where id = ?", screenName, account.getId());
-		// update account username in memory
+		// TODO clone Account with new username, set using SecurityContext
 	}
 	
 }
