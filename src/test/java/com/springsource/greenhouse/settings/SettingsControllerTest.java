@@ -1,7 +1,6 @@
 package com.springsource.greenhouse.settings;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.Map;
@@ -10,13 +9,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.ui.ExtendedModelMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.settings.SettingsController;
-import com.springsource.greenhouse.signup.GreenhouseTestUserDatabaseFactory;
+import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class SettingsControllerTest {
 
@@ -28,7 +27,9 @@ public class SettingsControllerTest {
 	
     @Before
     public void setup() {
-    	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("SettingsControllerTest.sql", getClass()));
+    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    			new ClassPathResource("SettingsControllerTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
     	controller = new SettingsController(jdbcTemplate);
     }

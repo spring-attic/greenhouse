@@ -1,14 +1,12 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -19,7 +17,7 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.signup.GreenhouseTestUserDatabaseFactory;
+import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class GreenhouseOAuthConsumerTokenServicesTest {
 
@@ -31,7 +29,9 @@ public class GreenhouseOAuthConsumerTokenServicesTest {
 
     @Before
     public void setupDatabase() {
-    	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("GreenhouseOAuthConsumerTokenServicesTest.sql", getClass()));
+    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    			new ClassPathResource("GreenhouseOAuthConsumerTokenServicesTest.sql", getClass()));
         jdbcTemplate = new JdbcTemplate(db);
         tokenServicesFactory = new GreenhouseOAuthConsumerTokenServicesFactory(jdbcTemplate);
     }

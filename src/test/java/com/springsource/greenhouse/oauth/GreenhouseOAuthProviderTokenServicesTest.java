@@ -1,14 +1,12 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -18,7 +16,7 @@ import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.DefaultAccountRepository;
-import com.springsource.greenhouse.signup.GreenhouseTestUserDatabaseFactory;
+import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class GreenhouseOAuthProviderTokenServicesTest {
 
@@ -28,7 +26,9 @@ public class GreenhouseOAuthProviderTokenServicesTest {
 
     @Before
     public void setup() {
-    	db = GreenhouseTestUserDatabaseFactory.createUserDatabase(new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
+    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    			new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
     	JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
     	DefaultAccountRepository accountRepository = new DefaultAccountRepository(jdbcTemplate);
     	tokenServices = new GreenhouseOAuthProviderTokenServices(jdbcTemplate, accountRepository);

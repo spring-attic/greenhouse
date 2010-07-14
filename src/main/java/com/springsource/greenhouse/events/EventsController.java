@@ -1,5 +1,6 @@
 package com.springsource.greenhouse.events;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,12 +31,12 @@ public class EventsController {
 	
 	@RequestMapping(method=RequestMethod.GET, headers="Accept=application/json") 
 	public @ResponseBody List<Event> eventsData() {
-		return eventsService.getEvents();
+		return eventsService.getEventsAfter(new Date());
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public String listEvents(Model model) {
-		model.addAttribute(eventsService.getEvents());
+		model.addAttribute(eventsService.getEventsAfter(new Date()));
 		return "events/list";
 	}
 

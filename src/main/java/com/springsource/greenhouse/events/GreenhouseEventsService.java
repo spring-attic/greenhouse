@@ -2,6 +2,7 @@ package com.springsource.greenhouse.events;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,8 +23,8 @@ public class GreenhouseEventsService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public List<Event> getEvents() {		
-		return jdbcTemplate.query(SELECT_EVENT + " order by startTime",	eventMapper);		
+	public List<Event> getEventsAfter(Date afterDate) {		
+		return jdbcTemplate.query(SELECT_EVENT + " where endTime > ? order by startTime",	eventMapper, afterDate);		
 	}
 	
 	public Event getEventById(long eventId) {		
