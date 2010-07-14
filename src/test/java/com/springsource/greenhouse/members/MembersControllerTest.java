@@ -27,7 +27,8 @@ public class MembersControllerTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
     			new ClassPathResource("MembersControllerTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
-    	controller = new MembersController(jdbcTemplate);
+    	MembersService membersService = new DefaultMembersService(jdbcTemplate);
+    	controller = new MembersController(membersService);
     }
     
     @After
