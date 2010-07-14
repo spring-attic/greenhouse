@@ -7,9 +7,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Transformer;
 import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.template.StringTemplate;
-import org.springframework.mail.template.StringTemplateFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.templating.StringTemplate;
+import org.springframework.templating.StringTemplateFactory;
 
 @Component
 public class WelcomeMailTransformer {

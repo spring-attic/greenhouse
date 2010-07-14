@@ -25,8 +25,8 @@ public class EventsServiceTest {
 	
     @Before
     public void setup() {
-    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
     			new ClassPathResource("EventsServiceTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
