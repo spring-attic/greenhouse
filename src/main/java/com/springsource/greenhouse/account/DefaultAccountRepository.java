@@ -22,14 +22,14 @@ public class DefaultAccountRepository implements AccountRepository {
 		return jdbcTemplate.queryForObject("select id, firstName, lastName, email, username from Member where id = ?", accountMapper, id);
 	}
 	
-	public Account findAccount(String username) throws AccountNotFoundException {
+	public Account findAccount(String username) throws UsernameNotFoundException {
 		String query = EmailUtils.isEmail(username) ? 
 			"select id, firstName, lastName, email, username from Member where email = ?" : 
 			"select id, firstName, lastName, email, username from Member where username = ?";
 		try {
 			return jdbcTemplate.queryForObject(query, accountMapper, username);
 		} catch (EmptyResultDataAccessException e) {
-			throw new AccountNotFoundException(username);
+			throw new UsernameNotFoundException(username);
 		}
 	}
 	

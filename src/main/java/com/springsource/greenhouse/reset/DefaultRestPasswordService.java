@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountNotFoundException;
+import com.springsource.greenhouse.account.UsernameNotFoundException;
 import com.springsource.greenhouse.account.AccountRepository;
 
 @Service
@@ -30,7 +30,7 @@ public class DefaultRestPasswordService implements ResetPasswordService {
 		this.mailer = mailer;
 	}
 
-	public void sendResetMail(String username) throws AccountNotFoundException {
+	public void sendResetMail(String username) throws UsernameNotFoundException {
 		Account account = accountRepository.findAccount(username);
 		String token = UUID.randomUUID().toString();
  		jdbcTemplate.update("insert into ResetPassword (token, member) values (?, ?)", token, account.getId());
