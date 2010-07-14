@@ -10,9 +10,6 @@
 	<!-- Turn on support for @Annotation-based configuration e.g. @Inject -->
 	<context:annotation-config />
 
-	<!-- Twitter Client API -->
-	<bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
-	
 	<!-- Configures Shared Data Access Resources -->
 	<import resource="data.xml" />
 				
