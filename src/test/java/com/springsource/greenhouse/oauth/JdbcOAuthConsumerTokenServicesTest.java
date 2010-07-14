@@ -29,8 +29,8 @@ public class JdbcOAuthConsumerTokenServicesTest {
 
     @Before
     public void setupDatabase() {
-    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new ClassPathResource("GreenhouseOAuthConsumerTokenServicesTest.sql", getClass()));
         jdbcTemplate = new JdbcTemplate(db);
         tokenServicesFactory = new JdbcOAuthConsumerTokenServicesFactory(jdbcTemplate);

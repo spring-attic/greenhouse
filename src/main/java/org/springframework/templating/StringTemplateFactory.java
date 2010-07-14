@@ -1,4 +1,4 @@
-package org.springframework.mail.template;
+package org.springframework.templating;
 
 import org.springframework.core.io.Resource;
 

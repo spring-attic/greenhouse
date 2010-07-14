@@ -1,4 +1,4 @@
-package org.springframework.mail.template;
+package org.springframework.templating;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,12 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 
-// Copied verbatim from Spring WebFlow - See http://jira.springframework.org/browse/SPR-6987
-public class DefaultStringTemplateFactory implements StringTemplateFactory {
+public class StandardStringTemplateFactory implements StringTemplateFactory {
 
 	private Map<Resource, org.antlr.stringtemplate.StringTemplate> compiledPrototypes;
 
-	public DefaultStringTemplateFactory() {
+	public StandardStringTemplateFactory() {
 		compiledPrototypes = new ConcurrentHashMap<Resource, org.antlr.stringtemplate.StringTemplate>();
 	}
 
