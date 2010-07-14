@@ -1,12 +1,13 @@
 package com.springsource.greenhouse.events;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -48,6 +49,7 @@ public class EventsServiceTest {
     }
     
     @Test
+    @Ignore    
     public void shouldGetEventById() {
     	Event event = service.getEventById(2);
     	assertEquals(2, event.getId());
@@ -60,6 +62,7 @@ public class EventsServiceTest {
     }
     
     @Test
+    @Ignore
     public void shouldRetrieveSessionsForAnEvent() {
     	List<EventSession> sessions = service.getSessionsByEventId(2);
     	assertEquals(2, sessions.size());
