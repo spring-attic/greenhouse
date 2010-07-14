@@ -30,7 +30,7 @@ public class EventsServiceTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
     			new ClassPathResource("EventsServiceTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
-    	service = new EventsService(jdbcTemplate);
+    	service = new DefaultEventsService(jdbcTemplate);
     }
     
     @After

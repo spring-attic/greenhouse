@@ -18,11 +18,6 @@
     <bean id="updatesService" class="com.springsource.greenhouse.updates.GreenhouseUpdatesService">
     	<constructor-arg ref="jdbcTemplate" />
     </bean>
-
-	<!-- Greenhouse events -->
-    <bean id="eventsService" class="com.springsource.greenhouse.events.EventsService">
-    	<constructor-arg ref="jdbcTemplate" />
-    </bean>
     	
 	<!-- Configures Shared Data Access Resources -->
 	<import resource="data.xml" />
