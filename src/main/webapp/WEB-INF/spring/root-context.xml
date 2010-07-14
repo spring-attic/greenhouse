@@ -13,8 +13,13 @@
 	<!-- Twitter Client API -->
 	<bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
 	
+<<<<<<< HEAD
 	<!-- Greenhouse events -->
     <bean id="eventsService" class="com.springsource.greenhouse.events.EventsService">
+=======
+	<!-- Greenhouse updates -->
+    <bean id="updatesService" class="com.springsource.greenhouse.updates.GreenhouseUpdatesService">
+>>>>>>> 0b8c3a7488354201b7e4826516f73740127798f8
     	<constructor-arg ref="jdbcTemplate" />
     </bean>
     	
