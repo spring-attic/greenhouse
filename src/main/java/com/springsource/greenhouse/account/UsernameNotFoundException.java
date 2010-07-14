@@ -1,11 +1,12 @@
 package com.springsource.greenhouse.account;
 
 @SuppressWarnings("serial")
-public class AccountNotFoundException extends Exception {
+public class UsernameNotFoundException extends AccountException {
 
 	private String username;
 	
-	public AccountNotFoundException(String username) {
+	public UsernameNotFoundException(String username) {
+		super("username not found");
 		this.username = username;
 	}
 	

@@ -9,14 +9,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DefaultResetPasswordMailer implements ResetPasswordMailer {
+public class AsyncResetPasswordMailer implements ResetPasswordMailer {
 
 	private Converter<ResetPasswordRequest, SimpleMailMessage> converter;
 	
 	private MailSender mailSender;
 	
 	@Inject
-	public DefaultResetPasswordMailer(Converter<ResetPasswordRequest, SimpleMailMessage> converter, MailSender mailSender) {
+	public AsyncResetPasswordMailer(Converter<ResetPasswordRequest, SimpleMailMessage> converter, MailSender mailSender) {
 		this.converter = converter;
 		this.mailSender = mailSender;
 	}

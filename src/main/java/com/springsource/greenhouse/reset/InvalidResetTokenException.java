@@ -1,11 +1,11 @@
 package com.springsource.greenhouse.reset;
 
 @SuppressWarnings("serial")
-public class InvalidTokenException extends Exception {
+public class InvalidResetTokenException extends Exception {
 
 	private String token;
 	
-	public InvalidTokenException(String token) {
+	public InvalidResetTokenException(String token) {
 		this.token = token;
 	}
 	

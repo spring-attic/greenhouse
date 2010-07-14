@@ -18,9 +18,8 @@ import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAda
 
 import com.springsource.greenhouse.account.Account;
 
-// TODO - it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter
-// TODO - support in Spring MVC namespace should be added for that (this would go away then)
-// TODO - see SPR-7327
+// TODO - see SPR-7327: it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter
+// support in Spring MVC namespace should be added for that (this would go away then)
 public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProcessor {
 
 	private OAuthConsumerTokenServicesFactory oauthTokenFactory;

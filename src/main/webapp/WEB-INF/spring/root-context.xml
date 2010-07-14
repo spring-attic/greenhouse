@@ -6,24 +6,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
 	<!-- Root Context: defines shared resources accessible to all other web components -->
+	
+	<!-- Turn on support for @Annotation-based configuration e.g. @Inject -->
 	<context:annotation-config />
 
-	<!-- Configurable application properties -->
-	<context:property-placeholder location="classpath:email.properties" />
-
-	<!-- Twitter Client API -->
-	<bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
-	
-	<!-- Greenhouse updates -->
-    <bean id="updatesService" class="com.springsource.greenhouse.updates.GreenhouseUpdatesService">
-    	<constructor-arg ref="jdbcTemplate" />
-    </bean>
-
-	<!-- Greenhouse events -->
-    <bean id="eventsService" class="com.springsource.greenhouse.events.GreenhouseEventsService">
-    	<constructor-arg ref="jdbcTemplate" />
-    </bean>
-    	
 	<!-- Configures Shared Data Access Resources -->
 	<import resource="data.xml" />
 				

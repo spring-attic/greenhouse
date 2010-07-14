@@ -27,8 +27,8 @@ public class SettingsControllerTest {
 	
     @Before
     public void setup() {
-    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new ClassPathResource("SettingsControllerTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
     	controller = new SettingsController(jdbcTemplate);

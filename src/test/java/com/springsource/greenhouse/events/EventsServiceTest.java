@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.events;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.List;
@@ -21,16 +21,16 @@ public class EventsServiceTest {
 
 	private JdbcTemplate jdbcTemplate;
 	
-	private GreenhouseEventsService service; 
+	private EventsService service; 
 	
     @Before
     public void setup() {
-    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
     			new ClassPathResource("EventsServiceTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
-    	service = new GreenhouseEventsService(jdbcTemplate);
+    	service = new DefaultEventsService(jdbcTemplate);
     }
     
     @After
@@ -49,7 +49,7 @@ public class EventsServiceTest {
     }
     
     @Test
-    @Ignore    
+    @Ignore
     public void shouldGetEventById() {
     	Event event = service.getEventById(2);
     	assertEquals(2, event.getId());
@@ -62,7 +62,6 @@ public class EventsServiceTest {
     }
     
     @Test
-    @Ignore
     public void shouldRetrieveSessionsForAnEvent() {
     	List<EventSession> sessions = service.getSessionsByEventId(2);
     	assertEquals(2, sessions.size());

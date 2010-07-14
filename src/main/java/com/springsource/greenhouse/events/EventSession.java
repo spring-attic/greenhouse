@@ -2,6 +2,8 @@ package com.springsource.greenhouse.events;
 
 import java.util.Date;
 
+import com.springsource.greenhouse.members.Member;
+
 public class EventSession {
 
 	private String code;
@@ -15,6 +17,8 @@ public class EventSession {
 	private Date endTime;
 	
 	private String hashtag;
+
+	private Member speaker;
 		
 	public String getCode() {
 		return this.code;
@@ -62,5 +66,13 @@ public class EventSession {
 	
 	public void setHashtag(String hashtag) {
 		this.hashtag = hashtag;
+	}
+
+	public void setSpeaker(Member speaker) {
+		this.speaker = speaker;
+    }
+	
+	public Member getSpeaker() {
+		return this.speaker;
 	}
 }

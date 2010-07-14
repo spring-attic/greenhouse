@@ -19,21 +19,21 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServi
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
-public class GreenhouseOAuthConsumerTokenServicesTest {
+public class JdbcOAuthConsumerTokenServicesTest {
 
 	private EmbeddedDatabase db;
 
 	private JdbcTemplate jdbcTemplate;
     
-	private GreenhouseOAuthConsumerTokenServicesFactory tokenServicesFactory;
+	private JdbcOAuthConsumerTokenServicesFactory tokenServicesFactory;
 
     @Before
     public void setupDatabase() {
-    	db = GreenhouseTestDatabaseFactory.createUserDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
+    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
+    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new ClassPathResource("GreenhouseOAuthConsumerTokenServicesTest.sql", getClass()));
         jdbcTemplate = new JdbcTemplate(db);
-        tokenServicesFactory = new GreenhouseOAuthConsumerTokenServicesFactory(jdbcTemplate);
+        tokenServicesFactory = new JdbcOAuthConsumerTokenServicesFactory(jdbcTemplate);
     }
 
     @After
@@ -128,7 +128,7 @@ public class GreenhouseOAuthConsumerTokenServicesTest {
         assertNotNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
 
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-        ((GreenhouseOAuthConsumerTokenServices) tokenServices).removeToken("twitter");
+        ((JdbcOAuthConsumerTokenServices) tokenServices).removeToken("twitter");
         
         // Token should be gone after remove
         assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp where accessToken = 'twitterToken'"));

@@ -15,12 +15,12 @@ import org.springframework.security.oauth.provider.BaseConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 
-public class GreenhouseConsumerDetailsService implements ConsumerDetailsService {
+public class JdbcConsumerDetailsService implements ConsumerDetailsService {
 
 	private JdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public GreenhouseConsumerDetailsService(JdbcTemplate jdbcTemplate) {
+	public JdbcConsumerDetailsService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

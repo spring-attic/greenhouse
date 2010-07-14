@@ -7,7 +7,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 public class GreenhouseTestDatabaseFactory {
-	public static EmbeddedDatabase createUserDatabase(Resource... testDataResources) {
+	public static EmbeddedDatabase createTestDatabase(Resource... testDataResources) {
     	EmbeddedDatabaseFactory dbFactory = new EmbeddedDatabaseFactory();
     	dbFactory.setDatabaseType(EmbeddedDatabaseType.H2);
     	ResourceDatabasePopulator populator = new ResourceDatabasePopulator();

@@ -10,11 +10,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.web.flash.FlashMap;
 
-public class GreenhouseAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class RedirectingAuthenticationFailureHandler implements AuthenticationFailureHandler {
 	
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
-		FlashMap.setErrorMessage(exception.getMessage());
+		FlashMap.getCurrent(request).put("signinError", true);
 		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/signin"));
 	}
 	

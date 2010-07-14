@@ -11,16 +11,16 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
-public class DefaultUsernamePasswordAuthenticationService implements UsernamePasswordAuthenticationService {
+public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswordAuthenticationService {
 
 	private JdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public DefaultUsernamePasswordAuthenticationService(JdbcTemplate jdbcTemplate) {
+	public JdbcUsernamePasswordAuthenticationService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public Account authenticate(String username, String password) throws AccountNotFoundException, InvalidPasswordException {
+	public Account authenticate(String username, String password) throws UsernameNotFoundException, InvalidPasswordException {
 		String query = EmailUtils.isEmail(username) ? 
 				"select id, firstName, lastName, email, username, password from Member where email = ?" : 
 				"select id, firstName, lastName, email, username, password from Member where username = ?";
@@ -31,7 +31,7 @@ public class DefaultUsernamePasswordAuthenticationService implements UsernamePas
 			}
 			return authenticate.getAccount();
 		} catch (EmptyResultDataAccessException e) {
-			throw new AccountNotFoundException(username);
+			throw new UsernameNotFoundException(username);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
+<%@ taglib tagdir="/WEB-INF/tags/dates" prefix="d" %>
 
 <h2>Upcoming Events</h2>
 
@@ -9,7 +10,9 @@
 		<s:url value="/events/{id}" var="eventUrl">
 			<s:param name="id" value="${event.id}" />
 		</s:url> 
-		<dt class="event"><a href="${eventUrl}">${event.title}</a></dt>
+		<dt class="event"><a href="${eventUrl}">${event.title}</a><br/>
+			<span class="locationAndDate"><d:displayDateRange startDate="${event.startTime}" endDate="${event.endTime}"/> - 
+			${event.location}</span></dt>
 		<dd class="event"><c:out value="${event.description}"/></dd>
 	</c:forEach>
 	</dl>

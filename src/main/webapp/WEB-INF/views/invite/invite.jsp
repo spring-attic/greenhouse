@@ -4,6 +4,6 @@
 
 <ul>
 	<li>
-		<img src="<c:url value="/resources/social/twitter/logo.png"/>" alt="Twitter Logo"/> <a href="<c:url value="/invite/twitter"/>">Find the friends you follow on Twitter</a>
+		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Logo"/> <a href="<c:url value="/invite/twitter"/>">Find the friends you follow on Twitter</a>
 	</li>
 </ul>

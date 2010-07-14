@@ -28,11 +28,19 @@
 		<level value="info" />
 	</logger>
 
+	<logger name="org.springframework.jdbc">
+		<level value="info" />
+	</logger>
+
 	<logger name="org.springframework.web">
 		<level value="info" />
 	</logger>
 
 	<logger name="org.springframework.security">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.integration">
 		<level value="info" />
 	</logger>
 

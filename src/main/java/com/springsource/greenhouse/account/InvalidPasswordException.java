@@ -1,9 +1,9 @@
 package com.springsource.greenhouse.account;
 
 @SuppressWarnings("serial")
-public class InvalidPasswordException extends Exception {
+public class InvalidPasswordException extends AccountException {
 
 	public InvalidPasswordException() {
-		super("Invalid password");
+		super("invalid password");
 	}
 }

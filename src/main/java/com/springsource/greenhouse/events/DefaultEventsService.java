@@ -9,17 +9,21 @@ import javax.inject.Inject;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
 
-public class GreenhouseEventsService {
+@Service
+public class DefaultEventsService implements EventsService {
 	private static final String SELECT_EVENT = 
 			"select id, title, description, startTime, endTime, location, hashtag from Event";
 	private static final String SELECT_SESSION = 
 			"select code, title, description, startTime, endTime, speaker, event, track, hashtag from EventSession";
+	private static final String SELECT_TRACK =
+			"select id, name, description";
 
 	private JdbcTemplate jdbcTemplate;
 
 	@Inject
-	public GreenhouseEventsService(JdbcTemplate jdbcTemplate) {
+	public DefaultEventsService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
@@ -39,10 +43,13 @@ public class GreenhouseEventsService {
 	}
 	
 	public List<EventSession> getSessionsByEventId(long eventId) {
-		return jdbcTemplate.query(SELECT_SESSION + " where event = ? order by startTime", 
-				eventSessionMapper, 
-				eventId);
+		return jdbcTemplate.query(SELECT_SESSION + " where event = ? order by startTime", eventSessionMapper, eventId);
 	}
+	
+	public List<EventTrack> getTracksByEventId(long eventId) {
+		return jdbcTemplate.query(SELECT_TRACK + " where event = ? order by id", eventTrackMapper, eventId);
+	}
+	
 
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
@@ -66,10 +73,19 @@ public class GreenhouseEventsService {
 			session.setDescription(rs.getString("description"));
 			session.setStartTime(rs.getTimestamp("startTime"));
 			session.setEndTime(rs.getTimestamp("endTime"));
-			session.setHashtag(rs.getString("hashtag"));	
-			// TODO: Add speaker, event, track
+			session.setHashtag(rs.getString("hashtag"));
 			return session;
 		}
 	};
-	
+
+	private RowMapper<EventTrack> eventTrackMapper = new RowMapper<EventTrack>() {
+		public EventTrack mapRow(ResultSet rs, int row) throws SQLException {
+			EventTrack track = new EventTrack();
+			track.setIdentity(rs.getLong("id"));
+			track.setName(rs.getString("name"));
+			track.setDescription(rs.getString("description"));
+			return track;
+		}
+	};
+
 }
