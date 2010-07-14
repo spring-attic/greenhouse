@@ -39,7 +39,7 @@ public class GreenhouseEventsService {
 	}
 	
 	public List<EventSession> getSessionsByEventId(long eventId) {
-		return jdbcTemplate.query(SELECT_SESSION + " where event = ? order by startTime desc", 
+		return jdbcTemplate.query(SELECT_SESSION + " where event = ? order by startTime", 
 				eventSessionMapper, 
 				eventId);
 	}

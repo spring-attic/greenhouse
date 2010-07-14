@@ -11,9 +11,14 @@ insert into Event (title, description, startTime, endTime, location, memberGroup
 	'Old Event', 'This event is over', '2009-10-19', '2009-10-22', 'New Orleans, LA', 1, '#old');
 
 
-insert into EventTrack (name, description, chair, event) values ('Core Spring', 'The low-down on the core Spring Framework', 1, 1);
+insert into EventTrack (name, description, chair, event) values ('Core Spring', 'The low-down on the core Spring Framework', 1, 2);
 
 insert into EventSession (code, title, description, startTime, endTime, speaker, event, track, hashtag) values ('CS1', 
 	'Developing Social-Ready Web Applications', 
 	'Businesses are increasingly recognizing the value of connecting with their customers on a more personal level....', 
-	'2010-10-20', '2010-10-20', 2, 1, 1, '#s12gxcs1');
+	'2010-10-20', '2010-10-20', 2, 2, 1, '#s12gxcs1');
+
+insert into EventSession (code, title, description, startTime, endTime, speaker, event, track, hashtag) values ('CS2', 
+	'Mastering MVC 3', 
+	'A deep-dive into the latest capabilities of MVC, Spring''s REST-ful web application development platform. ', 
+	'2010-10-19', '2010-10-19', 1, 2, 1, '#s12gxcs1');
