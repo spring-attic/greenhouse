@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -40,11 +39,6 @@ public class EventsServiceTest {
     }
     
     @Test
-    public void canary() {
-    	Assert.assertTrue(true);
-    }
-    
-    @Test
     public void shouldGetEventsAfterAGivenDate() {
     	Calendar testDate = Calendar.getInstance();
     	testDate.set(2010, 7, 14);
@@ -65,5 +59,13 @@ public class EventsServiceTest {
     	assertEquals("Chicago, IL", event.getLocation());
     	assertEquals(1287464400000L, event.getStartTime().getTime());
     	assertEquals(1287723600000L, event.getEndTime().getTime());
+    }
+    
+    @Test
+    public void shouldRetrieveSessionsForAnEvent() {
+    	List<EventSession> sessions = service.getSessionsByEventId(2);
+    	assertEquals(2, sessions.size());
+    	assertEquals("CS2", sessions.get(0).getCode());
+    	assertEquals("CS1", sessions.get(1).getCode());
     }
 }
