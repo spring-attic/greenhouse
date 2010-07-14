@@ -1,20 +1,16 @@
 package com.springsource.greenhouse.signup;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
 @RequestMapping("/signup")
@@ -39,7 +35,7 @@ public class SignupController {
 		}
 		try {
 			Account account = signupService.signup(form.createPerson());
-			signin(account);
+			SecurityUtils.signin(account);
 		} catch (EmailAlreadyOnFileException e) {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
 			return null;
@@ -47,10 +43,4 @@ public class SignupController {
 		return "redirect:/";			
 	}
 
-	private void signin(Account account) {
-		List<GrantedAuthority> authorities = null;
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(account, null, authorities);
-		SecurityContextHolder.getContext().setAuthentication(token);
-	}
-	
 }

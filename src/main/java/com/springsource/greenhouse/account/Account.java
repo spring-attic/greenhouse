@@ -56,4 +56,8 @@ public final class Account {
 		return username != null ? username : id.toString(); 
 	}
 
+	public Account newUsername(String newUsername) {
+		return new Account(id, firstName, lastName, email, newUsername);
+	}
+
 }

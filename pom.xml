@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>3.0.2.RELEASE</version>
+			<version>${org.springframework-version}</version>
 		</dependency>
 		<!-- Remove once spring-aspects marks JPA as optional -->
 		<dependency>
