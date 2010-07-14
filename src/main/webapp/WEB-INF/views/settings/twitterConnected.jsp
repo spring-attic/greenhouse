@@ -3,8 +3,8 @@
 
 <form id="disconnect" method="post">
 	<div id="header">
-		<c:if test="${not empty connectedMessage}">
-			<div class="success">${connectedMessage}</div>
+		<c:if test="${not empty message}">
+			<div class="${message.type}">${message.text}</div>
 		</c:if>
 	</div>
 	<p>Your Greenhouse account is currently linked to your Twitter account</p>

@@ -14,7 +14,7 @@ public class GreenhouseAuthenticationFailureHandler implements AuthenticationFai
 	
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
-		FlashMap.setErrorMessage(exception.getMessage());
+		FlashMap.getCurrent(request).put("signinError", true);
 		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/signin"));
 	}
 	

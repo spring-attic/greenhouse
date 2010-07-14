@@ -3,8 +3,8 @@
 <form id="resetPassword" method="post">
 	<div class="header">
   		<h2>Reset Password</h2>
-		<c:if test="${not empty successMessage}">
-			<div class="success">${successMessage}</div>
+		<c:if test="${not empty message}">
+			<div class="${message.type}">${message.text}</div>
 		</c:if>
 	</div>
   	<fieldset>

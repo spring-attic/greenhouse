@@ -28,7 +28,7 @@ public class MembersController {
 
 	@RequestMapping(value="/@self", headers="Accept=application/json")
 	public @ResponseBody Member memberData(Account account) {
-		return findMemberByUserId(account.getId());
+		return findMemberByAccountId(account.getId());
 	}
 
 	@RequestMapping("/{profileKey}")
@@ -40,12 +40,12 @@ public class MembersController {
 	// internal helpers
 	
 	private Member findMemberByProfileKey(String profileKey) {
-		Long entityId = getEntityId(profileKey);
-		return entityId != null ? findMemberByUserId(entityId) : findMemberByUsername(profileKey);
+		Long accountId = getAccountId(profileKey);
+		return accountId != null ? findMemberByAccountId(accountId) : findMemberByUsername(profileKey);
 	}
 	
-	private Member findMemberByUserId(Long userId) {
-		return jdbcTemplate.queryForObject("select firstName, lastName from Member where id = ?", memberMapper, userId);
+	private Member findMemberByAccountId(Long accountId) {
+		return jdbcTemplate.queryForObject("select firstName, lastName from Member where id = ?", memberMapper, accountId);
 	}
 
 	private Member findMemberByUsername(String username) {
@@ -61,7 +61,7 @@ public class MembersController {
 		}
 	};
 
-	private Long getEntityId(String id) {
+	private Long getAccountId(String id) {
 		try {
 			return Long.parseLong(id);
 		} catch (NumberFormatException e) {

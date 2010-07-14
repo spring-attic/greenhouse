@@ -4,7 +4,7 @@
 <form id="signin" action="<c:url value="/signin/authenticate" />" method="post">
 	<div class="header">
   		<h2>Sign in</h2>
-  		<c:if test="${not empty signinErrorMessage}">
+  		<c:if test="${signinError}">
   			<div class="error">Your sign in information was incorrect.  Please try again or <a href="<c:url value="/signup" />">sign up</a>.</div>
  	 	</c:if>
 	</div>	
