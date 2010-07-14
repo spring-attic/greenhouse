@@ -49,7 +49,7 @@ public class EventsServiceTest {
     }
     
     @Test
-    @Ignore    
+    @Ignore
     public void shouldGetEventById() {
     	Event event = service.getEventById(2);
     	assertEquals(2, event.getId());
@@ -62,7 +62,6 @@ public class EventsServiceTest {
     }
     
     @Test
-    @Ignore
     public void shouldRetrieveSessionsForAnEvent() {
     	List<EventSession> sessions = service.getSessionsByEventId(2);
     	assertEquals(2, sessions.size());
