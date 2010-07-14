@@ -20,7 +20,7 @@
     </bean>
 
 	<!-- Greenhouse events -->
-    <bean id="eventsService" class="com.springsource.greenhouse.events.GreenhouseEventsService">
+    <bean id="eventsService" class="com.springsource.greenhouse.events.EventsService">
     	<constructor-arg ref="jdbcTemplate" />
     </bean>
     	
