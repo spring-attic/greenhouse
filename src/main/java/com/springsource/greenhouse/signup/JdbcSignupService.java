@@ -11,14 +11,14 @@ import com.springsource.greenhouse.account.Account;
 
 @Service
 @Transactional
-public class DefaultSignupService implements SignupService {
+public class JdbcSignupService implements SignupService {
 
 	private JdbcTemplate jdbcTemplate;
 	
 	private SignedUpMessageGateway messageGateway;
 	
 	@Inject
-	public DefaultSignupService(JdbcTemplate jdbcTemplate, SignedUpMessageGateway messageGateway) {
+	public JdbcSignupService(JdbcTemplate jdbcTemplate, SignedUpMessageGateway messageGateway) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.messageGateway = messageGateway;
 	}

@@ -3,17 +3,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd		
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 
 	<!-- Configures the Spring MVC @Controller programming model -->
 	<annotation-driven />
+	
 	<!-- Installs Greenhouse-specific @Controller extensions not configurable via the mvc namespace -->
 	<beans:bean class="com.springsource.greenhouse.config.AnnotationMethodHandlerAdapterPostProcessor">
 		<beans:constructor-arg ref="consumerTokenServicesFactory" />
@@ -24,7 +22,7 @@
 
 	<!-- Interceptors that execute common control logic across multiple requests -->
 	<interceptors>
-		<beans:bean class="com.springsource.greenhouse.signin.AccountHandlerInterceptor" />
+		<beans:bean class="com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor" />
 		<beans:bean class="org.springframework.mobile.DeviceDetectingHandlerInterceptor">
 			<beans:constructor-arg ref="wurflManager" />
 		</beans:bean>
@@ -48,9 +46,6 @@
 	
 	<!-- Configures WURFL for detecting mobile device capabilities -->
 	<beans:bean id="wurflManager" class="org.springframework.mobile.WURFLManagerFactoryBean" />
-		
-	<!-- Configures transaction management around @Transactional components -->
-	<tx:annotation-driven mode="aspectj" />
 
 	<!-- Imports the application controllers that process client requests -->
 	<beans:import resource="controllers.xml" />

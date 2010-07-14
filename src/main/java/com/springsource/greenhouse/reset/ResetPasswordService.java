@@ -8,6 +8,6 @@ public interface ResetPasswordService {
 
 	boolean isValidResetToken(String token);
 
-	void changePassword(String token, String password) throws InvalidTokenException;
+	void changePassword(String token, String password) throws InvalidResetTokenException;
 	
 }

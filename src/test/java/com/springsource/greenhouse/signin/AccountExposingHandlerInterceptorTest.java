@@ -17,17 +17,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.signin.AccountHandlerInterceptor;
+import com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor;
 
-public class CurrentUserHandlerInterceptorTest {
+public class AccountExposingHandlerInterceptorTest {
 	
-    private AccountHandlerInterceptor interceptor;
+    private AccountExposingHandlerInterceptor interceptor;
     
     private Account account;
     
     @Before
     public void setup() {
-        interceptor = new AccountHandlerInterceptor();
+        interceptor = new AccountExposingHandlerInterceptor();
         account = new Account(1L);
         TestingAuthenticationToken authentication = new TestingAuthenticationToken(account, "password");
         SecurityContextHolder.getContext().setAuthentication(authentication);
