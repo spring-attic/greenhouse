@@ -11,7 +11,7 @@
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.0.4.BUILD-SNAPSHOT</org.springframework-version>
 		<org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version>
-		<org.aspectj-version>1.6.9.RELEASE</org.aspectj-version>
+		<org.aspectj-version>1.6.9</org.aspectj-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
 	</properties>
 	<dependencies>
@@ -280,7 +280,6 @@
 			<id>org.springframework.maven.release</id>
 			<name>Spring Maven Release Repository</name>
 			<url>http://maven.springframework.org/release</url>
-			<releases><enabled>true</enabled></releases>
 			<snapshots><enabled>false</enabled></snapshots>
 		</repository>
 		<!-- For developing against latest Spring milestones -->
