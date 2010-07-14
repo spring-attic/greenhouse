@@ -3,6 +3,7 @@ package com.springsource.greenhouse.settings;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
 @RequestMapping("/settings")
@@ -51,6 +53,7 @@ public class TwitterSettingsController {
 			Account account = (Account) authentication.getPrincipal();
 			makeTwitterScreenameGreenhouseUsername(accessToken, account);
 			if (request.getParameter("tweetIt") != null) {
+				// TODO should this be done asynchronously?
 				tweetConnection(accessToken, request, account);
 			}
 			FlashMap.setSuccessMessage("Your Twitter account is now linked to your Greenhouse account!");
@@ -83,8 +86,12 @@ public class TwitterSettingsController {
 
 	private void makeTwitterScreenameGreenhouseUsername(OAuthConsumerToken accessToken, Account account) {
 		String screenName = twitterService.getScreenName(accessToken);
-		jdbcTemplate.update("update Member set username = ? where id = ?", screenName, account.getId());
-		// TODO clone Account with new username, set using SecurityContext
+		try {
+			jdbcTemplate.update("update Member set username = ? where id = ?", screenName, account.getId());
+			SecurityUtils.signin(account.newUsername(screenName));
+		} catch (DuplicateKeyException e) {
+			// TODO add an info message that gets displayed under the success message
+		}
 	}
 	
 }
