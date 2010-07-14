@@ -9,9 +9,9 @@
 	</div>
   	<fieldset>
   		<label for="username">
-  			Username or Email <c:if test="${error}"><span class="fieldError">${errorMessage}</span></c:if>
+  			Username or Email <c:if test="${username.error}"><span class="fieldError">${username.errorMessage}</span></c:if>
   		</label>
-  		<input id="username" type="text" name="username" />
+  		<input id="username" type="text" name="username" value="${username.value}" />
 	</fieldset>
 	<input type="submit" value="Submit">
 </form>
