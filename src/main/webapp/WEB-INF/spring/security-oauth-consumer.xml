@@ -19,6 +19,9 @@
 	<beans:bean id="consumerTokenServicesFactory"  class="com.springsource.greenhouse.oauth.JdbcOAuthConsumerTokenServicesFactory">
 		<beans:constructor-arg ref="jdbcTemplate" />
 	</beans:bean>
+	
+	<!-- Twitter Client API -->
+	<beans:bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
 
 </beans:beans>
 
