@@ -7,20 +7,12 @@
 		http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail-1.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- Gateway that publishes signup messages to the global message channel -->
-	<gateway id="signupMessageGateway" service-interface="com.springsource.greenhouse.signup.SignedUpMessageGateway" default-request-channel="globalChannel" />
-		 		
-	<!-- Routes SignupMessages to the signupChannel -->
-	<payload-type-router input-channel="globalChannel">
-		<mapping type="com.springsource.greenhouse.account.Account" channel="signedUpChannel" />
-	</payload-type-router>	
-
-	<publish-subscribe-channel id="signedUpChannel" />
-
+	<!-- Activates the update service on signup -->
 	<service-activator input-channel="signedUpChannel" method="insertSignupUpdate" ref="updatesService" />
 
-	<beans:import resource="integration-updates.xml" />
-
-	<beans:import resource="integration-welcome-mail.xml" />
+	<!-- Greenhouse updates -->
+    <beans:bean id="updatesService" class="com.springsource.greenhouse.updates.GreenhouseUpdatesService">
+    	<beans:constructor-arg ref="jdbcTemplate" />
+    </beans:bean>
 			
 </beans:beans>

@@ -11,14 +11,14 @@ import org.springframework.mail.template.StringTemplateFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DefaultResetPasswordMailConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
+public class StringTemplateResetPasswordMailConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
 	
 	private StringTemplateFactory templateFactory;
 	
 	private Resource resetPasswordTemplate = new ClassPathResource("reset-password.st", getClass());
 
 	@Inject
-	public DefaultResetPasswordMailConverter(StringTemplateFactory templateFactory) {
+	public StringTemplateResetPasswordMailConverter(StringTemplateFactory templateFactory) {
 		this.templateFactory = templateFactory;
 	}
 	

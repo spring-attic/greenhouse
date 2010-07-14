@@ -11,12 +11,12 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
-public class DefaultUsernamePasswordAuthenticationService implements UsernamePasswordAuthenticationService {
+public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswordAuthenticationService {
 
 	private JdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public DefaultUsernamePasswordAuthenticationService(JdbcTemplate jdbcTemplate) {
+	public JdbcUsernamePasswordAuthenticationService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

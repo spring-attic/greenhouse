@@ -10,17 +10,17 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServi
 
 import com.springsource.greenhouse.account.Account;
 
-public class GreenhouseOAuthConsumerTokenServicesFactory implements OAuthConsumerTokenServicesFactory {
+public class JdbcOAuthConsumerTokenServicesFactory implements OAuthConsumerTokenServicesFactory {
   
   private JdbcTemplate jdbcTemplate;
 
   @Inject
-  public GreenhouseOAuthConsumerTokenServicesFactory(JdbcTemplate jdbcTemplate) {
+  public JdbcOAuthConsumerTokenServicesFactory(JdbcTemplate jdbcTemplate) {
       this.jdbcTemplate = jdbcTemplate;
   }
     
   public OAuthConsumerTokenServices getTokenServices(Authentication authentication, HttpServletRequest request) {
 	  Account account = (Account) authentication.getPrincipal();
-      return new GreenhouseOAuthConsumerTokenServices(jdbcTemplate, request.getSession(true), account.getId());
+      return new JdbcOAuthConsumerTokenServices(jdbcTemplate, request.getSession(true), account.getId());
   }
 }

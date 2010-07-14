@@ -25,15 +25,15 @@
 
 	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.signin.UsernamePasswordAuthenticationProvider">
 		<beans:constructor-arg>
-			<beans:bean class="com.springsource.greenhouse.account.DefaultUsernamePasswordAuthenticationService">
+			<beans:bean class="com.springsource.greenhouse.account.JdbcUsernamePasswordAuthenticationService">
 				<beans:constructor-arg ref="jdbcTemplate" />
 			</beans:bean>
 		</beans:constructor-arg>
 	</beans:bean>
 	
-	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.GreenhouseAuthenticationFailureHandler" />
+	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
 
-	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.DefaultAccountRepository">
+	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository">
 		<beans:constructor-arg ref="jdbcTemplate" />
 	</beans:bean>
 

@@ -30,7 +30,7 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 
 @Transactional
-public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenServices {
+public class JdbcOAuthProviderTokenServices implements OAuthProviderTokenServices {
 	
     private Random random = new SecureRandom();
 
@@ -39,7 +39,7 @@ public class GreenhouseOAuthProviderTokenServices implements OAuthProviderTokenS
 	private AccountRepository accountRepository;
 	
 	@Inject
-	public GreenhouseOAuthProviderTokenServices(JdbcTemplate jdbcTemplate, AccountRepository accountRepository) {
+	public JdbcOAuthProviderTokenServices(JdbcTemplate jdbcTemplate, AccountRepository accountRepository) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.accountRepository = accountRepository;
 	}

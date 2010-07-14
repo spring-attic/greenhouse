@@ -15,14 +15,14 @@ import org.springframework.security.oauth.provider.token.OAuthAccessProviderToke
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.DefaultAccountRepository;
+import com.springsource.greenhouse.account.JdbcAccountRepository;
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
-public class GreenhouseOAuthProviderTokenServicesTest {
+public class JdbcOAuthProviderTokenServicesTest {
 
 	private EmbeddedDatabase db;
 	
-    private GreenhouseOAuthProviderTokenServices tokenServices;
+    private JdbcOAuthProviderTokenServices tokenServices;
 
     @Before
     public void setup() {
@@ -30,8 +30,8 @@ public class GreenhouseOAuthProviderTokenServicesTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-user.sql"),
     			new ClassPathResource("GreenhouseOAuthProviderTokenServicesTest.sql", getClass()));
     	JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
-    	DefaultAccountRepository accountRepository = new DefaultAccountRepository(jdbcTemplate);
-    	tokenServices = new GreenhouseOAuthProviderTokenServices(jdbcTemplate, accountRepository);
+    	JdbcAccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate);
+    	tokenServices = new JdbcOAuthProviderTokenServices(jdbcTemplate, accountRepository);
     }
     
     @After

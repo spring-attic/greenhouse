@@ -12,7 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 
-public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenServices {
+public class JdbcOAuthConsumerTokenServices extends HttpSessionBasedTokenServices {
 
     static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (accessToken, member, accountName, secret) values (?, ?, ?, ?)";
     static final String SELECT_TOKEN_SQL = "select accessToken, accountName, secret from ConnectedAccount where member = ? and accountName = ?";
@@ -24,7 +24,7 @@ public class GreenhouseOAuthConsumerTokenServices extends HttpSessionBasedTokenS
 	
 	private HttpSession session;
 
-	public GreenhouseOAuthConsumerTokenServices(JdbcTemplate jdbcTemplate, HttpSession session, Long memberId) {
+	public JdbcOAuthConsumerTokenServices(JdbcTemplate jdbcTemplate, HttpSession session, Long memberId) {
 		super(session);
 		this.memberId = memberId;
 		this.jdbcTemplate = jdbcTemplate;

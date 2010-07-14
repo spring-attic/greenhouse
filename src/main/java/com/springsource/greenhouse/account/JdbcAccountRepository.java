@@ -7,14 +7,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
-public class DefaultAccountRepository implements AccountRepository {
+public class JdbcAccountRepository implements AccountRepository {
 
 	private JdbcTemplate jdbcTemplate;
 	
 	private AccountMapper accountMapper = new AccountMapper();
 	
 	@Inject
-	public DefaultAccountRepository(JdbcTemplate jdbcTemplate) {
+	public JdbcAccountRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 

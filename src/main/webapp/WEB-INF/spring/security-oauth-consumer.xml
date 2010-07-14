@@ -4,8 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                         http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
 
-	<consumer resource-details-service-ref="resourceDetails" oauth-failure-page="/oauthError"
-		token-services-factory-ref="consumerTokenServicesFactory">
+	<consumer resource-details-service-ref="resourceDetails" token-services-factory-ref="consumerTokenServicesFactory">
 		<url pattern="/settings/twitterconnect/authorize**" resources="twitter" />
 	</consumer>
 
@@ -17,8 +16,7 @@
 			access-token-url="https://twitter.com/oauth/access_token" />
 	</resource-details-service>
 
-	<beans:bean id="consumerTokenServicesFactory" 
-				class="com.springsource.greenhouse.oauth.GreenhouseOAuthConsumerTokenServicesFactory">
+	<beans:bean id="consumerTokenServicesFactory"  class="com.springsource.greenhouse.oauth.JdbcOAuthConsumerTokenServicesFactory">
 		<beans:constructor-arg ref="jdbcTemplate" />
 	</beans:bean>
 
