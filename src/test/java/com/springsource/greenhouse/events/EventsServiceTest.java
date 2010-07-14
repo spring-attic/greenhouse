@@ -21,7 +21,7 @@ public class EventsServiceTest {
 
 	private JdbcTemplate jdbcTemplate;
 	
-	private GreenhouseEventsService service; 
+	private EventsService service; 
 	
     @Before
     public void setup() {
@@ -30,7 +30,7 @@ public class EventsServiceTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
     			new ClassPathResource("EventsServiceTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
-    	service = new GreenhouseEventsService(jdbcTemplate);
+    	service = new EventsService(jdbcTemplate);
     }
     
     @After
@@ -65,7 +65,7 @@ public class EventsServiceTest {
     public void shouldRetrieveSessionsForAnEvent() {
     	List<EventSession> sessions = service.getSessionsByEventId(2);
     	assertEquals(2, sessions.size());
-    	assertEquals("CS2", sessions.get(0).getCode());
+    	assertEquals("CS2", sessions.get(0).getCode()); 
     	assertEquals("CS1", sessions.get(1).getCode());
     }
 }

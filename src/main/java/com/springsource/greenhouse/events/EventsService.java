@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-public class GreenhouseEventsService {
+public class EventsService {
 	private static final String SELECT_EVENT = 
 			"select id, title, description, startTime, endTime, location, hashtag from Event";
 	private static final String SELECT_SESSION = 
@@ -19,7 +19,7 @@ public class GreenhouseEventsService {
 	private JdbcTemplate jdbcTemplate;
 
 	@Inject
-	public GreenhouseEventsService(JdbcTemplate jdbcTemplate) {
+	public EventsService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	

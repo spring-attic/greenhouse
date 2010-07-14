@@ -25,3 +25,8 @@ dt.event {
 dd.event {
 	padding-bottom: 10pt;
 }
+
+dt.event span.locationAndDate {
+	font-size: .75em;
+	font-style: italic;
+}

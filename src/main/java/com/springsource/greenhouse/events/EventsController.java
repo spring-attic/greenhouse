@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/events")
 public class EventsController {
 	
-	private GreenhouseEventsService eventsService;
+	private EventsService eventsService;
 	private TwitterOperations twitter;
 	
 	@Inject
-	public EventsController(GreenhouseEventsService eventsService, TwitterOperations twitter) {
+	public EventsController(EventsService eventsService, TwitterOperations twitter) {
 		this.eventsService = eventsService;
 		this.twitter = twitter;
 	}
