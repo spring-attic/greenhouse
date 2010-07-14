@@ -11,9 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import com.springsource.greenhouse.members.Member;
-import com.springsource.greenhouse.members.MembersService;
-
 @Service
 public class DefaultEventsService implements EventsService {
 	private static final String SELECT_EVENT = 
@@ -24,12 +21,10 @@ public class DefaultEventsService implements EventsService {
 			"select id, name, description";
 
 	private JdbcTemplate jdbcTemplate;
-	private final MembersService membersService;
 
 	@Inject
-	public DefaultEventsService(JdbcTemplate jdbcTemplate, MembersService membersService) {
+	public DefaultEventsService(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.membersService = membersService;
 	}
 	
 	public List<Event> getEventsAfter(Date afterDate) {		
@@ -79,8 +74,6 @@ public class DefaultEventsService implements EventsService {
 			session.setStartTime(rs.getTimestamp("startTime"));
 			session.setEndTime(rs.getTimestamp("endTime"));
 			session.setHashtag(rs.getString("hashtag"));
-			Member speaker = membersService.findMemberByAccountId(rs.getLong("speaker"));
-			session.setSpeaker(speaker);
 			return session;
 		}
 	};

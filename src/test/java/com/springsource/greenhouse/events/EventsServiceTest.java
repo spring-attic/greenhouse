@@ -14,8 +14,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
-import com.springsource.greenhouse.members.DefaultMembersService;
-import com.springsource.greenhouse.members.MembersService;
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class EventsServiceTest {
@@ -32,8 +30,7 @@ public class EventsServiceTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
     			new ClassPathResource("EventsServiceTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
-    	MembersService membersService = new DefaultMembersService(jdbcTemplate);
-    	service = new DefaultEventsService(jdbcTemplate, membersService);
+    	service = new DefaultEventsService(jdbcTemplate);
     }
     
     @After
