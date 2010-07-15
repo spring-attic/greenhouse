@@ -7,8 +7,9 @@
 <c:if test="${not empty eventList}">
 	<dl>
 	<c:forEach items="${eventList}" var="event">
-		<s:url value="/events/{id}" var="eventUrl">
-			<s:param name="id" value="${event.id}" />
+		<s:url value="/groups/{group}/events/{event}" var="eventUrl">
+			<s:param name="group" value="${event.memberGroup.publicId}" />
+			<s:param name="event" value="${event.publicId}" />
 		</s:url> 
 		<dt class="event"><a href="${eventUrl}">${event.title}</a><br/>
 			<span class="locationAndDate"><d:displayDateRange startDate="${event.startTime}" endDate="${event.endTime}"/> - 

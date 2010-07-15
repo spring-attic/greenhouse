@@ -42,7 +42,7 @@ public class EventsServiceTest {
     public void shouldGetEventsAfterAGivenDate() {
     	Calendar testDate = Calendar.getInstance();
     	testDate.set(2010, 7, 14);
-		List<Event> events = service.getEventsAfter(testDate.getTime());
+		List<Event> events = service.findEventsAfter(testDate.getTime());
     	assertEquals(2, events.size());    	
     	assertEquals(2, events.get(0).getId());
     	assertEquals(1, events.get(1).getId());
@@ -51,21 +51,42 @@ public class EventsServiceTest {
     @Test
     @Ignore
     public void shouldGetEventById() {
-    	Event event = service.getEventById(2);
-    	assertEquals(2, event.getId());
+    	Event event = service.findEventById(2);
+    	assertExpectedSoonEvent(event);
+    }
+
+    @Test
+    public void shouldRetrieveSessionsForAnEvent() {
+    	List<EventSession> sessions = service.findSessionsByEventId(2);
+    	assertEquals(2, sessions.size());
+    	assertEquals("CS2", sessions.get(0).getCode());
+    	assertEquals("CS1", sessions.get(1).getCode());
+    }
+    
+    @Test
+    public void shouldFindAMemberGroupById() {
+    	MemberGroup group = service.findMemberGroupById(1);
+    	assertEquals(1, group.getId());
+    	assertEquals("SpringOne", group.getName());
+    	assertEquals("SpringOne", group.getPublicId());
+    	assertEquals("The premier Spring Framework event.", group.getDescription());
+    	assertEquals("#springone", group.getHashtag());
+    }
+    
+    @Test
+    public void shouldFindAnEventGivenAGroupAndEventName() {
+    	Event event = service.findEventByGroupNameAndEventName("SpringOne", "Soon_Event");
+    	assertExpectedSoonEvent(event);
+    }
+    
+	private void assertExpectedSoonEvent(Event event) {
+	    assertEquals(2, event.getId());
+	    assertEquals("Soon_Event", event.getPublicId());
     	assertEquals("Soon Event", event.getTitle());
     	assertEquals("This event is soon", event.getDescription());
     	assertEquals("#soon", event.getHashtag());
     	assertEquals("Chicago, IL", event.getLocation());
     	assertEquals(1287464400000L, event.getStartTime().getTime());
     	assertEquals(1287723600000L, event.getEndTime().getTime());
-    }
-    
-    @Test
-    public void shouldRetrieveSessionsForAnEvent() {
-    	List<EventSession> sessions = service.getSessionsByEventId(2);
-    	assertEquals(2, sessions.size());
-    	assertEquals("CS2", sessions.get(0).getCode());
-    	assertEquals("CS1", sessions.get(1).getCode());
     }
 }

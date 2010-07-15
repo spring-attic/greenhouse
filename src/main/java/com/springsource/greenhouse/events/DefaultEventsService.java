@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultEventsService implements EventsService {
+	private static final String SELECT_MEMBER_GROUP =
+			"select id, publicId, name, description, hashtag from MemberGroup";
 	private static final String SELECT_EVENT = 
-			"select id, title, description, startTime, endTime, location, hashtag from Event";
+			"select Event.id, Event.publicId, Event.title, Event.description, startTime, endTime, location, memberGroup, Event.hashtag from Event";
 	private static final String SELECT_SESSION = 
 			"select code, title, description, startTime, endTime, speaker, event, track, hashtag from EventSession";
 	private static final String SELECT_TRACK =
@@ -27,22 +29,18 @@ public class DefaultEventsService implements EventsService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public List<Event> getEventsAfter(Date afterDate) {		
+	public List<Event> findEventsAfter(Date afterDate) {		
 		return jdbcTemplate.query(SELECT_EVENT + " where endTime > ? order by startTime",	eventMapper, afterDate);		
 	}
 	
-	public Event getEventById(long eventId) {		
+	public Event findEventById(long eventId) {		
 		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + " where id=? order by startTime", 
 				eventMapper, eventId);
-		
-		if (event != null) {
-			event.setSessions(this.getSessionsByEventId(event.getId()));
-		}
-		
+		event.setSessions(this.findSessionsByEventId(event.getId()));
 		return event;
 	}
 	
-	public List<EventSession> getSessionsByEventId(long eventId) {
+	public List<EventSession> findSessionsByEventId(long eventId) {
 		return jdbcTemplate.query(SELECT_SESSION + " where event = ? order by startTime", eventSessionMapper, eventId);
 	}
 	
@@ -50,17 +48,31 @@ public class DefaultEventsService implements EventsService {
 		return jdbcTemplate.query(SELECT_TRACK + " where event = ? order by id", eventTrackMapper, eventId);
 	}
 	
-
+	public Event findEventByGroupNameAndEventName(String groupName, String eventName) {
+		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + ", MemberGroup where " +
+				"MemberGroup.publicId = ? and MemberGroup.id = Event.memberGroup and Event.publicId = ?", 
+				eventMapper, groupName, eventName);
+		event.setSessions(this.findSessionsByEventId(event.getId()));		
+		return event;
+	}
+	
+	public MemberGroup findMemberGroupById(long groupId) {
+		return jdbcTemplate.queryForObject(SELECT_MEMBER_GROUP + " where id = ?", memberGroupMapper, groupId);
+	}
+	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
 			Event event = new Event();
 			event.setId(rs.getLong("id"));
+			event.setPublicId(rs.getString("publicId"));
 			event.setTitle(rs.getString("title"));
 			event.setDescription(rs.getString("description"));
 			event.setLocation(rs.getString("location"));
 			event.setStartTime(rs.getTimestamp("startTime"));
 			event.setEndTime(rs.getTimestamp("endTime"));
 			event.setHashtag(rs.getString("hashtag"));
+			// TODO: Things like this make me feel like we're starting to need ORM 
+			event.setMemberGroup(findMemberGroupById(rs.getLong("memberGroup")));
 			return event;
 		}
 	};
@@ -86,6 +98,18 @@ public class DefaultEventsService implements EventsService {
 			track.setDescription(rs.getString("description"));
 			return track;
 		}
+	};
+	
+	private RowMapper<MemberGroup> memberGroupMapper = new RowMapper<MemberGroup>() {
+		public MemberGroup mapRow(ResultSet rs, int rowNum) throws SQLException {
+			MemberGroup group = new MemberGroup();
+			group.setId(rs.getLong("id"));
+			group.setName(rs.getString("name"));
+			group.setPublicId(rs.getString("publicId"));
+			group.setHashtag(rs.getString("hashtag"));
+			group.setDescription(rs.getString("description"));
+			return group;
+		};
 	};
 
 }

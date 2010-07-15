@@ -5,10 +5,13 @@ import java.util.List;
 
 public interface EventsService {
 
-	List<Event> getEventsAfter(Date afterDate);
+	List<Event> findEventsAfter(Date afterDate);
 
-	Event getEventById(long eventId);
+	Event findEventById(long eventId);
 
-	List<EventSession> getSessionsByEventId(long eventId);
-
+	List<EventSession> findSessionsByEventId(long eventId);
+	
+	MemberGroup findMemberGroupById(long groupId);
+	
+	Event findEventByGroupNameAndEventName(String groupName, String eventName);
 }

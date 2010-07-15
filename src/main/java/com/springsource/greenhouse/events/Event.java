@@ -7,6 +7,8 @@ public class Event {
 
 	private long id;
 
+	private String publicId;
+	
 	private String title;
 
 	private String location;
@@ -23,6 +25,8 @@ public class Event {
 
 	private List<EventSession> sessions;
 
+	private MemberGroup memberGroup;
+	
 	public long getId() {
 		return this.id;
 	}
@@ -95,4 +99,21 @@ public class Event {
 		return sessions;
 	}
 
+	public void setPublicId(String publicId) {
+	    this.publicId = publicId;
+    }
+
+	public String getPublicId() {
+	    return publicId;
+    }
+
+	public void setMemberGroup(MemberGroup memberGroup) {
+	    this.memberGroup = memberGroup;
+    }
+
+	public MemberGroup getMemberGroup() {
+	    return memberGroup;
+    }
+
+	
 }

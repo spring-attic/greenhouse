@@ -1,4 +1,5 @@
 create table MemberGroup (id identity,
+					publicId varchar not null,
 					name varchar not null,
 					description varchar,
 					hashtag varchar,
@@ -6,7 +7,8 @@ create table MemberGroup (id identity,
 					primary key (id),
 					foreign key (leader) references Member(id));
 					
-create table Event (id identity, 
+create table Event (id identity,
+					publicId varchar not null,
 					title varchar not null,
 					description varchar,
 					startTime timestamp,
