@@ -27,12 +27,14 @@ public class DeviceDetectingHandlerInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {
 		String userAgent = request.getHeader("User-Agent");
 		Device device = wurflManager.getDeviceForRequest(userAgent);
+		Device defaultDevice = new DefaultDevice(device);
+		
 		if (device != null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Device: " + device.getId());
 				logger.debug("Mobile Browser: " + device.getCapability("mobile_browser"));
 			}
-			request.setAttribute(DEVICE_ATTRIBUTE, device);
+			request.setAttribute(DEVICE_ATTRIBUTE, defaultDevice);
 		}
 		return true;
 	}
