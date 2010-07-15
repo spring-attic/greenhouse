@@ -7,8 +7,7 @@
 <c:if test="${not empty eventList}">
 	<dl>
 	<c:forEach items="${eventList}" var="event">
-		<s:url value="/groups/{group}/events/{event}" var="eventUrl">
-			<s:param name="group" value="${event.memberGroup.publicId}" />
+		<s:url value="/events/{event}" var="eventUrl">
 			<s:param name="event" value="${event.publicId}" />
 		</s:url> 
 		<dt class="event"><a href="${eventUrl}">${event.title}</a><br/>

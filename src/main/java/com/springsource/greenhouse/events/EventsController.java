@@ -44,10 +44,18 @@ public class EventsController {
 	public @ResponseBody Event eventData(@PathVariable long eventId) {
 		return eventsService.findEventById(eventId);
 	}
+
+	@RequestMapping(value="/{eventName}", method=RequestMethod.GET)
+	public String viewEvent(OAuthConsumerToken accessToken, @PathVariable String eventName, Model model) {
+		Event event = eventsService.findEventByPublicId(eventName);
+		model.addAttribute(event);
+		model.addAttribute(twitter.search(accessToken, event.getHashtag(), 1, 10));
+		return "events/view";
+	}
 	
 	@RequestMapping(value="/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults listEventTweets(OAuthConsumerToken accessToken, @PathVariable long eventId, 
-			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="20") int perPage) {
+			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="10") int perPage) {
 		Event event = eventsService.findEventById(eventId);
 		return twitter.search(accessToken, event.getHashtag(), page, perPage);
 	}

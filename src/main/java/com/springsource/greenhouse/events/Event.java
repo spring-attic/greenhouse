@@ -24,8 +24,6 @@ public class Event {
 	private List<EventTrack> tracks;
 
 	private List<EventSession> sessions;
-
-	private MemberGroup memberGroup;
 	
 	public long getId() {
 		return this.id;
@@ -106,14 +104,4 @@ public class Event {
 	public String getPublicId() {
 	    return publicId;
     }
-
-	public void setMemberGroup(MemberGroup memberGroup) {
-	    this.memberGroup = memberGroup;
-    }
-
-	public MemberGroup getMemberGroup() {
-	    return memberGroup;
-    }
-
-	
 }

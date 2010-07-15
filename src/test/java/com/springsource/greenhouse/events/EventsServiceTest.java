@@ -64,18 +64,8 @@ public class EventsServiceTest {
     }
     
     @Test
-    public void shouldFindAMemberGroupById() {
-    	MemberGroup group = service.findMemberGroupById(1);
-    	assertEquals(1, group.getId());
-    	assertEquals("SpringOne", group.getName());
-    	assertEquals("SpringOne", group.getPublicId());
-    	assertEquals("The premier Spring Framework event.", group.getDescription());
-    	assertEquals("#springone", group.getHashtag());
-    }
-    
-    @Test
-    public void shouldFindAnEventGivenAGroupAndEventName() {
-    	Event event = service.findEventByGroupNameAndEventName("SpringOne", "Soon_Event");
+    public void shouldFindAnEventByEventName() {
+    	Event event = service.findEventByPublicId("Soon_Event");
     	assertExpectedSoonEvent(event);
     }
     

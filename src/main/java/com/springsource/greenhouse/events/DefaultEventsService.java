@@ -16,7 +16,7 @@ public class DefaultEventsService implements EventsService {
 	private static final String SELECT_MEMBER_GROUP =
 			"select id, publicId, name, description, hashtag from MemberGroup";
 	private static final String SELECT_EVENT = 
-			"select Event.id, Event.publicId, Event.title, Event.description, startTime, endTime, location, memberGroup, Event.hashtag from Event";
+			"select id, publicId, title, description, startTime, endTime, location, memberGroup, hashtag from Event";
 	private static final String SELECT_SESSION = 
 			"select code, title, description, startTime, endTime, speaker, event, track, hashtag from EventSession";
 	private static final String SELECT_TRACK =
@@ -48,16 +48,10 @@ public class DefaultEventsService implements EventsService {
 		return jdbcTemplate.query(SELECT_TRACK + " where event = ? order by id", eventTrackMapper, eventId);
 	}
 	
-	public Event findEventByGroupNameAndEventName(String groupName, String eventName) {
-		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + ", MemberGroup where " +
-				"MemberGroup.publicId = ? and MemberGroup.id = Event.memberGroup and Event.publicId = ?", 
-				eventMapper, groupName, eventName);
+	public Event findEventByPublicId(String eventName) {
+		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + " where publicId = ?", eventMapper, eventName);
 		event.setSessions(this.findSessionsByEventId(event.getId()));		
 		return event;
-	}
-	
-	public MemberGroup findMemberGroupById(long groupId) {
-		return jdbcTemplate.queryForObject(SELECT_MEMBER_GROUP + " where id = ?", memberGroupMapper, groupId);
 	}
 	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
@@ -71,9 +65,6 @@ public class DefaultEventsService implements EventsService {
 			event.setStartTime(rs.getTimestamp("startTime"));
 			event.setEndTime(rs.getTimestamp("endTime"));
 			event.setHashtag(rs.getString("hashtag"));
-			// TODO: Things like this make me feel like we're starting to need ORM 
-			// TODO: KD - well, why do we need this association in the first place?
-			event.setMemberGroup(findMemberGroupById(rs.getLong("memberGroup")));
 			return event;
 		}
 	};
@@ -100,17 +91,4 @@ public class DefaultEventsService implements EventsService {
 			return track;
 		}
 	};
-	
-	private RowMapper<MemberGroup> memberGroupMapper = new RowMapper<MemberGroup>() {
-		public MemberGroup mapRow(ResultSet rs, int rowNum) throws SQLException {
-			MemberGroup group = new MemberGroup();
-			group.setId(rs.getLong("id"));
-			group.setName(rs.getString("name"));
-			group.setPublicId(rs.getString("publicId"));
-			group.setHashtag(rs.getString("hashtag"));
-			group.setDescription(rs.getString("description"));
-			return group;
-		};
-	};
-
 }
