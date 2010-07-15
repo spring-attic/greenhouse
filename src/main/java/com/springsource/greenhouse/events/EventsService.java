@@ -11,4 +11,6 @@ public interface EventsService {
 
 	List<EventSession> getSessionsByEventId(long eventId);
 
+	Event findEventByGroupNameAndEventName(String groupName, String eventName);
+
 }

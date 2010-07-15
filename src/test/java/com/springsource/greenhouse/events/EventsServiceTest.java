@@ -52,7 +52,26 @@ public class EventsServiceTest {
     @Ignore
     public void shouldGetEventById() {
     	Event event = service.getEventById(2);
-    	assertEquals(2, event.getId());
+    	assertExpectedSoonEvent(event);
+    }
+
+    @Test
+    public void shouldRetrieveSessionsForAnEvent() {
+    	List<EventSession> sessions = service.getSessionsByEventId(2);
+    	assertEquals(2, sessions.size());
+    	assertEquals("CS2", sessions.get(0).getCode());
+    	assertEquals("CS1", sessions.get(1).getCode());
+    }
+    
+    @Test
+    public void shouldFindAnEventGivenAGroupAndEventName() {
+    	Event event = service.findEventByGroupNameAndEventName("SpringOne", "Soon_Event");
+    	assertExpectedSoonEvent(event);
+    }
+    
+	private void assertExpectedSoonEvent(Event event) {
+	    assertEquals(2, event.getId());
+	    assertEquals("Soon_Event", event.getPublicId());
     	assertEquals("Soon Event", event.getTitle());
     	assertEquals("This event is soon", event.getDescription());
     	assertEquals("#soon", event.getHashtag());
@@ -61,11 +80,5 @@ public class EventsServiceTest {
     	assertEquals(1287723600000L, event.getEndTime().getTime());
     }
     
-    @Test
-    public void shouldRetrieveSessionsForAnEvent() {
-    	List<EventSession> sessions = service.getSessionsByEventId(2);
-    	assertEquals(2, sessions.size());
-    	assertEquals("CS2", sessions.get(0).getCode());
-    	assertEquals("CS1", sessions.get(1).getCode());
-    }
+
 }
