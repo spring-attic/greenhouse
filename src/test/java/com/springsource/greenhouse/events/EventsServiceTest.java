@@ -89,6 +89,4 @@ public class EventsServiceTest {
     	assertEquals(1287464400000L, event.getStartTime().getTime());
     	assertEquals(1287723600000L, event.getEndTime().getTime());
     }
-    
-
 }

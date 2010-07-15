@@ -1,6 +1,5 @@
 package com.springsource.greenhouse.updates;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Update {
