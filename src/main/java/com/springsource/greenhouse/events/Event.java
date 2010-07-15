@@ -7,7 +7,7 @@ public class Event {
 
 	private long id;
 
-	private String publicId;
+	private String friendlyId;
 	
 	private String title;
 
@@ -97,11 +97,11 @@ public class Event {
 		return sessions;
 	}
 
-	public void setPublicId(String publicId) {
-	    this.publicId = publicId;
+	public void setFriendlyId(String friendlyId) {
+	    this.friendlyId = friendlyId;
     }
 
-	public String getPublicId() {
-	    return publicId;
+	public String getFriendlyId() {
+	    return friendlyId;
     }
 }

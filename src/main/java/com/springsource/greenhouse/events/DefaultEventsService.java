@@ -58,7 +58,7 @@ public class DefaultEventsService implements EventsService {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
 			Event event = new Event();
 			event.setId(rs.getLong("id"));
-			event.setPublicId(rs.getString("publicId"));
+			event.setFriendlyId(rs.getString("publicId"));
 			event.setTitle(rs.getString("title"));
 			event.setDescription(rs.getString("description"));
 			event.setLocation(rs.getString("location"));

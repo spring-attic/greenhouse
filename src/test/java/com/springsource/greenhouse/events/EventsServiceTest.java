@@ -71,7 +71,7 @@ public class EventsServiceTest {
     
 	private void assertExpectedSoonEvent(Event event) {
 	    assertEquals(2, event.getId());
-	    assertEquals("Soon_Event", event.getPublicId());
+	    assertEquals("Soon_Event", event.getFriendlyId());
     	assertEquals("Soon Event", event.getTitle());
     	assertEquals("This event is soon", event.getDescription());
     	assertEquals("#soon", event.getHashtag());
