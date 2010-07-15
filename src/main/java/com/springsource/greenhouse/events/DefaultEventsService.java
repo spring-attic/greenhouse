@@ -71,6 +71,7 @@ public class DefaultEventsService implements EventsService {
 			event.setStartTime(rs.getTimestamp("startTime"));
 			event.setEndTime(rs.getTimestamp("endTime"));
 			event.setHashtag(rs.getString("hashtag"));
+			// TODO: Things like this make me feel like we're starting to need ORM 
 			event.setMemberGroup(findMemberGroupById(rs.getLong("memberGroup")));
 			return event;
 		}
