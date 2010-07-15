@@ -31,23 +31,23 @@ public class EventsController {
 	
 	@RequestMapping(method=RequestMethod.GET, headers="Accept=application/json") 
 	public @ResponseBody List<Event> eventsData() {
-		return eventsService.getEventsAfter(new Date());
+		return eventsService.findEventsAfter(new Date());
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public String listEvents(Model model) {
-		model.addAttribute(eventsService.getEventsAfter(new Date()));
+		model.addAttribute(eventsService.findEventsAfter(new Date()));
 		return "events/list";
 	}
 
 	@RequestMapping(value="/{eventId}", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody Event eventData(@PathVariable long eventId) {
-		return eventsService.getEventById(eventId);
+		return eventsService.findEventById(eventId);
 	}
 
 	@RequestMapping(value="/{eventId}", method=RequestMethod.GET)
 	public String viewEvent(OAuthConsumerToken accessToken, @PathVariable long eventId, Model model) {
-		Event event = eventsService.getEventById(eventId);
+		Event event = eventsService.findEventById(eventId);
 		model.addAttribute(event);
 		model.addAttribute(twitter.search(accessToken, event.getHashtag()));
 		return "events/view";
@@ -56,7 +56,7 @@ public class EventsController {
 	@RequestMapping(value="/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults listEventTweets(OAuthConsumerToken accessToken, @PathVariable long eventId, 
 			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="20") int perPage) {
-		Event event = eventsService.getEventById(eventId);
+		Event event = eventsService.findEventById(eventId);
 		return twitter.search(accessToken, event.getHashtag(), page, perPage);
 	}
 }

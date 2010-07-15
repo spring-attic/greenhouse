@@ -42,7 +42,7 @@ public class EventsServiceTest {
     public void shouldGetEventsAfterAGivenDate() {
     	Calendar testDate = Calendar.getInstance();
     	testDate.set(2010, 7, 14);
-		List<Event> events = service.getEventsAfter(testDate.getTime());
+		List<Event> events = service.findEventsAfter(testDate.getTime());
     	assertEquals(2, events.size());    	
     	assertEquals(2, events.get(0).getId());
     	assertEquals(1, events.get(1).getId());
@@ -51,13 +51,13 @@ public class EventsServiceTest {
     @Test
     @Ignore
     public void shouldGetEventById() {
-    	Event event = service.getEventById(2);
+    	Event event = service.findEventById(2);
     	assertExpectedSoonEvent(event);
     }
 
     @Test
     public void shouldRetrieveSessionsForAnEvent() {
-    	List<EventSession> sessions = service.getSessionsByEventId(2);
+    	List<EventSession> sessions = service.findSessionsByEventId(2);
     	assertEquals(2, sessions.size());
     	assertEquals("CS2", sessions.get(0).getCode());
     	assertEquals("CS1", sessions.get(1).getCode());

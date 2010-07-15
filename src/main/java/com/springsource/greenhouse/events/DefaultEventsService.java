@@ -29,18 +29,18 @@ public class DefaultEventsService implements EventsService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public List<Event> getEventsAfter(Date afterDate) {		
+	public List<Event> findEventsAfter(Date afterDate) {		
 		return jdbcTemplate.query(SELECT_EVENT + " where endTime > ? order by startTime",	eventMapper, afterDate);		
 	}
 	
-	public Event getEventById(long eventId) {		
+	public Event findEventById(long eventId) {		
 		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + " where id=? order by startTime", 
 				eventMapper, eventId);
-		event.setSessions(this.getSessionsByEventId(event.getId()));
+		event.setSessions(this.findSessionsByEventId(event.getId()));
 		return event;
 	}
 	
-	public List<EventSession> getSessionsByEventId(long eventId) {
+	public List<EventSession> findSessionsByEventId(long eventId) {
 		return jdbcTemplate.query(SELECT_SESSION + " where event = ? order by startTime", eventSessionMapper, eventId);
 	}
 	
@@ -52,7 +52,7 @@ public class DefaultEventsService implements EventsService {
 		Event event = jdbcTemplate.queryForObject(SELECT_EVENT + ", MemberGroup where " +
 				"MemberGroup.publicId = ? and MemberGroup.id = Event.memberGroup and Event.publicId = ?", 
 				eventMapper, groupName, eventName);
-		event.setSessions(this.getSessionsByEventId(event.getId()));		
+		event.setSessions(this.findSessionsByEventId(event.getId()));		
 		return event;
 	}
 	
