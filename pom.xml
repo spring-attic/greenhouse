@@ -52,22 +52,22 @@
 				<exclusion>
 					<groupId>org.aspectj</groupId>
 					<artifactId>aspectjweaver</artifactId>
-				</exclusion>		
+				</exclusion>
 			</exclusions>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-            <version>${org.springframework.security-version}</version>
-            <exclusions>
-                <!-- Exclude Commons Logging in favor of SLF4j -->
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${org.springframework.security-version}</version>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${org.springframework.security-version}</version>
@@ -79,18 +79,16 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-        
-        <dependency>
+		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth</artifactId>
-			<version>1.0.0.BUILD-SNAPSHOT</version>			
-        </dependency>        
-
-        <dependency>
-        	<groupId>org.springframework.integration</groupId>
-        	<artifactId>spring-integration-mail</artifactId>
-        	<version>1.0.4.RELEASE</version>
-        </dependency>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-mail</artifactId>
+			<version>1.0.4.RELEASE</version>
+		</dependency>
 
 		<!-- Aspect J -->
 		<dependency>
@@ -110,7 +108,7 @@
 			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- @Inject -->
 		<dependency>
 			<groupId>javax.inject</groupId>
@@ -149,20 +147,20 @@
 			<version>1.2.131</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<!-- JavaMail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.1</version>
 		</dependency>
-		
+
 		<!-- String Template -->
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>stringtemplate</artifactId>
 			<version>3.2.1</version>
-		</dependency>		
+		</dependency>
 
 		<!-- Servlet -->
 		<dependency>
@@ -214,7 +212,7 @@
 			<version>4.0.2.GA</version>
 		</dependency>
 
-		<!--  Joda Time -->
+		<!-- Joda Time -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -236,9 +234,9 @@
 
 		<!-- WURFL -->
 		<dependency>
- 			<groupId>net.sourceforge.wurfl</groupId>
- 			<artifactId>wurfl</artifactId>
- 			<version>1.0.1</version>
+			<groupId>net.sourceforge.wurfl</groupId>
+			<artifactId>wurfl</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 
 		<!-- Test -->
@@ -254,19 +252,12 @@
 			<version>${org.springframework-version}</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>1.8.5</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.8.5</version>
-            <scope>test</scope>
-        </dependency>
-        
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.5</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
@@ -274,7 +265,7 @@
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
 			<url>http://maven.springframework.org/snapshot</url>
-			<releases><enabled>false</enabled></releases>
+			<releases><enabled>false</enabled></releases>			
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 		<!-- For Spring releases -->
@@ -282,35 +273,28 @@
 			<id>org.springframework.maven.release</id>
 			<name>Spring Maven Release Repository</name>
 			<url>http://maven.springframework.org/release</url>
-			<snapshots><enabled>false</enabled></snapshots>
+			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
 			<url>http://maven.springframework.org/milestone</url>
-			<snapshots><enabled>false</enabled></snapshots>
+			<snapshots><enabled>false</enabled></snapshots>		
 		</repository>
 		<!-- For Hibernate Validator -->
 		<repository>
 			<id>org.jboss.repository.releases</id>
 			<name>JBoss Maven Release Repository</name>
 			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
-			<snapshots><enabled>false</enabled></snapshots>
+			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 		<!-- For Rome -->
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
 			<name>Java.net Repository for Maven</name>
 			<url>http://download.java.net/maven/2/</url>
-			<snapshots><enabled>false</enabled></snapshots>
-		</repository>
-		<!-- Maven Central -->
-		<repository>
-			<id>org.maven.central</id>
-			<name>Maven Central Repository</name>
-			<url>http://repo1.maven.org/maven2</url>
-			<snapshots><enabled>false</enabled></snapshots>
+			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 	</repositories>
 	<build>
@@ -359,7 +343,7 @@
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -367,12 +351,10 @@
 					<execution>
 						<id>install</id>
 						<phase>install</phase>
-						<goals>
-							<goal>sources</goal>
-						</goals>
+						<goals><goal>sources</goal></goals>
 					</execution>
 				</executions>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
@@ -380,4 +362,28 @@
 			</plugin>
 		</plugins>
 	</build>
+	<pluginRepositories>
+		<!-- For testing against latest Spring snapshots -->
+		<pluginRepository>
+			<id>org.springframework.maven.snapshot</id>
+			<name>Spring Maven Snapshot Repository</name>
+			<url>http://maven.springframework.org/snapshot</url>
+			<releases><enabled>false</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</pluginRepository>
+		<!-- For Spring releases -->
+		<pluginRepository>
+			<id>org.springframework.maven.release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://maven.springframework.org/release</url>
+			<snapshots><enabled>false</enabled></snapshots>
+		</pluginRepository>
+		<!-- For developing against latest Spring milestones -->
+		<pluginRepository>
+			<id>org.springframework.maven.milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+			<snapshots><enabled>false</enabled></snapshots>
+		</pluginRepository>
+	</pluginRepositories>	
 </project>
