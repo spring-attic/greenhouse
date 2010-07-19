@@ -2,6 +2,7 @@ package com.springsource.greenhouse.events;
 
 import static org.junit.Assert.*;
 
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -66,8 +67,8 @@ public class EventsServiceTest {
     	assertEquals("This event is soon", event.getDescription());
     	assertEquals("#soon", event.getHashtag());
     	assertEquals("Chicago, IL", event.getLocation());
-// TODO: I'll fix these to be not so timezone-specific very soon.    	
-//    	assertEquals(1287464400000L, event.getStartTime().getTime());
-//    	assertEquals(1287723600000L, event.getEndTime().getTime());
+    	assertEquals(new Date(110, 9, 19), event.getStartTime());
+    	Calendar expectedEndTime = Calendar.getInstance();
+    	assertEquals(new Date(110, 9, 22), event.getEndTime());
     }
 }
