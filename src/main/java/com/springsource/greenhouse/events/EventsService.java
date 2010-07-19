@@ -9,7 +9,5 @@ public interface EventsService {
 
 	Event findEventById(long eventId);
 
-	List<EventSession> findSessionsByEventId(long eventId);
-		
 	Event findEventByPublicId(String eventName);
 }

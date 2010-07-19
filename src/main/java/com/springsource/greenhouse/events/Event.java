@@ -1,7 +1,6 @@
 package com.springsource.greenhouse.events;
 
 import java.util.Date;
-import java.util.List;
 
 public class Event {
 
@@ -21,10 +20,6 @@ public class Event {
 
 	private String hashtag;
 
-	private List<EventTrack> tracks;
-
-	private List<EventSession> sessions;
-	
 	public long getId() {
 		return this.id;
 	}
@@ -79,22 +74,6 @@ public class Event {
 
 	public String getLocation() {
 		return location;
-	}
-
-	public void setTracks(List<EventTrack> tracks) {
-		this.tracks = tracks;
-	}
-
-	public List<EventTrack> getTracks() {
-		return tracks;
-	}
-
-	public void setSessions(List<EventSession> sessions) {
-		this.sessions = sessions;
-	}
-
-	public List<EventSession> getSessions() {
-		return sessions;
 	}
 
 	public void setFriendlyId(String friendlyId) {

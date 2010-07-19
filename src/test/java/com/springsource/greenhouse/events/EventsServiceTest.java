@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -49,18 +48,9 @@ public class EventsServiceTest {
     }
     
     @Test
-    @Ignore
     public void shouldGetEventById() {
     	Event event = service.findEventById(2);
     	assertExpectedSoonEvent(event);
-    }
-
-    @Test
-    public void shouldRetrieveSessionsForAnEvent() {
-    	List<EventSession> sessions = service.findSessionsByEventId(2);
-    	assertEquals(2, sessions.size());
-    	assertEquals("CS2", sessions.get(0).getCode());
-    	assertEquals("CS1", sessions.get(1).getCode());
     }
     
     @Test
