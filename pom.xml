@@ -265,6 +265,7 @@
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
 			<url>http://maven.springframework.org/snapshot</url>
+			<releases><enabled>false</enabled></releases>			
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 		<!-- For Spring releases -->
@@ -272,24 +273,28 @@
 			<id>org.springframework.maven.release</id>
 			<name>Spring Maven Release Repository</name>
 			<url>http://maven.springframework.org/release</url>
+			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
 			<url>http://maven.springframework.org/milestone</url>
+			<snapshots><enabled>false</enabled></snapshots>		
 		</repository>
 		<!-- For Hibernate Validator -->
 		<repository>
 			<id>org.jboss.repository.releases</id>
 			<name>JBoss Maven Release Repository</name>
 			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 		<!-- For Rome -->
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
 			<name>Java.net Repository for Maven</name>
 			<url>http://download.java.net/maven/2/</url>
+			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 	</repositories>
 	<build>
@@ -363,6 +368,7 @@
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
 			<url>http://maven.springframework.org/snapshot</url>
+			<releases><enabled>false</enabled></releases>
 			<snapshots><enabled>true</enabled></snapshots>
 		</pluginRepository>
 		<!-- For Spring releases -->
@@ -370,12 +376,14 @@
 			<id>org.springframework.maven.release</id>
 			<name>Spring Maven Release Repository</name>
 			<url>http://maven.springframework.org/release</url>
+			<snapshots><enabled>false</enabled></snapshots>
 		</pluginRepository>
 		<!-- For developing against latest Spring milestones -->
 		<pluginRepository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
 			<url>http://maven.springframework.org/milestone</url>
+			<snapshots><enabled>false</enabled></snapshots>
 		</pluginRepository>
 	</pluginRepositories>	
 </project>
