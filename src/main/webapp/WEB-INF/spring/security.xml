@@ -15,7 +15,7 @@
 		<intercept-url pattern="/signup" access="permitAll" />
 		<intercept-url pattern="/reset/**" access="permitAll" />
 		<intercept-url pattern="/signin" filters="none" method="GET" />
-		<intercept-url pattern="/signin/fb" filters="none" method="POST" />
+		<intercept-url pattern="/signin/fb" access="permitAll" method="POST" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 	</http>
