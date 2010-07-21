@@ -6,6 +6,13 @@ create table Member (id identity,
 					username varchar(15) unique,
 					primary key (id));
 
+-- might be better to roll this into ConnectedApp table
+create table ConnectedMember (connectionId varchar not null,
+					connectionApp varchar not null,
+					member bigint not null,
+ 					primary key (connectionId, connectionApp),
+ 					foreign key (member) references Member(id));
+					
 create table App (consumerKey varchar,
 				name varchar not null unique, 
 				description varchar not null,

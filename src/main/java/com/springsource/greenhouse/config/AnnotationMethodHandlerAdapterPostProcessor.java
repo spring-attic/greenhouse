@@ -11,6 +11,7 @@ import org.springframework.mobile.DeviceDetectingHandlerInterceptor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;
+import org.springframework.social.facebook.FacebookUserWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
@@ -23,10 +24,12 @@ import com.springsource.greenhouse.account.Account;
 public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProcessor {
 
 	private OAuthConsumerTokenServicesFactory oauthTokenFactory;
+	private final String facebookAppKey;
 	
 	@Inject
-	public AnnotationMethodHandlerAdapterPostProcessor(OAuthConsumerTokenServicesFactory oauthTokenFactory) {
+	public AnnotationMethodHandlerAdapterPostProcessor(OAuthConsumerTokenServicesFactory oauthTokenFactory, String facebookAppKey) {
 		this.oauthTokenFactory = oauthTokenFactory;
+		this.facebookAppKey = facebookAppKey;
 	}
 
 	public Object postProcessBeforeInitialization(Object bean, String name)
@@ -37,10 +40,11 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 	public Object postProcessAfterInitialization(Object bean, String name) throws BeansException {
 		if (bean instanceof AnnotationMethodHandlerAdapter) {
 			AnnotationMethodHandlerAdapter controllerInvoker = (AnnotationMethodHandlerAdapter) bean;
-			WebArgumentResolver[] resolvers = new WebArgumentResolver[3];
+			WebArgumentResolver[] resolvers = new WebArgumentResolver[4];
 			resolvers[0] = new DeviceWebArgumentResolver();
 			resolvers[1] = new GreenhouseUserDetailsWebArgumentResolver();
 			resolvers[2] = new OAuthConsumerAccessTokenWebArgumentResolver(oauthTokenFactory);
+			resolvers[3] = new FacebookUserWebArgumentResolver(facebookAppKey);
 			controllerInvoker.setCustomArgumentResolvers(resolvers);
 		}
 		return bean;
