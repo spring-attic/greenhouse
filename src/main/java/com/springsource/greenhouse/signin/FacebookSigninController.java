@@ -2,10 +2,10 @@ package com.springsource.greenhouse.signin;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.social.facebook.FacebookUserId;
@@ -31,18 +31,21 @@ public class FacebookSigninController {
 	
 	@RequestMapping(value="/fb", method=RequestMethod.POST)
 	public String signinWithFacebook(@FacebookUserId String facebookUserId) {
-		List<Account> accounts = jdbcTemplate.query(SELECT_ACCOUNT_INFO, new RowMapper<Account>() {
-			public Account mapRow(ResultSet rs, int row) throws SQLException {				
-	            return new Account(rs.getLong("id"), rs.getString("firstName"), rs.getString("lastName"),
-	            		rs.getString("email"), rs.getString("username"));
-            }
-		}, facebookUserId);
+		try {
+	        Account account = jdbcTemplate.queryForObject(SELECT_ACCOUNT_INFO, new RowMapper<Account>() {
+	        	public Account mapRow(ResultSet rs, int row) throws SQLException {				
+	                return new Account(rs.getLong("id"), rs.getString("firstName"), rs.getString("lastName"),
+	                		rs.getString("email"), rs.getString("username"));
+	            }
+	        }, facebookUserId);
 
-		if(accounts.size() > 0) {
-			SecurityUtils.signin(accounts.get(0));
-			return "redirect:/";
-		}
-
-		return "signin";
+	        SecurityUtils.signin(account);
+	        return "redirect:/";
+        } catch (IncorrectResultSizeDataAccessException e) {
+        	// TODO: For GREENHOUSE-163, we could retrieve the user's info from Facebook and use it to
+        	//       automatically register them in Greenhouse
+    		return "signin";
+        }
 	}
+
 }

@@ -10,7 +10,7 @@
   			<div class="error">Your sign in information was incorrect.  Please try again<c:if test="${!wurflDevice.isMobileBrowser}"> or <a href="<c:url value="/signup" />">sign up</a></c:if>.</div>
  	 	</c:if>
 	</div>	
-	<fb:login-button onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in to Greenhouse using Facebook</fb:login-button>
+	<fb:login-button onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in to The Greenhouse using Facebook</fb:login-button>
   	<fieldset>
 		<label for="login">Username or Email</label>
 		<input id="login" name="j_username" type="text" size="25" <c:if test="${wurflDevice.isAppleDevice}">autocorrect="off" autocapitalize="off"</c:if> <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />

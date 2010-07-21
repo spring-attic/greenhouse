@@ -23,3 +23,4 @@ insert into EventSession (code, title, description, startTime, endTime, speaker,
 
 insert into ConnectedMember (connectionId, connectionApp, member) values ('1255689239', 'facebook', 1);
 insert into ConnectedMember (connectionId, connectionApp, member) values ('738140579', 'facebook', 2);
+insert into ConnectedMember (connectionId, connectionApp, member) values ('1533260333', 'facebook', 3);
