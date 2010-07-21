@@ -17,6 +17,11 @@ li.eventTweet {
 	padding-bottom: 10pt;
 }
 
+li.inviteNetwork {
+	list-style: none;
+	padding-bottom: 20pt;
+}
+
 dt.event {
 	list-style: none;
 	font-size: 1.2em;

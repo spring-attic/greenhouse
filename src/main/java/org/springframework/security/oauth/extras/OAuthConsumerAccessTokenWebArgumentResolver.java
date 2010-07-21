@@ -10,7 +10,6 @@ import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 
 public class OAuthConsumerAccessTokenWebArgumentResolver implements WebArgumentResolver {
-
 	private OAuthConsumerTokenServicesHelper oauthHelper;
 	
 	public OAuthConsumerAccessTokenWebArgumentResolver(OAuthConsumerTokenServicesFactory oauthTokenFactory) {
@@ -27,5 +26,4 @@ public class OAuthConsumerAccessTokenWebArgumentResolver implements WebArgumentR
 			return WebArgumentResolver.UNRESOLVED;
 		}
 	}
-
 }
