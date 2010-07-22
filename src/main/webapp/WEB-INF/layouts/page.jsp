@@ -21,12 +21,6 @@
     <%-- Facebook advises placing this in the body, not the header  --%>
 	<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
 	
-	<script>
-	function facebook_onlogin_ready() {
-		  alert("Hey!");
-		}
-	</script>
-	
 	<div id="header">
 		<tiles:insertAttribute name="header" />
 	</div>
@@ -42,8 +36,8 @@
 	</c:forEach>	
 
 
-        <script type="text/javascript">
-            FB.init("8f007e7ce33d82dc2f5485102b3504c2", "<c:url value="/resources/xd_receiver.html" />");
-        </script>	
+    <script type="text/javascript">
+        FB.init("8f007e7ce33d82dc2f5485102b3504c2", "<c:url value="/resources/xd_receiver.html" />");
+    </script>	
 </body>
 </html>
