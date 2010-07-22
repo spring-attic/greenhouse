@@ -46,7 +46,9 @@ public class FacebookSigninController {
         	// TODO: For GREENHOUSE-163, we could retrieve the user's info from Facebook and use it to
         	//       automatically register a user and log them into Greenhouse
 
-    		FlashMap.setErrorMessage("Your Facebook account is not linked with your Greenhouse account.");
+    		FlashMap.setErrorMessage(
+    				"You are currently logged into Facebook as <fb:name linked='false' useyou='false' uid='" + 
+    				facebookUserId + "'></fb:name>. This account is not linked to your Greenhouse account.");
 
         	return "redirect:/signin";
         }
