@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookUserId;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class FacebookSigninController {
 	}
 	
 	@RequestMapping(value="/fb", method=RequestMethod.POST)
-	public String signinWithFacebook(@FacebookUserId String facebookUserId) {
+	public String signinWithFacebook(@FacebookUserId String facebookUserId, @FacebookAccessToken String accessToken) {		
 		try {
 	        Account account = jdbcTemplate.queryForObject(SELECT_ACCOUNT_INFO, new RowMapper<Account>() {
 	        	public Account mapRow(ResultSet rs, int row) throws SQLException {				

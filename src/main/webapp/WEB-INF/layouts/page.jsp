@@ -19,7 +19,18 @@
 </head>
 <body>
     <%-- Facebook advises placing this in the body, not the header  --%>
-	<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+<div id="fb-root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script>
+  FB.init({appId: '8f007e7ce33d82dc2f5485102b3504c2', status: true, cookie: true, xfbml: true});
+  FB.Event.subscribe('auth.sessionChange', function(response) {
+    if (response.session) {
+     //   alert("Hey!");
+    } else {
+     //   alert("See ya!");
+    }
+  });
+</script>
 	
 	<div id="header">
 		<tiles:insertAttribute name="header" />
@@ -33,11 +44,15 @@
 	<tiles:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true" />
 	<c:forEach var="script" items="${scripts}">
 		<script type="text/javascript" src="<c:url value="/resources/${script}" />"></script>	
-	</c:forEach>	
+	</c:forEach>
 
 
     <script type="text/javascript">
-        FB.init("8f007e7ce33d82dc2f5485102b3504c2", "<c:url value="/resources/xd_receiver.html" />");
-    </script>	
+//    FB.init({apiKey: '8f007e7ce33d82dc2f5485102b3504c2', status: true, cookie: true,            xfbml: true});
+
+//        FB.init("8f007e7ce33d82dc2f5485102b3504c2", "<c:url value="/resources/xd_receiver.html" />", {appId: '140372495981006', status: true, cookie: true, xfbml: true});
+//        FB.init({appId: '140372495981006', status: true, cookie: true, xfbml: true});
+    </script>
+        	
 </body>
 </html>
