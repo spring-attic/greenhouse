@@ -15,9 +15,11 @@ public class EventSession {
 	private Date endTime;
 
 	private List<SessionLeader> leaders;
+	
+	private String hashtag;
 
 	public EventSession(String title, String summary, Date startTime,
-			Date endTime, SessionLeader leader) {
+			Date endTime, SessionLeader leader, String hashtag) {
 		super();
 		this.title = title;
 		this.summary = summary;
@@ -25,17 +27,19 @@ public class EventSession {
 		this.endTime = endTime;
 		
 		this.leaders = new ArrayList<SessionLeader>();
-		leaders.add(leader);
+		this.leaders.add(leader);
+		this.hashtag = hashtag;
 	}
 
 	public EventSession(String title, String summary, Date startTime,
-			Date endTime, List<SessionLeader> leaders) {
+			Date endTime, List<SessionLeader> leaders, String hashtag) {
 		super();
 		this.title = title;
 		this.summary = summary;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.leaders = leaders;
+		this.hashtag = hashtag;
 	}
 	
 	public String getTitle() {
@@ -58,4 +62,7 @@ public class EventSession {
 		return leaders;
 	}
 
+	public String getHashtag() {
+		return hashtag;
+	}
 }

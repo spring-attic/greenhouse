@@ -7,6 +7,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
@@ -24,6 +26,7 @@ public class EventsController {
 	
 	private EventsService eventsService;
 	private TwitterOperations twitter;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Inject
 	public EventsController(EventsService eventsService, TwitterOperations twitter) {
@@ -62,6 +65,14 @@ public class EventsController {
 		return twitter.search(accessToken, event.getHashtag(), page, perPage);
 	}
 	
+	// This method is stubbed out to test posting a twitter status
+	@RequestMapping(value="/tweet", method=RequestMethod.POST)//, headers="Accept=application/json")
+	public @ResponseBody String postTweet(OAuthConsumerToken accessToken, @RequestParam String status) {
+		logger.info("twitter update: " + status);
+		
+		return "hello";
+	}
+		
 	// This method should return all sessions for the current day
 	@RequestMapping(value="/{eventId}/currentsessions", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> listCurrentSessions(@PathVariable long eventId) {
@@ -81,7 +92,7 @@ public class EventsController {
 		
 		for (int i = 0; i < 9; i++)
 		{
-			sessions.add(new EventSession("Test Session A" + i, "Description for Test Session A" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker")));
+			sessions.add(new EventSession("Test Session A" + i, "Description for Test Session A" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker"), "#SpringOne2GX-A" + i));
 		}
 
 		startTime = new DateTime(year, month, date, 10, 15, 0, 0).toDate();
@@ -92,7 +103,7 @@ public class EventsController {
 			List<SessionLeader> leaders = new ArrayList<SessionLeader>();
 			leaders.add(new SessionLeader("Roy", "Clarkson"));
 			leaders.add(new SessionLeader("Jeremy", "Grelle"));
-			sessions.add(new EventSession("Test Session B" + i, "Description for Test Session B" + i, startTime, endTime, leaders));
+			sessions.add(new EventSession("Test Session B" + i, "Description for Test Session B" + i, startTime, endTime, leaders, "#SpringOne2GX-B" + i));
 		}
 
 		startTime = new DateTime(year, month, date, 12, 45, 0, 0).toDate();
@@ -100,7 +111,7 @@ public class EventsController {
 		
 		for (int i = 0; i < 9; i++)
 		{
-			sessions.add(new EventSession("Test Session C" + i, "Description for Test Session C" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker")));
+			sessions.add(new EventSession("Test Session C" + i, "Description for Test Session C" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker"), "#SpringOne2GX-C" + i));
 		}
 
 		startTime = new DateTime(year, month, date, 14, 45, 0, 0).toDate();
@@ -108,7 +119,7 @@ public class EventsController {
 
 		for (int i = 0; i < 9; i++)
 		{
-			sessions.add(new EventSession("Test Session D" + i, "Description for Test Session D" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker")));
+			sessions.add(new EventSession("Test Session D" + i, "Description for Test Session D" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker"), "#SpringOne2GX-D" + i));
 		}
 
 		startTime = new DateTime(year, month, date, 16, 30, 0, 0).toDate();
@@ -116,7 +127,7 @@ public class EventsController {
 
 		for (int i = 0; i < 9; i++)
 		{
-			sessions.add(new EventSession("Test Session E" + i, "Description for Test Session E" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker")));
+			sessions.add(new EventSession("Test Session E" + i, "Description for Test Session E" + i, startTime, endTime, new SessionLeader("Johnny", "Speaker"), "#SpringOne2GX-E" + i));
 		}
 				
 //		sessions.add(new EventSession("What's new in Spring 3", "Come see the latest Spring Framework features!", new DateTime(2010, 10, 20, 8, 0, 0, 0).toDate(), new DateTime(2010, 10, 20, 9, 0, 0, 0).toDate(), new SessionLeader("Juergen", "Hoeller")));
