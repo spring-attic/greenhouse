@@ -13,7 +13,13 @@
   			<div class="error">Your sign in information was incorrect.  Please try again<c:if test="${!wurflDevice.isMobileBrowser}"> or <a href="<c:url value="/signup" />">sign up</a></c:if>.</div>
  	 	</c:if>
 	</div>	
-	<fb:login-button perms="email" onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in to The Greenhouse using Facebook</fb:login-button>
+	<%-- Unfortunately, offline access is the only way to get an access token that doesn't expire. 
+	     Facebook currently doesn't implement the refresh_token fragment of section 3.5.1 of the
+	     OAuth 2 specification. So, if you get a regular access token, it will expire after a
+	     few hours and the user will have to authenticate again. Asking for offline access allows
+	     the token to be long-lived, but has the unfortunate side-effect of communicating that the
+	     app may access their information even if they're not logged in. --%>
+	<fb:login-button perms="email,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in to The Greenhouse using Facebook</fb:login-button>
   	<fieldset>
 		<label for="login">Username or Email</label>
 		<input id="login" name="j_username" type="text" size="25" <c:if test="${wurflDevice.isAppleDevice}">autocorrect="off" autocapitalize="off"</c:if> <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />

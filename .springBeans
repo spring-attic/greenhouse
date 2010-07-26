@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.3.3.201005160334-M1]]></pluginVersion>
+	<pluginVersion><![CDATA[2.3.3.201007151000-M2]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
+		<config>src/main/webapp/WEB-INF/spring/facebook.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

@@ -13,6 +13,7 @@
 		<!-- Authorization policy -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/signup" access="permitAll" />
+		<intercept-url pattern="/signup/fb" access="permitAll" />
 		<intercept-url pattern="/reset/**" access="permitAll" />
 		<intercept-url pattern="/signin" filters="none" method="GET" />
 		<intercept-url pattern="/signin/fb" access="permitAll" method="POST" />

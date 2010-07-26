@@ -22,4 +22,6 @@
 	<!-- Configures Mail support -->
 	<import resource="mail.xml" />
 	
+	<!-- Configures Facebook servce -->
+	<import resource="facebook.xml" />
 </beans>
