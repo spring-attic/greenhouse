@@ -21,6 +21,7 @@
     <%-- Facebook advises placing this in the body, not the header  --%>
 <div id="fb-root"></div>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
+<script src="<c:url value='/resources/social/facebook/facebook-extras.js'/>"></script>
 <script>
   FB.init({appId: '8f007e7ce33d82dc2f5485102b3504c2', status: true, cookie: true, xfbml: true});
   FB.Event.subscribe('auth.sessionChange', function(response) {

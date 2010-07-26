@@ -14,10 +14,11 @@
 	</li>
 	<li class="inviteNetwork">
 		<img src="http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_medium_short.gif" alt="Facebook Connect" width="89" height="21" id="fb_login_image" />
-		<a class="button large" href="<c:url value="/invite/facebook"/>">Find your friends on Facebook</a>
+		
+		<a class="button large" href="#" onclick="FB.requireSessionThenGoTo('<c:url value="/invite/facebook"/>');return false;">Find your friends on Facebook</a>
 		  <c:if test="${not empty facebookUserId}">
           (you are currently logged into Facebook as <fb:name linked="false" useyou="false" uid="${facebookUserId}"></fb:name>.
-          <a onclick="FB.Connect.logoutAndRedirect('<c:url value="/signout"/>'); return false;" href="#">Not you?</a>)
+          <a onclick="FB.logoutThenGoTo('<c:url value="/signout"/>');return false;" href="#">Not you?</a>)
           </c:if>
 	</li>
 </ul>

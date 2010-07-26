@@ -32,7 +32,7 @@ public class FacebookSigninController {
 	}
 	
 	@RequestMapping(value="/fb", method=RequestMethod.POST)
-	public String signinWithFacebook(@FacebookUserId String facebookUserId, @FacebookAccessToken String accessToken) {		
+	public String signinWithFacebook(@FacebookUserId String facebookUserId, @FacebookAccessToken String accessToken) {				
 		try {
 	        Account account = jdbcTemplate.queryForObject(SELECT_ACCOUNT_INFO, new RowMapper<Account>() {
 	        	public Account mapRow(ResultSet rs, int row) throws SQLException {				
@@ -46,7 +46,6 @@ public class FacebookSigninController {
         } catch (IncorrectResultSizeDataAccessException e) {
         	// TODO: For GREENHOUSE-163, we could retrieve the user's info from Facebook and use it to
         	//       automatically register a user and log them into Greenhouse
-
     		FlashMap.setErrorMessage(
     				"You are currently logged into Facebook as <fb:name linked='false' useyou='false' uid='" + 
     				facebookUserId + "'></fb:name>. This account is not linked to your Greenhouse account.");

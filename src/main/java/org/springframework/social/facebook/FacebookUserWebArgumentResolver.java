@@ -39,7 +39,8 @@ public class FacebookUserWebArgumentResolver implements WebArgumentResolver {
 	    if (parameter.getParameterAnnotation(FacebookUserId.class) != null) {
 	    	return cookieData.get("uid");
 	    } else if (parameter.getParameterAnnotation(FacebookAccessToken.class) != null) {
-	    	return cookieData.get("access_token");
+	    	String accessToken = cookieData.get("access_token");
+			return accessToken.replaceAll("\\%7C", "|");
 	    } else {
 	    	return WebArgumentResolver.UNRESOLVED;
 	    }
