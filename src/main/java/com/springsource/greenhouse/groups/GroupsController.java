@@ -1,5 +1,7 @@
 package com.springsource.greenhouse.groups;
 
+import javax.inject.Inject;
+
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ public class GroupsController {
 	
 	private TwitterOperations twitter;
 
+	@Inject
 	public GroupsController(EventRepository eventRepository, TwitterOperations twitter) {
 		this.eventRepository = eventRepository;
 		this.twitter = twitter;
