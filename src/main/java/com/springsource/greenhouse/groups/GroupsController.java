@@ -28,7 +28,7 @@ public class GroupsController {
 
 	@RequestMapping(value="/{group}/events/{year}/{month}/{name}", method=RequestMethod.GET, headers="Accept=text/html")
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String name, Model model) {
-		Event event = eventRepository.findEventByName(group, month, year, name);
+		Event event = eventRepository.findEventByName(group, year, month, name);
 		model.addAttribute(event);
 		model.addAttribute(twitter.search(event.getHashtag(), 1, 10));
 		return "groups/event";
