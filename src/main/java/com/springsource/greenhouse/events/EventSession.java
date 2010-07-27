@@ -1,7 +1,7 @@
 package com.springsource.greenhouse.events;
 
-import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class EventSession {
@@ -17,18 +17,13 @@ public class EventSession {
 	private String description;
 	
 	private Set<EventSessionLeader> leaders;
-
-	public EventSession(Short code, String title, Date startTime, Date endTime, String description, EventSessionLeader leader) {
-		this(code, title, startTime, endTime, description, Collections.singleton(leader));
-	}
 		
-	public EventSession(Short code, String title, Date startTime, Date endTime, String description, Set<EventSessionLeader> leaders) {
+	public EventSession(Short code, String title, Date startTime, Date endTime, String description) {
 		this.code = code;
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
-		this.leaders = leaders;
 	}
 
 	public Short getCode() {
@@ -53,6 +48,13 @@ public class EventSession {
 
 	public Set<EventSessionLeader> getLeaders() {
 		return leaders;
+	}
+
+	public void addLeader(EventSessionLeader leader) {
+		if (leaders == null) {
+			leaders = new LinkedHashSet<EventSessionLeader>();
+		}
+		leaders.add(leader);
 	}
 
 }

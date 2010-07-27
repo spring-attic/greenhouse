@@ -56,6 +56,7 @@ public class JdbcEventRepositoryTest {
 
 	@Test
 	public void findTodaysSessions() {
-		assertEquals("#springone2gx-201", eventRepository.getEventSessionSearchString(1L, (short)201));
+		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(1L);
+		assertEquals(0, todaysSessions.size());
 	}
 }
