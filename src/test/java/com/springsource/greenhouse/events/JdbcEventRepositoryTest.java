@@ -2,7 +2,6 @@ package com.springsource.greenhouse.events;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.After;
