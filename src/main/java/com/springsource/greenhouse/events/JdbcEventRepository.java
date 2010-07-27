@@ -16,8 +16,6 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.springsource.greenhouse.utils.ResourceReference;
-
 @Repository
 public class JdbcEventRepository implements EventRepository {
 
@@ -29,35 +27,34 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<Event> findUpcomingEvents() {		
-		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, g.profileKey as groupId, g.name as groupName from Event e inner join MemberGroup g on e.group = g.id where endDate > ? order by startDate", eventMapper, new Date());
+		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where e.endDate > ? order by e.startDate", eventMapper, new Date());
 	}
 
-	public String getEventSearchString(Long eventId) {
-		return jdbcTemplate.queryForObject("select g.searchString from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id", String.class, eventId);
+	public String findEventHashtag(Long eventId) {
+		return jdbcTemplate.queryForObject("select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id", String.class, eventId);
 	}
 
-	public String getEventSessionSearchString(Long eventId, Short sessionCode) {
-		return getEventSearchString(eventId) + "-" + sessionCode;
+	public String findSessionHashtag(Long eventId, Short sessionCode) {
+		return buildSessionHashtag(findEventHashtag(eventId), sessionCode);
 	}
 
 	public List<EventSession> findTodaysSessions(Long eventId) {
 		LocalDate day = new LocalDate();
 		Date startInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
 		Date endInstant = day.plusDays(1).toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
-		return jdbcTemplate.query("select s.code, s.title, s.startTime, s.endTime, s.description, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.code = l.session inner join Member m on l.leader = m.id where s.startTime > ? and s.endTime < ?", eventSessionsExtractor, startInstant, endInstant);
+		return jdbcTemplate.query("select s.code, s.title, s.startTime, s.endTime, s.description, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.code = l.session inner join Member m on l.leader = m.id where s.event = ? and s.startTime > ? and s.endTime < ?", eventSessionsExtractor, eventId, startInstant, endInstant);
 	}
 
+	// internal helpers
+	
+	private String buildSessionHashtag(String hashtag, Short sessionCode) {
+		return hashtag + "-" + sessionCode;
+	}
+	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			Event event = new Event();
-			event.setId(rs.getLong("id"));
-			event.setTitle(rs.getString("title"));
-			event.setStartDate(rs.getTimestamp("startDate"));
-			event.setEndDate(rs.getTimestamp("endDate"));
-			event.setLocation(rs.getString("location"));
-			event.setDescription(rs.getString("description"));
-			event.setGroup(new ResourceReference<String>(rs.getString("groupId"), rs.getString("groupName")));
-			return event;
+			return new Event(rs.getLong("id"), rs.getString("title"), rs.getDate("startDate"), rs.getDate("endDate"), rs.getString("location"), rs.getString("description"), rs.getString("hashtag"),
+					rs.getString("groupName"), rs.getString("groupProfileKey"));
 		}
 	};
 

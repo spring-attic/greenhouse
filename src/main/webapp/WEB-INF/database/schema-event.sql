@@ -2,7 +2,7 @@ create table MemberGroup (id identity,
 					name varchar not null,
 					description varchar,
 					profileKey varchar unique,					
-					searchString varchar,
+					hashtag varchar,
 					leader bigint not null,
 					primary key (id),
 					foreign key (leader) references Member(id));

@@ -46,12 +46,12 @@ public class JdbcEventRepositoryTest {
 	
 	@Test
 	public void getEventSearchString() {
-		assertEquals("#springone2gx", eventRepository.getEventSearchString(1L));
+		assertEquals("#springone2gx", eventRepository.findEventHashtag(1L));
 	}
 	
 	@Test
 	public void getEventSessionSearchString() {
-		assertEquals("#springone2gx-201", eventRepository.getEventSessionSearchString(1L, (short)201));
+		assertEquals("#springone2gx-201", eventRepository.findSessionHashtag(1L, (short)201));
 	}
 
 	@Test

@@ -15,7 +15,7 @@ public class EventSession {
 	private Date endTime;
 
 	private String description;
-	
+
 	private Set<EventSessionLeader> leaders;
 		
 	public EventSession(Short code, String title, Date startTime, Date endTime, String description) {
@@ -23,7 +23,6 @@ public class EventSession {
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.description = description;
 	}
 
 	public Short getCode() {

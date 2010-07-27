@@ -6,9 +6,9 @@ public interface EventRepository {
 
 	List<Event> findUpcomingEvents();
 
-	String getEventSearchString(Long eventId);
+	String findEventHashtag(Long eventId);
 
-	String getEventSessionSearchString(Long eventId, Short sessionCode);
+	String findSessionHashtag(Long eventId, Short sessionCode);
 
 	List<EventSession> findTodaysSessions(Long eventId);
 	

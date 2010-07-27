@@ -2,8 +2,6 @@ package com.springsource.greenhouse.events;
 
 import java.util.Date;
 
-import com.springsource.greenhouse.utils.ResourceReference;
-
 public class Event {
 
 	private Long id;
@@ -18,42 +16,38 @@ public class Event {
 
 	private String description;
 	
-	private ResourceReference<String> group;
+	private String hashtag;
+
+	private String groupName;
 	
-	public Long getId() {
-		return id;
+	private String groupProfileKey;
+	
+	public Event(Long id, String title, Date startDate, Date endDate, String location, String description, String hashtag, String groupName, String groupProfileKey) {
+		this.id = id;
+		this.title = title;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.location = location;
+		this.description = description;
+		this.hashtag = hashtag;
+		this.groupName = groupName;
+		this.groupProfileKey = groupProfileKey;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Long getId() {
+		return id;
 	}
 
 	public String getTitle() {
 		return this.title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
 	public Date getEndDate() {
 		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public String getLocation() {
@@ -61,19 +55,19 @@ public class Event {
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public String getHashtag() {
+		return hashtag;
 	}
 
-	public ResourceReference<String> getGroup() {
-		return group;
+	public String getGroupName() {
+		return groupName;
 	}
 
-	public void setGroup(ResourceReference<String> group) {
-		this.group = group;
+	public String getGroupProfileKey() {
+		return groupProfileKey;
 	}
 
 }

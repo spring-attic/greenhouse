@@ -2,7 +2,7 @@ insert into Member (firstName, lastName, email, password, username) values ('Kei
 insert into Member (firstName, lastName, email, password, username) values ('Craig' , 'Walls', 'cwalls@vmware.com', 'plano', 'habuma');
 insert into Member (firstName, lastName, email, password, username) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'atlanta', 'rclarkson');
 
-insert into MemberGroup (name, description, profileKey, searchString, leader) values ('SpringOne2gx', 'The premier Spring Framework event', 'springone2gx', '#springone2gx', 1);
+insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier Spring Framework event', 'springone2gx', '#springone2gx', 1);
 
 insert into Event (title, startDate, endDate, location, description, memberGroup) values ('Later_Event', '2011-04-27', '2011-04-29', 'Amsterdam', 'This event takes place next year', 1);
 insert into Event (title, startDate, endDate, location, description, memberGroup) values ('Soon_Event', '2010-07-27', '2010-07-30', 'Chicago, IL', 'This event is soon', 1);
