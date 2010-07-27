@@ -15,4 +15,12 @@
         <put-attribute name="content" value="/WEB-INF/views/settings/twitterConnected.jsp" />
     </definition>
 
+    <definition name="settings/facebookConnect" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/settings/facebookConnect.jsp" />
+    </definition>
+
+    <definition name="settings/facebookConnected" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/settings/facebookConnected.jsp" />
+    </definition>
+
 </tiles-definitions>
