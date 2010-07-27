@@ -27,7 +27,7 @@ public class FacebookSettingsController {
 	private static final String COUNT_FACEBOOK_CONNECTIONS = 
 		"select count(*) from ConnectedAccount where member = ? and accountName = 'facebook'";	
 	private static final String LINK_ACCOUNT_TO_FACEBOOK = 
-		"insert into ConnectedAccount (accessToken, member, accountName, secret) values (?, ?, 'facebook', 'facebook')";
+		"insert into ConnectedAccount (accessToken, member, externalId, accountName, secret) values (?, ?, ?, 'facebook', 'facebook')";
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -49,8 +49,8 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
 	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
-			@FacebookAccessToken String accessToken) {		
-		jdbcTemplate.update(LINK_ACCOUNT_TO_FACEBOOK, accessToken, account.getId());
+			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {		
+		jdbcTemplate.update(LINK_ACCOUNT_TO_FACEBOOK, accessToken, account.getId(), facebookId);
 		
 		if(request.getParameter("postIt") != null) {
 			postGreenhouseConnectionToWall(request, account, accessToken);
