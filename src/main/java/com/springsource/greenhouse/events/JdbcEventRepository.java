@@ -2,6 +2,7 @@ package com.springsource.greenhouse.events;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<EventSession> findTodaysSessions(Long eventId) {
-		return jdbcTemplate.query();
+		return Collections.emptyList();
 	}
 
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
