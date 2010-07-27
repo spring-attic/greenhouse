@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookOperations;
-import org.springframework.social.facebook.FacebookUserId;
 import org.springframework.social.facebook.FacebookUserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +41,7 @@ public class FacebookSigninController {
 	}
 	
 	@RequestMapping(value="/fb", method=RequestMethod.POST)
-	public String signinWithFacebook(@FacebookUserId String facebookUserId, @FacebookAccessToken String accessToken) {				
+	public String signinWithFacebook(@FacebookAccessToken String accessToken) {				
         List<Account> accounts = findLinkedAccount(accessToken);
         
         if(accounts.size() > 0) {	        	

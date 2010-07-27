@@ -20,7 +20,3 @@ insert into EventSession (code, title, description, startTime, endTime, speaker,
 	'Developing Social-Ready Web Applications', 
 	'Businesses are increasingly recognizing the value of connecting with their customers on a more personal level. Companies can utilize social networking to transition from "Big Faceless Corporation" to "Friend" by taking their wares to the online communities where their customers are. In this age of social media, those communities are found at social network sites such as Facebook, Twitter, and LinkedIn. In this session, you%27ll learn how to build Spring-based applications that interact with the various social networks. We%27ll talk about new features in the Spring portfolio to support integration with social networks as well as how to start building social features into your own applications.', 
 	'2010-10-20', '2010-10-20', 2, 1, 1, '#s12gxcs1');
-
-insert into ConnectedMember (connectionId, connectionApp, member) values ('1255689239', 'facebook', 1);
-insert into ConnectedMember (connectionId, connectionApp, member) values ('738140579', 'facebook', 2);
-insert into ConnectedMember (connectionId, connectionApp, member) values ('1533260333', 'facebook', 3);
