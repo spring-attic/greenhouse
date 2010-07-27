@@ -2,7 +2,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<form:form id="signup" method="post" modelAttribute="signupForm">
+<c:url value="/signup" var="signupUrl" />
+<form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm">
 	<div class="header">
   		<h2>Sign up</h2>
   		<s:bind path="*">
