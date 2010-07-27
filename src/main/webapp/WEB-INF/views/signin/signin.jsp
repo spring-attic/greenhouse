@@ -19,7 +19,7 @@
 	     few hours and the user will have to authenticate again. Asking for offline access allows
 	     the token to be long-lived, but has the unfortunate side-effect of communicating that the
 	     app may access their information even if they're not logged in. --%>
-	<fb:login-button perms="email,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in to The Greenhouse using Facebook</fb:login-button>
+	<fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in to The Greenhouse using Facebook</fb:login-button>
   	<fieldset>
 		<label for="login">Username or Email</label>
 		<input id="login" name="j_username" type="text" size="25" <c:if test="${wurflDevice.isAppleDevice}">autocorrect="off" autocapitalize="off"</c:if> <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.utils.MemberUtils;
 import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
@@ -74,14 +75,8 @@ public class TwitterSettingsController {
 	}
 
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
-		String message = "Linked with the Greenhouse at " + assembleMemberProfileUrl(request, account);
+		String message = "Linked with the Greenhouse at " + MemberUtils.assembleMemberProfileUrl(request, account);
 		twitterService.updateStatus(accessToken, message);
-	}
-	
-	private String assembleMemberProfileUrl(HttpServletRequest request, Account account) {
-		int serverPort = request.getServerPort();
-		String portPart = serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort;
-		return request.getScheme() + "://" + request.getServerName() + portPart + request.getContextPath() + "/members/" + account.getMemberProfileKey();
 	}
 
 	private void makeTwitterScreenameGreenhouseUsername(OAuthConsumerToken accessToken, Account account) {

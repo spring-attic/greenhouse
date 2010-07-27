@@ -9,10 +9,15 @@ import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookUserId;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.utils.MemberUtils;
 
 @Controller
 @RequestMapping("/settings")
@@ -20,8 +25,7 @@ public class FacebookSettingsController {
 	private static final String DELETE_FACEBOOK_CONNECTION = 
 		"delete from ConnectedAccount where member=? and accountName='facebook'";
 	private static final String COUNT_FACEBOOK_CONNECTIONS = 
-		"select count(*) from ConnectedAccount where member = ? and accountName = 'facebook'";
-	
+		"select count(*) from ConnectedAccount where member = ? and accountName = 'facebook'";	
 	private static final String LINK_ACCOUNT_TO_FACEBOOK = 
 		"insert into ConnectedAccount (accessToken, member, accountName, secret) values (?, ?, 'facebook', 'facebook')";
 
@@ -44,10 +48,30 @@ public class FacebookSettingsController {
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken) {		
+	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
+			@FacebookAccessToken String accessToken) {		
 		jdbcTemplate.update(LINK_ACCOUNT_TO_FACEBOOK, accessToken, account.getId());
+		
+		if(request.getParameter("postIt") != null) {
+			postGreenhouseConnectionToWall(request, account, accessToken);
+		}
+		
+		FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
 		return "redirect:/settings/facebook";
 	}
+
+	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account, String accessToken) {
+	    RestTemplate rest = new RestTemplate();
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>(); 
+		map.set("access_token", accessToken);
+		map.set("message", "I just signed into the Greenhouse!");
+		map.set("link", MemberUtils.assembleMemberProfileUrl(request, account));
+		map.set("name", "The Greenhouse");
+		map.set("caption", "The place where Spring developers hang out.");
+		map.set("description", "We help you connect with fellow developers and take advantage of everything the " +
+				"Spring community has to offer.");
+		rest.postForLocation("https://graph.facebook.com/me/feed", map);
+    }
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.DELETE)
 	public String disconnectTwitter(Account account, HttpServletRequest request, Authentication authentication) {
