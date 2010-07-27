@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.invite.facebook;
+package com.springsource.greenhouse.invite;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
-import com.springsource.greenhouse.invite.GreenhouseFriend;
 
 @Controller
 @RequestMapping("/invite/facebook")
