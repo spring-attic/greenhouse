@@ -11,7 +11,7 @@ insert into Update (text, updateTimestamp, member) values ('Roy Clarkson signed 
 
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier event for Spring technologies', 'springone2gx', '#springone2gx', 1);
 
-insert into Event (title, startDate, endDate, location, description, memberGroup) values ('SpringOne/2GX', '2010-10-19', '2010-10-22', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 'Chicago, IL', 1);
+insert into Event (title, startDate, endDate, location, description, name, memberGroup) values ('SpringOne/2GX', '2010-10-19', '2010-10-22', 'Chicago, IL', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 'chicago', 1);
 
 insert into EventTrack (name, description, chair, event) values ('Essential Spring', 'Spring techniques and technologies applicable to most classes of applications', 2, 1);
 insert into EventTrack (name, description, chair, event) values ('Web Application Development', 'What you need to know to build rich web applications', 1, 1);

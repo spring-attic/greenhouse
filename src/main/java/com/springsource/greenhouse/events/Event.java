@@ -15,6 +15,8 @@ public class Event {
 	private String location;
 
 	private String description;
+
+	private String name;
 	
 	private String hashtag;
 
@@ -22,13 +24,14 @@ public class Event {
 	
 	private String groupProfileKey;
 	
-	public Event(Long id, String title, Date startDate, Date endDate, String location, String description, String hashtag, String groupName, String groupProfileKey) {
+	public Event(Long id, String title, Date startDate, Date endDate, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
 		this.id = id;
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.location = location;
 		this.description = description;
+		this.name = name;
 		this.hashtag = hashtag;
 		this.groupName = groupName;
 		this.groupProfileKey = groupProfileKey;
@@ -58,6 +61,10 @@ public class Event {
 		return description;
 	}
 
+	public String getName() {
+		return name;
+	}
+	
 	public String getHashtag() {
 		return hashtag;
 	}

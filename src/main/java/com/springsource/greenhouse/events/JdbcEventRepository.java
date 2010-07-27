@@ -29,6 +29,14 @@ public class JdbcEventRepository implements EventRepository {
 	public List<Event> findUpcomingEvents() {		
 		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where e.endDate > ? order by e.startDate", eventMapper, new Date());
 	}
+	
+	public List<Event> findEventsByMonthOfYear(String group, Integer month, Integer year) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	public Event findEventByName(String group, Integer month, Integer year, String name) {
+		return null;
+	}
 
 	public String findEventHashtag(Long eventId) {
 		return jdbcTemplate.queryForObject("select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id", String.class, eventId);
@@ -53,8 +61,8 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			return new Event(rs.getLong("id"), rs.getString("title"), rs.getDate("startDate"), rs.getDate("endDate"), rs.getString("location"), rs.getString("description"), rs.getString("hashtag"),
-					rs.getString("groupName"), rs.getString("groupProfileKey"));
+			return new Event(rs.getLong("id"), rs.getString("title"), rs.getDate("startDate"), rs.getDate("endDate"), rs.getString("location"), rs.getString("description"), rs.getString("name"),
+					rs.getString("hashtag"), rs.getString("groupName"), rs.getString("groupProfileKey"));
 		}
 	};
 
