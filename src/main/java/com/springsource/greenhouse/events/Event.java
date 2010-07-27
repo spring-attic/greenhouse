@@ -1,7 +1,5 @@
 package com.springsource.greenhouse.events;
 
-import java.util.Date;
-
 import org.joda.time.DateTime;
 
 public class Event {

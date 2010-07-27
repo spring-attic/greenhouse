@@ -6,9 +6,7 @@ public interface EventRepository {
 
 	List<Event> findUpcomingEvents();
 
-	List<Event> findEventsByMonthOfYear(String group, Integer month, Integer year);
-
-	Event findEventByName(String group, Integer month, Integer year, String name);
+	Event findEventByName(String group, Integer year, Integer month, String name);
 
 	String findEventHashtag(Long eventId);
 
