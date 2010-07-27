@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.members;
 
-public interface MembersService {
+public interface MemberRepository {
 
 	Member findMemberByProfileKey(String profileKey);
 

@@ -4,27 +4,23 @@ import java.util.Date;
 
 public class Event {
 
-	private long id;
+	private Long id;
 
-	private String friendlyId;
-	
 	private String title;
+
+	private Date startDate;
+
+	private Date endDate;
 
 	private String location;
 
 	private String description;
-
-	private Date startTime;
-
-	private Date endTime;
-
-	private String hashtag;
-
-	public long getId() {
-		return this.id;
+	
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -35,37 +31,21 @@ public class Event {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public String getDescription() {
-		return this.description;
+	
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
-	public Date getStartTime() {
-		return this.startTime;
+	public Date getEndDate() {
+		return endDate;
 	}
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public Date getEndTime() {
-		return this.endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	public String getHashtag() {
-		return this.hashtag;
-	}
-
-	public void setHashtag(String hashtag) {
-		this.hashtag = hashtag;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public void setLocation(String location) {
@@ -76,11 +56,12 @@ public class Event {
 		return location;
 	}
 
-	public void setFriendlyId(String friendlyId) {
-	    this.friendlyId = friendlyId;
-    }
+	public String getDescription() {
+		return this.description;
+	}
 
-	public String getFriendlyId() {
-	    return friendlyId;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

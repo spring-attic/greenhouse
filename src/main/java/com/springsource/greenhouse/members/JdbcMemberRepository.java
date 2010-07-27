@@ -10,12 +10,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultMembersService implements MembersService {
+public class JdbcMemberRepository implements MemberRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 
 	@Inject
-	public DefaultMembersService(JdbcTemplate jdbcTemplate) {
+	public JdbcMemberRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
