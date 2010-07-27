@@ -24,6 +24,9 @@ import com.springsource.greenhouse.invite.GreenhouseFriend;
 @Controller
 @RequestMapping("/invite/facebook")
 public class FacebookInviteController {
+	private static final String SELECT_GREENHOUSE_FB_FRIENDS = 
+		"select username, firstName, lastName from Member, ConnectedAccount where member = id and " +
+		"accountName='facebook' and externalId in ( :ids )";
 	private final FacebookOperations facebook;
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -51,8 +54,7 @@ public class FacebookInviteController {
 	}
 	
 	private List<GreenhouseFriend> findGreenhouseFacebookFriends(List<String> facebookFriends) {
-	    return jdbcTemplate.query("select username, firstName, lastName from Member, ConnectedAccount where member = id and accountName='facebook' and externalId in ( :ids )",
-	    		Collections.singletonMap("ids", facebookFriends),
+	    return jdbcTemplate.query(SELECT_GREENHOUSE_FB_FRIENDS, Collections.singletonMap("ids", facebookFriends),
 	    		new RowMapper<GreenhouseFriend>() {
 					public GreenhouseFriend mapRow(ResultSet rs, int rowNum) throws SQLException {
 						GreenhouseFriend friend = new GreenhouseFriend();
