@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <div>
+	<c:if test="${not empty friends}">
 	<h3>Some of your Facebook friends are already Greenhouse members:</h3>
 	<ul>
 		<c:forEach var="friend" items="${friends}">
@@ -10,8 +11,9 @@
 			</li>
 		</c:forEach>
 	</ul>
-
 	<h3>But you can invite some more...</h3>
+	</c:if>
+	
 <fb:serverfbml style="width: 625px;">
 	<script type="text/fbml">
 		<fb:fbml>

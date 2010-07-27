@@ -5,6 +5,11 @@
 
 	<definition name="invite" extends="standard">
 		<put-attribute name="content" value="/WEB-INF/views/invite/invite.jsp" />
+        <put-list-attribute name="scripts">
+            <add-attribute value="/social/facebook/all.js"/>
+            <add-attribute value="/social/facebook/facebook-extras.js"/>
+            <add-attribute value="/social/facebook/init.js"/>
+        </put-list-attribute>
 	</definition>
           
 </tiles-definitions>

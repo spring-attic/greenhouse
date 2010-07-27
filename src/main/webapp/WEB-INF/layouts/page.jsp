@@ -18,20 +18,7 @@
 	<script type="text/javascript" src="<c:url value="/resources/jquery/jquery-1.4.2.js" />"></script>	
 </head>
 <body>
-    <%-- Facebook advises placing this in the body, not the header  --%>
-<div id="fb-root"></div>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<script src="<c:url value='/resources/social/facebook/facebook-extras.js'/>"></script>
-<script>
-  FB.init({appId: '8f007e7ce33d82dc2f5485102b3504c2', status: true, cookie: true, xfbml: true});
-  FB.Event.subscribe('auth.sessionChange', function(response) {
-    if (response.session) {
-     //   alert("Hey!");
-    } else {
-     //   alert("See ya!");
-    }
-  });
-</script>
+	<div id="fb-root"></div>
 	
 	<div id="header">
 		<tiles:insertAttribute name="header" />
@@ -46,14 +33,5 @@
 	<c:forEach var="script" items="${scripts}">
 		<script type="text/javascript" src="<c:url value="/resources/${script}" />"></script>	
 	</c:forEach>
-
-
-    <script type="text/javascript">
-//    FB.init({apiKey: '8f007e7ce33d82dc2f5485102b3504c2', status: true, cookie: true,            xfbml: true});
-
-//        FB.init("8f007e7ce33d82dc2f5485102b3504c2", "<c:url value="/resources/xd_receiver.html" />", {appId: '140372495981006', status: true, cookie: true, xfbml: true});
-//        FB.init({appId: '140372495981006', status: true, cookie: true, xfbml: true});
-    </script>
-        	
 </body>
 </html>
