@@ -7,13 +7,20 @@
 <c:if test="${not empty eventList}">
 	<dl>
 	<c:forEach items="${eventList}" var="event">
-		<s:url value="/events/{event}" var="eventUrl">
-			<s:param name="event" value="${event.friendlyId}" />
-		</s:url> 
-		<dt class="event"><a href="${eventUrl}">${event.title}</a><br/>
-			<span class="locationAndDate"><d:displayDateRange startDate="${event.startTime}" endDate="${event.endTime}"/> - 
-			${event.location}</span></dt>
-		<dd class="event"><c:out value="${event.description}"/></dd>
+		<s:url value="/groups/{group}/events/{year}/{month}" var="eventUrl">
+			<s:param name="group" value="${event.group}" />
+			<s:param name="year" value="${event.startDate.year}" />
+			<s:param name="month" value="${event.startDate.month}" />
+		</s:url>
+		<dt class="event">
+			<a href="${eventUrl}">${event.title}</a> <br/>
+			<span class="locationAndDate">
+				<d:displayDateRange startDate="${event.startDate}" endDate="${event.endDate}"/> - ${event.location}
+			</span>
+		</dt>
+		<dd class="event">
+			<c:out value="${event.description}" />
+		</dd>
 	</c:forEach>
 	</dl>
 </c:if>

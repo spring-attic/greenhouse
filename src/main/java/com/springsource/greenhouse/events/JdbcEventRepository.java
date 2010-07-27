@@ -14,9 +14,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+import com.springsource.greenhouse.utils.ResourceReference;
+
+@Repository
 public class JdbcEventRepository implements EventRepository {
 
 	private JdbcTemplate jdbcTemplate;
@@ -27,7 +29,7 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<Event> findUpcomingEvents() {		
-		return jdbcTemplate.query(SELECT_EVENT + " where endDate > ? order by startDate", eventMapper, new Date());		
+		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, g.profileKey as groupId, g.name as groupName from Event e inner join MemberGroup g on e.group = g.id where endDate > ? order by startDate", eventMapper, new Date());
 	}
 
 	public String getEventSearchString(Long eventId) {
@@ -54,6 +56,7 @@ public class JdbcEventRepository implements EventRepository {
 			event.setEndDate(rs.getTimestamp("endDate"));
 			event.setLocation(rs.getString("location"));
 			event.setDescription(rs.getString("description"));
+			event.setGroup(new ResourceReference<String>(rs.getString("groupId"), rs.getString("groupName")));
 			return event;
 		}
 	};
@@ -75,8 +78,5 @@ public class JdbcEventRepository implements EventRepository {
 			return sessions;			
 		}
 	};
-
-	private static final String SELECT_EVENT = 
-		"select id, title, startDate, endDate, location, description from Event";
 
 }

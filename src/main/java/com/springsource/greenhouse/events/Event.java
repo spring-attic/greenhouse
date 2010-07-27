@@ -2,6 +2,8 @@ package com.springsource.greenhouse.events;
 
 import java.util.Date;
 
+import com.springsource.greenhouse.utils.ResourceReference;
+
 public class Event {
 
 	private Long id;
@@ -15,6 +17,8 @@ public class Event {
 	private String location;
 
 	private String description;
+	
+	private ResourceReference<String> group;
 	
 	public Long getId() {
 		return id;
@@ -31,7 +35,7 @@ public class Event {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -62,6 +66,14 @@ public class Event {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public ResourceReference<String> getGroup() {
+		return group;
+	}
+
+	public void setGroup(ResourceReference<String> group) {
+		this.group = group;
 	}
 
 }
