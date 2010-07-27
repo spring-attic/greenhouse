@@ -1,8 +1,9 @@
 package com.springsource.greenhouse.events;
 
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import org.joda.time.DateTime;
 
 public class EventSession {
 	
@@ -10,15 +11,15 @@ public class EventSession {
 	
 	private String title;
 	
-	private Date startTime;
+	private DateTime startTime;
 	
-	private Date endTime;
+	private DateTime endTime;
 
 	private String description;
 
 	private Set<EventSessionLeader> leaders;
 		
-	public EventSession(Short code, String title, Date startTime, Date endTime, String description) {
+	public EventSession(Short code, String title, DateTime startTime, DateTime endTime, String description) {
 		this.code = code;
 		this.title = title;
 		this.startTime = startTime;
@@ -33,11 +34,11 @@ public class EventSession {
 		return title;
 	}
 
-	public Date getStartTime() {
+	public DateTime getStartTime() {
 		return startTime;
 	}
 
-	public Date getEndTime() {
+	public DateTime getEndTime() {
 		return endTime;
 	}
 
