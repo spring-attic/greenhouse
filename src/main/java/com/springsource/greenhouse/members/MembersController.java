@@ -14,10 +14,10 @@ import com.springsource.greenhouse.account.Account;
 @RequestMapping("/members/*")
 public class MembersController {
 
-	private MembersService membersService;
+	private MemberRepository membersService;
 	
 	@Inject
-	public MembersController(MembersService membersService) {
+	public MembersController(MemberRepository membersService) {
 		this.membersService = membersService;
 	}
 

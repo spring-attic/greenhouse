@@ -1,53 +1,42 @@
 package com.springsource.greenhouse.events;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 public class EventSession {
 	
-	private String title;
+	private Short code;
 	
-	private String summary;
+	private String title;
 	
 	private Date startTime;
 	
 	private Date endTime;
 
-	private List<SessionLeader> leaders;
+	private String description;
 	
-	private String hashtag;
+	private Set<EventSessionLeader> leaders;
 
-	public EventSession(String title, String summary, Date startTime,
-			Date endTime, SessionLeader leader, String hashtag) {
-		super();
-		this.title = title;
-		this.summary = summary;
-		this.startTime = startTime;
-		this.endTime = endTime;
+	public EventSession(Short code, String title, Date startTime, Date endTime, String description, EventSessionLeader leader) {
+		this(code, title, startTime, endTime, description, Collections.singleton(leader));
+	}
 		
-		this.leaders = new ArrayList<SessionLeader>();
-		this.leaders.add(leader);
-		this.hashtag = hashtag;
-	}
-
-	public EventSession(String title, String summary, Date startTime,
-			Date endTime, List<SessionLeader> leaders, String hashtag) {
-		super();
+	public EventSession(Short code, String title, Date startTime, Date endTime, String description, Set<EventSessionLeader> leaders) {
+		this.code = code;
 		this.title = title;
-		this.summary = summary;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.description = description;
 		this.leaders = leaders;
-		this.hashtag = hashtag;
 	}
-	
+
+	public Short getCode() {
+		return code;
+	}
+
 	public String getTitle() {
 		return title;
-	}
-
-	public String getSummary() {
-		return summary;
 	}
 
 	public Date getStartTime() {
@@ -58,11 +47,12 @@ public class EventSession {
 		return endTime;
 	}
 
-	public List<SessionLeader> getLeaders() {
+	public String getDescription() {
+		return description;
+	}
+
+	public Set<EventSessionLeader> getLeaders() {
 		return leaders;
 	}
 
-	public String getHashtag() {
-		return hashtag;
-	}
 }

@@ -70,6 +70,10 @@ public class TwitterService implements TwitterOperations {
 		return search(accessToken, query, 1, DEFAULT_RESULTS_PER_PAGE, 0, 0);
 	}
 
+	public SearchResults search(String query, int page, int resultsPerPage) {
+		return search(null, query, page, resultsPerPage, 0, 0);
+	}
+	
 	public SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage) {
 		return search(accessToken, query, page, resultsPerPage, 0, 0);
 	}

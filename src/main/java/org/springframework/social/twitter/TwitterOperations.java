@@ -7,9 +7,16 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 public interface TwitterOperations {
 
 	String getScreenName(OAuthConsumerToken accessToken);
+	
 	List<String> getFriends(OAuthConsumerToken accessToken, String screenName);
+	
 	void updateStatus(OAuthConsumerToken accessToken, String message);
+
+	SearchResults search(String query, int page, int pageSize);
+
 	SearchResults search(OAuthConsumerToken accessToken, String query);
+	
 	SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage);
+	
 	SearchResults search(OAuthConsumerToken accessToken, String query, int page, int resultsPerPage, int sinceId, int maxId);
 }
