@@ -15,6 +15,7 @@ import org.springframework.security.oauth.extras.OAuthAccessToken;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,8 +45,11 @@ public class TwitterInviteController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@OAuthAccessToken("twitter") OAuthConsumerToken accessToken, @RequestParam String username, Model model) {
-		List<String> twitterFriends = twitterService.getFriends(accessToken, username);
-		model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
+		if(StringUtils.hasText(username)) {
+			List<String> twitterFriends = twitterService.getFriends(accessToken, username);
+			model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
+		}
+		
 		return "invite/twitterFriends";
 	}
 	
