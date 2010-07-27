@@ -2,6 +2,7 @@ package com.springsource.greenhouse.events;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.After;
@@ -58,5 +59,22 @@ public class JdbcEventRepositoryTest {
 	public void findTodaysSessions() {
 		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(1L);
 		assertEquals(0, todaysSessions.size());
+
+		/* TODO make this test resilient to natural time change
+		assertEquals(2, todaysSessions.size());
+		EventSession s1 = todaysSessions.get(0);
+		assertEquals("Developing Social-Ready Web Applications", s1.getTitle());
+		assertEquals(1, s1.getLeaders().size());
+		assertEquals("Craig", s1.getLeaders().iterator().next().getFirstName());
+
+		EventSession s2 = todaysSessions.get(1);
+		assertEquals("Mastering MVC 3", s2.getTitle());
+		assertEquals(2, s2.getLeaders().size());
+		Iterator<EventSessionLeader> it = s2.getLeaders().iterator();
+		EventSessionLeader leader = it.next();
+		assertEquals("Keith", leader.getFirstName());
+		leader = it.next();
+		assertEquals("Craig", leader.getFirstName());
+		*/
 	}
 }
