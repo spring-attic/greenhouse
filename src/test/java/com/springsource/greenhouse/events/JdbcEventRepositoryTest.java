@@ -1,6 +1,7 @@
 package com.springsource.greenhouse.events;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -42,6 +43,13 @@ public class JdbcEventRepositoryTest {
 		assertEquals(2, events.size());
 		assertEquals((Long)2L, events.get(0).getId());
 		assertEquals((Long)1L, events.get(1).getId());
+	}
+	
+	@Test
+	public void findEventByName() {
+		Event event = eventRepository.findEventByName("springone2gx", 2010, 07, "chitown");
+		assertNotNull(event);
+		assertEquals("Soon_Event", event.getTitle());
 	}
 	
 	@Test

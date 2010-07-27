@@ -31,12 +31,8 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where e.endDate > ? order by e.startDate", eventMapper, new Date());
 	}
 	
-	public List<Event> findEventsByMonthOfYear(String group, Integer month, Integer year) {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
-
-	public Event findEventByName(String group, Integer month, Integer year, String name) {
-		return null;
+	public Event findEventByName(String group, Integer year, Integer month,String name) {
+		return jdbcTemplate.queryForObject("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where g.profileKey = ? and extract(year from e.startDate) = ? and extract(month from e.startDate) = ? and e.name = ?", eventMapper, group, year, month, name);
 	}
 
 	public String findEventHashtag(Long eventId) {
