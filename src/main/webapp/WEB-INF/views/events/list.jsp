@@ -10,8 +10,8 @@
 		<s:url value="/groups/{group}/events/{year}/{month}/{name}" var="eventUrl">
 			<s:param name="group" value="${event.groupProfileKey}" />
 			<s:param name="year" value="${event.startDate.year}" />
-			<s:param name="month" value="${event.startDate.month}" />
-			<s:param name="month" value="${event.name}" />
+			<s:param name="month" value="${event.startDate.monthOfYear}" />
+			<s:param name="name" value="${event.name}" />
 		</s:url>
 		<dt class="event">
 			<a href="${eventUrl}">${event.title}</a> <br/>

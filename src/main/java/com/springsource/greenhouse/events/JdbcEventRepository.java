@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.dao.DataAccessException;
@@ -27,7 +28,7 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<Event> findUpcomingEvents() {		
-		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where e.endDate > ? order by e.startDate", eventMapper, new Date());
+		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where e.endDate > ? order by e.startDate", eventMapper, new Date());
 	}
 	
 	public List<Event> findEventsByMonthOfYear(String group, Integer month, Integer year) {
@@ -61,7 +62,7 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			return new Event(rs.getLong("id"), rs.getString("title"), rs.getDate("startDate"), rs.getDate("endDate"), rs.getString("location"), rs.getString("description"), rs.getString("name"),
+			return new Event(rs.getLong("id"), rs.getString("title"), new DateTime(rs.getDate("startDate")), new DateTime(rs.getDate("endDate")), rs.getString("location"), rs.getString("description"), rs.getString("name"),
 					rs.getString("hashtag"), rs.getString("groupName"), rs.getString("groupProfileKey"));
 		}
 	};
@@ -74,7 +75,7 @@ public class JdbcEventRepository implements EventRepository {
 			while (rs.next()) {
 				Short code = rs.getShort("code");
 				if (!code.equals(previousCode)) {
-					session = new EventSession(code, rs.getString("title"), rs.getDate("startTime"), rs.getDate("endTime"), rs.getString("description"));
+					session = new EventSession(code, rs.getString("title"), new DateTime(rs.getDate("startTime")), new DateTime(rs.getDate("endTime")), rs.getString("description"));
 					sessions.add(session);
 				}
 				session.addLeader(new EventSessionLeader(rs.getString("firstName"), rs.getString("lastName")));				

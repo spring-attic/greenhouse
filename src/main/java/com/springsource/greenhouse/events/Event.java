@@ -2,15 +2,17 @@ package com.springsource.greenhouse.events;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 public class Event {
 
 	private Long id;
 
 	private String title;
 
-	private Date startDate;
+	private DateTime startDate;
 
-	private Date endDate;
+	private DateTime endDate;
 
 	private String location;
 
@@ -24,7 +26,7 @@ public class Event {
 	
 	private String groupProfileKey;
 	
-	public Event(Long id, String title, Date startDate, Date endDate, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
+	public Event(Long id, String title, DateTime startDate, DateTime endDate, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
 		this.id = id;
 		this.title = title;
 		this.startDate = startDate;
@@ -45,11 +47,11 @@ public class Event {
 		return this.title;
 	}
 
-	public Date getStartDate() {
+	public DateTime getStartDate() {
 		return startDate;
 	}
 
-	public Date getEndDate() {
+	public DateTime getEndDate() {
 		return endDate;
 	}
 
