@@ -34,7 +34,7 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<EventSession> findTodaysSessions(Long eventId) {
-		return null;
+		return jdbcTemplate.query();
 	}
 
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {

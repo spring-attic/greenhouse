@@ -2,7 +2,6 @@ package com.springsource.greenhouse.events;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.junit.After;
@@ -39,8 +38,6 @@ public class JdbcEventRepositoryTest {
 
 	@Test
 	public void findUpcomingEvents() {
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2010, 7, 14);
 		List<Event> events = eventRepository.findUpcomingEvents();
 		assertEquals(2, events.size());
 		assertEquals((Long)2L, events.get(0).getId());
@@ -48,8 +45,17 @@ public class JdbcEventRepositoryTest {
 	}
 	
 	@Test
-	public void findEventSearchString() {
+	public void getEventSearchString() {
 		assertEquals("#springone2gx", eventRepository.getEventSearchString(1L));
 	}
+	
+	@Test
+	public void getEventSessionSearchString() {
+		assertEquals("#springone2gx-201", eventRepository.getEventSessionSearchString(1L, (short)201));
+	}
 
+	@Test
+	public void findTodaysSessions() {
+		assertEquals("#springone2gx-201", eventRepository.getEventSessionSearchString(1L, (short)201));
+	}
 }
