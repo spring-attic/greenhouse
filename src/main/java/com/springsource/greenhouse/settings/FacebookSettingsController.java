@@ -67,7 +67,7 @@ public class FacebookSettingsController {
 		map.set("access_token", accessToken);
 		map.set("message", "I just signed into the Greenhouse!");
 		map.set("link", MemberUtils.assembleMemberProfileUrl(request, account));
-		map.set("name", "The Greenhouse");
+		map.set("name", "Greenhouse");
 		map.set("caption", "The place where Spring developers hang out.");
 		map.set("description", "We help you connect with fellow developers and take advantage of everything the " +
 				"Spring community has to offer.");
