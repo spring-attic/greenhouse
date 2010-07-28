@@ -24,6 +24,7 @@ public class EventSession {
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.description = description;
 	}
 
 	public Short getCode() {
