@@ -58,7 +58,7 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			return new Event(rs.getLong("id"), rs.getString("title"), new DateTime(rs.getDate("startDate")), new DateTime(rs.getDate("endDate")), rs.getString("location"), rs.getString("description"), rs.getString("name"),
+			return new Event(rs.getLong("id"), rs.getString("title"), new DateTime(rs.getTimestamp("startDate")), new DateTime(rs.getTimestamp("endDate")), rs.getString("location"), rs.getString("description"), rs.getString("name"),
 					rs.getString("hashtag"), rs.getString("groupName"), rs.getString("groupProfileKey"));
 		}
 	};
@@ -71,7 +71,7 @@ public class JdbcEventRepository implements EventRepository {
 			while (rs.next()) {
 				Short code = rs.getShort("code");
 				if (!code.equals(previousCode)) {
-					session = new EventSession(code, rs.getString("title"), new DateTime(rs.getDate("startTime")), new DateTime(rs.getDate("endTime")), rs.getString("description"));
+					session = new EventSession(code, rs.getString("title"), new DateTime(rs.getTimestamp("startTime")), new DateTime(rs.getTimestamp("endTime")), rs.getString("description"));
 					sessions.add(session);
 				}
 				session.addLeader(new EventSessionLeader(rs.getString("firstName"), rs.getString("lastName")));				
