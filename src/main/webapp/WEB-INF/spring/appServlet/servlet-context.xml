@@ -19,8 +19,17 @@
 	</beans:bean>
 	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-	<resources />
-
+	<!-- TODO: add back namespace support -->
+	<beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<beans:property name="mappings">
+			<beans:value>/resources/**=resourceHandler</beans:value>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="resourceHandler" class="org.springframework.web.servlet.resources.ResourceHttpRequestHandler">
+		<beans:constructor-arg value="/resources/" />
+	</beans:bean>
+	<beans:bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"/>
+     
 	<!-- Interceptors that execute common control logic across multiple requests -->
 	<interceptors>
 		<beans:bean class="com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor" />
