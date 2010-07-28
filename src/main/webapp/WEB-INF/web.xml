@@ -50,7 +50,23 @@
       <filter-name>securityFilter</filter-name>
       <url-pattern>/*</url-pattern>
     </filter-mapping>
-    	
+
+	<!-- H2 Database Console for managing the app's database -->
+	<servlet>
+		<servlet-name>H2Console</servlet-name>
+		<servlet-class>org.h2.server.web.WebServlet</servlet-class>
+		<init-param>
+			<param-name>-webAllowOthers</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>H2Console</servlet-name>
+		<url-pattern>/admin/h2/*</url-pattern>
+	</servlet-mapping>
+	    	
 	<!-- Handles requests into the application -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>

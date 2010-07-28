@@ -23,6 +23,9 @@
 	<!-- Twitter Client API -->
 	<beans:bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
 
+	<!-- Facebook Client API -->
+	<bean id="facebook" class="org.springframework.social.facebook.FacebookService" />
+	
 </beans:beans>
 
 
