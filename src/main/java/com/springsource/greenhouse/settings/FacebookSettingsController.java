@@ -17,24 +17,22 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.utils.MemberUtils;
 
 @Controller
 @RequestMapping("/settings")
 public class FacebookSettingsController {
-	private static final String DELETE_FACEBOOK_CONNECTION = 
-		"delete from ConnectedAccount where member=? and accountName='facebook'";
 	private static final String COUNT_FACEBOOK_CONNECTIONS = 
 		"select count(*) from ConnectedAccount where member = ? and accountName = 'facebook'";	
-	private static final String LINK_ACCOUNT_TO_FACEBOOK = 
-		"insert into ConnectedAccount (accessToken, member, externalId, accountName, secret) " +
-		"values (?, ?, ?, 'facebook', 'facebook')";
 
 	private final JdbcTemplate jdbcTemplate;
+	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookSettingsController(JdbcTemplate jdbcTemplate) {
+	public FacebookSettingsController(JdbcTemplate jdbcTemplate, AccountRepository accountRepository) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.accountRepository = accountRepository;
 		
 	}
 	
@@ -50,8 +48,8 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
 	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
-			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {		
-		jdbcTemplate.update(LINK_ACCOUNT_TO_FACEBOOK, accessToken, account.getId(), facebookId);
+			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
+		accountRepository.connectAccount(account.getId(), facebookId, "facebook", accessToken, "facebook");
 		
 		if(request.getParameter("postIt") != null) {
 			postGreenhouseConnectionToWall(request, account, accessToken);
@@ -75,12 +73,12 @@ public class FacebookSettingsController {
     }
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.DELETE)
-	public String disconnectTwitter(Account account, HttpServletRequest request, Authentication authentication) {
-		jdbcTemplate.update(DELETE_FACEBOOK_CONNECTION, account.getId());
+	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
+		accountRepository.removeConnectedAccount(account.getId(), "facebook");
 		return "redirect:/settings/facebook";
 	}
 	
-	private boolean isConnected(Account account) {
+	private boolean isConnected(Account account) {		
 		return jdbcTemplate.queryForInt(COUNT_FACEBOOK_CONNECTIONS, account.getId()) == 1;
 	}
 }
