@@ -56,6 +56,10 @@ public class JdbcAccountRepository implements AccountRepository {
 		jdbcTemplate.update(CONNECT_ACCOUNT, accessToken, memberId, externalId, accountName, secret);
 	}
 	
+	public boolean isConnected(Long memberId, String accountName) {
+		return jdbcTemplate.queryForInt(COUNT_CONNECTIONS_FOR_MEMBER, memberId, accountName) == 1;		
+	}
+	
 	private static final String SELECT_BY_USERNAME = 
 		"select id, firstName, lastName, email, username from Member where username = ?";
 	private static final String SELECT_BY_EMAIL = 
@@ -69,4 +73,6 @@ public class JdbcAccountRepository implements AccountRepository {
 	private static final String CONNECT_ACCOUNT = 
 		"insert into ConnectedAccount (accessToken, member, externalId, accountName, secret) " +
 		"values (?, ?, ?, ?, ?)";
+	private static final String COUNT_CONNECTIONS_FOR_MEMBER = 
+		"select count(*) from ConnectedAccount where member = ? and accountName = ?";
 }

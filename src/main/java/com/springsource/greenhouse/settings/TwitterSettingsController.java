@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.utils.MemberUtils;
 import com.springsource.greenhouse.utils.SecurityUtils;
 
@@ -28,9 +29,13 @@ public class TwitterSettingsController {
 	private TwitterOperations twitterService;
 	
 	private JdbcTemplate jdbcTemplate;
+
+	private final AccountRepository accountRepository;
 	
 	@Inject
-	public TwitterSettingsController(OAuthConsumerTokenServicesFactory oauthTokenFactory, TwitterOperations twitterService, JdbcTemplate jdbcTemplate) {
+	public TwitterSettingsController(OAuthConsumerTokenServicesFactory oauthTokenFactory, 
+			TwitterOperations twitterService, JdbcTemplate jdbcTemplate, AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
 		this.oauthHelper = new OAuthConsumerTokenServicesHelper(oauthTokenFactory);
 		this.jdbcTemplate = jdbcTemplate;
 		this.twitterService = twitterService;
@@ -38,7 +43,7 @@ public class TwitterSettingsController {
 
 	@RequestMapping(value="/twitter", method=RequestMethod.GET)
 	public String connectView(Account account) {
-		if (isConnected(account)) {
+		if (accountRepository.isConnected(account.getId(), "twitter")) {
 			return "settings/twitterConnected";
 		} else {
 			return "settings/twitterConnect";
@@ -69,11 +74,6 @@ public class TwitterSettingsController {
 	}
 
 	// internal helpers
-
-	private boolean isConnected(Account account) {
-		return jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = ? and accountName = 'twitter'", account.getId()) == 1;
-	}
-
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
 		String message = "Linked with the Greenhouse at " + MemberUtils.assembleMemberProfileUrl(request, account);
 		twitterService.updateStatus(accessToken, message);

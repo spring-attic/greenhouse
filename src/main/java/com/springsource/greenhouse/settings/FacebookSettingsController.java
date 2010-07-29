@@ -3,7 +3,6 @@ package com.springsource.greenhouse.settings;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookUserId;
@@ -23,22 +22,16 @@ import com.springsource.greenhouse.utils.MemberUtils;
 @Controller
 @RequestMapping("/settings")
 public class FacebookSettingsController {
-	private static final String COUNT_FACEBOOK_CONNECTIONS = 
-		"select count(*) from ConnectedAccount where member = ? and accountName = 'facebook'";	
-
-	private final JdbcTemplate jdbcTemplate;
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookSettingsController(JdbcTemplate jdbcTemplate, AccountRepository accountRepository) {
-		this.jdbcTemplate = jdbcTemplate;
+	public FacebookSettingsController(AccountRepository accountRepository) {
 		this.accountRepository = accountRepository;
-		
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.GET)
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
-		if (isConnected(account)) {
+		if (accountRepository.isConnected(account.getId(), "facebook")) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "settings/facebookConnected";
 		} else {
@@ -76,9 +69,5 @@ public class FacebookSettingsController {
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
 		accountRepository.removeConnectedAccount(account.getId(), "facebook");
 		return "redirect:/settings/facebook";
-	}
-	
-	private boolean isConnected(Account account) {		
-		return jdbcTemplate.queryForInt(COUNT_FACEBOOK_CONNECTIONS, account.getId()) == 1;
 	}
 }

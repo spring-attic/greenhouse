@@ -38,7 +38,7 @@ public class JdbcAccountRepositoryTest {
     	assertExpectedAccount(accountRepository.findAccount(1L));
     }
     
-    @Test
+    @Test 
     public void shouldFindAccountByEmail() throws Exception {
     	assertExpectedAccount(accountRepository.findAccount("cwalls@vmware.com"));
     }
@@ -84,6 +84,15 @@ public class JdbcAccountRepositoryTest {
     	assertExpectedAccount(accountRepository.findByConnectedAccount("newToken", "twitter"));
     }
 
+    @Test
+    public void shouldBeConnected() {
+    	assertTrue(accountRepository.isConnected(1L, "facebook"));
+    }
+
+    @Test
+    public void shouldNotBeConnected() {
+    	assertFalse(accountRepository.isConnected(1L, "twitter"));
+    }
 
 	private void assertExpectedAccount(Account account) {
 	    assertEquals("Craig", account.getFirstName());
