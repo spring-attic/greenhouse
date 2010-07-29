@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<form action="<c:url value="/settings/twitterconnect/authorize" />">
+<form action="<c:url value="/settings/twitter/authorize" />">
 	<div id="header">
 		<div class="info">
 			Click the button to connect your Greenhouse account with your Twitter account.

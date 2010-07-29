@@ -46,7 +46,7 @@ public class TwitterSettingsController {
 	}
 
 	// TODO - change this callback url to /twitter/authorize and simplify @RequestMapping values
-	@RequestMapping("/twitterconnect/authorize")
+	@RequestMapping("/twitter/authorize")
 	public String authorize(HttpServletRequest request, Authentication authentication) {
 		String oauthToken = request.getParameter("oauth_token");
 		if (oauthToken != null && oauthToken.length() > 0) {

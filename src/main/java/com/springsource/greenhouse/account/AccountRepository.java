@@ -6,5 +6,4 @@ public interface AccountRepository {
 
 	Account findAccount(String username) throws UsernameNotFoundException;
 
-	Account findAccountByConnectedAccountAccessToken(String appName, String accessToken);
 }

@@ -5,7 +5,7 @@
                         http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
 
 	<consumer resource-details-service-ref="resourceDetails" token-services-factory-ref="consumerTokenServicesFactory">
-		<url pattern="/settings/twitterconnect/authorize**" resources="twitter" />
+		<url pattern="/settings/twitter/authorize**" resources="twitter" />
 	</consumer>
 
 	<resource-details-service id="resourceDetails">
