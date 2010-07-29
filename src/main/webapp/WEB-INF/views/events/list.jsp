@@ -16,7 +16,7 @@
 		<dt class="event">
 			<a href="${eventUrl}"><c:out value="${event.title}" escapeXml="true"/></a> <br/>
 			<span class="locationAndDate">
-				<d:displayDateRange startTime="${event.startTime}" endTime="${event.endTime}" /> - 
+				<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" /> - 
 				<c:out value="${event.location}" escapeXml="true"/>
 			</span>
 		</dt>
