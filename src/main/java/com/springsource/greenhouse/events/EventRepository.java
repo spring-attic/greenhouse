@@ -10,7 +10,7 @@ public interface EventRepository {
 
 	String findEventHashtag(Long eventId);
 
-	String findSessionHashtag(Long eventId, Short sessionCode);
+	String findSessionHashtag(Long eventId, Short sessionNumber);
 
 	List<EventSession> findTodaysSessions(Long eventId);
 	

@@ -8,9 +8,9 @@ public class Event {
 
 	private String title;
 
-	private DateTime startDate;
+	private DateTime startTime;
 
-	private DateTime endDate;
+	private DateTime endTime;
 
 	private String location;
 
@@ -24,11 +24,11 @@ public class Event {
 	
 	private String groupProfileKey;
 	
-	public Event(Long id, String title, DateTime startDate, DateTime endDate, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
+	public Event(Long id, String title, DateTime startTime, DateTime endTime, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
 		this.id = id;
 		this.title = title;
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.location = location;
 		this.description = description;
 		this.name = name;
@@ -45,12 +45,12 @@ public class Event {
 		return this.title;
 	}
 
-	public DateTime getStartDate() {
-		return startDate;
+	public DateTime getStartTime() {
+		return startTime;
 	}
 
-	public DateTime getEndDate() {
-		return endDate;
+	public DateTime getEndTime() {
+		return endTime;
 	}
 
 	public String getLocation() {

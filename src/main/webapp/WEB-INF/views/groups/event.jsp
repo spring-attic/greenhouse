@@ -6,13 +6,13 @@
 
 <div id="eventInfo">
 	<p>
-		<strong>When:</strong> <d:displayDateRange startDate="${event.startDate}" endDate="${event.endDate}" />
+		<strong>When:</strong> <d:displayDateRange startTime="${event.startTime}" endTime="${event.endTime}" />
 	</p>
 	<p>
-		<strong>Where:</strong> <c:out value="${event.location}" escapeXml="true"/>
+		<strong>Where:</strong> <c:out value="${event.location}" escapeXml="true" />
 	</p>
 	<p>
-		<c:out value="${event.description}" escapeXml="true"/>
+		<c:out value="${event.description}" escapeXml="true" />
 	</p>		
 </div>
 

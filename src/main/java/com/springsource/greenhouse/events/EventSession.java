@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 
 public class EventSession {
 	
-	private Short code;
+	private Short number;
 	
 	private String title;
 	
@@ -17,18 +17,21 @@ public class EventSession {
 
 	private String description;
 
+	private String hashtag;
+	
 	private Set<EventSessionLeader> leaders;
 		
-	public EventSession(Short code, String title, DateTime startTime, DateTime endTime, String description) {
-		this.code = code;
+	public EventSession(Short number, String title, DateTime startTime, DateTime endTime, String description, String hashtag) {
+		this.number = number;
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
+		this.hashtag = hashtag;
 	}
 
-	public Short getCode() {
-		return code;
+	public Short getNumber() {
+		return number;
 	}
 
 	public String getTitle() {
@@ -45,6 +48,10 @@ public class EventSession {
 
 	public String getDescription() {
 		return description;
+	}
+	
+	public String getHashtag() {
+		return hashtag;
 	}
 
 	public Set<EventSessionLeader> getLeaders() {

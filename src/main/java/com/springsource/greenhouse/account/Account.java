@@ -1,6 +1,8 @@
 package com.springsource.greenhouse.account;
 
-public final class Account {
+import java.io.Serializable;
+
+public final class Account implements Serializable {
 	
 	private final Long id;
 	
