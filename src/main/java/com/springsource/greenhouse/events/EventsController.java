@@ -52,13 +52,13 @@ public class EventsController {
 		return eventRepository.findTodaysSessions(id);
 	}
 
-	@RequestMapping(value="/{id}/sessions/{code}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody SearchResults sessionTweets(@PathVariable Long id, @PathVariable Short code, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
-		return twitter.search(eventRepository.findSessionHashtag(id, code), page, pageSize);
+	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody SearchResults sessionTweets(@PathVariable Long id, @PathVariable Short number, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
+		return twitter.search(eventRepository.findSessionHashtag(id, number), page, pageSize);
 	}
 
-	@RequestMapping(value="/{id}/sessions/{code}/tweets", method=RequestMethod.POST)
-	public @ResponseBody void postSessionTweet(@PathVariable Long id, @PathVariable Short code, @RequestParam String status, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
+	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
+	public @ResponseBody void postSessionTweet(@PathVariable Long id, @PathVariable Short number, @RequestParam String status, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
 		twitter.updateStatus(accessToken, status);
 	}
 

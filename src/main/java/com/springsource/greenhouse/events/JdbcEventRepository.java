@@ -39,22 +39,18 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject("select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id", String.class, eventId);
 	}
 
-	public String findSessionHashtag(Long eventId, Short sessionCode) {
-		return buildSessionHashtag(findEventHashtag(eventId), sessionCode);
+	public String findSessionHashtag(Long eventId, Short sessionNumber) {
+		return jdbcTemplate.queryForObject("select hashtag from EventSession where event = ? and number = ?", String.class, eventId, sessionNumber);
 	}
 
 	public List<EventSession> findTodaysSessions(Long eventId) {
 		LocalDate day = new LocalDate();
 		Date startInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
 		Date endInstant = day.plusDays(1).toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
-		return jdbcTemplate.query("select s.code, s.title, s.startTime, s.endTime, s.description, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.code = l.session inner join Member m on l.leader = m.id where s.event = ? and s.startTime > ? and s.endTime < ?", eventSessionsExtractor, eventId, startInstant, endInstant);
+		return jdbcTemplate.query("select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.event = l.event and s.number = l.session inner join Member m on l.leader = m.id where s.event = ? and s.startTime > ? and s.endTime < ?", eventSessionsExtractor, eventId, startInstant, endInstant);
 	}
 
 	// internal helpers
-	
-	private String buildSessionHashtag(String hashtag, Short sessionCode) {
-		return hashtag + "-" + sessionCode;
-	}
 	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
@@ -67,15 +63,15 @@ public class JdbcEventRepository implements EventRepository {
 		public List<EventSession> extractData(ResultSet rs) throws SQLException, DataAccessException {
 			List<EventSession> sessions = new ArrayList<EventSession>();
 			EventSession session = null;
-			Short previousCode = null;
+			Short previousNumber = null;
 			while (rs.next()) {
-				Short code = rs.getShort("code");
-				if (!code.equals(previousCode)) {
-					session = new EventSession(code, rs.getString("title"), new DateTime(rs.getTimestamp("startTime")), new DateTime(rs.getTimestamp("endTime")), rs.getString("description"));
+				Short number = rs.getShort("number");
+				if (!number.equals(previousNumber)) {
+					session = new EventSession(number, rs.getString("title"), new DateTime(rs.getTimestamp("startTime")), new DateTime(rs.getTimestamp("endTime")), rs.getString("description"), rs.getString("hashtag"));
 					sessions.add(session);
 				}
 				session.addLeader(new EventSessionLeader(rs.getString("firstName"), rs.getString("lastName")));				
-				previousCode = code;
+				previousNumber = number;
 			}
 			return sessions;			
 		}
