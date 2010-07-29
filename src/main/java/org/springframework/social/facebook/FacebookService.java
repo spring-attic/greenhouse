@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 public class FacebookService implements FacebookOperations {
@@ -37,5 +39,25 @@ public class FacebookService implements FacebookOperations {
         }
 	    return friendIds;
     }
+	
+	public void postToWall(String accessToken, String message) {
+		MultiValueMap<String, String> map = createBaseWallMessage(accessToken, message);
+		restTemplate.postForLocation("https://graph.facebook.com/me/feed", map);
+	}
+	
+	public void postToWall(String accessToken, String message, FacebookLink link) {
+		MultiValueMap<String, String> map = createBaseWallMessage(accessToken, message);
+		map.set("link", link.getLink());
+		map.set("name", link.getName());
+		map.set("caption", link.getCaption());
+		map.set("description", link.getDescription());		
+		restTemplate.postForLocation("https://graph.facebook.com/me/feed", map);
+	}
 
+	private MultiValueMap<String, String> createBaseWallMessage(String accessToken, String message) {
+	    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>(); 
+		map.set("access_token", accessToken);
+		map.set("message", message);
+	    return map;
+    }
 }
