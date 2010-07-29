@@ -21,7 +21,7 @@
 			</span>
 		</dt>
 		<dd class="event">
-			<c:out value="${event.description}" />
+			<c:out value="${event.description}" escapeXml="true"/>
 		</dd>
 	</c:forEach>
 	</dl>
