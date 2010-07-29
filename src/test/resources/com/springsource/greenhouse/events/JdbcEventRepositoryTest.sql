@@ -10,11 +10,11 @@ insert into Event (title, startTime, endTime, location, description, name, membe
 
 insert into EventTrack (event, code, name, description, chair) values (2, 'spr', 'Core Spring', 'The low-down on the core Spring Framework', 2);
 
-insert into EventSession (event, title, startTime, endTime, description, hashtag, track) values (2, 'Mastering MVC 3', '2010-07-27 14:00:00', '2010-07-27 15:00:00',
+insert into EventSession (event, number, title, startTime, endTime, description, hashtag, track) values (2, 1, 'Mastering MVC 3', '2010-07-27 14:00:00', '2010-07-27 15:00:00',
 	'A deep-dive into the latest capabilities of MVC, Spring''s REST-ful web application development platform. ', '#spr101', 'spr');
 insert into EventSessionLeader (event, session, leader) values (2, 1, 1);
 insert into EventSessionLeader (event, session, leader) values (2, 1, 2);
 
-insert into EventSession (event, title, startTime, endTime, description, hashtag, track) values (2, 'Developing Social-Ready Web Applications', '2010-07-27 15:00:00', '2010-07-27 16:00:00', 
+insert into EventSession (event, number, title, startTime, endTime, description, hashtag, track) values (2, 2, 'Developing Social-Ready Web Applications', '2010-07-27 15:00:00', '2010-07-27 16:00:00', 
 	'Businesses are increasingly recognizing the value of connecting with their customers on a more personal level....', '#spr102', 'spr');
 insert into EventSessionLeader (event, session, leader) values (2, 2, 2);
