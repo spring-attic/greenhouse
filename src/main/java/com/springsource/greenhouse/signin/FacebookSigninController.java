@@ -51,6 +51,9 @@ public class FacebookSigninController {
 	    		
 	    		return "redirect:/signin";
     		} else {
+	    		FlashMap.setInfoMessage("Your Facebook account is not linked to any Greenhouse profile. " +
+	    				"Please complete the following form to create a Greenhouse account. The form has " +
+	    				"been prefilled with information from your Facebook profile.");
         		return "redirect:/signup/fb";        			
     		}
         }

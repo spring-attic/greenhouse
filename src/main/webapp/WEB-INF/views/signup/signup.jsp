@@ -7,12 +7,17 @@
 	<div class="header">
   		<h2>Sign up</h2>
   		<s:bind path="*">
-  			<c:if test="${status.error}">
-		  		<div class="error">Unable to sign up.  Please complete all fields.</div>
-  			</c:if>
-  			<c:if test="${!status.error}">
-		  		<div class="info">Please complete the following form to create a Greenhouse account</div>
-  			</c:if>  			
+  		    <c:choose>
+	  			<c:when test="${status.error}">
+			  		<div class="error">Unable to sign up.  Please complete all fields.</div>
+	  			</c:when>
+				<c:when test="${not empty message}">
+					<div class="${message.type}">${message.text}</div>
+				</c:when>
+	  			<c:otherwise>
+			  		<div class="info">Please complete the following form to create a Greenhouse account</div>
+	  			</c:otherwise>  
+  			</c:choose>			
   		</s:bind>
 	</div>
   	<fieldset>
