@@ -9,7 +9,7 @@ insert into Update (text, updateTimestamp, member) values ('Keith Donald signed 
 insert into Update (text, updateTimestamp, member) values ('Craig Walls signed up', 1278017173970, 2);
 insert into Update (text, updateTimestamp, member) values ('Roy Clarkson signed up', 1274015177470, 3);
 
-insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier event for Spring technologies', 'springone2gx', '#ignore', 1);
+insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier event for Spring technologies', 'springone2gx', '#springone2gx', 1);
 
 insert into Event (title, startDate, endDate, location, description, name, memberGroup) values ('SpringOne/2GX', '2010-10-19', '2010-10-22', 'Chicago, IL', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 'chicago', 1);
 
