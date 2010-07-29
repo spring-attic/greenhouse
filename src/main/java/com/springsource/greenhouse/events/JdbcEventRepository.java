@@ -28,11 +28,11 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<Event> findUpcomingEvents() {		
-		return jdbcTemplate.query("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where e.endDate > ? order by e.startDate", eventMapper, new Date());
+		return jdbcTemplate.query("select e.id, e.title, e.startTime, e.endTime, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where e.endTime > ? order by e.startTime", eventMapper, new Date());
 	}
 	
-	public Event findEventByName(String group, Integer year, Integer month,String name) {
-		return jdbcTemplate.queryForObject("select e.id, e.title, e.startDate, e.endDate, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where g.profileKey = ? and extract(year from e.startDate) = ? and extract(month from e.startDate) = ? and e.name = ?", eventMapper, group, year, month, name);
+	public Event findEventByName(String group, Integer year, Integer month, String name) {
+		return jdbcTemplate.queryForObject("select e.id, e.title, e.startTime, e.endTime, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e inner join MemberGroup g on e.memberGroup = g.id where g.profileKey = ? and extract(year from e.startTime) = ? and extract(month from e.startTime) = ? and e.name = ?", eventMapper, group, year, month, name);
 	}
 
 	public String findEventHashtag(Long eventId) {
@@ -54,7 +54,7 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			return new Event(rs.getLong("id"), rs.getString("title"), new DateTime(rs.getTimestamp("startDate")), new DateTime(rs.getTimestamp("endDate")), rs.getString("location"), rs.getString("description"), rs.getString("name"),
+			return new Event(rs.getLong("id"), rs.getString("title"), new DateTime(rs.getTimestamp("startTime")), new DateTime(rs.getTimestamp("endTime")), rs.getString("location"), rs.getString("description"), rs.getString("name"),
 					rs.getString("hashtag"), rs.getString("groupName"), rs.getString("groupProfileKey"));
 		}
 	};

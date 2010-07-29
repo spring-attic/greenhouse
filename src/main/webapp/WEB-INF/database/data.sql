@@ -13,8 +13,8 @@ insert into Update (text, updateTimestamp, member) values ('Roy Clarkson signed 
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier conference series for Spring technologies', 'springone2gx', '#springone2gx', 1);
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('Atlanta Spring Users Group', 'The Spring developers in the Greater Atlanta area', 'atl', '#atlspring', 1);
 
-insert into Event (title, startDate, endDate, location, description, name, memberGroup) values ('SpringOne/2GX', '2010-10-19', '2010-10-22', 'Chicago, IL', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 'chicago', 1);
-insert into Event (title, startDate, endDate, location, description, name, memberGroup) values ('Spring Integration 2', '2010-09-21 20:30:00', '2010-09-21 22:00:00', 'Atlanta, GA', 'Come learn the latest the Spring Integration project has to offer', 'int', 1);
+insert into Event (title, startTime, endTime, location, description, name, memberGroup) values ('SpringOne/2GX', '2010-10-19', '2010-10-22', 'Chicago, IL', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 'chicago', 1);
+insert into Event (title, startTime, endTime, location, description, name, memberGroup) values ('Spring Integration 2', '2010-09-21 20:30:00', '2010-09-21 22:00:00', 'Atlanta, GA', 'Come learn the latest the Spring Integration project has to offer', 'int', 1);
 
 -- SpringOne Chicago 2010
 

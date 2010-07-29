@@ -9,19 +9,19 @@
 	<c:forEach items="${eventList}" var="event">
 		<s:url value="/groups/{group}/events/{year}/{month}/{name}" var="eventUrl">
 			<s:param name="group" value="${event.groupProfileKey}" />
-			<s:param name="year" value="${event.startDate.year}" />
-			<s:param name="month" value="${event.startDate.monthOfYear}" />
+			<s:param name="year" value="${event.startTime.year}" />
+			<s:param name="month" value="${event.startTime.monthOfYear}" />
 			<s:param name="name" value="${event.name}" />
 		</s:url>
 		<dt class="event">
 			<a href="${eventUrl}"><c:out value="${event.title}" escapeXml="true"/></a> <br/>
 			<span class="locationAndDate">
-				<d:displayDateRange startDate="${event.startDate}" endDate="${event.endDate}"/> - 
+				<d:displayDateRange startTime="${event.startTime}" endTime="${event.endTime}" /> - 
 				<c:out value="${event.location}" escapeXml="true"/>
 			</span>
 		</dt>
 		<dd class="event">
-			<c:out value="${event.description}" escapeXml="true"/>
+			<c:out value="${event.description}" escapeXml="true" />
 		</dd>
 	</c:forEach>
 	</dl>
