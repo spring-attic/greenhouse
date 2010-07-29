@@ -2,17 +2,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib tagdir="/WEB-INF/tags/dates" prefix="d" %>
 
-<h2>${event.title}</h2>
+<h2><c:out value="${event.title}"/></h2>
 
 <div id="eventInfo">
 	<p>
 		<strong>When:</strong> <d:displayDateRange startDate="${event.startDate}" endDate="${event.endDate}" />
 	</p>
 	<p>
-		<strong>Where:</strong> ${event.location}
+		<strong>Where:</strong> <c:out value="${event.location}" escapeXml="true"/>
 	</p>
 	<p>
-		<c:out value="${event.description}" />
+		<c:out value="${event.description}" escapeXml="true"/>
 	</p>		
 </div>
 
