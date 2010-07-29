@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class DeviceDetectingHandlerInterceptor implements HandlerInterceptor {
 
-	public static final String DEVICE_ATTRIBUTE = "wurflDevice";
+	public static final String CURRENT_DEVICE_ATTRIBUTE = "currentDevice";
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -27,14 +27,12 @@ public class DeviceDetectingHandlerInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {
 		String userAgent = request.getHeader("User-Agent");
 		Device device = wurflManager.getDeviceForRequest(userAgent);
-		Device defaultDevice = new DefaultDevice(device);
-		
 		if (device != null) {
+			device = new DeviceModel(device);
 			if (logger.isDebugEnabled()) {
-				logger.debug("Device: " + device.getId());
-				logger.debug("Mobile Browser: " + device.getCapability("mobile_browser"));
+				logger.debug("Device for request is: " + device);
 			}
-			request.setAttribute(DEVICE_ATTRIBUTE, defaultDevice);
+			request.setAttribute(CURRENT_DEVICE_ATTRIBUTE, new DeviceModel(device));
 		}
 		return true;
 	}

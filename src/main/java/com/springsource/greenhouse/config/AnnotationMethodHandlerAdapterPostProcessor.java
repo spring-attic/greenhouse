@@ -2,19 +2,17 @@ package com.springsource.greenhouse.config;
 
 import javax.inject.Inject;
 
-import net.sourceforge.wurfl.core.Device;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
-import org.springframework.mobile.DeviceDetectingHandlerInterceptor;
+import org.springframework.mobile.DeviceWebArgumentResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;
 import org.springframework.social.facebook.FacebookUserWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
 import com.springsource.greenhouse.account.Account;
@@ -50,16 +48,6 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 		return bean;
 	}
 
-	private static class DeviceWebArgumentResolver implements WebArgumentResolver {
-		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
-			if (Device.class.isAssignableFrom(param.getParameterType())) {
-				return request.getAttribute(DeviceDetectingHandlerInterceptor.DEVICE_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
-			} else {
-				return WebArgumentResolver.UNRESOLVED;
-			}
-		}
-	}
-	
 	private static class GreenhouseUserDetailsWebArgumentResolver implements WebArgumentResolver {
 		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
 			if (Account.class.isAssignableFrom(param.getParameterType())) {

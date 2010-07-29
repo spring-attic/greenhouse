@@ -1,8 +1,6 @@
 package com.springsource.greenhouse.signin;
 
-import net.sourceforge.wurfl.core.Device;
-import net.sourceforge.wurfl.core.handlers.AppleHandler;
-
+import org.springframework.mobile.DeviceModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,12 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class SigninController {
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public String signin(Device device) {
-		if (new AppleHandler().canHandle(device.getUserAgent())) {
-			return "signin-iphone";
-		}
-		else {
-			return "signin";
-		}
+	public String signin(DeviceModel device) {
+		return device.isApple() ? "signin-iphone" : "signin";
 	}
 }
