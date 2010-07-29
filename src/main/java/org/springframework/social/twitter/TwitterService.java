@@ -177,7 +177,6 @@ public class TwitterService implements TwitterOperations {
 	}
 
 	// to support unit testing
-
 	void setRestTemplate(RestTemplate mock) {
 		this.restTemplate = mock;
 	}
