@@ -32,7 +32,7 @@ public class FacebookInviteController {
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(@FacebookAccessToken String accessToken, Model model) {
 		List<String> friendIds = facebook.getFriendIds(accessToken);		
-		model.addAttribute("friends", accountRepository.findFriendAccounts("facebook", friendIds));
+		model.addAttribute("friendAccounts", accountRepository.findFriendAccounts("facebook", friendIds));
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, params="skip=1")

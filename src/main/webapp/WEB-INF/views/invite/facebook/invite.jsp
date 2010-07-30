@@ -2,18 +2,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags/urls" prefix="u" %>
 
-<div>
-	<c:if test="${not empty friends}">
-	<h2>Some of your Facebook friends are already Greenhouse members</h2>
-	<ul>
-		<c:forEach var="friend" items="${friends}">
-		<li>
-			<a href="<s:url value="/members/${friend.username}" />">${friend.name}</a>
-		</li>
-		</c:forEach>
-	</ul>
-	<h2>Invite more Facebook friends</h2>
-	</c:if>
+<h2>Invite Facebook Friends</h2>
+
+<c:if test="${not empty friendAccounts}">
+<h3>Some of your friends are already in the Greenhouse</h3>
+<ul>
+	<c:forEach var="friendAccount" items="${friendAccounts}">
+	<li>
+		<a href="<s:url value="/members/${friendAccount.memberProfileKey}" />">${friendAccount.fullName}</a>
+	</li>
+	</c:forEach>
+</ul>
+<h3>Invite more...</h3>
+</c:if>
 <fb:serverfbml style="width: 625px;">
 	<script type="text/fbml">
 		<fb:fbml>
@@ -23,4 +24,3 @@
 		</fb:fbml>
 	</script>
 </fb:serverfbml>
-</div>        
