@@ -19,7 +19,9 @@ import com.springsource.greenhouse.utils.SecurityUtils;
 @Controller
 @RequestMapping("/signin")
 public class FacebookSigninController {	
+	
 	private final FacebookOperations facebook;
+	
 	private final AccountRepository accountRepository;
 
 	@Inject
@@ -31,26 +33,25 @@ public class FacebookSigninController {
 	@RequestMapping(value="/fb", method=RequestMethod.POST)
 	public String signinWithFacebook(@FacebookAccessToken String accessToken) {				
 		try {
-			Account account = accountRepository.findByConnectedAccount(accessToken, "facebook");
+			Account account = accountRepository.findByConnectedAccount("facebook", accessToken);
 	        SecurityUtils.signin(account);
 	        return "redirect:/";
 		} catch (ConnectedAccountNotFoundException e) {
-        	return handleUnlinkedAccount(accessToken);
+        	return handleConnectedAccountNotFound(accessToken);
 		}
 	}
 
-	private String handleUnlinkedAccount(String accessToken) {
+	private String handleConnectedAccountNotFound(String accessToken) {
 	    try {
 		    FacebookUserInfo userInfo = facebook.getUserInfo(accessToken);		    
 	        accountRepository.findByUsername(userInfo.getEmail());
-	    	FlashMap.setWarningMessage("It looks like your Facebook profile is not linked to your Greenhouse " +
-	    		"profile. To connect them, sign in and then go to the settings page.");
-
+	    	FlashMap.setWarningMessage("Your Facebook account is not linked with your Greenhouse account. " +
+	    		"To connect them, sign in and then go to the Settings page.");
 	    	return "redirect:/signin";
 	    } catch (UsernameNotFoundException e1) {
-	    	FlashMap.setInfoMessage("Your Facebook account is not linked to any Greenhouse profile. " +
-	    			"Please complete the following form to create a Greenhouse account. The form has " +
-	    			"been prefilled with information from your Facebook profile.");
+	    	FlashMap.setInfoMessage("Your Facebook account is not linked with a Greenhouse account. " +
+	    			"If you do not have a Greenhouse account, complete the following form to create one. " +
+	    			"If you already have an account, sign in with your username and password, then go to the Settings page to connect with Facebook.");
 	    	return "redirect:/signup/fb";        			
 	    }
     }

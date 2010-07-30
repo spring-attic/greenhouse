@@ -2,6 +2,10 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
+<c:if test="${not empty message}">
+	<div class="${message.type}">${message.text}</div>
+</c:if>
+
 <c:url value="/signup" var="signupUrl" />
 <form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm">
 	<div class="formInfo">

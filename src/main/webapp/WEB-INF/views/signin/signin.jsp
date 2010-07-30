@@ -1,5 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<c:if test="${not empty message}">
+	<div class="${message.type}">${message.text}</div>
+</c:if>
+
 <form id="signin" action="<c:url value="/signin/authenticate" />" method="post">
 	<div class="formInfo">
   		<h2>Sign in</h2>
