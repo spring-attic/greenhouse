@@ -3,6 +3,7 @@ insert into Member (firstName, lastName, email, password, username) values ('Cra
 insert into Member (firstName, lastName, email, password, username) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'atlanta', 'rclarkson');
 insert into Member (firstName, lastName, email, password, username) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', 'churchkeys', 'jgrelle');
 insert into Member (firstName, lastName, email, password, username) values ('Mark', 'Fisher', 'mfisher@vmware.com', 'boston', 'mfisher');
+insert into Member (firstName, lastName, email, password, username) values ('Keri', 'Donald', 'keridonald@gmail.com', 'melbourne', 'kkdonald');
 
 insert into App (consumerKey, name, description, website, callbackUrl, secret, owner) values ('a08318eb478a1ee31f69a55276f3af64', 'Greenhouse for the iPhone', 'Awesome', 'http://www.springsource.com', 'x-com-springsource-greenhouse://oauth-response', '80e7f8f7ba724aae9103f297e5fb9bdf', 2);
 
@@ -44,4 +45,3 @@ insert into EventSessionLeader (event, session, leader) values (1, 4, 4);
 
 insert into EventSession (event, number, title, startTime, endTime, description) values (2, 1, 'Spring Integration 2', '2010-9-21 20:30:00', '2010-9-21 22:00:00', 'Spring Integration 2 inside and out.');
 insert into EventSessionLeader (event, session, leader) values (2, 1, 5);
-

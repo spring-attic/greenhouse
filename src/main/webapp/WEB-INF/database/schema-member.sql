@@ -16,22 +16,24 @@ create table App (consumerKey varchar,
 				primary key (consumerKey),
 				foreign key (owner) references Member(id));
 					
-create table ConnectedApp (accessToken varchar not null unique,
-					app varchar,
+create table ConnectedApp (app varchar,
 					member bigint,
+					accessToken varchar not null unique,					
 					secret varchar not null,
 					primary key (app, member),
 					foreign key (member) references Member(id),
 					foreign key (app) references App(consumerKey));
 					
-create table ConnectedAccount (accessToken varchar not null,
-					member bigint not null,
-					externalId varchar,
-					accountName varchar,
-					secret varchar not null,
-					primary key (member, accountName),
+create table ConnectedAccount (member bigint,
+					provider varchar,
+					accessToken varchar not null,					
+					accountId varchar,
+					secret varchar, -- oauth1 only
+					primary key (member, provider),
 					foreign key (member) references Member(id));
-                    					
+create unique index AccessTokenKey on ConnectedAccount(provider, accessToken);
+create unique index ProviderAccountKey on ConnectedAccount(provider, accountId); 
+
 create table ResetPassword (token varchar,
 					member bigint not null,
 					primary key (token),

@@ -115,7 +115,7 @@ public class JdbcOAuthProviderTokenServices implements OAuthProviderTokenService
 	
 	private Authentication createUserAuthentication(Long memberId) {
 		Collection<GrantedAuthority> authorities = Collections.emptySet();
-		Account account = accountRepository.findAccount(memberId);
+		Account account = accountRepository.findById(memberId);
 		return new UsernamePasswordAuthenticationToken(account, "OAuth", authorities);
 	}
 	

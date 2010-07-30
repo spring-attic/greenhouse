@@ -59,7 +59,7 @@ public class ResetPasswordController {
 		}
 		try {
 			service.changePassword(token, form.getPassword());
-			FlashMap.setSuccessMessage("Your password has been reset successfully");
+			FlashMap.setSuccessMessage("Your password has been reset");
 			return "redirect:/reset";
 		} catch (InvalidResetTokenException e) {
 			FlashMap.setErrorMessage("Your reset password session has expired.  Please try again.");

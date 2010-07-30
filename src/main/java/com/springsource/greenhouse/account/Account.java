@@ -2,6 +2,7 @@ package com.springsource.greenhouse.account;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public final class Account implements Serializable {
 	
 	private final Long id;

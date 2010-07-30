@@ -42,16 +42,12 @@ public class FacebookSettingsController {
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
-			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
-		
+	public String connectAccountToFacebook(HttpServletRequest request, Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
 		if(StringUtils.hasText(accessToken)) {			
-			accountRepository.connectAccount(account.getId(), facebookId, "facebook", accessToken, "facebook");
-			
+			accountRepository.connect(account.getId(), "facebook", accessToken, facebookId);		
 			if(request.getParameter("postIt") != null) {
 				postGreenhouseConnectionToWall(request, account, accessToken);
 			}
-			
 			FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
 		}
 		return "redirect:/settings/facebook";
@@ -68,7 +64,7 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.DELETE)
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
-		accountRepository.removeConnectedAccount(account.getId(), "facebook");
+		accountRepository.disconnect(account.getId(), "facebook");
 		return "redirect:/settings/facebook";
 	}
 }

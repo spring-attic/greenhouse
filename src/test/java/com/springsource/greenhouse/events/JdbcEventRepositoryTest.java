@@ -47,7 +47,7 @@ public class JdbcEventRepositoryTest {
 	
 	@Test
 	public void findEventByName() {
-		Event event = eventRepository.findEventByName("springone2gx", 2010, 07, "chitown");
+		Event event = eventRepository.findEventByName("springone2gx", 2010, 8, "chitown");
 		assertNotNull(event);
 		assertEquals("Soon_Event", event.getTitle());
 	}

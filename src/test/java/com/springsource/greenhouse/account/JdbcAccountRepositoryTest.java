@@ -1,6 +1,11 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,64 +39,70 @@ public class JdbcAccountRepositoryTest {
     }
     
     @Test
-    public void shouldFindAccountById() {
-    	assertExpectedAccount(accountRepository.findAccount(1L));
+    public void findById() {
+    	assertExpectedAccount(accountRepository.findById(1L));
     }
     
     @Test 
-    public void shouldFindAccountByEmail() throws Exception {
-    	assertExpectedAccount(accountRepository.findAccount("cwalls@vmware.com"));
+    public void findtByEmail() throws Exception {
+    	assertExpectedAccount(accountRepository.findByUsername("cwalls@vmware.com"));
     }
     
     @Test
-    public void shouldFindAccountByUsername() throws Exception {
-    	assertExpectedAccount(accountRepository.findAccount("habuma"));
+    public void findByUsername() throws Exception {
+    	assertExpectedAccount(accountRepository.findByUsername("habuma"));
     }
     
-    
     @Test(expected=UsernameNotFoundException.class)
-    public void shouldThrowUsernameNotFoundExceptionForUnknownUsername() throws Exception {
-    	accountRepository.findAccount("strangerdanger");
+    public void usernameNotFound() throws Exception {
+    	accountRepository.findByUsername("strangerdanger");
     }
         
     @Test(expected=UsernameNotFoundException.class)
-    public void shouldThrowUsernameNotFoundExceptionForUnknownEmailAddress() throws Exception {
-    	accountRepository.findAccount("stranger@danger.com");
+    public void usernameNotFoundEmail() throws Exception {
+    	accountRepository.findByUsername("stranger@danger.com");
     }
 
     @Test
-    public void shouldFindConnectedAccount() throws Exception {
-    	assertExpectedAccount(accountRepository.findByConnectedAccount("accesstoken", "facebook"));
+    public void findConnectedAccount() throws Exception {
+    	assertExpectedAccount(accountRepository.findByConnectedAccount("facebook", "accesstoken"));
     }
 
     @Test(expected=ConnectedAccountNotFoundException.class)
-    public void shouldThrowExceptionForUnknownConnection() throws Exception {
+    public void connectedAccountNotFound() throws Exception {
     	accountRepository.findByConnectedAccount("badtoken", "facebook");
     }
     
     @Test
-    public void shouldRemoveConnectedAccount() {
-    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
-    	accountRepository.removeConnectedAccount(1L, "facebook");
-    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
+    public void findFriendAccounts() throws Exception {
+    	List<Account> accounts = accountRepository.findFriendAccounts("facebook", Collections.singletonList("1"));
+    	assertEquals(1, accounts.size());
+    	assertExpectedAccount(accounts.get(0));
     }
     
     @Test
-    public void shouldConnectAccount() throws Exception {
-    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
-    	accountRepository.connectAccount(1L, "habuma", "twitter", "newToken", "secret");
-    	assertEquals(2, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
-    	assertExpectedAccount(accountRepository.findByConnectedAccount("newToken", "twitter"));
+    public void disconnectAccount() {
+    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
+    	accountRepository.disconnect(1L, "facebook");
+    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
+    }
+    
+    @Test
+    public void connectAccount() throws Exception {
+    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
+    	accountRepository.connect(1L, "tripit", "accessToken", "cwalls");
+    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
+    	assertExpectedAccount(accountRepository.findByConnectedAccount("tripit", "accessToken"));
     }
 
     @Test
-    public void shouldBeConnected() {
+    public void isConnected() {
     	assertTrue(accountRepository.isConnected(1L, "facebook"));
     }
 
     @Test
-    public void shouldNotBeConnected() {
-    	assertFalse(accountRepository.isConnected(1L, "twitter"));
+    public void notConnected() {
+    	assertFalse(accountRepository.isConnected(1L, "tripit"));
     }
 
 	private void assertExpectedAccount(Account account) {
