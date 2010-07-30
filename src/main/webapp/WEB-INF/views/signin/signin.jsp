@@ -24,6 +24,7 @@
 	<input type="submit" value="Sign In"/>
 </form>
 
+<c:if test="${!currentDevice.mobileBrowser}">
 <form id="fb_signin" action="<c:url value="/signin/fb" />" method="post">
 <%-- Unfortunately, offline access is the only way to get an access token that doesn't expire. 
 	Facebook currently doesn't implement the refresh_token fragment of section 3.5.1 of the
@@ -33,3 +34,4 @@
 	app may access their information even if they're not logged in. --%>
 	<fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in with Facebook</fb:login-button>
 </form>
+</c:if>
