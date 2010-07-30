@@ -34,63 +34,63 @@ public class JdbcAccountRepositoryTest {
     }
     
     @Test
-    public void shouldFindAccountById() {
-    	assertExpectedAccount(accountRepository.findAccount(1L));
+    public void findAccountById() {
+    	assertExpectedAccount(accountRepository.findById(1L));
     }
     
     @Test 
-    public void shouldFindAccountByEmail() throws Exception {
-    	assertExpectedAccount(accountRepository.findAccount("cwalls@vmware.com"));
+    public void findAccountByEmail() throws Exception {
+    	assertExpectedAccount(accountRepository.findByUsername("cwalls@vmware.com"));
     }
     
     @Test
-    public void shouldFindAccountByUsername() throws Exception {
-    	assertExpectedAccount(accountRepository.findAccount("habuma"));
+    public void findAccountByUsername() throws Exception {
+    	assertExpectedAccount(accountRepository.findByUsername("habuma"));
     }
     
     
     @Test(expected=UsernameNotFoundException.class)
-    public void shouldThrowUsernameNotFoundExceptionForUnknownUsername() throws Exception {
-    	accountRepository.findAccount("strangerdanger");
+    public void throwUsernameNotFoundExceptionForUnknownUsername() throws Exception {
+    	accountRepository.findByUsername("strangerdanger");
     }
         
     @Test(expected=UsernameNotFoundException.class)
-    public void shouldThrowUsernameNotFoundExceptionForUnknownEmailAddress() throws Exception {
-    	accountRepository.findAccount("stranger@danger.com");
+    public void throwUsernameNotFoundExceptionForUnknownEmailAddress() throws Exception {
+    	accountRepository.findByUsername("stranger@danger.com");
     }
 
     @Test
-    public void shouldFindConnectedAccount() throws Exception {
-    	assertExpectedAccount(accountRepository.findByConnectedAccount("accesstoken", "facebook"));
+    public void findConnectedAccount() throws Exception {
+    	assertExpectedAccount(accountRepository.findByConnectedAccount("facebook", "accesstoken"));
     }
 
     @Test(expected=ConnectedAccountNotFoundException.class)
-    public void shouldThrowExceptionForUnknownConnection() throws Exception {
+    public void throwExceptionForUnknownConnection() throws Exception {
     	accountRepository.findByConnectedAccount("badtoken", "facebook");
     }
     
     @Test
-    public void shouldRemoveConnectedAccount() {
+    public void disconnectAccount() {
     	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
-    	accountRepository.removeConnectedAccount(1L, "facebook");
+    	accountRepository.disconnect(1L, "facebook");
     	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
     }
     
     @Test
-    public void shouldConnectAccount() throws Exception {
+    public void connectAccount() throws Exception {
     	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
-    	accountRepository.connectAccount(1L, "habuma", "twitter", "newToken", "secret");
+    	accountRepository.connect(1L, "twitter", "newToken");
     	assertEquals(2, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount"));
-    	assertExpectedAccount(accountRepository.findByConnectedAccount("newToken", "twitter"));
+    	assertExpectedAccount(accountRepository.findByConnectedAccount("twitter", "newToken"));
     }
 
     @Test
-    public void shouldBeConnected() {
+    public void isConnected() {
     	assertTrue(accountRepository.isConnected(1L, "facebook"));
     }
 
     @Test
-    public void shouldNotBeConnected() {
+    public void notConnected() {
     	assertFalse(accountRepository.isConnected(1L, "twitter"));
     }
 

@@ -42,7 +42,7 @@ public class FacebookSigninController {
 	private String handleUnlinkedAccount(String accessToken) {
 	    try {
 		    FacebookUserInfo userInfo = facebook.getUserInfo(accessToken);		    
-	        accountRepository.findAccount(userInfo.getEmail());
+	        accountRepository.findByUsername(userInfo.getEmail());
 	    	FlashMap.setWarningMessage("It looks like your Facebook profile is not linked to your Greenhouse " +
 	    		"profile. To connect them, sign in and then go to the settings page.");
 

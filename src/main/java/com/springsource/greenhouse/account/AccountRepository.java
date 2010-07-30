@@ -2,15 +2,16 @@ package com.springsource.greenhouse.account;
 
 public interface AccountRepository {
 
-	Account findAccount(Long id);
+	Account findById(Long id);
 
-	Account findAccount(String username) throws UsernameNotFoundException;
+	Account findByUsername(String username) throws UsernameNotFoundException;
 	
-	Account findByConnectedAccount(String accessToken, String accountName) throws ConnectedAccountNotFoundException;
-	
-	void removeConnectedAccount(Long memberId, String accountName);
-	
-	void connectAccount(Long memberId, String externalId, String accountName, String accessToken, String secret);
+	Account findByConnectedAccount(String accountName, String accessToken) throws ConnectedAccountNotFoundException;
 
-	boolean isConnected(Long memberId, String accountName);
+	void connect(Long id, String accountName, String accessToken);
+
+	boolean isConnected(Long id, String accountName);
+
+	void disconnect(Long id, String accountName);
+		
 }

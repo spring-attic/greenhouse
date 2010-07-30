@@ -1,2 +1,2 @@
 insert into Member (firstName, lastName, email, password, username) values ('Craig', 'Walls', 'cwalls@vmware.com', 'password', 'habuma');
-insert into ConnectedAccount (accessToken, member, externalId, accountName, secret) values ('accesstoken', 1, 'externalId', 'facebook', 'shhhh');
+insert into ConnectedAccount (member, accountName, accessToken) values (1, 'facebook', 'accesstoken');

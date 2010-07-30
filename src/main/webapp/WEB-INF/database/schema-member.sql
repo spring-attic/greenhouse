@@ -26,9 +26,8 @@ create table ConnectedApp (accessToken varchar not null unique,
 					
 create table ConnectedAccount (accessToken varchar not null,
 					member bigint not null,
-					externalId varchar,
 					accountName varchar,
-					secret varchar not null,
+					secret varchar, -- oauth1 only
 					primary key (member, accountName),
 					foreign key (member) references Member(id));
                     					
