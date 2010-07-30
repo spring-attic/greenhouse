@@ -1,9 +1,12 @@
 package com.springsource.greenhouse.events;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.extras.OAuthAccessToken;
 import org.springframework.social.twitter.SearchResults;
@@ -50,6 +53,11 @@ public class EventsController {
 	@RequestMapping(value="/{id}/sessions/today", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> sessionsToday(@PathVariable Long id) {
 		return eventRepository.findTodaysSessions(id);
+	}
+	
+	@RequestMapping(value="/{id}/sessions/{date}", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody List<EventSession> sessionsToday(@PathVariable Long id, @PathVariable @DateTimeFormat(iso=ISO.DATE) Date date) {
+		return eventRepository.findSessionsByDate(id, date);
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")

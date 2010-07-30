@@ -49,6 +49,13 @@ public class JdbcEventRepository implements EventRepository {
 		Date endInstant = day.plusDays(1).toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
 		return jdbcTemplate.query("select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.event = l.event and s.number = l.session inner join Member m on l.leader = m.id where s.event = ? and s.startTime > ? and s.endTime < ?", eventSessionsExtractor, eventId, startInstant, endInstant);
 	}
+	
+	public List<EventSession> findSessionsByDate(Long eventId, Date date) {
+		LocalDate day = new LocalDate(date);
+		Date startInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
+		Date endInstant = day.plusDays(1).toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
+		return jdbcTemplate.query("select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.event = l.event and s.number = l.session inner join Member m on l.leader = m.id where s.event = ? and s.startTime > ? and s.endTime < ?", eventSessionsExtractor, eventId, startInstant, endInstant);
+	}
 
 	// internal helpers
 	
