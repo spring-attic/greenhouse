@@ -1,9 +1,14 @@
 package com.springsource.greenhouse.account;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
@@ -31,24 +36,32 @@ public class JdbcAccountRepository implements AccountRepository {
 		}
 	}
 	
-	public Account findByConnectedAccount(String accountName, String accessToken) throws ConnectedAccountNotFoundException {
+	public Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException {
 		try {
-			return jdbcTemplate.queryForObject(SELECT_BY_ACCESS_TOKEN, accountMapper, accountName, accessToken);
+			return jdbcTemplate.queryForObject(SELECT_BY_ACCESS_TOKEN, accountMapper, provider, accessToken);
 		} catch (EmptyResultDataAccessException e) {
-			throw new ConnectedAccountNotFoundException(accessToken, accountName);
+			throw new ConnectedAccountNotFoundException(accessToken, provider);
 		}
 	}
 	
-	public void connect(Long id, String accountName, String accessToken) {
-		jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, accountName, accessToken);
+	public List<Account> findFriendAccounts(String provider, List<String> friendIds) {
+		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+		Map<String, Object> params = new HashMap<String, Object>(2, 1);
+		params.put("provider", provider);
+		params.put("friendIds", friendIds);
+		return namedTemplate.query(SELECT_FRIEND_ACCOUNTS, params, accountMapper);
 	}
 
-	public boolean isConnected(Long id, String accountName) {
-		return jdbcTemplate.queryForInt(CONNECTION_COUNT, id, accountName) == 1;		
+	public void connect(Long id, String provider, String accessToken, String accountId) {
+		jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
 	}
 
-	public void disconnect(Long id, String accountName) {
-		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, accountName);
+	public boolean isConnected(Long id, String provider) {
+		return jdbcTemplate.queryForInt(SELECT_CONNECTION_COUNT, id, provider) == 1;		
+	}
+
+	public void disconnect(Long id, String provider) {
+		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, provider);
 	}
 
 	private static final String SELECT_BY_ID = 
@@ -61,14 +74,19 @@ public class JdbcAccountRepository implements AccountRepository {
 		"select id, firstName, lastName, email, username from Member where username = ?";
 	
 	private static final String SELECT_BY_ACCESS_TOKEN = "select m.id, m.firstName, m.lastName, m.email, m.username from ConnectedAccount a " + 
-		"inner join Member m on a.member = m.id and a.accountName = ? and a.accessToken = ?";
-	
-	private static final String DELETE_CONNECTED_ACCOUNT = 
-		"delete from ConnectedAccount where member = ? and accountName = ?";
-	
+		"inner join Member m on a.member = m.id and a.provider = ? and a.accessToken = ?";
+
+	private static final String SELECT_FRIEND_ACCOUNTS = 
+		"select m.id, m.firstName, m.lastName, m.email, m.username from ConnectedAccount a " + 
+		"inner join Member m on a.member = m.id where provider = :provider and accountId in ( :friendIds )";
+
 	private static final String INSERT_CONNECTED_ACCOUNT = 
-		"insert into ConnectedAccount (member, accountName, accessToken) values (?, ?, ?)";
+		"insert into ConnectedAccount (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
 	
-	private static final String CONNECTION_COUNT = 
-		"select count(*) from ConnectedAccount where member = ? and accountName = ?";
+	private static final String SELECT_CONNECTION_COUNT = 
+		"select count(*) from ConnectedAccount where member = ? and provider = ?";
+
+	private static final String DELETE_CONNECTED_ACCOUNT = 
+		"delete from ConnectedAccount where member = ? and provider = ?";
+	
 }

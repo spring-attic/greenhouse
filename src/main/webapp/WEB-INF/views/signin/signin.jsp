@@ -1,13 +1,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <form id="signin" action="<c:url value="/signin/authenticate" />" method="post">
-	<div class="header">
+	<div class="formInfo">
   		<h2>Sign in</h2>
-		<c:if test="${not empty message}">
-			<div class="${message.type}">${message.text}</div>
-		</c:if>
   		<c:if test="${signinError}">
-  			<div class="error">Your sign in information was incorrect.  Please try again<c:if test="${!currentDevice.mobileBrowser}"> or <a href="<c:url value="/signup" />">sign up</a></c:if>.</div>
+  		<div class="error">
+  			Your sign in information was incorrect.
+  			Please try again<c:if test="${!currentDevice.mobileBrowser}"> or <a href="<c:url value="/signup" />">sign up</a></c:if>.
+  		</div>
  	 	</c:if>
 	</div>
   	<fieldset>

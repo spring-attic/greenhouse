@@ -4,40 +4,35 @@
 
 <c:url value="/signup" var="signupUrl" />
 <form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm">
-	<div class="header">
+	<div class="formInfo">
   		<h2>Sign up</h2>
   		<s:bind path="*">
   		    <c:choose>
 	  			<c:when test="${status.error}">
-			  		<div class="error">Unable to sign up.  Please complete all fields.</div>
+			  		<div class="error">Unable to signup. Please fix the errors below and resubmit.</div>
 	  			</c:when>
-				<c:when test="${not empty message}">
-					<div class="${message.type}">${message.text}</div>
-				</c:when>
-	  			<c:otherwise>
-			  		<div class="info">Please complete the following form to create a Greenhouse account</div>
-	  			</c:otherwise>  
   			</c:choose>			
   		</s:bind>
+  		<p>Please complete the following form to create a Greenhouse account</p>  		
 	</div>
   	<fieldset>
   		<form:label path="firstName">
-  			First Name <form:errors path="firstName" cssClass="fieldError" />
+  			First Name <form:errors path="firstName" cssClass="error" />
  		</form:label>
   		<form:input path="firstName" />
   		
   		<form:label path="lastName">
-  			Last Name <form:errors path="lastName" cssClass="fieldError" />
+  			Last Name <form:errors path="lastName" cssClass="error" />
  		</form:label>
   		<form:input path="lastName" />
   		
   		<form:label path="email">
-  			Email <form:errors path="email" cssClass="fieldError" />
+  			Email <form:errors path="email" cssClass="error" />
   		</form:label>
   		<form:input path="email" />
   		
   		<form:label path="password">
-  			Password (at least 6 characters) <form:errors path="passwordConfirmed" cssClass="fieldError" />
+  			Password (at least 6 characters) <form:errors path="passwordConfirmed" cssClass="error" />
   		</form:label>
   		<form:password path="password" />
 

@@ -4,17 +4,16 @@
 
 <div>
 	<c:if test="${not empty friends}">
-	<h3>Some of your Facebook friends are already Greenhouse members:</h3>
+	<h2>Some of your Facebook friends are already Greenhouse members</h2>
 	<ul>
 		<c:forEach var="friend" items="${friends}">
-			<li>
-				<a href="<s:url value="/members/${friend.username}" />">${friend.name}</a>
-			</li>
+		<li>
+			<a href="<s:url value="/members/${friend.username}" />">${friend.name}</a>
+		</li>
 		</c:forEach>
 	</ul>
-	<h3>But you can invite some more...</h3>
+	<h2>Invite more Facebook friends</h2>
 	</c:if>
-	
 <fb:serverfbml style="width: 625px;">
 	<script type="text/fbml">
 		<fb:fbml>

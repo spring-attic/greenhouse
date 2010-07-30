@@ -44,7 +44,7 @@ public class FacebookSettingsController {
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
 	public String connectAccountToFacebook(HttpServletRequest request, Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
 		if(StringUtils.hasText(accessToken)) {			
-			accountRepository.connect(account.getId(), "facebook", accessToken);			
+			accountRepository.connect(account.getId(), "facebook", accessToken, facebookId);		
 			if(request.getParameter("postIt") != null) {
 				postGreenhouseConnectionToWall(request, account, accessToken);
 			}

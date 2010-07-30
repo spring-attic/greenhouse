@@ -86,20 +86,20 @@ form button:active {
 }
 
 /* information */
-form .header {
+form .formInfo {
 	margin-bottom: 1em;
 	padding-bottom: 0.5em;
 	border-bottom: 0.1em solid #ddd;
 }
 
-form .header h2 {
+form .formInfo h2 {
 	color: #00889e;
 	font-weight: bold;
 	font-size: 1.2em;
 	margin-bottom: 1em
 }
 
-form .header p {
+form .formInfo p {
 	text-align: justify
 }
 

@@ -44,4 +44,3 @@ insert into EventSessionLeader (event, session, leader) values (1, 4, 4);
 
 insert into EventSession (event, number, title, startTime, endTime, description) values (2, 1, 'Spring Integration 2', '2010-9-21 20:30:00', '2010-9-21 22:00:00', 'Spring Integration 2 inside and out.');
 insert into EventSessionLeader (event, session, leader) values (2, 1, 5);
-

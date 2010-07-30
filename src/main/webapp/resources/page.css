@@ -8,6 +8,10 @@ body {
 	width: 763px;
 }
 
+ul li {
+	padding: 5px;
+}
+
 #topbar {
 	text-align: right;
 }

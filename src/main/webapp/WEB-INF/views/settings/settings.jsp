@@ -6,15 +6,15 @@
 <div id="apps">
 	<h3>Connected Apps</h3>
 	<ul>
-		<c:forEach var="app" items="${apps}">
-			<li>
-				${app.name}
-				<form action="settings/apps/${app.accessToken}" method="post">
-					<input type="submit" value="Disconnect" />
-					<input type="hidden" name="_method" value="DELETE" />
-				</form>
-			</li>
-		</c:forEach>
+	<c:forEach var="app" items="${apps}">
+		<li>
+			${app.name}
+			<form action="settings/apps/${app.accessToken}" method="post">
+				<input type="submit" value="Disconnect" />
+				<input type="hidden" name="_method" value="DELETE" />
+			</form>
+		</li>
+	</c:forEach>
 	</ul>
 </div>
 
@@ -24,9 +24,8 @@
 		<h4>Twitter</h4>
 		<a href="<s:url value="/settings/twitter" />">Connect to Twitter</a>	
 	</div>
-		<div id="facebook">
+	<div id="facebook">
 		<h4>Facebook</h4>
 		<a href="<s:url value="/settings/facebook" />">Connect to Facebook</a>	
 	</div>
-	
 </div>

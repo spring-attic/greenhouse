@@ -14,9 +14,9 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 
 public class JdbcOAuthConsumerTokenServices extends HttpSessionBasedTokenServices {
 
-    static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (accessToken, member, accountName, secret) values (?, ?, ?, ?)";
-    static final String SELECT_TOKEN_SQL = "select accessToken, accountName, secret from ConnectedAccount where member = ? and accountName = ?";
-    static final String DELETE_TOKEN_SQL = "delete from ConnectedAccount where member = ? and accountName = ?";
+    static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (member, provider, accessToken, secret) values (?, ?, ?, ?)";
+    static final String SELECT_TOKEN_SQL = "select provider, accessToken, secret from ConnectedAccount where member = ? and provider = ?";
+    static final String DELETE_TOKEN_SQL = "delete from ConnectedAccount where member = ? and provider = ?";
 
 	private Long memberId;	
 
@@ -58,17 +58,16 @@ public class JdbcOAuthConsumerTokenServices extends HttpSessionBasedTokenService
 	}
 
 	private OAuthConsumerToken getTokenFromDatabase(String resourceId) {
-		List<OAuthConsumerToken> accessTokens = jdbcTemplate.query(
-				SELECT_TOKEN_SQL, new RowMapper<OAuthConsumerToken>() {
-					public OAuthConsumerToken mapRow(ResultSet rs, int rowNum) throws SQLException {
-						OAuthConsumerToken token = new OAuthConsumerToken();
-						token.setAccessToken(true);
-						token.setValue(rs.getString("accessToken"));
-						token.setResourceId(rs.getString("accountName"));
-						token.setSecret(rs.getString("secret"));
-						return token;
-					}
-				}, memberId, resourceId);
+		List<OAuthConsumerToken> accessTokens = jdbcTemplate.query(SELECT_TOKEN_SQL, new RowMapper<OAuthConsumerToken>() {
+			public OAuthConsumerToken mapRow(ResultSet rs, int rowNum) throws SQLException {
+				OAuthConsumerToken token = new OAuthConsumerToken();
+				token.setAccessToken(true);
+				token.setValue(rs.getString("accessToken"));
+				token.setResourceId(rs.getString("provider"));
+				token.setSecret(rs.getString("secret"));
+				return token;
+			}
+		}, memberId, resourceId);
 		OAuthConsumerToken accessToken = null;
 		if (accessTokens.size() > 0) {
 			accessToken = accessTokens.get(0);
@@ -77,6 +76,6 @@ public class JdbcOAuthConsumerTokenServices extends HttpSessionBasedTokenService
 	}
 
 	private void storeTokenInDB(OAuthConsumerToken token) {
-		jdbcTemplate.update(INSERT_TOKEN_SQL, token.getValue(), memberId, token.getResourceId(), token.getSecret());
+		jdbcTemplate.update(INSERT_TOKEN_SQL, memberId, token.getResourceId(), token.getValue(), token.getSecret());
 	}
 }
