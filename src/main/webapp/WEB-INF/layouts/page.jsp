@@ -15,7 +15,8 @@
 	<c:forEach var="style" items="${styles}">
 		<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
 	</c:forEach>	
-	<script type="text/javascript" src="<c:url value="/resources/jquery/jquery-1.4.2.js" />"></script>	
+	<script type="text/javascript" src="<c:url value="/resources/jquery/1.4/jquery.js" />"></script>	
+	<script type="text/javascript" src="<c:url value="/resources/jquery-cookie/1.0/jquery-cookie.js" />"></script>
 </head>
 <body>
 	<div id="fb-root"></div>
@@ -33,5 +34,8 @@
 	<c:forEach var="script" items="${scripts}">
 		<script type="text/javascript" src="<c:url value="/resources/${script}" />"></script>	
 	</c:forEach>
+<script type="text/javascript">
+$.cookie('Greenhouse.timeZoneOffset', new Date().getTimezoneOffset() / 60 * -1);
+</script>
 </body>
 </html>

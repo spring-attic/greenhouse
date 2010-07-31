@@ -8,9 +8,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -61,7 +61,7 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			return new Event(rs.getLong("id"), rs.getString("title"), new DateTime(rs.getTimestamp("startTime")), new DateTime(rs.getTimestamp("endTime")), rs.getString("location"), rs.getString("description"), rs.getString("name"),
+			return new Event(rs.getLong("id"), rs.getString("title"), new LocalDateTime(rs.getTimestamp("startTime")), new LocalDateTime(rs.getTimestamp("endTime")), rs.getString("location"), rs.getString("description"), rs.getString("name"),
 					rs.getString("hashtag"), rs.getString("groupName"), rs.getString("groupProfileKey"));
 		}
 	};
@@ -74,7 +74,7 @@ public class JdbcEventRepository implements EventRepository {
 			while (rs.next()) {
 				Short number = rs.getShort("number");
 				if (!number.equals(previousNumber)) {
-					session = new EventSession(number, rs.getString("title"), new DateTime(rs.getTimestamp("startTime")), new DateTime(rs.getTimestamp("endTime")), rs.getString("description"), rs.getString("hashtag"));
+					session = new EventSession(number, rs.getString("title"), new LocalDateTime(rs.getTimestamp("startTime")), new LocalDateTime(rs.getTimestamp("endTime")), rs.getString("description"), rs.getString("hashtag"));
 					sessions.add(session);
 				}
 				session.addLeader(new EventSessionLeader(rs.getString("firstName"), rs.getString("lastName")));				

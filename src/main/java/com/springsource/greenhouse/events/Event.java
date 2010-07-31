@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.events;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 public class Event {
 
@@ -8,9 +8,9 @@ public class Event {
 
 	private String title;
 
-	private DateTime startTime;
+	private LocalDateTime startTime;
 
-	private DateTime endTime;
+	private LocalDateTime endTime;
 
 	private String location;
 
@@ -24,7 +24,7 @@ public class Event {
 	
 	private String groupProfileKey;
 	
-	public Event(Long id, String title, DateTime startTime, DateTime endTime, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
+	public Event(Long id, String title, LocalDateTime startTime, LocalDateTime endTime, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
 		this.id = id;
 		this.title = title;
 		this.startTime = startTime;
@@ -45,11 +45,11 @@ public class Event {
 		return this.title;
 	}
 
-	public DateTime getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public DateTime getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 

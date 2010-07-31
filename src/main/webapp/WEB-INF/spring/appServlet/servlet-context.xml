@@ -32,6 +32,7 @@
      
 	<!-- Interceptors that execute common control logic across multiple requests -->
 	<interceptors>
+		<beans:bean class="com.springsource.greenhouse.DateTimeZoneHandlerInterceptor" />
 		<beans:bean class="com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor" />
 		<beans:bean class="org.springframework.mobile.DeviceDetectingHandlerInterceptor">
 			<beans:constructor-arg ref="wurflManager" />
