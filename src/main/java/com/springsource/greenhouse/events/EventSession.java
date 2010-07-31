@@ -3,7 +3,7 @@ package com.springsource.greenhouse.events;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
 
 public class EventSession {
 	
@@ -11,9 +11,9 @@ public class EventSession {
 	
 	private String title;
 	
-	private LocalDateTime startTime;
+	private DateTime startTime;
 	
-	private LocalDateTime endTime;
+	private DateTime endTime;
 
 	private String description;
 
@@ -21,7 +21,7 @@ public class EventSession {
 	
 	private Set<EventSessionLeader> leaders;
 		
-	public EventSession(Short number, String title, LocalDateTime startTime, LocalDateTime endTime, String description, String hashtag) {
+	public EventSession(Short number, String title, DateTime startTime, DateTime endTime, String description, String hashtag) {
 		this.number = number;
 		this.title = title;
 		this.startTime = startTime;
@@ -38,11 +38,11 @@ public class EventSession {
 		return title;
 	}
 
-	public LocalDateTime getStartTime() {
+	public DateTime getStartTime() {
 		return startTime;
 	}
 
-	public LocalDateTime getEndTime() {
+	public DateTime getEndTime() {
 		return endTime;
 	}
 
