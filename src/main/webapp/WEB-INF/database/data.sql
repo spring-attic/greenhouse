@@ -43,5 +43,5 @@ insert into EventSessionLeader (event, session, leader) values (1, 4, 4);
 
 -- Atlanta Spring Users Group September 2010
 
-insert into EventSession (event, number, title, startTime, endTime, description) values (2, 1, 'Spring Integration 2', '2010-9-21 23:30:00Z', '2010-9-22 00:00:00Z', 'Spring Integration 2 inside and out.');
+insert into EventSession (event, number, title, startTime, endTime, description) values (2, 1, 'Spring Integration 2', '2010-09-21 22:30:00Z', '2010-09-22 00:00:00Z', 'Spring Integration 2 inside and out.');
 insert into EventSessionLeader (event, session, leader) values (2, 1, 5);
