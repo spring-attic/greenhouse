@@ -23,5 +23,7 @@ public interface EventRepository {
 	List<EventFavorite> findFavorites(Long eventId);
 	
 	boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId);
+
+	void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value);
 	
 }

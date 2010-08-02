@@ -35,6 +35,7 @@ create table EventSession (event bigint not null,
 					description varchar,
 					hashtag varchar,
 					track varchar,
+					rating real,
 					primary key (event, number),
 					foreign key (event) references Event(id),
 					foreign key (event, track) references EventTrack(event, code));
@@ -49,6 +50,14 @@ create table EventSessionLeader (event bigint not null,
 create table EventSessionFavorite (event bigint not null,
 					session bigint not null,
 					attendee bigint not null,
+					primary key (event, session, attendee),
+					foreign key (event, session) references EventSession(event, number),
+					foreign key (attendee) references Member(id));
+
+create table EventSessionRating (event bigint not null,
+					session bigint not null,
+					attendee bigint not null,
+					rating tinyint not null check (rating in (1, 2, 3, 4, 5)),
 					primary key (event, session, attendee),
 					foreign key (event, session) references EventSession(event, number),
 					foreign key (attendee) references Member(id));

@@ -20,14 +20,20 @@ public class EventSession {
 	private String hashtag;
 	
 	private Set<EventSessionLeader> leaders;
-		
-	public EventSession(Short number, String title, DateTime startTime, DateTime endTime, String description, String hashtag) {
+	
+	private Float rating;
+
+	private Boolean favorite;
+	
+	public EventSession(Short number, String title, DateTime startTime, DateTime endTime, String description, String hashtag, Float rating, Boolean favorite) {
 		this.number = number;
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
 		this.hashtag = hashtag;
+		this.rating = rating;
+		this.favorite = favorite;
 	}
 
 	public Short getNumber() {
@@ -54,10 +60,18 @@ public class EventSession {
 		return hashtag;
 	}
 
+	public Float getRating() {
+		return rating;
+	}
+
+	public boolean isFavorite() {
+		return favorite;
+	}
+	
 	public Set<EventSessionLeader> getLeaders() {
 		return leaders;
 	}
-
+	
 	public void addLeader(EventSessionLeader leader) {
 		if (leaders == null) {
 			leaders = new LinkedHashSet<EventSessionLeader>();

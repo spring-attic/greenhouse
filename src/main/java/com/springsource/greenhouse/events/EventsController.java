@@ -75,7 +75,12 @@ public class EventsController {
 	@RequestMapping(value="/{id}/sessions/{number}/favorite", method=RequestMethod.PUT)
 	public @ResponseBody Boolean toggleFavorite(@PathVariable Long id, @PathVariable Short number, Account account) {
 		return eventRepository.toggleFavorite(id, number, account.getId());
-	}	
+	}
+
+	@RequestMapping(value="/{id}/sessions/{number}/rating", method=RequestMethod.PUT)
+	public @ResponseBody void updateRating(@PathVariable Long id, @PathVariable Short number, Account account, @RequestParam Short value) {
+		eventRepository.updateRating(id, number, account.getId(), value);
+	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long id, @PathVariable Short number, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
