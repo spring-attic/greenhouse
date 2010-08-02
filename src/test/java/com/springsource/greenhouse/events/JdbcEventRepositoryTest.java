@@ -1,8 +1,11 @@
 package com.springsource.greenhouse.events;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.After;
@@ -64,24 +67,42 @@ public class JdbcEventRepositoryTest {
 
 	@Test
 	public void findTodaysSessions() {
-		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(1L, 1L);
-		assertEquals(0, todaysSessions.size());
-
-		/* TODO make this test resilient to natural time change
+		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(2L, 2L);
 		assertEquals(2, todaysSessions.size());
-		EventSession s1 = todaysSessions.get(0);
-		assertEquals("Developing Social-Ready Web Applications", s1.getTitle());
-		assertEquals(1, s1.getLeaders().size());
-		assertEquals("Craig", s1.getLeaders().iterator().next().getFirstName());
+		assertMasteringMvc(todaysSessions.get(0));
+		assertSocialWebapps(todaysSessions.get(1));
+	}
 
-		EventSession s2 = todaysSessions.get(1);
-		assertEquals("Mastering MVC 3", s2.getTitle());
-		assertEquals(2, s2.getLeaders().size());
-		Iterator<EventSessionLeader> it = s2.getLeaders().iterator();
+	@Test
+	public void findFavoriteSessions() {
+		List<EventSession> todaysSessions = eventRepository.findFavoriteSessions(2L, 2L);
+		assertEquals(1, todaysSessions.size());
+		assertMasteringMvc(todaysSessions.get(0));
+	}
+	
+	@Test
+	public void toggleFavorite() {
+		assertFalse(eventRepository.toggleFavorite(2L, (short)1, 2L));
+		assertTrue(eventRepository.toggleFavorite(2L, (short)1, 2L));
+	}
+
+	// internal helpers
+	
+	private void assertMasteringMvc(EventSession s1) {
+		assertEquals("Mastering MVC 3", s1.getTitle());
+		assertEquals(2, s1.getLeaders().size());
+		Iterator<EventSessionLeader> it = s1.getLeaders().iterator();
 		EventSessionLeader leader = it.next();
 		assertEquals("Keith", leader.getFirstName());
 		leader = it.next();
 		assertEquals("Craig", leader.getFirstName());
-		*/
+		assertEquals(true, s1.isFavorite());
+	}
+
+	private void assertSocialWebapps(EventSession s2) {
+		assertEquals("Developing Social-Ready Web Applications", s2.getTitle());
+		assertEquals(1, s2.getLeaders().size());
+		assertEquals("Craig", s2.getLeaders().iterator().next().getFirstName());
+		assertEquals(false, s2.isFavorite());	
 	}
 }
