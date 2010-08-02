@@ -44,4 +44,11 @@ create table EventSessionLeader (event bigint not null,
 					leader bigint not null,
 					primary key (event, session, leader),
 					foreign key (event, session) references EventSession(event, number),
-					foreign key (leader) references Member(id));	
+					foreign key (leader) references Member(id));
+
+create table EventSessionFavorite (event bigint not null,
+					session bigint not null,
+					attendee bigint not null,
+					primary key (event, session, attendee),
+					foreign key (event, session) references EventSession(event, number),
+					foreign key (attendee) references Member(id));

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.springsource.greenhouse.account.Account;
+
 @Controller
 @RequestMapping("/events")
 public class EventsController {
@@ -40,6 +42,11 @@ public class EventsController {
 		return eventRepository.findUpcomingEvents();
 	}
 
+	@RequestMapping(value="/{id}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody List<EventFavorite> favorites(@PathVariable Long id) {
+		return eventRepository.findFavorites(id);
+	}
+	
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults tweets(@PathVariable Long id,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		return twitter.search(eventRepository.findEventHashtag(id), page, pageSize);
@@ -50,15 +57,25 @@ public class EventsController {
 		twitter.updateStatus(accessToken, status);
 	}
 
+	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long id, Account account) {
+		return eventRepository.findFavoriteSessions(id, account.getId());
+	}
+
 	@RequestMapping(value="/{id}/sessions/today", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> sessionsToday(@PathVariable Long id) {
 		return eventRepository.findTodaysSessions(id);
 	}
-	
+
 	@RequestMapping(value="/{id}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventSession> sessionsToday(@PathVariable Long id, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day) {
+	public @ResponseBody List<EventSession> sessionsOnDay(@PathVariable Long id, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day) {
 		return eventRepository.findSessionsOnDay(id, day);
 	}
+
+	@RequestMapping(value="/{id}/sessions/{number}/favorite", method=RequestMethod.PUT)
+	public @ResponseBody Boolean toggleFavorite(@PathVariable Long id, @PathVariable Short number, Account account) {
+		return eventRepository.toggleFavorite(id, number, account.getId());
+	}	
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long id, @PathVariable Short number, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
@@ -69,7 +86,7 @@ public class EventsController {
 	public @ResponseBody void postSessionTweet(@PathVariable Long id, @PathVariable Short number, @RequestParam String status, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
 		twitter.updateStatus(accessToken, status);
 	}
-
+	
 	// for web browser (HTML) clients
 	
 	@RequestMapping(method=RequestMethod.GET, headers="Accept=text/html")

@@ -18,4 +18,10 @@ public interface EventRepository {
 	
 	List<EventSession> findSessionsOnDay(Long eventId, LocalDate day);
 	
+	List<EventSession> findFavoriteSessions(Long eventId, Long attendeeId);
+
+	List<EventFavorite> findFavorites(Long eventId);
+	
+	boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId);
+	
 }

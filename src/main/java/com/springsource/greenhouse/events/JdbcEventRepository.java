@@ -3,6 +3,7 @@ package com.springsource.greenhouse.events;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +52,23 @@ public class JdbcEventRepository implements EventRepository {
 		Date startInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
 		Date endInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).plusDays(1).toDate();
 		return jdbcTemplate.query("select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.event = l.event and s.number = l.session inner join Member m on l.leader = m.id where s.event = ? and s.startTime > ? and s.endTime < ?", eventSessionsExtractor, eventId, startInstant, endInstant);
+	}
+
+	public List<EventSession> findFavoriteSessions(Long eventId, Long attendeeId) {
+		List<EventSession> favorites = Collections.emptyList();
+		// TODO complete implementation
+		return favorites;
+	}
+
+	public List<EventFavorite> findFavorites(Long eventId) {
+		List<EventFavorite> favorites = Collections.emptyList();
+		// TODO complete implementation
+		return favorites;
+	}
+	
+	public boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId) {
+		// TODO complete implementation
+		return true;
 	}
 
 	// internal helpers
