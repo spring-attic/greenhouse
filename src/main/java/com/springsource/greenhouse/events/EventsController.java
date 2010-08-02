@@ -63,13 +63,13 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/sessions/today", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventSession> sessionsToday(@PathVariable Long id) {
-		return eventRepository.findTodaysSessions(id);
+	public @ResponseBody List<EventSession> sessionsToday(@PathVariable Long id, Account account) {
+		return eventRepository.findTodaysSessions(id, account.getId());
 	}
 
 	@RequestMapping(value="/{id}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventSession> sessionsOnDay(@PathVariable Long id, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day) {
-		return eventRepository.findSessionsOnDay(id, day);
+	public @ResponseBody List<EventSession> sessionsOnDay(@PathVariable Long id, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day, Account account) {
+		return eventRepository.findSessionsOnDay(id, day, account.getId());
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/favorite", method=RequestMethod.PUT)

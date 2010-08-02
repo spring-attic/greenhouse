@@ -64,7 +64,7 @@ public class JdbcEventRepositoryTest {
 
 	@Test
 	public void findTodaysSessions() {
-		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(1L);
+		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(1L, 1L);
 		assertEquals(0, todaysSessions.size());
 
 		/* TODO make this test resilient to natural time change

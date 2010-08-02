@@ -44,18 +44,18 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject("select hashtag from EventSession where event = ? and number = ?", String.class, eventId, sessionNumber);
 	}
 
-	public List<EventSession> findTodaysSessions(Long eventId) {
-		return findSessionsOnDay(eventId, new LocalDate());
+	public List<EventSession> findTodaysSessions(Long eventId, Long memberId) {
+		return findSessionsOnDay(eventId, new LocalDate(), memberId);
 	}
 	
-	public List<EventSession> findSessionsOnDay(Long eventId, LocalDate day) {
+	public List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long memberId) {
 		Date startInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
 		Date endInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).plusDays(1).toDate();
-		// TODO pass in memberId, join with EventSessionFavorite		
+		// TODO join with EventSessionFavorite		
 		return jdbcTemplate.query("select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, m.firstName, m.lastName from EventSession s inner join EventSessionLeader l on s.event = l.event and s.number = l.session inner join Member m on l.leader = m.id where s.event = ? and s.startTime > ? and s.endTime < ?", eventSessionsExtractor, eventId, startInstant, endInstant);
 	}
 
-	public List<EventSession> findFavoriteSessions(Long eventId, Long attendeeId) {
+	public List<EventSession> findFavoriteSessions(Long eventId, Long memberId) {
 		List<EventSession> favorites = Collections.emptyList();
 		// TODO complete implementation
 		return favorites;
@@ -67,12 +67,12 @@ public class JdbcEventRepository implements EventRepository {
 		return favorites;
 	}
 	
-	public boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId) {
+	public boolean toggleFavorite(Long eventId, Short sessionNumber, Long memberId) {
 		// TODO complete implementation
 		return true;
 	}
 
-	public void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value) {
+	public void updateRating(Long eventId, Short sessionNumber, Long memberId, Short value) {
 		// TODO complete implementation
 	}
 	
@@ -93,6 +93,7 @@ public class JdbcEventRepository implements EventRepository {
 			while (rs.next()) {
 				Short number = rs.getShort("number");
 				if (!number.equals(previousNumber)) {
+					// TODO map favorite status
 					session = new EventSession(number, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
 							rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), Boolean.TRUE);
 					sessions.add(session);

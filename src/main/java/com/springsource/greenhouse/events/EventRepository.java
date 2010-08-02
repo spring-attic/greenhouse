@@ -14,16 +14,16 @@ public interface EventRepository {
 
 	String findSessionHashtag(Long eventId, Short sessionNumber);
 
-	List<EventSession> findTodaysSessions(Long eventId);
+	List<EventSession> findTodaysSessions(Long eventId, Long memberId);
 	
-	List<EventSession> findSessionsOnDay(Long eventId, LocalDate day);
+	List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long memberId);
 	
-	List<EventSession> findFavoriteSessions(Long eventId, Long attendeeId);
+	List<EventSession> findFavoriteSessions(Long eventId, Long memberId);
 
 	List<EventFavorite> findFavorites(Long eventId);
 	
-	boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId);
+	boolean toggleFavorite(Long eventId, Short sessionNumber, Long memberId);
 
-	void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value);
+	void updateRating(Long eventId, Short sessionNumber, Long memberId, Short value);
 	
 }
