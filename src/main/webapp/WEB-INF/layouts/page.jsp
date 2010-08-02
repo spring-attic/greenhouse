@@ -36,9 +36,6 @@
 	</c:forEach>
 <script type="text/javascript">
 $.cookie('Greenhouse.timeZoneOffset', new Date().getTimezoneOffset() / 60 * -1);
-
-$.ajax({ url: "${pageContext.request.contextPath}/events", dataType: "json", success: function(json) { console.log(json); }, error: function(xhr) { console.log(xhr.responseText); }});					
-
 </script>
 </body>
 </html>
