@@ -3,7 +3,6 @@ package com.springsource.greenhouse.events;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -55,14 +54,12 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.query(SELECT_SESSIONS_ON_DAY, eventSessionsExtractor, attendeeId, eventId, startInstant, endInstant);
 	}
 
-	public List<EventSession> findFavoriteSessions(Long eventId, Long attendeeId) {
-		return jdbcTemplate.query(SELECT_FAVORITE_SESSIONS, eventSessionsExtractor, attendeeId, eventId);
+	public List<EventSession> findFavorites(Long eventId, Long attendeeId) {
+		return jdbcTemplate.query(SELECT_FAVORITES, eventSessionsExtractor, attendeeId, eventId);
 	}
 
-	public List<EventFavorite> findFavorites(Long eventId) {
-		List<EventFavorite> favorites = Collections.emptyList();
-		// TODO complete implementation
-		return favorites;
+	public List<EventSession> findAttendeeFavorites(Long eventId, Long attendeeId) {
+		return jdbcTemplate.query(SELECT_ATTENDEE_FAVORITES, eventSessionsExtractor, attendeeId, eventId);
 	}
 
 	@Transactional
@@ -76,7 +73,7 @@ public class JdbcEventRepository implements EventRepository {
 		return !favorite;
 	}
 
-	public void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value) {
+	public void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment) {
 		// TODO complete implementation
 	}
 	
@@ -97,7 +94,6 @@ public class JdbcEventRepository implements EventRepository {
 			while (rs.next()) {
 				Short number = rs.getShort("number");
 				if (!number.equals(previousNumber)) {
-					// TODO map favorite status
 					session = new EventSession(number, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
 							rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), rs.getBoolean("favorite"));
 					sessions.add(session);
@@ -108,7 +104,7 @@ public class JdbcEventRepository implements EventRepository {
 			return sessions;			
 		}
 	};
-
+	
 	private static final String SELECT_UPCOMING_EVENTS = "select e.id, e.title, e.startTime, e.endTime, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e " + 
 		"inner join MemberGroup g on e.memberGroup = g.id where e.endTime > ? order by e.startTime";
 
@@ -119,11 +115,21 @@ public class JdbcEventRepository implements EventRepository {
 		"select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName from EventSession s " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.number = f.session and f.attendee = ? " +	
 		"inner join EventSessionLeader l on s.event = l.event and s.number = l.session " +
-		"inner join Member m on l.leader = m.id where s.event = ? and s.startTime >= ? and s.endTime <= ?";
+		"inner join Member m on l.leader = m.id where s.event = ? and s.startTime >= ? and s.endTime <= ? " +
+		"order by s.number";
 
-	private static final String SELECT_FAVORITE_SESSIONS =
+	private static final String SELECT_FAVORITES = "select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName, top.favoriteCount from EventSession s " + 
+		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.number = top.session " +
+		"left outer join EventSessionFavorite f on s.event = f.event and s.number = f.session and f.attendee = ? " +
+		"inner join EventSessionLeader l on s.event = l.event and s.number = l.session " +
+		"inner join Member m on l.leader = m.id where s.event = ? " +
+		"order by top.favoriteCount desc, s.number";
+
+	private static final String SELECT_ATTENDEE_FAVORITES =
 		"select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (true) as favorite, m.firstName, m.lastName from EventSession s " +
 		"inner join EventSessionFavorite f on s.event = f.event and s.number = f.session and f.attendee = ? " +	
 		"inner join EventSessionLeader l on s.event = l.event and s.number = l.session " +
-		"inner join Member m on l.leader = m.id where s.event = ?";
+		"inner join Member m on l.leader = m.id where s.event = ? " + 
+		"order by s.number";
+	
 }

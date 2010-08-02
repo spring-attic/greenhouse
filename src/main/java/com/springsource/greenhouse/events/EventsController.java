@@ -43,8 +43,8 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventFavorite> favorites(@PathVariable Long id) {
-		return eventRepository.findFavorites(id);
+	public @ResponseBody List<EventSession> favorites(@PathVariable Long id, Account account) {
+		return eventRepository.findFavorites(id, account.getId());
 	}
 	
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
@@ -59,7 +59,7 @@ public class EventsController {
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long id, Account account) {
-		return eventRepository.findFavoriteSessions(id, account.getId());
+		return eventRepository.findAttendeeFavorites(id, account.getId());
 	}
 
 	@RequestMapping(value="/{id}/sessions/today", method=RequestMethod.GET, headers="Accept=application/json")
@@ -78,8 +78,8 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/rating", method=RequestMethod.PUT)
-	public @ResponseBody void updateRating(@PathVariable Long id, @PathVariable Short number, Account account, @RequestParam Short value) {
-		eventRepository.updateRating(id, number, account.getId(), value);
+	public @ResponseBody void updateRating(@PathVariable Long id, @PathVariable Short number, Account account, @RequestParam Short value, @RequestParam String comment) {
+		eventRepository.updateRating(id, number, account.getId(), value, comment);
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")

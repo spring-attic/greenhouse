@@ -17,13 +17,13 @@ public interface EventRepository {
 	List<EventSession> findTodaysSessions(Long eventId, Long attendeeId);
 	
 	List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long attendeeId);
-	
-	List<EventSession> findFavoriteSessions(Long eventId, Long attendeeId);
 
-	List<EventFavorite> findFavorites(Long eventId);
+	List<EventSession> findFavorites(Long eventId, Long attendeeId);
 	
+	List<EventSession> findAttendeeFavorites(Long eventId, Long attendeeId);
+
 	boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId);
 
-	void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value);
+	void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment);
 	
 }

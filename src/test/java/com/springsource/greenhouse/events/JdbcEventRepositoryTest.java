@@ -75,7 +75,7 @@ public class JdbcEventRepositoryTest {
 
 	@Test
 	public void findFavoriteSessions() {
-		List<EventSession> todaysSessions = eventRepository.findFavoriteSessions(2L, 2L);
+		List<EventSession> todaysSessions = eventRepository.findAttendeeFavorites(2L, 2L);
 		assertEquals(1, todaysSessions.size());
 		assertMasteringMvc(todaysSessions.get(0));
 	}
