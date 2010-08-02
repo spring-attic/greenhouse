@@ -73,8 +73,16 @@ public class JdbcEventRepository implements EventRepository {
 		return !favorite;
 	}
 
-	public void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment) {
-		// TODO complete implementation
+	@Transactional
+	public void rate(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment) {
+		boolean rated = jdbcTemplate.queryForObject("select exists(select 1 from EventSessionRating where event = ? and session = ? and attendee = ?)", Boolean.class, eventId, sessionNumber, attendeeId);
+		if (rated) {
+			jdbcTemplate.update("update EventSessionRating where event = ? and session = ? and attendee = ? set rating = ? and comment = ?", eventId, sessionNumber, attendeeId, value, comment);			
+		} else {
+			jdbcTemplate.update("insert into EventSessionRating (event, session, attendee, rating, comment) values (?, ?, ?, ?, ?)", eventId, sessionNumber, attendeeId, value, comment);			
+		}
+		float rating = jdbcTemplate.queryForObject("select avg(rating) from EventSessionRating where event = ? and session = ? and attendee = ? group by event, session", Float.class);
+		jdbcTemplate.update("update EventSession where event = ? and session = ? set rating = ?", rating);
 	}
 	
 	// internal helpers

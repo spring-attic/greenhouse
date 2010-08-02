@@ -24,6 +24,6 @@ public interface EventRepository {
 
 	boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId);
 
-	void updateRating(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment);
+	void rate(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment);
 	
 }

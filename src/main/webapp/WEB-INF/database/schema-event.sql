@@ -58,6 +58,7 @@ create table EventSessionRating (event bigint not null,
 					session bigint not null,
 					attendee bigint not null,
 					rating tinyint not null check (rating in (1, 2, 3, 4, 5)),
+					comment varchar,
 					primary key (event, session, attendee),
 					foreign key (event, session) references EventSession(event, number),
 					foreign key (attendee) references Member(id));

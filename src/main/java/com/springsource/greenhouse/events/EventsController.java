@@ -79,7 +79,7 @@ public class EventsController {
 
 	@RequestMapping(value="/{id}/sessions/{number}/rating", method=RequestMethod.PUT)
 	public @ResponseBody void updateRating(@PathVariable Long id, @PathVariable Short number, Account account, @RequestParam Short value, @RequestParam String comment) {
-		eventRepository.updateRating(id, number, account.getId(), value, comment);
+		eventRepository.rate(id, number, account.getId(), value, comment);
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
