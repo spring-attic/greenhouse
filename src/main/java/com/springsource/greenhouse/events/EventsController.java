@@ -77,7 +77,7 @@ public class EventsController {
 		return eventRepository.toggleFavorite(id, number, account.getId());
 	}
 
-	@RequestMapping(value="/{id}/sessions/{number}/rating", method=RequestMethod.PUT)
+	@RequestMapping(value="/{id}/sessions/{number}/rating", method=RequestMethod.POST)
 	public @ResponseBody void updateRating(@PathVariable Long id, @PathVariable Short number, Account account, @RequestParam Short value, @RequestParam String comment) {
 		eventRepository.rate(id, number, account.getId(), value, comment);
 	}
