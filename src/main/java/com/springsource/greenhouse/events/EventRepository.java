@@ -10,9 +10,9 @@ public interface EventRepository {
 
 	Event findEventByName(String group, Integer year, Integer month, String name);
 
-	String findEventHashtag(Long eventId);
+	String findEventSearchString(Long eventId);
 
-	String findSessionHashtag(Long eventId, Short sessionNumber);
+	String findSessionSearchString(Long eventId, Short sessionNumber);
 
 	List<EventSession> findTodaysSessions(Long eventId, Long attendeeId);
 	

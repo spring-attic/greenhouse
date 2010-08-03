@@ -36,12 +36,12 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject(SELECT_EVENT_BY_NAME, eventMapper, group, year, month, name);
 	}
 
-	public String findEventHashtag(Long eventId) {
+	public String findEventSearchString(Long eventId) {
 		return jdbcTemplate.queryForObject("select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id", String.class, eventId);
 	}
 
-	public String findSessionHashtag(Long eventId, Short sessionNumber) {
-		return jdbcTemplate.queryForObject("select hashtag from EventSession where event = ? and number = ?", String.class, eventId, sessionNumber);
+	public String findSessionSearchString(Long eventId, Short sessionNumber) {
+		return jdbcTemplate.queryForObject("select (select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id) || ' ' || hashtag from EventSession where event = ? and number = ?", String.class, eventId, eventId, sessionNumber);
 	}
 
 	public List<EventSession> findTodaysSessions(Long eventId, Long attendeeId) {

@@ -49,7 +49,7 @@ public class EventsController {
 	
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults tweets(@PathVariable Long id,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
-		return twitter.search(eventRepository.findEventHashtag(id), page, pageSize);
+		return twitter.search(eventRepository.findEventSearchString(id), page, pageSize);
 	}
 
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.POST)
@@ -84,7 +84,7 @@ public class EventsController {
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long id, @PathVariable Short number, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
-		return twitter.search(eventRepository.findSessionHashtag(id, number), page, pageSize);
+		return twitter.search(eventRepository.findSessionSearchString(id, number), page, pageSize);
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
