@@ -44,8 +44,8 @@ public class JdbcEventRepositoryTest {
 	public void findUpcomingEvents() {
 		List<Event> events = eventRepository.findUpcomingEvents();
 		assertEquals(2, events.size());
-		assertEquals((Long)2L, events.get(0).getId());
-		assertEquals((Long)1L, events.get(1).getId());
+		assertEquals((Long)1L, events.get(0).getId());
+		assertEquals((Long)2L, events.get(1).getId());
 	}
 	
 	@Test
@@ -62,28 +62,42 @@ public class JdbcEventRepositoryTest {
 	
 	@Test
 	public void getEventSessionSearchString() {
-		assertEquals("#spr101", eventRepository.findSessionHashtag(2L, (short)1));
+		assertEquals("#spr101", eventRepository.findSessionHashtag(1L, (short)1));
 	}
 
 	@Test
 	public void findTodaysSessions() {
-		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(2L, 2L);
+		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(1L, 2L);
 		assertEquals(2, todaysSessions.size());
 		assertMasteringMvc(todaysSessions.get(0));
 		assertSocialWebapps(todaysSessions.get(1));
 	}
 
 	@Test
-	public void findFavoriteSessions() {
-		List<EventSession> todaysSessions = eventRepository.findAttendeeFavorites(2L, 2L);
-		assertEquals(1, todaysSessions.size());
-		assertMasteringMvc(todaysSessions.get(0));
+	public void findFavorites() {
+		List<EventSession> favorites = eventRepository.findFavorites(1L, 2L);
+		assertEquals("Mastering MVC 3", favorites.get(0).getTitle());
+		assertEquals("Developing Social-Ready Web Applications", favorites.get(1).getTitle());
+		assertEquals(2, favorites.size());
+	}
+
+	@Test
+	public void findAttendeeFavorites() {
+		List<EventSession> favorites = eventRepository.findAttendeeFavorites(1L, 2L);
+		assertEquals(1, favorites.size());
+		assertMasteringMvc(favorites.get(0));
 	}
 	
 	@Test
 	public void toggleFavorite() {
-		assertFalse(eventRepository.toggleFavorite(2L, (short)1, 2L));
-		assertTrue(eventRepository.toggleFavorite(2L, (short)1, 2L));
+		assertFalse(eventRepository.toggleFavorite(1L, (short)1, 2L));
+		assertTrue(eventRepository.toggleFavorite(1L, (short)1, 2L));
+	}
+	
+	@Test
+	public void rate() {
+		eventRepository.rate(1L, (short)1, 2L, (short)5, "Rocked");
+		assertEquals(new Float(5.0), eventRepository.findAttendeeFavorites(1L, 1L).get(0).getRating());
 	}
 
 	// internal helpers

@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -44,14 +45,14 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject("select hashtag from EventSession where event = ? and number = ?", String.class, eventId, sessionNumber);
 	}
 
-	public List<EventSession> findTodaysSessions(Long eventId, Long memberId) {
-		return findSessionsOnDay(eventId, new LocalDate(), memberId);
+	public List<EventSession> findTodaysSessions(Long eventId, Long attendeeId) {
+		return findSessionsOnDay(eventId, new LocalDate(DateTimeZone.UTC), attendeeId);
 	}
 	
 	public List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long attendeeId) {
-		Date startInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
-		Date endInstant = day.toDateTimeAtStartOfDay(DateTimeZone.UTC).plusDays(1).toDate();
-		return jdbcTemplate.query(SELECT_SESSIONS_ON_DAY, eventSessionsExtractor, attendeeId, eventId, startInstant, endInstant);
+		DateTime dayStart = day.toDateTimeAtStartOfDay(DateTimeZone.UTC);
+		DateTime dayEnd = dayStart.plusDays(1);
+		return jdbcTemplate.query(SELECT_SESSIONS_ON_DAY, eventSessionsExtractor, attendeeId, eventId, dayStart.toDate(), dayEnd.toDate());
 	}
 
 	public List<EventSession> findFavorites(Long eventId, Long attendeeId) {
@@ -81,8 +82,8 @@ public class JdbcEventRepository implements EventRepository {
 		} else {
 			jdbcTemplate.update("insert into EventSessionRating (event, session, attendee, rating, comment) values (?, ?, ?, ?, ?)", eventId, sessionNumber, attendeeId, value, comment);			
 		}
-		float rating = jdbcTemplate.queryForObject("select avg(rating) from EventSessionRating where event = ? and session = ? and attendee = ? group by event, session", Float.class);
-		jdbcTemplate.update("update EventSession where event = ? and session = ? set rating = ?", rating);
+		float rating = jdbcTemplate.queryForObject("select avg(rating) from EventSessionRating where event = ? and session = ? and attendee = ? group by event, session", Float.class, eventId, sessionNumber, attendeeId);
+		jdbcTemplate.update("update EventSession set rating = ? where event = ? and number = ?", rating, eventId, sessionNumber);
 	}
 	
 	// internal helpers
