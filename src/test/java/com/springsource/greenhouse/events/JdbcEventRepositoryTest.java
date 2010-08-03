@@ -97,7 +97,9 @@ public class JdbcEventRepositoryTest {
 	@Test
 	public void rate() {
 		eventRepository.rate(1L, (short)1, 2L, (short)5, "Rocked");
-		assertEquals(new Float(5.0), eventRepository.findAttendeeFavorites(1L, 1L).get(0).getRating());
+		eventRepository.rate(1L, (short)1, 3L, (short)4, "Rocked");
+		eventRepository.rate(1L, (short)1, 1L, (short)2, "Rocked");
+		assertEquals(new Float(3.5), eventRepository.findAttendeeFavorites(1L, 1L).get(0).getRating());
 	}
 
 	// internal helpers

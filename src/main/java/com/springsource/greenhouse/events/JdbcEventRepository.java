@@ -1,5 +1,6 @@
 package com.springsource.greenhouse.events;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -82,7 +82,7 @@ public class JdbcEventRepository implements EventRepository {
 		} else {
 			jdbcTemplate.update("insert into EventSessionRating (event, session, attendee, rating, comment) values (?, ?, ?, ?, ?)", eventId, sessionNumber, attendeeId, value, comment);			
 		}
-		float rating = jdbcTemplate.queryForObject("select avg(rating) from EventSessionRating where event = ? and session = ? and attendee = ? group by event, session", Float.class, eventId, sessionNumber, attendeeId);
+		Float rating = jdbcTemplate.queryForObject("select round(avg(cast(rating as double)) * 2, 0) / 2 from EventSessionRating where event = ? and session = ? group by event, session", Float.class, eventId, sessionNumber);
 		jdbcTemplate.update("update EventSession set rating = ? where event = ? and number = ?", rating, eventId, sessionNumber);
 	}
 	
