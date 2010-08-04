@@ -23,12 +23,13 @@ public class FacebookService implements FacebookOperations {
 	}
 
 	public FacebookUserInfo getUserInfo(String accessToken) {
-		return restTemplate.getForObject(GET_CURRENT_USER_INFO, FacebookUserInfo.class, accessToken);
+		return restTemplate.getForObject(OBJECT_URL + ACCESS_TOKEN_PARAM, FacebookUserInfo.class, "me", accessToken);
     }
 
 	public List<String> getFriendIds(String accessToken) {
 		Map<String, List<Map<String, String>>> results = 
-			restTemplate.getForObject(GET_CURRENT_USER_FRIENDS, Map.class, accessToken);		
+			restTemplate.getForObject(CONNECTION_URL + ACCESS_TOKEN_PARAM, Map.class, 
+					CURRENT_USER, FRIENDS, accessToken);		
 		List<Map<String, String>> friends = results.get("data");
 		
 		List<String> friendIds = new ArrayList<String>();
@@ -39,32 +40,37 @@ public class FacebookService implements FacebookOperations {
     }
 	
 	public void postToWall(String accessToken, String message) {
-		MultiValueMap<String, String> map = createBaseWallMessage(accessToken, message);
-		restTemplate.postForLocation(USER_FEED_URL, map);
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.set("message", message);
+		publish(accessToken, CURRENT_USER, FEED, map);
 	}
 	
 	public void postToWall(String accessToken, String message, FacebookLink link) {
-		MultiValueMap<String, String> map = createBaseWallMessage(accessToken, message);
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.set("link", link.getLink());
 		map.set("name", link.getName());
 		map.set("caption", link.getCaption());
-		map.set("description", link.getDescription());		
-		restTemplate.postForLocation(USER_FEED_URL, map);
-	}
-
-	private MultiValueMap<String, String> createBaseWallMessage(String accessToken, String message) {
-	    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>(); 
-		map.set("access_token", accessToken);
+		map.set("description", link.getDescription());
 		map.set("message", message);
-	    return map;
-    }
+		publish(accessToken, CURRENT_USER, FEED, map);
+	}
+	
+	public void publish(String accessToken, String object, String connection, MultiValueMap<String, String> data) {
+		MultiValueMap<String, String> requestData = new LinkedMultiValueMap<String, String>(data);
+		requestData.add("access_token", accessToken);
+		restTemplate.postForLocation(CONNECTION_URL, requestData, object, connection);
+	}
 	
 	// to support unit testing
 	void setRestTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 	
-	static final String GET_CURRENT_USER_FRIENDS = "https://graph.facebook.com/me/friends?access_token={token}";
-	static final String GET_CURRENT_USER_INFO = "https://graph.facebook.com/me?access_token={token}";
-	static final String USER_FEED_URL = "https://graph.facebook.com/me/feed";
+	static final String OBJECT_URL = "https://graph.facebook.com/{objectId}";
+	static final String CONNECTION_URL = OBJECT_URL + "/{connection}";
+	
+	static final String ACCESS_TOKEN_PARAM = "?access_token={token}";
+	static final String FRIENDS = "friends";
+	static final String FEED = "feed";
+	static final String CURRENT_USER = "me";
 }

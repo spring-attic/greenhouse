@@ -28,10 +28,10 @@ public class FacebookServiceTest {
 	public void setup() throws Exception {
 		restTemplate = mock(RestTemplate.class);		
 		facebookUser = new FacebookUserInfo();
-		when(restTemplate.getForObject(GET_CURRENT_USER_INFO, FacebookUserInfo.class, "testToken")).
+		when(restTemplate.getForObject(OBJECT_URL + ACCESS_TOKEN_PARAM, FacebookUserInfo.class, CURRENT_USER, "testToken")).
 			thenReturn(facebookUser);		
 		Map<String, List<Map<String, String>>> facebookFriendsMap = buildFriendsMap();
-		when(restTemplate.getForObject(GET_CURRENT_USER_FRIENDS, Map.class, "testToken")).
+		when(restTemplate.getForObject(CONNECTION_URL + ACCESS_TOKEN_PARAM, Map.class, CURRENT_USER, "friends", "testToken")).
 			thenReturn(facebookFriendsMap);
 		
 		facebook = new FacebookService();
@@ -55,7 +55,7 @@ public class FacebookServiceTest {
 		MultiValueMap<String, String> messageMap = new LinkedMultiValueMap<String, String>();
 		messageMap.set("access_token", "testToken");
 		messageMap.set("message", "This is a test");
-		verify(restTemplate).postForLocation(eq(USER_FEED_URL), eq(messageMap));
+		verify(restTemplate).postForLocation(eq(CONNECTION_URL), eq(messageMap), eq(CURRENT_USER), eq(FEED));
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class FacebookServiceTest {
 		messageMap.set("name", "name");
 		messageMap.set("caption", "caption");
 		messageMap.set("description", "description");
-		verify(restTemplate).postForLocation(eq(USER_FEED_URL), eq(messageMap));
+		verify(restTemplate).postForLocation(eq(CONNECTION_URL), eq(messageMap), eq(CURRENT_USER), eq(FEED));
 	}
 
 	// helper method
