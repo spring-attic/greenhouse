@@ -15,11 +15,17 @@
 </ul>
 <h3>Invite more...</h3>
 </c:if>
+
+<c:if test="${empty friendAccounts}">
+<h3>None of your friends have Greenhouse accounts connected to Facebook</h3>
+<h3>Invite some...</h3>
+</c:if>
+
 <fb:serverfbml style="width: 625px;">
 	<script type="text/fbml">
 		<fb:fbml>
 			<fb:request-form action='<u:absoluteUrl value="/invite/facebook" />?skip=1' method="POST" invite="true" type="Greenhouse" content="Join me in the Greenhouse! It's the best way to exchange ideas and information with other Spring application developers. <fb:req-choice url='http://greenhouse.springsource.org' label='Join the Greenhouse' />">
-				<fb:multi-friend-selector bypass="cancel" email_invite="false" import_external_friends="false" cols="4" showborder="false" actiontext="Invite your Facebook friends to join the Greenhouse"></fb:multi-friend-selector>
+				<fb:multi-friend-selector bypass="cancel" email_invite="false" import_external_friends="false" cols="4" showborder="false" actiontext="Invite your Facebook friends to join Greenhouse"></fb:multi-friend-selector>
 			</fb:request-form>
 		</fb:fbml>
 	</script>
