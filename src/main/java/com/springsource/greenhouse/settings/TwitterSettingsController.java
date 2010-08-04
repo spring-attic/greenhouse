@@ -24,6 +24,10 @@ import com.springsource.greenhouse.utils.SecurityUtils;
 @RequestMapping("/settings")
 public class TwitterSettingsController {
 	
+	private static final String TWITTER = "twitter";
+	private static final String UPDATE_CONNECTED_ACCOUNT_ID = 
+		"update ConnectedAccount set accountId = ? where member = ? and provider = ?";
+
 	private OAuthConsumerTokenServicesHelper oauthHelper;
 
 	private TwitterOperations twitterService;
@@ -43,7 +47,7 @@ public class TwitterSettingsController {
 
 	@RequestMapping(value="/twitter", method=RequestMethod.GET)
 	public String connectView(Account account) {
-		if (accountRepository.isConnected(account.getId(), "twitter")) {
+		if (accountRepository.isConnected(account.getId(), TWITTER)) {
 			return "settings/twitterConnected";
 		} else {
 			return "settings/twitterConnect";
@@ -55,9 +59,13 @@ public class TwitterSettingsController {
 	public String authorize(HttpServletRequest request, Authentication authentication) {
 		String oauthToken = request.getParameter("oauth_token");
 		if (oauthToken != null && oauthToken.length() > 0) {
-			OAuthConsumerToken accessToken = oauthHelper.getAccessToken("twitter", request, authentication);
+			OAuthConsumerToken accessToken = oauthHelper.getAccessToken(TWITTER, request, authentication);
 			Account account = (Account) authentication.getPrincipal();
-			makeTwitterScreenameGreenhouseUsername(accessToken, account);
+			
+			String screenName = twitterService.getScreenName(accessToken);
+			makeTwitterScreenameGreenhouseUsername(screenName, account);
+			jdbcTemplate.update(UPDATE_CONNECTED_ACCOUNT_ID, screenName, account.getId(), TWITTER);
+			
 			if (request.getParameter("tweetIt") != null) {
 				// TODO should this be done asynchronously?
 				tweetConnection(accessToken, request, account);
@@ -69,7 +77,7 @@ public class TwitterSettingsController {
 
 	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
 	public String disconnectTwitter(Account account, HttpServletRequest request, Authentication authentication) {
-		oauthHelper.removeToken("twitter", request, authentication);
+		oauthHelper.removeToken(TWITTER, request, authentication);
 		return "redirect:/settings/twitter";
 	}
 
@@ -79,8 +87,7 @@ public class TwitterSettingsController {
 		twitterService.updateStatus(accessToken, message);
 	}
 
-	private void makeTwitterScreenameGreenhouseUsername(OAuthConsumerToken accessToken, Account account) {
-		String screenName = twitterService.getScreenName(accessToken);
+	private void makeTwitterScreenameGreenhouseUsername(String screenName, Account account) {
 		try {
 			jdbcTemplate.update("update Member set username = ? where id = ?", screenName, account.getId());
 			SecurityUtils.signin(account.newUsername(screenName));
