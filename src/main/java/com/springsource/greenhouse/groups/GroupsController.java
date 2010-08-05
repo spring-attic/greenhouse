@@ -1,5 +1,8 @@
 package com.springsource.greenhouse.groups;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.springframework.social.twitter.TwitterOperations;
@@ -29,9 +32,11 @@ public class GroupsController {
 		this.twitter = twitter;
 	}
 	
-	@RequestMapping(value="/{group}")
-	public String groupView(@PathVariable String group, Model model) {
-		model.addAttribute(groupRepository.findGroupByProfileKey(group));
+	@RequestMapping(value="/{groupKey}")
+	public String groupView(@PathVariable String groupKey, Model model) {
+		Group group = groupRepository.findGroupByProfileKey(groupKey);
+		model.addAttribute(group);		
+		model.addAttribute("metadata", buildOpenGraphMetadata(group));		
 		return "groups/view";
 	}
 	
@@ -42,4 +47,23 @@ public class GroupsController {
 		model.addAttribute(twitter.search(event.getHashtag(), 1, 10));
 		return "groups/event";
 	}	
+	
+	private Map<String, String> buildOpenGraphMetadata(Group group) {
+		Map<String, String> metadata = new HashMap<String, String>();
+		metadata.put("og:title", group.getName());
+		metadata.put("og:type", "non_profit"); // TODO: Not sure if this applies to all groups.
+		metadata.put("og:site_name", "Greenhouse");
+		metadata.put("fb:app_id", "140372495981006"); // TODO: Probably shouldn't hardcode this
+		return metadata;		
+	}
+	
+	/*
+	 * 
+    * og:site_name - A human-readable name for your site, e.g., "IMDb".
+    * fb:admins or fb:app_id - A comma-separated list of either the Facebook IDs of page administrators or a Facebook Platform application ID. At a minimum, include only your own Facebook ID.
+
+	 * 
+	 */
+	
+	
 }

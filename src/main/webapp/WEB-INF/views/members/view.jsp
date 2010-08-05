@@ -10,4 +10,6 @@
 			<li><a href="http://www.facebook.com/profile.php?id=${connectedIds['facebook']}">At Facebook</a></li>
 		</ul>
 	</div>
+	
+	<fb:like></fb:like>
 </div>

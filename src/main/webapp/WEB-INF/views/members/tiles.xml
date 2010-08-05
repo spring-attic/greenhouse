@@ -6,6 +6,10 @@
 	<definition name="members/view" extends="standard">
 		<put-attribute name="title" expression="${member.displayName} | Greenhouse" />
 		<put-attribute name="content" value="/WEB-INF/views/members/view.jsp" />
+        <put-list-attribute name="scripts">
+            <add-attribute value="/social/facebook/all.js"/>
+            <add-attribute value="/social/facebook/init.js"/>
+        </put-list-attribute>
 	</definition>
 
 </tiles-definitions>
