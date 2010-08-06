@@ -42,7 +42,7 @@ public class MembersController {
 	private Map<String, String> buildOpenGraphMetadata(Member member) {
 		Map<String, String> metadata = new HashMap<String, String>();
 		metadata.put("og:title", member.getDisplayName());
-		metadata.put("og:type", "# public_figure");
+		metadata.put("og:type", "public_figure");
 		metadata.put("og:site_name", "Greenhouse");
 		metadata.put("fb:app_id", "140372495981006"); // TODO: Probably shouldn't hardcode this
 		return metadata;		

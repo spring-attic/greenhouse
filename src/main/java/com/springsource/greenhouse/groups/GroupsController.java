@@ -56,14 +56,4 @@ public class GroupsController {
 		metadata.put("fb:app_id", "140372495981006"); // TODO: Probably shouldn't hardcode this
 		return metadata;		
 	}
-	
-	/*
-	 * 
-    * og:site_name - A human-readable name for your site, e.g., "IMDb".
-    * fb:admins or fb:app_id - A comma-separated list of either the Facebook IDs of page administrators or a Facebook Platform application ID. At a minimum, include only your own Facebook ID.
-
-	 * 
-	 */
-	
-	
 }
