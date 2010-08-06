@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,11 +19,13 @@ import com.springsource.greenhouse.events.EventRepository;
 @Controller
 @RequestMapping("/groups")
 public class GroupsController {
+	@Value("#{facebookProperties.applicationId}")
+	private String facebookAppId; 
 
-	private EventRepository eventRepository;
+	private EventRepository eventRepository;	
 	
 	private TwitterOperations twitter;
-
+	
 	private GroupRepository groupRepository;
 
 	@Inject
@@ -53,7 +56,7 @@ public class GroupsController {
 		metadata.put("og:title", group.getName());
 		metadata.put("og:type", "non_profit"); // TODO: Not sure if this applies to all groups.
 		metadata.put("og:site_name", "Greenhouse");
-		metadata.put("fb:app_id", "140372495981006"); // TODO: Probably shouldn't hardcode this
+		metadata.put("fb:app_id", facebookAppId);
 		return metadata;		
 	}
 }

@@ -5,4 +5,5 @@
 	<p><c:out value="${group.name}" escapeXml="true"/></p>
 	<p><c:out value="${group.description}" escapeXml="true"/></p>
 </div>
+
 <fb:like></fb:like>

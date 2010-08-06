@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,8 @@ import com.springsource.greenhouse.account.Account;
 @Controller
 @RequestMapping("/members/*")
 public class MembersController {
+	@Value("#{facebookProperties.applicationId}")
+	private String facebookAppId; 
 
 	private MemberRepository membersService;
 
@@ -44,7 +47,7 @@ public class MembersController {
 		metadata.put("og:title", member.getDisplayName());
 		metadata.put("og:type", "public_figure");
 		metadata.put("og:site_name", "Greenhouse");
-		metadata.put("fb:app_id", "140372495981006"); // TODO: Probably shouldn't hardcode this
+		metadata.put("fb:app_id", facebookAppId);
 		return metadata;		
 	}
 }
