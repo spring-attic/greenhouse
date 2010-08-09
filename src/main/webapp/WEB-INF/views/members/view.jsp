@@ -4,6 +4,12 @@
 <div id="personInfo">
 	<c:out value="${member.displayName}" escapeXml="true"/>
 	
+	<c:if test="${member.profileImageUrl != null}">
+	<div id="profilePicture">
+		<img src="${member.profileImageUrl}" />
+	</div>	
+	</c:if>
+	
 	<div id="connections">
 		<ul>
 			<li><a href="http://www.twitter.com/${connectedIds['twitter']}">At Twitter</a></li>

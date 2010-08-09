@@ -4,6 +4,7 @@ create table Member (id identity,
 					email varchar(320) not null unique,
 					password varchar not null,
 					username varchar(15) unique,
+					imageUrl varchar(60),
 					primary key (id));
 
 create table App (consumerKey varchar,
@@ -28,7 +29,7 @@ create table ConnectedAccount (member bigint,
 					provider varchar,
 					accessToken varchar not null,					
 					accountId varchar,
-					secret varchar, -- oauth1 only
+					secret varchar, 
 					primary key (member, provider),
 					foreign key (member) references Member(id));
 create unique index AccessTokenKey on ConnectedAccount(provider, accessToken);

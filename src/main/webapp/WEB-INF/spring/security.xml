@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xsi:schemaLocation="
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+				xmlns:util="http://www.springframework.org/schema/util"
+				xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<http use-expressions="true">
 		<!-- Authentication policy -->
@@ -42,5 +42,12 @@
 	<beans:import resource="security-oauth-provider.xml" />
 	
     <beans:import resource="security-oauth-consumer.xml" />
+    
+    <util:properties id="s3Properties" location="classpath:s3.properties" />
+    
+	<beans:bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
+		<beans:constructor-arg value="#{s3Properties.accessKey}" index="0" />
+		<beans:constructor-arg value="#{s3Properties.secretKey}" index="1" />
+	</beans:bean>
     
 </beans:beans>

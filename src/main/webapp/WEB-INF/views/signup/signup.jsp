@@ -7,7 +7,7 @@
 </c:if>
 
 <c:url value="/signup" var="signupUrl" />
-<form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm">
+<form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm" enctype="multipart/form-data">
 	<div class="formInfo">
   		<h2>Sign up</h2>
   		<s:bind path="*">
@@ -42,6 +42,9 @@
 
   		<form:label path="confirmPassword">Confirm Password</form:label>
   		<form:password path="confirmPassword" />
+  		
+  		<label>Profile Image</label>
+  		<input type="file" name="profileImage" />
 	</fieldset>
 	<input type="submit" value="Sign up">
 </form:form>

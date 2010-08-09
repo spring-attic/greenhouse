@@ -53,5 +53,10 @@
 	<!-- Imports the application controllers that process client requests -->
 	<beans:import resource="controllers.xml" />
 	
-	<util:properties id="facebookProperties" location="classpath:facebook.properties"/>
+	<util:properties id="facebookProperties" location="classpath:facebook.properties" />
+	
+	<beans:bean id="multipartResolver"
+			class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="100000"/>
+	</beans:bean>
 </beans:beans>

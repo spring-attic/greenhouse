@@ -28,11 +28,11 @@ public class JdbcMemberRepository implements MemberRepository {
 	}
 	
 	public Member findMemberByAccountId(Long accountId) {
-		return jdbcTemplate.queryForObject("select firstName, lastName from Member where id = ?", memberMapper, accountId);
+		return jdbcTemplate.queryForObject("select firstName, lastName, imageUrl from Member where id = ?", memberMapper, accountId);
 	}
 
 	public Member findMemberByUsername(String username) {
-		return jdbcTemplate.queryForObject("select firstName, lastName from Member where username = ?", memberMapper, username);
+		return jdbcTemplate.queryForObject("select firstName, lastName, imageUrl from Member where username = ?", memberMapper, username);
 	}
 	
 	
@@ -61,6 +61,7 @@ public class JdbcMemberRepository implements MemberRepository {
 			Member member = new Member();
 			member.setFirstName(rs.getString("firstName"));
 			member.setLastName(rs.getString("lastName"));
+			member.setProfileImageUrl(rs.getString("imageUrl"));
 			return member;
 		}
 	};
