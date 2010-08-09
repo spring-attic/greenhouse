@@ -28,7 +28,7 @@ create table ConnectedAccount (member bigint,
 					provider varchar,
 					accessToken varchar not null,					
 					accountId varchar,
-					secret varchar, -- oauth1 only
+					secret varchar,
 					primary key (member, provider),
 					foreign key (member) references Member(id));
 create unique index AccessTokenKey on ConnectedAccount(provider, accessToken);
