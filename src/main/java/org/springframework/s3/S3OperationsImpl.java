@@ -32,6 +32,6 @@ public class S3OperationsImpl implements S3Operations {
 		imageObject.setAcl(acl);
 		s3.putObject(imageBucket, imageObject);	
 		
-		return "http://s3.amazonaws.com/" + bucket + "/" + fileName;
+		return "http://" + bucket + ".s3.amazonaws.com/" + fileName;
 	}
 }

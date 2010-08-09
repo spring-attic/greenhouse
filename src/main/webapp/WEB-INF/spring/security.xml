@@ -46,8 +46,8 @@
     <util:properties id="s3Properties" location="classpath:s3.properties" />
     
 	<beans:bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
-		<beans:constructor-arg value="#{s3Properties.accessKey}" index="0" />
-		<beans:constructor-arg value="#{s3Properties.secretKey}" index="1" />
+		<beans:constructor-arg value="#{s3Properties['s3.accessKey']}" index="0" />
+		<beans:constructor-arg value="#{s3Properties['s3.secretKey']}" index="1" />
 	</beans:bean>
     
 </beans:beans>

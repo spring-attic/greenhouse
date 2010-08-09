@@ -46,7 +46,7 @@ public class SignupController {
 			Account account = signupService.signup(form.createPerson());			
 			if(!profileImage.isEmpty()) {
 				// TODO: Figure out real extension from mime type or original file name
-				String imageUrl = s3.saveFile("habuma-images", account.getId() + ".jpg", 
+				String imageUrl = s3.saveFile("gh-images", "profilepix/" + account.getId() + ".jpg", 
 						profileImage.getBytes(), profileImage.getContentType());
 								
 				jdbcTemplate.update("update member set imageUrl = ? where id = ?", imageUrl, account.getId());
