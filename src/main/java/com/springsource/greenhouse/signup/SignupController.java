@@ -41,8 +41,10 @@ public class SignupController {
 		try {
 			Account account = signupService.signup(form.createPerson());			
 			SecurityUtils.signin(account);
-			profilePictureService.setProfilePicture(account.getId(), form.getProfileImage().getBytes(), 
-					form.getProfileImage().getContentType());
+			if(!form.getProfileImage().isEmpty()) {
+				profilePictureService.setProfilePicture(account.getId(), form.getProfileImage().getBytes(), 
+						form.getProfileImage().getContentType());
+			}
 		} catch (EmailAlreadyOnFileException e) {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
 			return null;
