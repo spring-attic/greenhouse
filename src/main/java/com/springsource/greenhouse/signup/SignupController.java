@@ -50,11 +50,9 @@ public class SignupController {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
 			return null;
 		} catch (ProfilePictureException e) {
-			formBinding.rejectValue("profileImage", "image.notsaved", "unable to save image");
-			return null;
+			// TODO: Figure out best way to handle this
 		} catch (IOException e) {
-			formBinding.rejectValue("profileImage", "image.misread", "unable to read image");
-			return null;
+			// TODO: Figure out best way to handle this
 		}
 		return "redirect:/";			
 	}
