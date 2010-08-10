@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.CommonsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -19,6 +21,7 @@ public class FacebookService implements FacebookOperations {
 		MappingJacksonHttpMessageConverter jsonMessageConverter = new MappingJacksonHttpMessageConverter();
 		jsonMessageConverter.setSupportedMediaTypes(asList(new MediaType("text", "javascript")) );
 		this.restTemplate = new RestTemplate();
+		restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
 		this.restTemplate.getMessageConverters().add(jsonMessageConverter);
 	}
 
@@ -59,6 +62,11 @@ public class FacebookService implements FacebookOperations {
 		MultiValueMap<String, String> requestData = new LinkedMultiValueMap<String, String>(data);
 		requestData.add("access_token", accessToken);
 		restTemplate.postForLocation(CONNECTION_URL, requestData, object, connection);
+	}
+	
+	public byte[] getProfilePicture(String accessToken) {
+		ResponseEntity<byte[]> imageBytes = restTemplate.getForEntity("https://graph.facebook.com/me/picture?type=large&access_token={token}", byte[].class, accessToken);
+		return imageBytes.getBody();
 	}
 	
 	// to support unit testing

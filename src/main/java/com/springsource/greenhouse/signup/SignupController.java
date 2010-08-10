@@ -1,9 +1,12 @@
 package com.springsource.greenhouse.signup;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.jets3t.service.S3ServiceException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.s3.S3Operations;
 import org.springframework.stereotype.Controller;
@@ -38,7 +41,7 @@ public class SignupController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String signup(@Valid SignupForm form, BindingResult formBinding, 
-			@RequestParam(value="profileImage", required=false) MultipartFile profileImage, HttpServletRequest request) throws Exception {
+			@RequestParam(value="profileImage", required=false) MultipartFile profileImage, HttpServletRequest request) {
 		if (formBinding.hasErrors()) {
 			return null;
 		}
@@ -55,6 +58,10 @@ public class SignupController {
 		} catch (EmailAlreadyOnFileException e) {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
 			return null;
+		} catch (S3ServiceException e) {
+			
+		} catch (IOException e) {
+			
 		}
 		return "redirect:/";			
 	}
