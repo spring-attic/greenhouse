@@ -43,8 +43,10 @@
   		<form:label path="confirmPassword">Confirm Password</form:label>
   		<form:password path="confirmPassword" />
   		
-  		<label>Profile Image</label>
-  		<input type="file" name="profileImage" />
+  		<form:label path="profileImage">
+  			Profile Image <form:errors path="profileImage" cssClass="error" />
+  		</form:label>
+  		<input type="file" name="profileImage" accept="image/jpeg,image/gif,image/png" />
 	</fieldset>
 	<input type="submit" value="Sign up">
 </form:form>

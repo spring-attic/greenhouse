@@ -65,7 +65,12 @@ public class FacebookService implements FacebookOperations {
 	}
 	
 	public byte[] getProfilePicture(String accessToken) {
-		ResponseEntity<byte[]> imageBytes = restTemplate.getForEntity("https://graph.facebook.com/me/picture?type=large&access_token={token}", byte[].class, accessToken);
+		return getProfilePicture(accessToken, "me");
+	}
+
+	public byte[] getProfilePicture(String accessToken, String profileId) {
+		ResponseEntity<byte[]> imageBytes = restTemplate.getForEntity(PROFILE_LARGE_PICTURE_URL, 
+				byte[].class, profileId, accessToken);
 		return imageBytes.getBody();
 	}
 	
@@ -74,6 +79,7 @@ public class FacebookService implements FacebookOperations {
 		this.restTemplate = restTemplate;
 	}
 	
+	static final String PROFILE_LARGE_PICTURE_URL = "https://graph.facebook.com/{profile}/picture?type=large&access_token={token}";
 	static final String OBJECT_URL = "https://graph.facebook.com/{objectId}";
 	static final String CONNECTION_URL = OBJECT_URL + "/{connection}";
 	
