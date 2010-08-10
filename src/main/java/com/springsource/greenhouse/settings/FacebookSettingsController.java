@@ -3,8 +3,6 @@ package com.springsource.greenhouse.settings;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jets3t.service.S3ServiceException;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.s3.S3Operations;
 import org.springframework.security.core.Authentication;
@@ -21,6 +19,8 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.ProfilePictureException;
+import com.springsource.greenhouse.account.ProfilePictureService;
 import com.springsource.greenhouse.utils.MemberUtils;
 
 @Controller
@@ -30,13 +30,15 @@ public class FacebookSettingsController {
 	private final FacebookOperations facebook;
 	private final S3Operations s3;
 	private final JdbcTemplate jdbcTemplate;
+	private final ProfilePictureService profilePictureService;
 
 	@Inject
-	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, S3Operations s3, JdbcTemplate jdbcTemplate) {
+	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, S3Operations s3, JdbcTemplate jdbcTemplate, ProfilePictureService profilePictureService) {
 		this.accountRepository = accountRepository;
 		this.facebook = facebook;
 		this.s3 = s3;
 		this.jdbcTemplate = jdbcTemplate;
+		this.profilePictureService = profilePictureService;
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.GET)
@@ -83,16 +85,10 @@ public class FacebookSettingsController {
 	
 	public void useFacebookProfilePicture(Account account, String accessToken) {
 		try {
-	        byte[] imageBytes = facebook.getProfilePicture(accessToken);
-	        if(imageBytes.length > 0) {
-	        	// TODO: Figure out real extension from mime type or original file name
-	        	String imageUrl = s3.saveFile("gh-images", "profilepix/" + account.getId() + ".jpg", 
-	        			imageBytes, "image/jpeg");
-	        					
-	        	jdbcTemplate.update("update member set imageUrl = ? where id = ?", imageUrl, account.getId());
-	        }
-        } catch (DataAccessException e) {
-        } catch (S3ServiceException e) {
-        }
+	        byte[] imageBytes = facebook.getProfilePicture(accessToken);	        
+	        profilePictureService.setProfilePicture(account.getId(), imageBytes, "image/jpeg");
+		} catch (ProfilePictureException e) {
+			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
+		}
 	}
 }

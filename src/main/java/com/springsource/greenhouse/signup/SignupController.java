@@ -6,9 +6,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.jets3t.service.S3ServiceException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.s3.S3Operations;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.ProfilePictureException;
+import com.springsource.greenhouse.account.ProfilePictureService;
 import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
@@ -24,14 +23,12 @@ import com.springsource.greenhouse.utils.SecurityUtils;
 public class SignupController {
 
 	private SignupService signupService;
-	private final S3Operations s3;
-	private final JdbcTemplate jdbcTemplate;
+	private final ProfilePictureService profilePictureService;
 		
 	@Inject
-	public SignupController(SignupService signupService, S3Operations s3, JdbcTemplate jdbcTemplate) {
+	public SignupController(SignupService signupService, ProfilePictureService profilePictureService) {
 		this.signupService = signupService;
-		this.s3 = s3;
-		this.jdbcTemplate = jdbcTemplate;
+		this.profilePictureService = profilePictureService;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -47,21 +44,17 @@ public class SignupController {
 		}
 		try {
 			Account account = signupService.signup(form.createPerson());			
-			if(!profileImage.isEmpty()) {
-				// TODO: Figure out real extension from mime type or original file name
-				String imageUrl = s3.saveFile("gh-images", "profilepix/" + account.getId() + ".jpg", 
-						profileImage.getBytes(), profileImage.getContentType());
-								
-				jdbcTemplate.update("update member set imageUrl = ? where id = ?", imageUrl, account.getId());
-			}
 			SecurityUtils.signin(account);
+			profilePictureService.setProfilePicture(account.getId(), profileImage.getBytes(), profileImage.getContentType());
 		} catch (EmailAlreadyOnFileException e) {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
 			return null;
-		} catch (S3ServiceException e) {
-			
+		} catch (ProfilePictureException e) {
+			formBinding.rejectValue("profileImage", "image.notsaved", "unable to save image");
+			return null;
 		} catch (IOException e) {
-			
+			formBinding.rejectValue("profileImage", "image.misread", "unable to read image");
+			return null;
 		}
 		return "redirect:/";			
 	}
