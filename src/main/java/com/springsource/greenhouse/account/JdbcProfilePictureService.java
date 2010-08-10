@@ -20,6 +20,7 @@ public class JdbcProfilePictureService implements ProfilePictureService {
 	}
 	
 	public void setProfilePicture(Long accountId, byte[] imageBytes, String contentType) throws ProfilePictureException {
+		// TODO: Probably should reject non-image files
 		try {
 			if(imageBytes.length > 0) {
 				// TODO: Figure out real extension from mime type or original file name

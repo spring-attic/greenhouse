@@ -3,8 +3,6 @@ package com.springsource.greenhouse.settings;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.s3.S3Operations;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookLink;
@@ -28,16 +26,13 @@ import com.springsource.greenhouse.utils.MemberUtils;
 public class FacebookSettingsController {
 	private final AccountRepository accountRepository;
 	private final FacebookOperations facebook;
-	private final S3Operations s3;
-	private final JdbcTemplate jdbcTemplate;
 	private final ProfilePictureService profilePictureService;
 
 	@Inject
-	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, S3Operations s3, JdbcTemplate jdbcTemplate, ProfilePictureService profilePictureService) {
+	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, 
+			ProfilePictureService profilePictureService) {
 		this.accountRepository = accountRepository;
 		this.facebook = facebook;
-		this.s3 = s3;
-		this.jdbcTemplate = jdbcTemplate;
 		this.profilePictureService = profilePictureService;
 	}
 	
@@ -52,7 +47,8 @@ public class FacebookSettingsController {
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(HttpServletRequest request, Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
+	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
+			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
 		if(StringUtils.hasText(accessToken)) {			
 			accountRepository.connect(account.getId(), "facebook", accessToken, facebookId);		
 			if(request.getParameter("postIt") != null) {
