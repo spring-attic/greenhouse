@@ -7,10 +7,6 @@ insert into Member (firstName, lastName, email, password, username) values ('Ker
 
 insert into App (consumerKey, name, description, website, callbackUrl, secret, owner) values ('a08318eb478a1ee31f69a55276f3af64', 'Greenhouse for the iPhone', 'Awesome', 'http://www.springsource.com', 'x-com-springsource-greenhouse://oauth-response', '80e7f8f7ba724aae9103f297e5fb9bdf', 2);
 
-insert into Update (text, updateTimestamp, member) values ('Keith Donald signed up', 1278019179970, 1);
-insert into Update (text, updateTimestamp, member) values ('Craig Walls signed up', 1278017173970, 2);
-insert into Update (text, updateTimestamp, member) values ('Roy Clarkson signed up', 1274015177470, 3);
-
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier conference series for Spring technologies', 'springone2gx', '#springone2gx', 1);
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('Atlanta Spring Users Group', 'The Spring developers in the Greater Atlanta area', 'atl', '#atlspring', 1);
 
@@ -35,7 +31,7 @@ insert into EventSession (event, number, title, startTime, endTime, description,
 	'#social', 'web');
 insert into EventSessionLeader (event, session, leader) values (1, 3, 2);
 	
-insert into EventSession (event, number, title, startTime, endTime, description, hashtag, track) values (1, 4, 'Choices in Moble Application Development', '2010-10-21 18:45:00Z', '2010-10-21 20:15:00Z',
+insert into EventSession (event, number, title, startTime, endTime, description, hashtag, track) values (1, 4, 'Choices in Mobile Application Development', '2010-10-21 18:45:00Z', '2010-10-21 20:15:00Z',
 	'With the rising prevalence of advanced mobile platforms such as iPhone, Android, and Web OS, the desire for rich mobile clients as another means of accessing enterprise services is becoming something that can no longer be ignored. In this session, we will explore the current mobile development landscape and discuss what you as a Spring developer can do to support this increasingly important paradigm. We will examine the benefits and tradeoffs of native mobile client development vs. web-based mobile client development, and we will explore some of the emerging cross-platform options such as PhoneGap. We will look at the various strategies for utilizing a Spring back-end with these mobile platforms, such as consumption of RESTful services, authentication and authorization via OAuth, and server-push style messaging.',
 	'#mobile', 'web');
 insert into EventSessionLeader (event, session, leader) values (1, 4, 3);

@@ -15,12 +15,12 @@ public class JdbcSignupService implements SignupService {
 
 	private JdbcTemplate jdbcTemplate;
 	
-	private SignedUpMessageGateway messageGateway;
+	private SignedUpGateway gateway;
 	
 	@Inject
-	public JdbcSignupService(JdbcTemplate jdbcTemplate, SignedUpMessageGateway messageGateway) {
+	public JdbcSignupService(JdbcTemplate jdbcTemplate, SignedUpGateway gateway) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.messageGateway = messageGateway;
+		this.gateway = gateway;
 	}
 
 	public Account signup(Person person) throws EmailAlreadyOnFileException {
@@ -32,7 +32,7 @@ public class JdbcSignupService implements SignupService {
 		}
 		Long memberId = jdbcTemplate.queryForLong("call identity()");
 		Account account = new Account(memberId, person.getFirstName(), person.getLastName(), person.getEmail());
-		messageGateway.signedUp(account);
+		gateway.signedUp(account);
 		return account;
 	}
 

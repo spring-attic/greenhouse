@@ -2,25 +2,13 @@
 <beans:beans xmlns="http://www.springframework.org/schema/integration" 
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mail="http://www.springframework.org/schema/integration/mail"
-	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-1.0.xsd
-		http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail-1.0.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- Gateway that publishes signup messages to the global message channel -->
-	<gateway id="signupMessageGateway" service-interface="com.springsource.greenhouse.signup.SignedUpMessageGateway" default-request-channel="globalChannel" />
-		 		
-	<!-- Routes SignupMessages to the signupChannel -->
-	<payload-type-router input-channel="globalChannel">
-		<mapping type="com.springsource.greenhouse.account.Account" channel="signedUpChannel" />
-	</payload-type-router>	
+	<beans:import resource="integration-signup.xml" />
 
-	<publish-subscribe-channel id="signedUpChannel" />
-
-	<service-activator input-channel="signedUpChannel" method="insertSignupUpdate" ref="updatesService" />
-
-	<beans:import resource="integration-updates.xml" />
-
-	<beans:import resource="integration-welcome-mail.xml" />
+	<publish-subscribe-channel id="actionChannel" />
+	
+	<beans:import resource="integration-badge.xml" />
 			
 </beans:beans>
