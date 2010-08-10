@@ -53,6 +53,7 @@ public class SignupController {
 			// TODO: Figure out best way to handle this
 		} catch (IOException e) {
 			// TODO: Figure out best way to handle this
+			
 		}
 		return "redirect:/";			
 	}

@@ -11,4 +11,5 @@ public interface FacebookOperations {
 	void postToWall(String accessToken, String message, FacebookLink link);
 	void publish(String accessToken, String object, String connection, MultiValueMap<String, String> data);
 	byte[] getProfilePicture(String accessToken);
+	byte[] getProfilePicture(String accessToken, String profileId);
 }
