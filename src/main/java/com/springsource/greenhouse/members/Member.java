@@ -5,6 +5,8 @@ public class Member {
 	private String firstName;
 	
 	private String lastName;
+	
+	private String profileImageUrl;
 
 	public String getDisplayName() {
 		return firstName + " " + lastName;
@@ -25,5 +27,13 @@ public class Member {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	public void setProfileImageUrl(String profileImageUrl) {
+	    this.profileImageUrl = profileImageUrl;
+    }
+
+	public String getProfileImageUrl() {
+	    return profileImageUrl;
+    }
 	
 }

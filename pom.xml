@@ -244,6 +244,26 @@
 			<artifactId>wurfl</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+		
+		<!-- File Upload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.java.dev.jets3t</groupId>
+			<artifactId>jets3t</artifactId>
+			<version>0.7.4</version>
+		</dependency>
+
 
 		<!-- Test -->
 		<dependency>

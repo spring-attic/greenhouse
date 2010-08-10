@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.action.Location;
 
 @Controller
 @RequestMapping("/events")
@@ -53,7 +54,7 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.POST)
-	public @ResponseBody void postTweet(@PathVariable Long eventId, @RequestParam String status, @RequestParam double latitude, @RequestParam double longitude, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
+	public @ResponseBody void postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
 		twitter.updateStatus(accessToken, status);
 	}
 

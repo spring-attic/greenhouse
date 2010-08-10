@@ -17,6 +17,8 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.ProfilePictureException;
+import com.springsource.greenhouse.account.ProfilePictureService;
 import com.springsource.greenhouse.utils.MemberUtils;
 
 @Controller
@@ -24,11 +26,14 @@ import com.springsource.greenhouse.utils.MemberUtils;
 public class FacebookSettingsController {
 	private final AccountRepository accountRepository;
 	private final FacebookOperations facebook;
+	private final ProfilePictureService profilePictureService;
 
 	@Inject
-	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook) {
+	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, 
+			ProfilePictureService profilePictureService) {
 		this.accountRepository = accountRepository;
 		this.facebook = facebook;
+		this.profilePictureService = profilePictureService;
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.GET)
@@ -42,12 +47,18 @@ public class FacebookSettingsController {
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(HttpServletRequest request, Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
+	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
+			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
 		if(StringUtils.hasText(accessToken)) {			
 			accountRepository.connect(account.getId(), "facebook", accessToken, facebookId);		
 			if(request.getParameter("postIt") != null) {
 				postGreenhouseConnectionToWall(request, account, accessToken);
 			}
+			
+			if(request.getParameter("useFBPic") != null) {
+				useFacebookProfilePicture(account, accessToken);
+			}
+			
 			FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
 		}
 		return "redirect:/settings/facebook";
@@ -66,5 +77,14 @@ public class FacebookSettingsController {
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
 		accountRepository.disconnect(account.getId(), "facebook");
 		return "redirect:/settings/facebook";
+	}
+	
+	public void useFacebookProfilePicture(Account account, String accessToken) {
+		try {
+	        byte[] imageBytes = facebook.getProfilePicture(accessToken);	        
+	        profilePictureService.setProfilePicture(account.getId(), imageBytes, "image/jpeg");
+		} catch (ProfilePictureException e) {
+			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
+		}
 	}
 }
