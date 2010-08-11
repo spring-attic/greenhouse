@@ -151,10 +151,8 @@ public class TwitterService implements TwitterOperations {
 				uriVariables.put(key, parameters.get(key));
 			}
 		}
-		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(
-				form, headers);
-		return restTemplate.exchange(twitterUrl, method, requestEntity,
-				responseType, uriVariables).getBody();
+		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(form, headers);
+		return restTemplate.exchange(twitterUrl, method, requestEntity, responseType, uriVariables).getBody();
 	}
 
 	private HttpHeaders buildRequestHeaders(OAuthConsumerToken accessToken,
