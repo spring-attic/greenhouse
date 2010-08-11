@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://spring-security-oauth.codehaus.org/3.0"
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                        http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
+		http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
 
 	<consumer resource-details-service-ref="resourceDetails" token-services-factory-ref="consumerTokenServicesFactory">
 		<url pattern="/settings/twitter/authorize**" resources="twitter" />
@@ -27,5 +28,3 @@
 	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookService" />
 	
 </beans:beans>
-
-

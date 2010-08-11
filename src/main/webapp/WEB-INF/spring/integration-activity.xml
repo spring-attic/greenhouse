@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/integration"
-	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
@@ -19,17 +19,24 @@
 	<!-- Sends Member Actions to the badging system for processing -->		 		
 	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="awardedBadgeChannel" />
 
-	<!-- Badge system configuration -->
-	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.badge.BadgeSystemFactoryBean" />
-	
 	<!-- AwardedBadge channel -->
 	<publish-subscribe-channel id="awardedBadgeChannel" />
 
 	<!-- AwardedBadge->RecentActivity Transformer -->
 	<transformer input-channel="awardedBadgeChannel" output-channel="recentActivity">
-		<bean:bean class="com.springsource.greenhouse.badge.AwardedBadgeRecentActivityTransformer" />
+		<beans:bean class="com.springsource.greenhouse.badge.AwardedBadgeRecentActivityTransformer" />	
 	</transformer>
 	
 	<!-- TODO AwardedBadge Mail Notifier -->
+
+	<beans:bean id="actionRepository" class="com.springsource.greenhouse.action.JdbcActionRepository" />
 	
+	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.badge.BadgeSystemFactoryBean">
+		<beans:constructor-arg ref="badgeRepository" />
+	</beans:bean>
+	
+	<beans:bean id="badgeRepository" class="com.springsource.greenhouse.badge.JdbcBadgeRepository">
+		<beans:constructor-arg ref="jdbcTemplate" />
+	</beans:bean>
+		
 </beans:beans>

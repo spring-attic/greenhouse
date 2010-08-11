@@ -1,11 +1,14 @@
 package com.springsource.greenhouse.badge;
 
+import javax.inject.Inject;
+
 import org.springframework.beans.factory.FactoryBean;
 
 public class BadgeSystemFactoryBean implements FactoryBean<BadgeSystem> {
 
 	private BadgeRepository badgeRepository;
 	
+	@Inject
 	public BadgeSystemFactoryBean(BadgeRepository badgeRepository) {
 		this.badgeRepository = badgeRepository;
 	}

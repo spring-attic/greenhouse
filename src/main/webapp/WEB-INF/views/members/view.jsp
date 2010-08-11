@@ -12,8 +12,8 @@
 	
 	<div id="connections">
 		<ul>
-			<li><a href="http://www.twitter.com/${connectedIds['twitter']}">At Twitter</a></li>
-			<li><a href="http://www.facebook.com/profile.php?id=${connectedIds['facebook']}">At Facebook</a></li>
+			<li><a href="http://www.twitter.com/${connectedIds['twitter']}">On Twitter</a></li>
+			<li><a href="http://www.facebook.com/profile.php?id=${connectedIds['facebook']}">On Facebook</a></li>
 		</ul>
 	</div>
 	

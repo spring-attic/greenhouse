@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
-				xmlns:util="http://www.springframework.org/schema/util"
-				xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<http use-expressions="true">
 		<!-- Authentication policy -->
-    	<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="authenticationFailureHandler" />
+		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="authenticationFailureHandler" />
 		<logout logout-url="/signout" />
 		<!-- Authorization policy -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/signup" access="permitAll" />
 		<intercept-url pattern="/signup/fb" access="permitAll" />
-		<intercept-url pattern="/reset/**" access="permitAll" />
 		<intercept-url pattern="/signin" filters="none" method="GET" />
 		<intercept-url pattern="/signin/fb" access="permitAll" method="POST" />
+		<intercept-url pattern="/reset" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 	</http>
@@ -27,27 +26,16 @@
 
 	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.signin.UsernamePasswordAuthenticationProvider">
 		<beans:constructor-arg>
-			<beans:bean class="com.springsource.greenhouse.account.JdbcUsernamePasswordAuthenticationService">
-				<beans:constructor-arg ref="jdbcTemplate" />
-			</beans:bean>
+			<beans:bean class="com.springsource.greenhouse.account.JdbcUsernamePasswordAuthenticationService" />
 		</beans:constructor-arg>
 	</beans:bean>
+
+	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
 	
 	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
-
-	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository">
-		<beans:constructor-arg ref="jdbcTemplate" />
-	</beans:bean>
 
 	<beans:import resource="security-oauth-provider.xml" />
 	
     <beans:import resource="security-oauth-consumer.xml" />
-    
-    <util:properties id="s3Properties" location="classpath:s3.properties" />
-    
-	<beans:bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
-		<beans:constructor-arg value="#{s3Properties['s3.accessKey']}" index="0" />
-		<beans:constructor-arg value="#{s3Properties['s3.secretKey']}" index="1" />
-	</beans:bean>
     
 </beans:beans>

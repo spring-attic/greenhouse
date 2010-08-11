@@ -5,9 +5,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class JdbcBadgeRepository implements BadgeRepository {
 
 	private JdbcTemplate jdbcTemplate;
@@ -17,11 +15,11 @@ public class JdbcBadgeRepository implements BadgeRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public AwardedBadge createAwardedBadge(String badgeName, Long accountId, Long actionId) {
+	public AwardedBadge createAwardedBadge(String badge, Long accountId, Long actionId) {
 		DateTime awardTime = new DateTime(DateTimeZone.UTC);
-		jdbcTemplate.update("insert into AwardedBadge (badgeName, awardTime, member, memberAction) values (?, ?, ?, ?)", badgeName, awardTime, accountId, actionId);
+		jdbcTemplate.update("insert into AwardedBadge (badge, awardTime, member, memberAction) values (?, ?, ?, ?)", badge, awardTime.toDate(), accountId, actionId);
 		Long id = jdbcTemplate.queryForLong("call identity()");
-		return new AwardedBadge(id, badgeName, awardTime, accountId, actionId);
+		return new AwardedBadge(id, badge, awardTime, accountId, actionId);
 	}
 
 }

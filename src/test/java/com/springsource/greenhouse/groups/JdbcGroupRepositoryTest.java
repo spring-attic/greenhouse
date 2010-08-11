@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.groups;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class JdbcGroupRepositoryTest {
+	
 	private EmbeddedDatabase db;
 
 	private JdbcTemplate jdbcTemplate;
@@ -22,6 +23,7 @@ public class JdbcGroupRepositoryTest {
 	@Before
 	public void setup() {
 		db = GreenhouseTestDatabaseFactory.createTestDatabase(new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
+				new FileSystemResource("src/main/webapp/WEB-INF/database/schema-activity.sql"),				
 				new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
 				new ClassPathResource("JdbcGroupRepositoryTest.sql", getClass()));
 		jdbcTemplate = new JdbcTemplate(db);

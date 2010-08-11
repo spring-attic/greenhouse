@@ -24,7 +24,7 @@ public class HomeController {
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String home(Principal user, Model model) {
 		if (user == null) {
-			model.addAttribute("updates", recentActivityRepository.findInitial());
+			model.addAttribute("recentActivity", recentActivityRepository.findInitial());
 			return "homeNotSignedIn";
 		} else {
 			return "homeSignedIn";

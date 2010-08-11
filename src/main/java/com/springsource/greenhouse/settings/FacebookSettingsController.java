@@ -24,8 +24,11 @@ import com.springsource.greenhouse.utils.MemberUtils;
 @Controller
 @RequestMapping("/settings")
 public class FacebookSettingsController {
+	
 	private final AccountRepository accountRepository;
+	
 	private final FacebookOperations facebook;
+	
 	private final ProfilePictureService profilePictureService;
 
 	@Inject
@@ -49,16 +52,14 @@ public class FacebookSettingsController {
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
 	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
 			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
-		if(StringUtils.hasText(accessToken)) {			
+		if (StringUtils.hasText(accessToken)) {			
 			accountRepository.connect(account.getId(), "facebook", accessToken, facebookId);		
-			if(request.getParameter("postIt") != null) {
+			if (request.getParameter("postIt") != null) {
 				postGreenhouseConnectionToWall(request, account, accessToken);
-			}
-			
-			if(request.getParameter("useFBPic") != null) {
+			}			
+			if (request.getParameter("useFBPic") != null) {
 				useFacebookProfilePicture(account, accessToken);
 			}
-			
 			FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
 		}
 		return "redirect:/settings/facebook";

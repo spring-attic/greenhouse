@@ -8,7 +8,7 @@
 		<put-attribute name="content">
 			<definition name="content" template="/WEB-INF/views/home/content.jsp">
 				<put-attribute name="intro" value="/WEB-INF/views/home/intro.jsp" />
-				<put-attribute name="updates" value="/WEB-INF/views/home/updates.jsp" />
+				<put-attribute name="recentActivity" value="/WEB-INF/views/home/recentActivity.jsp" />
 			</definition>
 		</put-attribute>
 	</definition>

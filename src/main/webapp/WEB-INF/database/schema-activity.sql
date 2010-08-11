@@ -9,16 +9,16 @@ create table MemberAction (id identity,
 
 create table Badge (name varchar,
 					description varchar not null,
-					level varchar not null,
+					level tinyint not null,
 					icon varchar not null,
 					primary key (name));
 					
 create table AwardedBadge(id identity,
-					name varchar not null,
+					badge varchar not null,
 					awardTime timestamp not null,
 					member bigint not null,
 					memberAction bigint,
 					primary key (id),
-					foreign key (name) references Badge(name),					
+					foreign key (badge) references Badge(name),					
 					foreign key (member) references Member(id),
 					foreign key (memberAction) references MemberAction(id));

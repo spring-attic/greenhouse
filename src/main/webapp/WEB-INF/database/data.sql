@@ -5,6 +5,8 @@ insert into Member (firstName, lastName, email, password, username) values ('Jer
 insert into Member (firstName, lastName, email, password, username) values ('Mark', 'Fisher', 'mfisher@vmware.com', 'boston', 'mfisher');
 insert into Member (firstName, lastName, email, password, username) values ('Keri', 'Donald', 'keridonald@gmail.com', 'melbourne', 'kkdonald');
 
+insert into Badge (name, description, level, icon) values ('Newbie', 'You joined!', 1, 'http://localhost:8080/resources/badges/newbie.png');
+
 insert into App (consumerKey, name, description, website, callbackUrl, secret, owner) values ('a08318eb478a1ee31f69a55276f3af64', 'Greenhouse for the iPhone', 'Awesome', 'http://www.springsource.com', 'x-com-springsource-greenhouse://oauth-response', '80e7f8f7ba724aae9103f297e5fb9bdf', 2);
 
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier conference series for Spring technologies', 'springone2gx', '#springone2gx', 1);
