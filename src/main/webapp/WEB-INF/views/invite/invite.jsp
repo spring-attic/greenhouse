@@ -19,6 +19,9 @@
 		  <c:if test="${not empty facebookUserId}">
           (you are currently logged into Facebook as <fb:name linked="false" useyou="false" uid="${facebookUserId}"></fb:name>.
           <a onclick="FB.logoutThenGoTo('<c:url value="/signout"/>');return false;" href="#">Not you?</a>)
-          </c:if>
+          </c:if>          
 	</li>
 </ul>
+
+<div id="fb-root"></div>	
+

@@ -30,3 +30,5 @@
 		</fb:fbml>
 	</script>
 </fb:serverfbml>
+
+<div id="fb-root"></div>	

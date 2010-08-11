@@ -7,6 +7,7 @@
 		<h2>Connect to Facebook</h2>
 		<p>Click the button to connect your Greenhouse account with your Facebook account.</p>
 	</div>
+	<div id="fb-root"></div>	
 	<fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Connect to Facebook</fb:login-button><br/><br/>
 	<label for="postIt">Post a link to my Greenhouse profile on my wall after connecting</label>
 	<input id="postIt" type="checkbox" name="postIt" /><br/>
