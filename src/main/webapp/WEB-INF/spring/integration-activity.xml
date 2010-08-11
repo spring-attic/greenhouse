@@ -14,6 +14,7 @@
 	-->
 
 	<!-- RecentActivity Channel Adapter -->
+	<!-- TODO replace with Ajax push adapter -->
 	<logging-channel-adapter id="recentActivity" />
 			
 	<!-- Sends Member Actions to the badging system for processing -->		 		
@@ -31,6 +32,7 @@
 
 	<beans:bean id="actionRepository" class="com.springsource.greenhouse.action.JdbcActionRepository" />
 	
+	<!-- TODO SPR-7450 -->
 	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.badge.BadgeSystemFactoryBean">
 		<beans:constructor-arg ref="badgeRepository" />
 	</beans:bean>
