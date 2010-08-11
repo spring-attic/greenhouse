@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- Channel for Member Action messages -->
+	<publish-subscribe-channel id="actionChannel" />
+
+	<!-- TODO Action->RecentActivity Transformer
+	<transformer input-channel="actionChannel" output-channel="recentActivity">
+	</transformer>
+	-->
+
+	<!-- RecentActivity Channel Adapter -->
+	<logging-channel-adapter id="recentActivity" />
+			
+	<!-- Sends Member Actions to the badging system for processing -->		 		
+	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="awardedBadgeChannel" />
+
+	<!-- Badge system configuration -->
+	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.badge.BadgeSystemFactoryBean" />
+	
+	<!-- AwardedBadge channel -->
+	<publish-subscribe-channel id="awardedBadgeChannel" />
+
+	<!-- AwardedBadge->RecentActivity Transformer -->
+	<transformer input-channel="awardedBadgeChannel" output-channel="recentActivity">
+		<bean:bean class="com.springsource.greenhouse.badge.AwardedBadgeRecentActivityTransformer" />
+	</transformer>
+	
+	<!-- TODO AwardedBadge Mail Notifier -->
+	
+</beans:beans>

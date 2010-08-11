@@ -15,7 +15,7 @@ public class BroadcasterBadgeAwarder implements ActionTriggeredBadgeAwarder<Even
 		this.badgeRepository = badgeRepository;
 	}
 	
-	public AwardedBadge awardForAction(EventTweetAction action) {
+	public AwardedBadge awardBadgeForAction(EventTweetAction action) {
 		if (alreadyAwarded(action.getAccountId(), action.getEventId())) {
 			return null;
 		}

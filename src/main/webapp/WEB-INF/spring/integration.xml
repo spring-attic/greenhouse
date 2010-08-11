@@ -7,8 +7,6 @@
 
 	<beans:import resource="integration-signup.xml" />
 
-	<publish-subscribe-channel id="actionChannel" />
-	
-	<beans:import resource="integration-badge.xml" />
+	<beans:import resource="integration-activity.xml" />
 			
 </beans:beans>

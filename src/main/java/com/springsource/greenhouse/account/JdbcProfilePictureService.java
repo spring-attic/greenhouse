@@ -13,10 +13,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.s3.S3Operations;
 import org.springframework.stereotype.Service;
 
+// TODO consider extracting out the persisting of the imageUrl
 @Service
 public class JdbcProfilePictureService implements ProfilePictureService {
 	
 	private final S3Operations s3;
+	
 	private final JdbcTemplate jdbcTemplate;
 
 	@Inject
@@ -25,23 +27,23 @@ public class JdbcProfilePictureService implements ProfilePictureService {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public void setProfilePicture(Long accountId, byte[] imageBytes) throws ProfilePictureException {
+	public String setProfilePicture(Long accountId, byte[] imageBytes) throws ProfilePictureException {
 		try {
-			setProfilePicture(accountId, imageBytes, guessContentType(imageBytes));
+			return setProfilePicture(accountId, imageBytes, guessContentType(imageBytes));
         } catch (IOException e) {
-        	throw new ProfilePictureException("Unable to determine content type of image data.");
+        		throw new ProfilePictureException("Unable to determine content type of image data.");
         }
 	}
 
-	public void setProfilePicture(Long accountId, byte[] imageBytes, String contentType) throws ProfilePictureException {		
+	public String setProfilePicture(Long accountId, byte[] imageBytes, String contentType) throws ProfilePictureException {		
 		validateContentType(contentType);
 		try {
 			if(imageBytes.length > 0) {
 				String imageUrl = s3.saveFile(
 						"gh-images", "profilepix/" + accountId + IMAGE_TYPE_EXTENSIONS.get(contentType), 
-						imageBytes, contentType);
-								
+						imageBytes, contentType);					
 				jdbcTemplate.update("update member set imageUrl = ? where id = ?", imageUrl, accountId);
+				return imageUrl;
 			}  else {
 				throw new ProfilePictureException("Error saving profile picture.");
 			}
@@ -58,7 +60,7 @@ public class JdbcProfilePictureService implements ProfilePictureService {
 	}
 	
 	private void validateContentType(String contentType) throws ProfilePictureException {
-		if(!IMAGE_TYPE_EXTENSIONS.keySet().contains(contentType)) {
+		if (!IMAGE_TYPE_EXTENSIONS.keySet().contains(contentType)) {
 			throw new ProfilePictureException("Cannot accept content type " + contentType + " as profile picture.");
 		}
     }

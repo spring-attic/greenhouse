@@ -30,8 +30,8 @@ public class JdbcSignupService implements SignupService {
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
 		}
-		Long memberId = jdbcTemplate.queryForLong("call identity()");
-		Account account = new Account(memberId, person.getFirstName(), person.getLastName(), person.getEmail());
+		Long accountId = jdbcTemplate.queryForLong("call identity()");
+		Account account = new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail());
 		gateway.signedUp(account);
 		return account;
 	}

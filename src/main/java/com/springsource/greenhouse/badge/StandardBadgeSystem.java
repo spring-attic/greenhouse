@@ -1,48 +1,46 @@
 package com.springsource.greenhouse.badge;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.core.GenericTypeResolver;
 
 import com.springsource.greenhouse.action.Action;
 import com.springsource.greenhouse.action.SimpleAction;
 
-public class StandardBadgeSystem implements BadgeSystem {
+class StandardBadgeSystem implements BadgeSystem {
 
-	private Map<String, List<ActionTriggeredBadgeAwarder>> simpleActionTriggeredBadgeAwarders;
+	private Map<String, SimpleActionTriggeredBadgeAwarder> simpleActionTriggeredBadgeAwarders = 
+		new HashMap<String, SimpleActionTriggeredBadgeAwarder>();
 
-	private Map<Class<?>, List<ActionTriggeredBadgeAwarder>> actionTriggeredBadgeAwarders;
+	private Map<Class<? extends Action>, ActionTriggeredBadgeAwarder<? extends Action>> actionTriggeredBadgeAwarders = 
+		new HashMap<Class<? extends Action>, ActionTriggeredBadgeAwarder<? extends Action>>();
 
 	public void add(SimpleActionTriggeredBadgeAwarder badgeAwarder, String simpleActionType) {
-		
+		simpleActionTriggeredBadgeAwarders.put(simpleActionType, badgeAwarder);
 	}
 	
-	public void add(ActionTriggeredBadgeAwarder<?> badgeAwarder) {
-		
+	public void add(ActionTriggeredBadgeAwarder<? extends Action> badgeAwarder) {
+		@SuppressWarnings("unchecked")
+		Class<? extends Action> actionType = (Class<? extends Action>) GenericTypeResolver.resolveTypeArgument(badgeAwarder.getClass(), ActionTriggeredBadgeAwarder.class);
+		actionTriggeredBadgeAwarders.put(actionType, badgeAwarder);		
 	}
 	
-	public List<AwardedBadge> awardForAction(Action action) {
+	public AwardedBadge awardBadgeForAction(Action action) {
 		if (action instanceof SimpleAction) {
 			String simpleActionType = ((SimpleAction)action).getType();
-			return invokeAwarders(simpleActionTriggeredBadgeAwarders.get(simpleActionType), action);
+			return invokeBadgeAwarder(simpleActionTriggeredBadgeAwarders.get(simpleActionType), action);
 		} else {
-			return invokeAwarders(actionTriggeredBadgeAwarders.get(action.getClass()), action);
+			return invokeBadgeAwarder(actionTriggeredBadgeAwarders.get(action.getClass()), action);
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private List<AwardedBadge> invokeAwarders(List<ActionTriggeredBadgeAwarder> awarders, Action action) {
-		if (awarders == null) {
+	@SuppressWarnings("unchecked")
+	private AwardedBadge invokeBadgeAwarder(ActionTriggeredBadgeAwarder awarder, Action action) {
+		if (awarder == null) {
 			return null;
 		}
-		List<AwardedBadge> badges = new ArrayList<AwardedBadge>();
-		for (ActionTriggeredBadgeAwarder awarder : awarders) {
-			AwardedBadge badge = awarder.awardForAction(action);
-			if (badge != null) {
-				badges.add(badge);
-			}
-		}
-		return badges.isEmpty() ? null : badges;
+		return awarder.awardBadgeForAction(action);
 	}
 
 }

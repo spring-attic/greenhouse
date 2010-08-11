@@ -4,6 +4,6 @@ import com.springsource.greenhouse.action.Action;
 
 public interface ActionTriggeredBadgeAwarder<A extends Action> {
 	
-	public AwardedBadge awardForAction(A action);
+	public AwardedBadge awardBadgeForAction(A action);
 	
 }

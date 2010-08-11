@@ -13,8 +13,13 @@
 	<!-- Channel for signed up messages -->		 		
 	<publish-subscribe-channel id="signedUpChannel" />
 
+	<!-- ACTION PROCESSING -->
+	
 	<!-- Saves a 'SignedUp' action to the database and outputs it to the actionChannel -->
+	<!-- TODO resolve currentLocation from request -->
 	<service-activator input-channel="signedUpChannel" expression="@actionRepository.createSimpleAction('SignedUp', payload.id, null)" output-channel="actionChannel" />
+	
+	<!-- WELCOME MAIL -->
 	
 	<!-- Bridges to the asynchronous welcome mailer -->
 	<bridge input-channel="signedUpChannel" output-channel="welcomeMailerChannel" />

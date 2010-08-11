@@ -1,38 +1,29 @@
 package com.springsource.greenhouse.recent;
 
-import org.joda.time.DateTime;
-
 public class RecentActivity {
 
-	private final RecentActivityMember member;
+	private final String memberPictureUrl;
 	
-	private final DateTime time;
-	
-	private final String icon;
-	
-	private final String message;
+	private final String text;
 
-	public RecentActivity(RecentActivityMember member, DateTime time, String icon, String message) {
-		this.member = member;
-		this.time = time;
-		this.icon = icon;
-		this.message = message;
+	private final String imageUrl;
+
+	public RecentActivity(String memberPictureUrl, String text, String imageUrl) {
+		this.memberPictureUrl = memberPictureUrl;
+		this.text = text;
+		this.imageUrl = imageUrl;
 	}
 
-	public RecentActivityMember getMember() {
-		return member;
+	public String getMemberPictureUrl() {
+		return memberPictureUrl;
 	}
 
-	public DateTime getTime() {
-		return time;
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public String getMessage() {
-		return message;
+	public String getText() {
+		return text;
 	}	
-		
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	
 }

@@ -15,8 +15,6 @@ public final class Account implements Serializable {
 	
 	private final String username;
 	
-	private String profileImageUrl;
-	
 	public Account(Long id) {
 		this(id, null, null, null, null);
 	}
@@ -60,14 +58,6 @@ public final class Account implements Serializable {
 	public String getMemberProfileKey() {
 		return username != null ? username : id.toString(); 
 	}
-
-	public void setProfileImageUrl(String profileImageUrl) {
-	    this.profileImageUrl = profileImageUrl;
-    }
-
-	public String getProfileImageUrl() {
-	    return profileImageUrl;
-    }
 	
 	public Account newUsername(String newUsername) {
 		return new Account(id, firstName, lastName, email, newUsername);
