@@ -54,7 +54,7 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.POST)
-	public @ResponseBody void postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
+	public @ResponseBody void postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
 		twitter.updateStatus(accessToken, status);
 	}
 
@@ -89,7 +89,7 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
-	public @ResponseBody void postSessionTweet(@PathVariable Long id, @PathVariable Short number, @RequestParam String status, @RequestParam double latitude, @RequestParam double longitude, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
+	public @ResponseBody void postSessionTweet(@PathVariable Long id, @PathVariable Short number, @RequestParam String status, @RequestParam double latitude, @RequestParam double longitude, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
 		twitter.updateStatus(accessToken, status);
 	}
 	
