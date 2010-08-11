@@ -93,6 +93,7 @@ public class TwitterSettingsController {
 		}
 	}
 	
+	// TODO capitalize to Twitter
 	private static final String TWITTER_PROVIDER = "twitter";
 	
 	private static final String UPDATE_CONNECTED_ACCOUNT_ID = 
