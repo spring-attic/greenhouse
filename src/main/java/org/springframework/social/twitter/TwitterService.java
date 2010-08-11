@@ -157,7 +157,7 @@ public class TwitterService implements TwitterOperations {
 
 	private HttpHeaders buildRequestHeaders(OAuthConsumerToken accessToken, HttpMethod method, String twitterUrl, Map<String, String> parameters) {
 	    try {
-	    	ProtectedResourceDetails details = resourceDetailsService.loadProtectedResourceDetailsById("twitter");
+	    		ProtectedResourceDetails details = resourceDetailsService.loadProtectedResourceDetailsById("Twitter");
 	        String authorizationHeader = oauthSupport.getAuthorizationHeader(details, accessToken, new URL(twitterUrl), method.name(), parameters);
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("Authorization", authorizationHeader);
