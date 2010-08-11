@@ -54,7 +54,7 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.POST)
-	public @ResponseBody void postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
+	public @ResponseBody void postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation, @OAuthAccessToken("twitter") OAuthConsumerToken accessToken) {
 		twitter.updateStatus(accessToken, status);
 	}
 
