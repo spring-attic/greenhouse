@@ -21,7 +21,7 @@ li.eventTweet {
 	padding-bottom: 10pt;
 }
 
-li.inviteNetwork {
+ul#inviteNetworks li {
 	list-style: none;
 	padding-bottom: 20pt;
 }
