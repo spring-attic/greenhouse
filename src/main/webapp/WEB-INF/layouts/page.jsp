@@ -22,8 +22,6 @@
 	<script type="text/javascript" src="<c:url value="/resources/jquery-cookie/1.0/jquery-cookie.js" />"></script>
 </head>
 <body>
-	<!-- TODO what is this? -->
-	<div id="fb-root"></div>	
 	<div id="header">
 		<tiles:insertAttribute name="header" />
 	</div>

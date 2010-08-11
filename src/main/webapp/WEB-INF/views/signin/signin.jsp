@@ -25,6 +25,7 @@
 </form>
 
 <c:if test="${!currentDevice.mobileBrowser}">
+<div id="fb-root"></div>	
 <form id="fb_signin" action="<c:url value="/signin/fb" />" method="post">
 <%-- Unfortunately, offline access is the only way to get an access token that doesn't expire. 
 	Facebook currently doesn't implement the refresh_token fragment of section 3.5.1 of the

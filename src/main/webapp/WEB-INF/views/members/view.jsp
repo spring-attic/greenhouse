@@ -20,6 +20,7 @@
 		</ul>
 	</div>
 	
+	<div id="fb-root"></div>	
 	<fb:like></fb:like>
 	
 </div>
