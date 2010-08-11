@@ -23,8 +23,7 @@
 </head>
 <body>
 	<!-- TODO what is this? -->
-	<div id="fb-root"></div>
-	
+	<div id="fb-root"></div>	
 	<div id="header">
 		<tiles:insertAttribute name="header" />
 	</div>
@@ -38,8 +37,8 @@
 	<c:forEach var="script" items="${scripts}">
 		<script type="text/javascript" src="<c:url value="/resources/${script}" />"></script>	
 	</c:forEach>
-<script type="text/javascript">
-$.cookie('Greenhouse.timeZoneOffset', new Date().getTimezoneOffset() / 60 * -1);
-</script>
+	<script type="text/javascript">
+		$.cookie('Greenhouse.timeZoneOffset', new Date().getTimezoneOffset() / 60 * -1);
+	</script>
 </body>
 </html>

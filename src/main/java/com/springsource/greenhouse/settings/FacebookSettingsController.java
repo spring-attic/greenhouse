@@ -89,6 +89,6 @@ public class FacebookSettingsController {
 		}
 	}
 	
-	private static final String FACEBOOK_PROVIDER = "facebook";
+	private static final String FACEBOOK_PROVIDER = "Facebook";
 
 }
