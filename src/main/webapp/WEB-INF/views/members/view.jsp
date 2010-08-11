@@ -1,21 +1,25 @@
-<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<div id="personInfo">
-	<c:out value="${member.displayName}" escapeXml="true"/>
+<div id="memberProfile">
+
+	<c:out value="${profile.displayName}" />
 	
-	<c:if test="${member.profileImageUrl != null}">
-	<div id="profilePicture">
-		<img src="${member.profileImageUrl}" />
+	<c:if test="${profile.pictureUrl != null}">
+	<div id="picture">
+		<img src="${profile.pictureUrl}" />
 	</div>	
 	</c:if>
 	
-	<div id="connections">
+	<div id="connectedProfiles">
 		<ul>
-			<li><a href="http://www.twitter.com/${connectedIds['twitter']}">On Twitter</a></li>
-			<li><a href="http://www.facebook.com/profile.php?id=${connectedIds['facebook']}">On Facebook</a></li>
+			<c:forEach var="connectedProfile" items="${connectedProfiles}">
+			<li>
+				<a href="${connectedProfile.url}">${connectedProfile.name}</a>
+			</li>
+			</c:forEach>
 		</ul>
 	</div>
 	
 	<fb:like></fb:like>
+	
 </div>

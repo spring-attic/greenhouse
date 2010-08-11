@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.account;
+package com.springsource.greenhouse.members;
 
 // TODO consider unchecked exceptions instead of checked
 // or make checked exceptions more specific if recoverable

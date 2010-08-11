@@ -3,8 +3,8 @@ create table Member (id identity,
 					lastName varchar not null,
 					email varchar(320) not null unique,
 					password varchar not null,
-					username varchar(15) unique,
-					imageUrl varchar,
+					username varchar unique,
+					pictureUrl varchar,
 					reputation int default 0,
 					primary key (id));
 

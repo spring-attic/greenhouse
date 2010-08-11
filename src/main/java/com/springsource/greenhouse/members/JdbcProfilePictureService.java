@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.account;
+package com.springsource.greenhouse.members;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.s3.S3Operations;
 import org.springframework.stereotype.Service;
 
-// TODO consider extracting out the persisting of the imageUrl
+// TODO consider extracting out the persisting of the pictureUrl
 @Service
 public class JdbcProfilePictureService implements ProfilePictureService {
 	
@@ -38,12 +38,12 @@ public class JdbcProfilePictureService implements ProfilePictureService {
 	public String setProfilePicture(Long accountId, byte[] imageBytes, String contentType) throws ProfilePictureException {		
 		validateContentType(contentType);
 		try {
-			if(imageBytes.length > 0) {
-				String imageUrl = s3.saveFile(
-						"gh-images", "profilepix/" + accountId + IMAGE_TYPE_EXTENSIONS.get(contentType), 
+			if (imageBytes.length > 0) {
+				String pictureUrl = s3.saveFile(
+						"gh-images", "profile-pics/" + accountId + IMAGE_TYPE_EXTENSIONS.get(contentType), 
 						imageBytes, contentType);					
-				jdbcTemplate.update("update member set imageUrl = ? where id = ?", imageUrl, accountId);
-				return imageUrl;
+				jdbcTemplate.update("update member set pictureUrl = ? where id = ?", pictureUrl, accountId);
+				return pictureUrl;
 			}  else {
 				throw new ProfilePictureException("Error saving profile picture.");
 			}

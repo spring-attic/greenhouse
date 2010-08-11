@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.account;
+package com.springsource.greenhouse.members;
 
 @SuppressWarnings("serial")
 public class ProfilePictureException extends Exception {

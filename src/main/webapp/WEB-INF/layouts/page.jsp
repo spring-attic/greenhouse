@@ -2,9 +2,8 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ page session="false" %>
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:fb="http://www.facebook.com/2008/fbml">
+<!DOCTYPE html>
+<html>
 <head>
 	<title>
 		<tiles:insertAttribute name="title" defaultValue="Greenhouse" />
@@ -23,6 +22,7 @@
 	<script type="text/javascript" src="<c:url value="/resources/jquery-cookie/1.0/jquery-cookie.js" />"></script>
 </head>
 <body>
+	<!-- TODO what is this? -->
 	<div id="fb-root"></div>
 	
 	<div id="header">

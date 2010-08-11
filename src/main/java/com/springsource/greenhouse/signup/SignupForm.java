@@ -26,6 +26,7 @@ public class SignupForm {
 	@Size(min=6)
 	private String confirmPassword = "";
 
+	// TODO rename to profilePicture and consider byte[] binding
 	private MultipartFile profileImage;
 	
 	public String getFirstName() {

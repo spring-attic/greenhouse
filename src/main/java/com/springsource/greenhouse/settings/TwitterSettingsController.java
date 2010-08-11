@@ -21,13 +21,9 @@ import com.springsource.greenhouse.utils.MemberUtils;
 import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
-@RequestMapping("/settings")
+@RequestMapping("/settings/twitter")
 public class TwitterSettingsController {
 	
-	private static final String TWITTER = "twitter";
-	private static final String UPDATE_CONNECTED_ACCOUNT_ID = 
-		"update ConnectedAccount set accountId = ? where member = ? and provider = ?";
-
 	private OAuthConsumerTokenServicesHelper oauthHelper;
 
 	private TwitterOperations twitterService;
@@ -45,26 +41,26 @@ public class TwitterSettingsController {
 		this.twitterService = twitterService;
 	}
 
-	@RequestMapping(value="/twitter", method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public String connectView(Account account) {
-		if (accountRepository.isConnected(account.getId(), TWITTER)) {
+		if (accountRepository.isConnected(account.getId(), TWITTER_PROVIDER)) {
 			return "settings/twitterConnected";
 		} else {
 			return "settings/twitterConnect";
 		}
 	}
 
-	// TODO - change this callback url to /twitter/authorize and simplify @RequestMapping values
-	@RequestMapping("/twitter/authorize")
+	@RequestMapping("/authorize")
 	public String authorize(HttpServletRequest request, Authentication authentication) {
 		String oauthToken = request.getParameter("oauth_token");
 		if (oauthToken != null && oauthToken.length() > 0) {
-			OAuthConsumerToken accessToken = oauthHelper.getAccessToken(TWITTER, request, authentication);
+			// TODO FacebookSettingsController uses AccountRepository.connect(); make consistent
+			OAuthConsumerToken accessToken = oauthHelper.getAccessToken(TWITTER_PROVIDER, request, authentication);
 			Account account = (Account) authentication.getPrincipal();
 			
 			String screenName = twitterService.getScreenName(accessToken);
 			makeTwitterScreenameGreenhouseUsername(screenName, account);
-			jdbcTemplate.update(UPDATE_CONNECTED_ACCOUNT_ID, screenName, account.getId(), TWITTER);
+			jdbcTemplate.update(UPDATE_CONNECTED_ACCOUNT_ID, screenName, account.getId(), TWITTER_PROVIDER);
 			
 			if (request.getParameter("tweetIt") != null) {
 				// TODO should this be done asynchronously?
@@ -75,9 +71,10 @@ public class TwitterSettingsController {
 		return "redirect:/settings/twitter";
 	}
 
-	@RequestMapping(value="/twitter", method=RequestMethod.DELETE)
+	@RequestMapping(method=RequestMethod.DELETE)
 	public String disconnectTwitter(Account account, HttpServletRequest request, Authentication authentication) {
-		oauthHelper.removeToken(TWITTER, request, authentication);
+		// TODO FacebookSettingsController uses AccountRepository.disconnect(...); make consistent
+		oauthHelper.removeToken(TWITTER_PROVIDER, request, authentication);
 		return "redirect:/settings/twitter";
 	}
 
@@ -95,5 +92,10 @@ public class TwitterSettingsController {
 			// TODO add an info message that gets displayed under the success message
 		}
 	}
+	
+	private static final String TWITTER_PROVIDER = "Twitter";
+	
+	private static final String UPDATE_CONNECTED_ACCOUNT_ID = 
+		"update ConnectedAccount set accountId = ? where member = ? and provider = ?";
 	
 }

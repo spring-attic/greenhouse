@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/signup")
 public class FacebookSignupController {
+	
 	private final FacebookOperations facebook;
 
 	@Inject

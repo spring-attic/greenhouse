@@ -55,8 +55,13 @@ public final class Account implements Serializable {
 		return username;
 	}
 	
-	public String getMemberProfileKey() {
+	public String getProfileKey() {
 		return username != null ? username : id.toString(); 
+	}
+	
+	public String getProfilePictureUrl() {
+		// TODO populate
+		return null;
 	}
 	
 	public Account newUsername(String newUsername) {

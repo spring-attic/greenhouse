@@ -17,8 +17,8 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.ProfilePictureException;
-import com.springsource.greenhouse.account.ProfilePictureService;
+import com.springsource.greenhouse.members.ProfilePictureException;
+import com.springsource.greenhouse.members.ProfilePictureService;
 import com.springsource.greenhouse.utils.MemberUtils;
 
 @Controller
@@ -41,7 +41,7 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.GET)
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
-		if (accountRepository.isConnected(account.getId(), "facebook")) {
+		if (accountRepository.isConnected(account.getId(), FACEBOOK_PROVIDER)) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "settings/facebookConnected";
 		} else {
@@ -53,7 +53,7 @@ public class FacebookSettingsController {
 	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
 			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
 		if (StringUtils.hasText(accessToken)) {			
-			accountRepository.connect(account.getId(), "facebook", accessToken, facebookId);		
+			accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookId);		
 			if (request.getParameter("postIt") != null) {
 				postGreenhouseConnectionToWall(request, account, accessToken);
 			}			
@@ -76,7 +76,7 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.DELETE)
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
-		accountRepository.disconnect(account.getId(), "facebook");
+		accountRepository.disconnect(account.getId(), FACEBOOK_PROVIDER);
 		return "redirect:/settings/facebook";
 	}
 	
@@ -88,4 +88,7 @@ public class FacebookSettingsController {
 			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
 		}
 	}
+	
+	private static final String FACEBOOK_PROVIDER = "facebook";
+
 }
