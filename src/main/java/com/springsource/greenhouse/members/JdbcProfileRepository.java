@@ -32,7 +32,9 @@ public class JdbcProfileRepository implements ProfileRepository {
 	public List<ConnectedProfile> findConnectedProfiles(Long accountId) {
 		return jdbcTemplate.query("select provider, accountId from ConnectedAccount where member = ? order by provider", new RowMapper<ConnectedProfile>() {
 			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
-				return new ConnectedProfile(rs.getString("provider"), rs.getString("accountId"));
+				String provider = rs.getString("provider");
+				String accountId = rs.getString("accountId");
+				return new ConnectedProfile(provider, getProfileUrl(accountId, provider));
 			}
 		}, accountId);
 	}
@@ -55,6 +57,16 @@ public class JdbcProfileRepository implements ProfileRepository {
 		} catch (NumberFormatException e) {
 			return null;
 		}		
+	}
+	
+	private String getProfileUrl(String accountId, String provider) {
+		if ("Twitter".equals(provider)) {
+			return "http://www.twitter.com/" + accountId;
+		} else if ("Facebook".equals(provider)) {
+			return "http://www.facebook.com/profile.php?id=" + accountId;
+		} else {
+			return null;
+		}
 	}
 
 	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, pictureUrl from Member";

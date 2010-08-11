@@ -10,7 +10,7 @@
 	</consumer>
 
 	<resource-details-service id="resourceDetails">
-		<resource id="twitter" key="QLM4vX68dBRLG1sE7zSJiA"
+		<resource id="Twitter" key="QLM4vX68dBRLG1sE7zSJiA"
 			secret="4Ah41ojlwi249GCI1UU5oKolmNDpjLLXgPKwGfVs0"
 			request-token-url="https://twitter.com/oauth/request_token"
 			user-authorization-url="https://twitter.com/oauth/authorize"

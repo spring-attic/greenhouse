@@ -35,7 +35,7 @@ create table ConnectedAccount (member bigint,
 					foreign key (member) references Member(id));
 create unique index AccessTokenKey on ConnectedAccount(provider, accessToken);
 create unique index ProviderAccountKey on ConnectedAccount(provider, accountId); 
-
+					
 create table ResetPassword (token varchar,
 					member bigint not null,
 					primary key (token),
