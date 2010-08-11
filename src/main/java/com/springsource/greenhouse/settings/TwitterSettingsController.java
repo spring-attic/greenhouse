@@ -93,7 +93,7 @@ public class TwitterSettingsController {
 		}
 	}
 	
-	private static final String TWITTER_PROVIDER = "Twitter";
+	private static final String TWITTER_PROVIDER = "twitter";
 	
 	private static final String UPDATE_CONNECTED_ACCOUNT_ID = 
 		"update ConnectedAccount set accountId = ? where member = ? and provider = ?";
