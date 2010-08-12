@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -38,11 +39,12 @@ public class TwitterInviteController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		if (account.getUsername() != null) {
-			model.addAttribute("username", account.getUsername());
+		String twitterId = lookupTwitterId(account);		
+		if (twitterId != null) {			
+			model.addAttribute("username", twitterId);
 		}
 	}
-	
+
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken, @RequestParam String username, Model model) {
 		if (StringUtils.hasText(username)) {
@@ -51,6 +53,19 @@ public class TwitterInviteController {
 		}
 		return "invite/twitterFriends";
 	}
+
+	private String lookupTwitterId(Account account) {
+		try {
+		    return jdbcTemplate.getJdbcOperations().queryForObject("select accountId from ConnectedAccount where member = ? and provider = 'Twitter'", 
+				new RowMapper<String>() {
+		    		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+					    return rs.getString("accountId");
+					}
+				}, account.getId());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+    }
 	
 	private List<GreenhouseFriend> findGreenhouseTwitterFriends(List<String> twitterFriends) {
 	    return jdbcTemplate.query("select username, firstName, lastName from Member where username in ( :names )",
