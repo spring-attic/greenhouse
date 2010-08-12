@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -52,8 +53,12 @@ public class JdbcAccountRepository implements AccountRepository {
 		return namedTemplate.query(SELECT_FRIEND_ACCOUNTS, params, accountMapper);
 	}
 
-	public void connect(Long id, String provider, String accessToken, String accountId) {
-		jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
+	public void connect(Long id, String provider, String accessToken, String accountId) throws ConnectedAccountAlreadyInUseException {
+		try {
+			jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
+		} catch (DuplicateKeyException e) {
+			throw new ConnectedAccountAlreadyInUseException();
+		}
 	}
 
 	public boolean isConnected(Long id, String provider) {

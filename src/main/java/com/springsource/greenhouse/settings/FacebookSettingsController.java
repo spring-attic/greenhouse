@@ -17,6 +17,7 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.ConnectedAccountAlreadyInUseException;
 import com.springsource.greenhouse.members.ProfilePictureException;
 import com.springsource.greenhouse.members.ProfilePictureService;
 import com.springsource.greenhouse.utils.MemberUtils;
@@ -52,17 +53,21 @@ public class FacebookSettingsController {
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
 	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
 			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
-		if (StringUtils.hasText(accessToken)) {			
-			accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookId);		
-			if (request.getParameter("postIt") != null) {
-				postGreenhouseConnectionToWall(request, account, accessToken);
-			}			
-			if (request.getParameter("useFBPic") != null) {
-				useFacebookProfilePicture(account, accessToken);
+		try {
+			if (StringUtils.hasText(accessToken)) {			
+				accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookId);		
+				if (request.getParameter("postIt") != null) {
+					postGreenhouseConnectionToWall(request, account, accessToken);
+				}			
+				if (request.getParameter("useFBPic") != null) {
+					useFacebookProfilePicture(account, accessToken);
+				}
+				FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
 			}
-			FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
+		} catch (ConnectedAccountAlreadyInUseException e) {
+			FlashMap.setErrorMessage("The Facebook profile is already connected to another Greenhouse profile.");
 		}
-		return "redirect:/settings/facebook";
+		return "redirect:/settings/facebook";			
 	}
 
 	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account, String accessToken) {

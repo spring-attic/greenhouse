@@ -93,6 +93,12 @@ public class JdbcAccountRepositoryTest {
     	assertExpectedAccount(accountRepository.findByConnectedAccount("tripit", "accessToken"));
     }
 
+    @Test(expected=ConnectedAccountAlreadyInUseException.class)
+    public void shouldThrowExceptionWhenConnectingAccountToAnExternalAccountThatIsAlreadyInUse() throws Exception {
+    	accountRepository.connect(1L, "facebook", "accessToken", "cwalls");
+    }
+
+    
     @Test
     public void isConnected() {
     	assertTrue(accountRepository.isConnected(1L, "facebook"));
