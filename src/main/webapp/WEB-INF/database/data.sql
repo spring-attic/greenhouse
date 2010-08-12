@@ -1,9 +1,9 @@
-insert into Member (firstName, lastName, email, password, username) values ('Keith' , 'Donald', 'kdonald@vmware.com', 'melbourne', 'kdonald');
-insert into Member (firstName, lastName, email, password, username) values ('Craig' , 'Walls', 'craig@habuma.com', 'plano', 'habuma');
-insert into Member (firstName, lastName, email, password, username) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'atlanta', 'rclarkson');
-insert into Member (firstName, lastName, email, password, username) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', 'churchkeys', 'jgrelle');
-insert into Member (firstName, lastName, email, password, username) values ('Mark', 'Fisher', 'mfisher@vmware.com', 'boston', 'mfisher');
-insert into Member (firstName, lastName, email, password, username) values ('Keri', 'Donald', 'keridonald@gmail.com', 'melbourne', 'kkdonald');
+insert into Member (firstName, lastName, email, password, username) values ('Keith' , 'Donald', 'kdonald@vmware.com', '7a08f4e8495c77e93cf421b1ef7813cc', 'kdonald');
+insert into Member (firstName, lastName, email, password, username) values ('Craig' , 'Walls', 'craig@habuma.com', '6a8c71d3b43d7902464a209ca9b1ef37', 'habuma');
+insert into Member (firstName, lastName, email, password, username) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'c84aed2b7935d4e481ca72c762af4761', 'rclarkson');
+insert into Member (firstName, lastName, email, password, username) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', '421125204e779b120b515bd92dd5c46a', 'jgrelle');
+insert into Member (firstName, lastName, email, password, username) values ('Mark', 'Fisher', 'mfisher@vmware.com', '6099c6f97f5634d7b2119e3dc1bb3281', 'mfisher');
+insert into Member (firstName, lastName, email, password, username) values ('Keri', 'Donald', 'keridonald@gmail.com', '1f3e92460cc2c81022ae71b5f5e50f12', 'kkdonald');
 
 insert into Badge (name, description, level, icon) values ('Newbie', 'You joined!', 1, 'http://localhost:8080/resources/badges/newbie.png');
 

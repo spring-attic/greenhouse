@@ -36,6 +36,7 @@
 
 	<beans:import resource="security-oauth-provider.xml" />
 	
-    <beans:import resource="security-oauth-consumer.xml" />
+	<beans:import resource="security-oauth-consumer.xml" />
     
+	<beans:bean class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
 </beans:beans>

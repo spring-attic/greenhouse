@@ -8,16 +8,19 @@ import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
 public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswordAuthenticationService {
 
 	private JdbcTemplate jdbcTemplate;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Inject
-	public JdbcUsernamePasswordAuthenticationService(JdbcTemplate jdbcTemplate) {
+	public JdbcUsernamePasswordAuthenticationService(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	public Account authenticate(String username, String password) throws UsernameNotFoundException, InvalidPasswordException {
@@ -26,7 +29,7 @@ public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswo
 				"select id, firstName, lastName, email, username, password from Member where username = ?";
 		try {
 			Authenticate authenticate = jdbcTemplate.queryForObject(query, authenticateMapper, username);
-			if (!authenticate.passwordMatches(password)) {
+			if (!authenticate.passwordMatches(passwordEncoder, password)) {
 				throw new InvalidPasswordException();
 			}
 			return authenticate.getAccount();
@@ -41,15 +44,8 @@ public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswo
 
 		public Authenticate mapRow(ResultSet rs, int row) throws SQLException {
 			Account account = accountMapper.mapRow(rs, row);
-			String decryptedPassword = decrypt(rs.getString("password"));
-			return new Authenticate(account, decryptedPassword);
+			return new Authenticate(account, rs.getString("password"));
 		}
-		
-		private String decrypt(String password) {
-			// TODO decrypt password
-			return password;
-		}
-		
 	};
 	
 	private static class Authenticate {
@@ -63,8 +59,8 @@ public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswo
 			this.password = password;
 		}
 	
-		public boolean passwordMatches(String password) {
-			return this.password.equals(password);
+		public boolean passwordMatches(PasswordEncoder passwordEncoder, String password) {
+			return passwordEncoder.isPasswordValid(this.password, password, account.getId());
 		}
 
 		public Account getAccount() {
