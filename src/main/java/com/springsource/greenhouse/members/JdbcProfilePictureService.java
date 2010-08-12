@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.jets3t.service.S3ServiceException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.s3.S3Operations;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,12 @@ import org.springframework.stereotype.Service;
 public class JdbcProfilePictureService implements ProfilePictureService {
 	
 	private final S3Operations s3;
-	
-	private final JdbcTemplate jdbcTemplate;
 
+	@Value("#{s3Properties['s3.bucket']}")
+	private String bucketName;
+
+	private final JdbcTemplate jdbcTemplate;
+	
 	@Inject
 	public JdbcProfilePictureService(S3Operations s3, JdbcTemplate jdbcTemplate) {
 		this.s3 = s3;
@@ -39,8 +43,8 @@ public class JdbcProfilePictureService implements ProfilePictureService {
 		validateContentType(contentType);
 		try {
 			if (imageBytes.length > 0) {
-				String pictureUrl = s3.saveFile(
-						"gh-images", "profile-pics/" + accountId + IMAGE_TYPE_EXTENSIONS.get(contentType), 
+				String pictureUrl = s3.saveFile(bucketName, 
+						"profile-pics/" + accountId + IMAGE_TYPE_EXTENSIONS.get(contentType), 
 						imageBytes, contentType);					
 				jdbcTemplate.update("update member set pictureUrl = ? where id = ?", pictureUrl, accountId);
 				return pictureUrl;

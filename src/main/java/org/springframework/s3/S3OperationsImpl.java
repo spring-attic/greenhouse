@@ -33,6 +33,6 @@ public class S3OperationsImpl implements S3Operations {
 		s3.putObject(imageBucket, imageObject);	
 		
 		
-		return "http://" + bucket + ".s3.amazonaws.com/" + fileName;
+		return "http://images.greenhouse.springsource.org/" + fileName;
 	}
 }
