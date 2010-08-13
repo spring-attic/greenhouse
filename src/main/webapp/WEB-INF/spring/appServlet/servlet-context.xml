@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+<beans:beans xmlns="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xmlns:beans="http://www.springframework.org/schema/beans" xmlns:task="http://www.springframework.org/schema/task"
+				xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 		 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 
 	<!-- Configures the Spring MVC @Controller programming model -->
 	<annotation-driven />
+	
+	<task:annotation-driven/>
 	
 	<!-- Installs Greenhouse-specific @Controller extensions not configurable via the mvc namespace -->
 	<beans:bean class="com.springsource.greenhouse.config.AnnotationMethodHandlerAdapterPostProcessor">

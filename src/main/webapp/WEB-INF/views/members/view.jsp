@@ -4,11 +4,10 @@
 
 	<c:out value="${profile.displayName}" />
 	
-	<c:if test="${profile.pictureUrl != null}">
 	<div id="picture">
-		<img src="${profile.pictureUrl}" />
+		<img src="<c:url value="/members/${profile.accountId}/picture?type=large"/>" 
+			 onError="this.src='<c:url value="/resources/images/defaultProfilePicture.png"/>';" />
 	</div>	
-	</c:if>
 	
 	<div id="connectedProfiles">
 		<ul>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
@@ -40,6 +41,13 @@ public class MembersController {
 		model.addAttribute("connectedProfiles", profileRepository.findConnectedProfiles(profile.getAccountId()));
 		model.addAttribute("metadata", buildOpenGraphMetadata(profile));
 		return "members/view";
+	}
+	
+	@RequestMapping("/{profileKey}/picture")
+	public String profilePicture(@PathVariable String profileKey, @RequestParam(required=false) String type) {
+		Profile profile = profileRepository.findByKey(profileKey);
+		return "redirect:http://images.greenhouse.springsource.org/profile-pics/" + profile.getAccountId() + "/" + 
+			(type != null ? type : "normal") + ".jpg";
 	}
 	
 	private Map<String, String> buildOpenGraphMetadata(Profile profile) {
