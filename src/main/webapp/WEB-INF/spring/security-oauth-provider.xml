@@ -12,7 +12,7 @@
 		POST /oauth/access_token?oauth_consumer_key&oauth_token&oauth_verifier
 	 -->
 	 
-	<!-- OAuth Provider Configuration --><!--	
+	<!-- OAuth Provider Configuration -->	
 	<oauth:provider consumer-details-service-ref="consumerDetails"
 		token-services-ref="tokenServices"
 		request-token-url="/oauth/request_token"
@@ -21,7 +21,7 @@
 		access-token-url="/oauth/access_token"
 		require10a="false" />
 
-	--><bean class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
+	<bean class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
 		<property name="realmName" value="Greenhouse" />
 	</bean>
 			
