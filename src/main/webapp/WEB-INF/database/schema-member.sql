@@ -4,7 +4,6 @@ create table Member (id identity,
 					email varchar(320) not null unique,
 					password varchar not null,
 					username varchar unique,
-					pictureUrl varchar,
 					reputation int default 0,
 					primary key (id));
 

@@ -47,7 +47,7 @@ public class JdbcProfileRepository implements ProfileRepository {
 	
 	private RowMapper<Profile> profileMapper = new RowMapper<Profile>() {
 		public Profile mapRow(ResultSet rs, int row) throws SQLException {
-			return new Profile(rs.getLong("id"), rs.getString("displayName"), rs.getString("pictureUrl"));
+			return new Profile(rs.getLong("id"), rs.getString("displayName"));
 		}
 	};
 
@@ -69,6 +69,6 @@ public class JdbcProfileRepository implements ProfileRepository {
 		}
 	}
 
-	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, pictureUrl from Member";
+	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName from Member";
 	
 }
