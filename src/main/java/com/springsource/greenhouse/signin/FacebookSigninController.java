@@ -37,13 +37,12 @@ public class FacebookSigninController {
 			SecurityUtils.signin(account);
 			return "redirect:/";
 		} catch (ConnectedAccountNotFoundException e) {
-			return handleConnectedAccountNotFound(accessToken);
-		}
+			return handleConnectedAccountNotFound(facebook.getUserInfo(accessToken));
+		} // TODO handle case where accessToken is invalid
 	}
 
-	private String handleConnectedAccountNotFound(String accessToken) {
+	private String handleConnectedAccountNotFound(FacebookUserInfo userInfo) {
 		try {
-			FacebookUserInfo userInfo = facebook.getUserInfo(accessToken);
 			accountRepository.findByUsername(userInfo.getEmail());
 			FlashMap.setWarningMessage("Your Facebook account is not linked with your Greenhouse account. "
 					+ "To connect them, sign in and then go to the Settings page.");

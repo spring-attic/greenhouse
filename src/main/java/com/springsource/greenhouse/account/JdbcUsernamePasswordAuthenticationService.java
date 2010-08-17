@@ -14,7 +14,7 @@ import com.springsource.greenhouse.utils.EmailUtils;
 
 public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswordAuthenticationService {
 
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 	
 	private final PasswordEncoder passwordEncoder;
 	

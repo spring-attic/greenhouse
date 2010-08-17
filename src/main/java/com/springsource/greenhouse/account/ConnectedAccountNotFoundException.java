@@ -1,21 +1,17 @@
 package com.springsource.greenhouse.account;
 
 @SuppressWarnings("serial")
-public class ConnectedAccountNotFoundException extends AccountException {
-	private final String connectedAccountName;
-	private final String accessToken;
+public final class ConnectedAccountNotFoundException extends AccountException {
 
-	public ConnectedAccountNotFoundException(String accessToken, String connectedAccountName) {
-		super("connected account not found");
-		this.accessToken = accessToken;
-		this.connectedAccountName = connectedAccountName;	  
-	}
+	private final String provider;
 	
-	public String getConnectedAccountName() {
-    	return connectedAccountName;
-    }
+	public ConnectedAccountNotFoundException(String provider) {
+		super("connected account not found");
+		this.provider = provider;
+	}
 
-	public String getAccessToken() {
-    	return accessToken;
-    }
+	public String getProvider() {
+		return provider;
+	}
+
 }

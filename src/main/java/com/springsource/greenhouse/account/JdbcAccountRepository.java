@@ -15,9 +15,9 @@ import com.springsource.greenhouse.utils.EmailUtils;
 
 public class JdbcAccountRepository implements AccountRepository {
 	
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 	
-	private AccountMapper accountMapper = new AccountMapper();
+	private final AccountMapper accountMapper = new AccountMapper();
 	
 	@Inject
 	public JdbcAccountRepository(JdbcTemplate jdbcTemplate) {
@@ -41,8 +41,8 @@ public class JdbcAccountRepository implements AccountRepository {
 		try {
 			return jdbcTemplate.queryForObject(SELECT_BY_ACCESS_TOKEN, accountMapper, provider, accessToken);
 		} catch (EmptyResultDataAccessException e) {
-			throw new ConnectedAccountNotFoundException(accessToken, provider);
-		}
+			throw new ConnectedAccountNotFoundException(provider);
+		} // TODO handle case where accessToken is invalid
 	}
 	
 	public List<Account> findFriendAccounts(String provider, List<String> friendIds) {
@@ -57,7 +57,7 @@ public class JdbcAccountRepository implements AccountRepository {
 		try {
 			jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
 		} catch (DuplicateKeyException e) {
-			throw new AccountAlreadyConnectedException(accountId);
+			throw new AccountAlreadyConnectedException(provider, accountId);
 		}
 	}
 

@@ -8,7 +8,7 @@ public interface AccountRepository {
 
 	Account findByUsername(String username) throws UsernameNotFoundException;
 	
-	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException;
+	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException; // TODO exception case where accessToken is valid
 
 	List<Account> findFriendAccounts(String provider, List<String> friendIds);
 	

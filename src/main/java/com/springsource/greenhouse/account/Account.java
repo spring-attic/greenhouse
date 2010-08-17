@@ -3,7 +3,7 @@ package com.springsource.greenhouse.account;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public final class Account implements Serializable {
+public class Account implements Serializable {
 	
 	private final Long id;
 	
@@ -15,9 +15,7 @@ public final class Account implements Serializable {
 	
 	private final String username;
 	
-	public Account(Long id) {
-		this(id, null, null, null, null);
-	}
+	// TODO add link to profile picture
 	
 	public Account(Long id, String firstName, String lastName, String email) {
 		this(id, firstName, lastName, email, null);
@@ -31,6 +29,12 @@ public final class Account implements Serializable {
 		this.username = username;
 	}
 
+	// TODO only used for testing. consider removing
+	
+	public Account(Long id) {
+		this(id, null, null, null, null);
+	}
+	
 	public Long getId() {
 		return id;
 	}

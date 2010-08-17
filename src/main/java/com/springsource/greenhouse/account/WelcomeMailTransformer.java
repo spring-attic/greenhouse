@@ -12,9 +12,9 @@ import org.springframework.templating.StringTemplateFactory;
 
 public class WelcomeMailTransformer {
 	
-	private StringTemplateFactory templateFactory;
+	private final StringTemplateFactory templateFactory;
 	
-	private Resource welcomeTemplate = new ClassPathResource("welcome.st", getClass());
+	private final Resource welcomeTemplate = new ClassPathResource("welcome.st", getClass());
 
 	@Inject
 	public WelcomeMailTransformer(StringTemplateFactory templateFactory) {
