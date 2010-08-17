@@ -41,6 +41,7 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 		return jdbcTemplate.queryForInt("select count(*) from ResetPassword where token = ?", token) == 1;
 	}
 
+	// TODO not encoding password here, should be
 	public void changePassword(String token, String password) throws InvalidResetTokenException {
 		Long memberId = findByToken(token);
 		jdbcTemplate.update("update Member set password = ? where id = ?", password, memberId);

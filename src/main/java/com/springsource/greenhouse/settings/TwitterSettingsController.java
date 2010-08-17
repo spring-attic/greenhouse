@@ -80,7 +80,7 @@ public class TwitterSettingsController {
 
 	// internal helpers
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
-		String message = "Connected with the Greenhouse at " + MemberUtils.assembleMemberProfileUrl(request, account);
+		String message = "Join me at the Greenhouse! " + MemberUtils.assembleMemberProfileUrl(request, account);
 		twitterService.updateStatus(accessToken, message);
 	}
 

@@ -66,7 +66,7 @@ public class FacebookSettingsController {
 	}
 
 	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account, String accessToken) {
-		facebook.postToWall(accessToken, "Connected my Facebook account to the Greenhouse.", 
+		facebook.postToWall(accessToken, "Join me at the Greenhouse!", 
 			new FacebookLink(MemberUtils.assembleMemberProfileUrl(request, account), "Greenhouse", "Where Spring developers hang out.", 
 					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
     }

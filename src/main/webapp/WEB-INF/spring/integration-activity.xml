@@ -8,11 +8,12 @@
 	<!-- Channel for Member Action messages -->
 	<publish-subscribe-channel id="actionChannel" />
 
-	<!-- TODO Action->RecentActivity Transformer
+	<!-- TODO
 	<transformer input-channel="actionChannel" output-channel="recentActivity">
+		<beans:bean class="com.springsource.greenhouse.action.ActionRecentActivityTransformerFactoryBean" />	
 	</transformer>
-	-->
-
+  	-->
+  	
 	<!-- RecentActivity Channel Adapter -->
 	<!-- TODO replace with Ajax push adapter -->
 	<logging-channel-adapter id="recentActivity" />

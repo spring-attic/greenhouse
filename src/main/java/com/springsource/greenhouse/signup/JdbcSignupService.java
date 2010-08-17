@@ -18,6 +18,7 @@ public class JdbcSignupService implements SignupService {
 	
 	private SignedUpGateway gateway;
 
+	// TODO push this down
 	private final PasswordEncoder passwordEncoder;
 	
 	@Inject
@@ -29,7 +30,8 @@ public class JdbcSignupService implements SignupService {
 
 	public Account signup(Person person) throws EmailAlreadyOnFileException {
 		try {
-			// TODO we should probably use a sequence here instead of doing a insert and an update
+			// TODO do one insert here where encoded password is calculated before hand
+			// TODO push this into AccountRepository
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password) values (?, ?, ?, ?)",
 					person.getFirstName(), person.getLastName(), person.getEmail(), "temporary");
 		} catch (DuplicateKeyException e) {
