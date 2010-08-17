@@ -4,7 +4,6 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.multipart.MultipartFile;
 
 public class SignupForm {
 	
@@ -26,9 +25,6 @@ public class SignupForm {
 	@Size(min=6)
 	private String confirmPassword = "";
 
-	// TODO rename to profilePicture and consider byte[] binding
-	private MultipartFile profileImage;
-	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -74,14 +70,6 @@ public class SignupForm {
 		return password.equals(confirmPassword);
 	}
 
-	public void setProfileImage(MultipartFile profileImage) {
-	    this.profileImage = profileImage;
-    }
-
-	public MultipartFile getProfileImage() {
-	    return profileImage;
-    }
-	
 	public Person createPerson() {
 		return new Person(firstName, lastName, email, password);
 	}

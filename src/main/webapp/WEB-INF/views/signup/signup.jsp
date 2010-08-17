@@ -36,17 +36,13 @@
   		<form:input path="email" />
   		
   		<form:label path="password">
+	  		<!-- TODO the form:errors will fail to render password field errors since its for the passwordConfirmed property -->
   			Password (at least 6 characters) <form:errors path="passwordConfirmed" cssClass="error" />
   		</form:label>
   		<form:password path="password" />
 
   		<form:label path="confirmPassword">Confirm Password</form:label>
-  		<form:password path="confirmPassword" />
-  		
-  		<form:label path="profileImage">
-  			Profile Image <form:errors path="profileImage" cssClass="error" />
-  		</form:label>
-  		<input type="file" name="profileImage" accept="image/jpeg,image/gif,image/png" />
+  		<form:password path="confirmPassword" />  		
 	</fieldset>
 	<input type="submit" value="Sign up">
 </form:form>

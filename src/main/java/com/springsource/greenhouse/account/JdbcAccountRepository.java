@@ -53,11 +53,11 @@ public class JdbcAccountRepository implements AccountRepository {
 		return namedTemplate.query(SELECT_FRIEND_ACCOUNTS, params, accountMapper);
 	}
 
-	public void connect(Long id, String provider, String accessToken, String accountId) throws ConnectedAccountAlreadyInUseException {
+	public void connect(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException {
 		try {
 			jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
 		} catch (DuplicateKeyException e) {
-			throw new ConnectedAccountAlreadyInUseException();
+			throw new AccountAlreadyConnectedException(accountId);
 		}
 	}
 

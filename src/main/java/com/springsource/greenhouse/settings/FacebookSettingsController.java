@@ -17,7 +17,7 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.ConnectedAccountAlreadyInUseException;
+import com.springsource.greenhouse.account.AccountAlreadyConnectedException;
 import com.springsource.greenhouse.members.ProfilePictureException;
 import com.springsource.greenhouse.members.ProfilePictureService;
 import com.springsource.greenhouse.utils.MemberUtils;
@@ -64,7 +64,7 @@ public class FacebookSettingsController {
 				}
 				FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
 			}
-		} catch (ConnectedAccountAlreadyInUseException e) {
+		} catch (AccountAlreadyConnectedException e) {
 			FlashMap.setErrorMessage("The Facebook profile is already connected to another Greenhouse profile.");
 		}
 		return "redirect:/settings/facebook";			

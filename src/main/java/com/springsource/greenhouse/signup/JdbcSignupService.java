@@ -29,15 +29,14 @@ public class JdbcSignupService implements SignupService {
 
 	public Account signup(Person person) throws EmailAlreadyOnFileException {
 		try {
+			// TODO we should probably use a sequence here instead of doing a insert and an update
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password) values (?, ?, ?, ?)",
 					person.getFirstName(), person.getLastName(), person.getEmail(), "temporary");
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
 		}
 		Long accountId = jdbcTemplate.queryForLong("call identity()");
-		
 		jdbcTemplate.update("update Member set password = ? where id = ?", encrypt(person.getPassword(), accountId), accountId);
-		
 		Account account = new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail());
 		gateway.signedUp(account);
 		return account;

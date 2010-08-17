@@ -59,7 +59,8 @@ public class DefaultProfilePictureService implements ProfilePictureService {
 		}
 	}
 	
-	private static final List<String> IMAGE_TYPES = Arrays.asList("image/jpeg", "image/gif", "image/png");	
+	private static final List<String> IMAGE_TYPES = Arrays.asList("image/jpeg", "image/gif", "image/png");
+	
 	private void validateContentType(String contentType) throws ProfilePictureException {
 		if (!IMAGE_TYPES.contains(contentType)) {
 			throw new ProfilePictureException("Cannot accept content type " + contentType + " as profile picture.");

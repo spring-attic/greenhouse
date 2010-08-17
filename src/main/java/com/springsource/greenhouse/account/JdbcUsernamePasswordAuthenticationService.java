@@ -15,6 +15,7 @@ import com.springsource.greenhouse.utils.EmailUtils;
 public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswordAuthenticationService {
 
 	private JdbcTemplate jdbcTemplate;
+	
 	private final PasswordEncoder passwordEncoder;
 	
 	@Inject
@@ -28,44 +29,41 @@ public class JdbcUsernamePasswordAuthenticationService implements UsernamePasswo
 				"select id, firstName, lastName, email, username, password from Member where email = ?" : 
 				"select id, firstName, lastName, email, username, password from Member where username = ?";
 		try {
-			Authenticate authenticate = jdbcTemplate.queryForObject(query, authenticateMapper, username);
-			if (!authenticate.passwordMatches(passwordEncoder, password)) {
-				throw new InvalidPasswordException();
-			}
-			return authenticate.getAccount();
+			return jdbcTemplate.queryForObject(query, passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
 		} catch (EmptyResultDataAccessException e) {
 			throw new UsernameNotFoundException(username);
 		}
 	}
 	
-	private RowMapper<Authenticate> authenticateMapper = new RowMapper<Authenticate>() {
+	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {
 		
 		private RowMapper<Account> accountMapper = new AccountMapper();	
 
-		public Authenticate mapRow(ResultSet rs, int row) throws SQLException {
+		public PasswordProtectedAccount mapRow(ResultSet rs, int row) throws SQLException {
 			Account account = accountMapper.mapRow(rs, row);
-			return new Authenticate(account, rs.getString("password"));
+			return new PasswordProtectedAccount(account, rs.getString("password"));
 		}
 	};
 	
-	private static class Authenticate {
+	private static class PasswordProtectedAccount {
 		
 		private Account account;
 		
 		private String password;
 
-		public Authenticate(Account account, String password) {
+		public PasswordProtectedAccount(Account account, String password) {
 			this.account = account;
 			this.password = password;
 		}
 	
-		public boolean passwordMatches(PasswordEncoder passwordEncoder, String password) {
-			return passwordEncoder.isPasswordValid(this.password, password, account.getId());
+		public Account accessAccount(String password, PasswordEncoder passwordEncoder) throws InvalidPasswordException {
+			if (passwordEncoder.isPasswordValid(this.password, password, account.getId())) {
+				return account;
+			} else {
+				throw new InvalidPasswordException();
+			}
 		}
-
-		public Account getAccount() {
-			return account;
-		}
+		
 	}
 
 }

@@ -12,8 +12,7 @@ public interface AccountRepository {
 
 	List<Account> findFriendAccounts(String provider, List<String> friendIds);
 	
-	void connect(Long id, String provider, String accessToken, String accountId) 
-			throws ConnectedAccountAlreadyInUseException;
+	void connect(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException;
 
 	boolean isConnected(Long id, String provider);
 
