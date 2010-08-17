@@ -19,7 +19,7 @@ public class S3OperationsImpl implements S3Operations {
 		awsCredentials = new AWSCredentials(accessKey, secretAccessKey);
 	}
 	
-	public String saveFile(String bucket, String fileName, byte[] bytes, String contentType) throws S3ServiceException {
+	public void saveFile(String bucket, String fileName, byte[] bytes, String contentType) throws S3ServiceException {
 		S3Service s3 = new RestS3Service(awsCredentials);
 		S3Bucket imageBucket = s3.getBucket(bucket);
 		S3Object imageObject = new S3Object(fileName);
@@ -31,8 +31,5 @@ public class S3OperationsImpl implements S3Operations {
 		acl.grantPermission(GroupGrantee.ALL_USERS, Permission.PERMISSION_READ);
 		imageObject.setAcl(acl);
 		s3.putObject(imageBucket, imageObject);	
-		
-		
-		return "http://images.greenhouse.springsource.org/" + fileName;
 	}
 }
