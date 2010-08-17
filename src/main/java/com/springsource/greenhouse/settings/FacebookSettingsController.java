@@ -10,14 +10,13 @@ import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookUserId;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountAlreadyConnectedException;
+import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.members.ProfilePictureException;
 import com.springsource.greenhouse.members.ProfilePictureService;
 import com.springsource.greenhouse.utils.MemberUtils;
@@ -33,8 +32,7 @@ public class FacebookSettingsController {
 	private final ProfilePictureService profilePictureService;
 
 	@Inject
-	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, 
-			ProfilePictureService profilePictureService) {
+	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, ProfilePictureService profilePictureService) {
 		this.accountRepository = accountRepository;
 		this.facebook = facebook;
 		this.profilePictureService = profilePictureService;
@@ -51,32 +49,26 @@ public class FacebookSettingsController {
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(HttpServletRequest request, Account account, 
-			@FacebookAccessToken String accessToken, @FacebookUserId String facebookId) {
+	public String connectAccountToFacebook(HttpServletRequest request, Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId) {
 		try {
-			if (StringUtils.hasText(accessToken)) {			
-				accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookId);		
-				if (request.getParameter("postIt") != null) {
-					postGreenhouseConnectionToWall(request, account, accessToken);
-				}			
-				if (request.getParameter("useFBPic") != null) {
-					useFacebookProfilePicture(account, accessToken);
-				}
-				FlashMap.setSuccessMessage("Your Facebook account is now linked to your Greenhouse account!");
+			accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);		
+			if (request.getParameter("postIt") != null) {
+				postGreenhouseConnectionToWall(request, account, accessToken);
+			}			
+			if (request.getParameter("useFBPic") != null) {
+				useFacebookProfilePicture(account, accessToken);
 			}
+			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 		} catch (AccountAlreadyConnectedException e) {
-			FlashMap.setErrorMessage("The Facebook profile is already connected to another Greenhouse profile.");
+			FlashMap.setErrorMessage("Unable to connect: Your Facebook account is already connected to a Greenhouse account.");
 		}
 		return "redirect:/settings/facebook";			
 	}
 
 	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account, String accessToken) {
-		facebook.postToWall(accessToken, "I just signed into the Greenhouse!", 
-				new FacebookLink(
-						MemberUtils.assembleMemberProfileUrl(request, account), 
-						"Greenhouse", "The place where Spring developers hang out.", 
-						"We help you connect with fellow developers and take advantage of everything the " +
-							"Spring community has to offer."));
+		facebook.postToWall(accessToken, "Connected my Facebook account to the Greenhouse.", 
+			new FacebookLink(MemberUtils.assembleMemberProfileUrl(request, account), "Greenhouse", "Where Spring developers hang out.", 
+					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
     }
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.DELETE)

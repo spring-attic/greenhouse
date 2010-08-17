@@ -66,7 +66,7 @@ public class TwitterSettingsController {
 				// TODO should this be done asynchronously?
 				tweetConnection(accessToken, request, account);
 			}
-			FlashMap.setSuccessMessage("Your Twitter account is now linked to your Greenhouse account!");
+			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
 		}
 		return "redirect:/settings/twitter";
 	}
@@ -80,7 +80,7 @@ public class TwitterSettingsController {
 
 	// internal helpers
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
-		String message = "Linked with the Greenhouse at " + MemberUtils.assembleMemberProfileUrl(request, account);
+		String message = "Connected with the Greenhouse at " + MemberUtils.assembleMemberProfileUrl(request, account);
 		twitterService.updateStatus(accessToken, message);
 	}
 
