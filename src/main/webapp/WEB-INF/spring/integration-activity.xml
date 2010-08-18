@@ -16,7 +16,8 @@
   	
 	<!-- RecentActivity Channel Adapter -->
 	<!-- TODO replace with Ajax push adapter -->
-	<logging-channel-adapter id="recentActivity" />
+	<!-- <logging-channel-adapter id="recentActivity" /> -->
+	<publish-subscribe-channel id="recentActivity" />
 			
 	<!-- Sends Member Actions to the badging system for processing -->		 		
 	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="awardedBadgeChannel" />

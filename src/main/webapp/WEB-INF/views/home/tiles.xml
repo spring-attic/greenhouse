@@ -11,6 +11,10 @@
 				<put-attribute name="recentActivity" value="/WEB-INF/views/home/recentActivity.jsp" />
 			</definition>
 		</put-attribute>
+		<put-list-attribute name="scripts">
+            <add-attribute value="/jquery-atmosphere/0.6.1/jquery.atmosphere.js"/>
+            <add-attribute value="/recentActivity.js"/>
+        </put-list-attribute>
 	</definition>
 	
 	<definition name="homeSignedIn" extends="standard">

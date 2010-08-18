@@ -39,3 +39,31 @@ dt.event span.locationAndDate {
 	font-size: .75em;
 	font-style: italic;
 }
+
+#recentActivityList {
+	list-style: none;
+}
+
+#recentActivityList li {
+	border: 1px solid #000;
+	height:5em;
+	overflow:hidden;
+}
+
+#recentActivityList img {
+	width: 5em;
+	vertical-align:middle;
+}
+
+#recentActivityList img.profile {
+	float:left;
+	padding-right:2em;
+}
+
+#recentActivityList img.badge {
+	float:right;
+}
+
+#recentActivityList li.newItem {
+	display: none;
+}

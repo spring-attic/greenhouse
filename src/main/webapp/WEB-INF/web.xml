@@ -82,5 +82,33 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	<!-- Handles Comet requests -->
+    <servlet>
+        <servlet-name>cometServlet</servlet-name>
+        <servlet-class>org.atmosphere.cpr.MeteorServlet</servlet-class>
+        <init-param>
+        	<param-name>org.atmosphere.servlet</param-name>
+        	<param-value>org.springframework.web.servlet.DispatcherServlet</param-value>
+        </init-param>
+        <init-param>
+        	<param-name>org.atmosphere.cpr.broadcasterClass</param-name>
+        	<param-value>org.springframework.integration.comet.HttpMessageBroadcaster</param-value>
+        </init-param>
+        <init-param>
+        	<param-name>org.atmosphere.useStream</param-name>
+        	<param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/spring/cometServlet/servlet-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+		<servlet-name>cometServlet</servlet-name>
+		<url-pattern>/pubsub/*</url-pattern>
+	</servlet-mapping> 
 
 </web-app>
