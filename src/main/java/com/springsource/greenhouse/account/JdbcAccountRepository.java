@@ -13,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
@@ -29,15 +30,16 @@ public class JdbcAccountRepository implements AccountRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	@Transactional
 	public Account createAccount(Person person) throws EmailAlreadyOnFileException {
 		try {
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password) values (?, ?, ?, ?)",
 					person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()));
+			Long accountId = jdbcTemplate.queryForLong("call identity()");
+			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail());
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
 		}
-		Long accountId = jdbcTemplate.queryForLong("call identity()");
-		return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail());		
 	}
 
 	public Account authenticate(String username, String password) throws UsernameNotFoundException, InvalidPasswordException {
