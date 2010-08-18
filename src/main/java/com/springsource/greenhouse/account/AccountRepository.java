@@ -8,6 +8,8 @@ public interface AccountRepository {
 
 	Account authenticate(String username, String password) throws UsernameNotFoundException, InvalidPasswordException;
 
+	void changePassword(Long accountId, String password);
+	
 	Account findById(Long id);
 
 	Account findByUsername(String username) throws UsernameNotFoundException;

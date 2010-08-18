@@ -14,7 +14,6 @@ import com.springsource.greenhouse.account.UsernameNotFoundException;
 import com.springsource.greenhouse.account.AccountRepository;
 
 @Service
-@Transactional
 public class JdbcRestPasswordService implements ResetPasswordService {
 
 	private JdbcTemplate jdbcTemplate;
@@ -30,6 +29,7 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 		this.mailer = mailer;
 	}
 
+	@Transactional
 	public void sendResetMail(String username) throws UsernameNotFoundException {
 		Account account = accountRepository.findByUsername(username);
 		String token = UUID.randomUUID().toString();
@@ -41,16 +41,16 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 		return jdbcTemplate.queryForInt("select count(*) from ResetPassword where token = ?", token) == 1;
 	}
 
-	// TODO not encoding password here, should be
+	@Transactional
 	public void changePassword(String token, String password) throws InvalidResetTokenException {
-		Long memberId = findByToken(token);
-		jdbcTemplate.update("update Member set password = ? where id = ?", password, memberId);
-		jdbcTemplate.update("delete from ResetPassword where token = ?", token);
+		Long accountId = findAccountIdByToken(token);
+		accountRepository.changePassword(accountId, password);
+		jdbcTemplate.update("delete from ResetPassword where token = ?", password);
 	}
 
 	// internal helpers
 	
-	private Long findByToken(String token) throws InvalidResetTokenException {
+	private Long findAccountIdByToken(String token) throws InvalidResetTokenException {
 		try {
 			return jdbcTemplate.queryForLong("select member from ResetPassword where token = ?", token);       		
 		} catch (EmptyResultDataAccessException e) {

@@ -53,6 +53,10 @@ public class JdbcAccountRepository implements AccountRepository {
 		}
 	}
 
+	public void changePassword(Long accountId, String password) {
+		jdbcTemplate.update("update Member set password = ? where id = ?", passwordEncoder.encode(password), accountId);
+	}
+
 	public Account findById(Long id) {
 		return jdbcTemplate.queryForObject(SELECT_BY_ID, accountMapper, id);
 	}
