@@ -1,9 +1,9 @@
-insert into Member (firstName, lastName, email, password, username) values ('Keith' , 'Donald', 'kdonald@vmware.com', '7a08f4e8495c77e93cf421b1ef7813cc', 'kdonald');
-insert into Member (firstName, lastName, email, password, username) values ('Craig' , 'Walls', 'craig@habuma.com', '6a8c71d3b43d7902464a209ca9b1ef37', 'habuma');
-insert into Member (firstName, lastName, email, password, username) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'c84aed2b7935d4e481ca72c762af4761', 'rclarkson');
-insert into Member (firstName, lastName, email, password, username) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', '421125204e779b120b515bd92dd5c46a', 'jgrelle');
-insert into Member (firstName, lastName, email, password, username) values ('Mark', 'Fisher', 'mfisher@vmware.com', '6099c6f97f5634d7b2119e3dc1bb3281', 'mfisher');
-insert into Member (firstName, lastName, email, password, username) values ('Keri', 'Donald', 'keridonald@gmail.com', '1f3e92460cc2c81022ae71b5f5e50f12', 'kkdonald');
+insert into Member (firstName, lastName, email, password, username) values ('Keith' , 'Donald', 'kdonald@vmware.com', '74655aa5c7defb5bd159dcaed45d5e8aba7fdc974413582193099a9661fbc99e:9af3da7c-584a-4cd7-a060-31fca6949347', 'kdonald');
+insert into Member (firstName, lastName, email, password, username) values ('Craig' , 'Walls', 'craig@habuma.com', '4717223a6c271ed8b0a701ee661f2e4ffb7d7922909e64c84c946385b72adbd9:213535b9-d696-4349-8d24-a6da11b169e3', 'habuma');
+insert into Member (firstName, lastName, email, password, username) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', '808cdba5a11d9a67ac44ceee2667ae111f03037f41648da09430daef20e41eac:dc015d3d-b678-4f08-a14c-ad42e4fe32ff', 'rclarkson');
+insert into Member (firstName, lastName, email, password, username) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', '80eba7f09f2955597d4c8a995f5a311581052711509c7a7ce74d9c8b502667f3:8537bd75-cc6d-4473-aad2-d2731c12c3d7', 'jgrelle');
+insert into Member (firstName, lastName, email, password, username) values ('Mark', 'Fisher', 'mfisher@vmware.com', '87da6fd4e6a5454bb4c32f5ab99498dc03959302f21069aa444f0f4f8dad8dd7:2e43f0da-725f-4d8e-80f0-5b5c75b4aa40', 'mfisher');
+insert into Member (firstName, lastName, email, password, username) values ('Keri', 'Donald', 'keridonald@gmail.com', 'cacbc4db15b707d60c029fa4c2fa2a7ea400ea3560998398787290cbaee3f429:09f006da-2e19-48b1-ae42-d2115d86ae0d', 'kkdonald');
 
 insert into Badge (name, description, level, icon) values ('Newbie', 'You joined!', 1, 'http://localhost:8080/resources/badges/newbie.png');
 

@@ -23,7 +23,7 @@ public class JdbcAccountRepository implements AccountRepository {
 	
 	private final AccountMapper accountMapper = new AccountMapper();
 	
-	private final PasswordEncoder passwordEncoder = new ShaHashedRandomSaltedPasswordEncoder();
+	private final PasswordEncoder passwordEncoder = new StandardPasswordEncoder("SHA-256", "secret");
 	
 	@Inject
 	public JdbcAccountRepository(JdbcTemplate jdbcTemplate) {
