@@ -102,6 +102,11 @@
         	<version>1.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.mobile</groupId>
+			<artifactId>spring-mobile</artifactId>
+        	<version>1.0.0.BUILD-SNAPSHOT</version>
+		</dependency>
 
 		<!-- Aspect J -->
 		<dependency>
