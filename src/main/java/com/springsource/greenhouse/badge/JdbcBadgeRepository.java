@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 public class JdbcBadgeRepository implements BadgeRepository {
 
@@ -15,6 +16,7 @@ public class JdbcBadgeRepository implements BadgeRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
+	@Transactional
 	public AwardedBadge createAwardedBadge(String badge, Long accountId, Long actionId) {
 		DateTime awardTime = new DateTime(DateTimeZone.UTC);
 		jdbcTemplate.update("insert into AwardedBadge (badge, awardTime, member, memberAction) values (?, ?, ?, ?)", badge, awardTime.toDate(), accountId, actionId);
