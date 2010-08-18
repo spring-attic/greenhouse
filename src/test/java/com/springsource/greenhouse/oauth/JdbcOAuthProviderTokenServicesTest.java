@@ -57,7 +57,7 @@ public class JdbcOAuthProviderTokenServicesTest {
     	assertEquals(token.getCallbackUrl(), token2.getCallbackUrl());
     	assertEquals(token.getVerifier(), token.getVerifier());
     	
-    	Authentication auth = new TestingAuthenticationToken(new Account(1L), "atlanta");
+    	Authentication auth = new TestingAuthenticationToken(new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com"), "atlanta");
     	tokenServices.authorizeRequestToken(token.getValue(), "12345", auth);
 
     	OAuthProviderToken token3 = tokenServices.getToken(token.getValue());
@@ -111,7 +111,7 @@ public class JdbcOAuthProviderTokenServicesTest {
         assertEquals(token.getCallbackUrl(), token2.getCallbackUrl());
         assertEquals(token.getVerifier(), token.getVerifier());
         
-        Authentication auth = new TestingAuthenticationToken(new Account(1L), "atlanta");
+        Authentication auth = new TestingAuthenticationToken(new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com"), "atlanta");
         tokenServices.authorizeRequestToken(token.getValue(), "12345", auth);
 
         OAuthProviderToken token3 = tokenServices.getToken(token.getValue());

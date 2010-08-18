@@ -43,15 +43,16 @@ public class JdbcOAuthConsumerTokenServicesTest {
     
     @Test
     public void shouldReturnNullTokenForUnknownResource() {
-        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
+        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("ohloh"));
     }
 
+
     @Test
     public void shouldReturnNullTokenForUnknownUser() {
-        Authentication authentication = new TestingAuthenticationToken(new Account(2L), "atlanta");
+        Authentication authentication = new TestingAuthenticationToken(new Account(2L, "Roy", "Clarkson", "rclarkson@vmware.com"), "atlanta");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("twitter"));
@@ -59,7 +60,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
 
     @Test
     public void shouldReturnTokenForKnownResourceInDB() {
-        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
+        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         OAuthConsumerToken token = tokenServices.getToken("twitter");
@@ -75,7 +76,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
         OAuthConsumerToken linkedInToken = new OAuthConsumerToken();
         request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn", linkedInToken);
         
-        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
+        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         OAuthConsumerToken token = tokenServices.getToken("linkedIn");
         assertSame(linkedInToken, token);
@@ -89,7 +90,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
       requestToken.setSecret("someSecret");
       requestToken.setValue("someToken"); 
       MockHttpServletRequest request = new MockHttpServletRequest();
-      Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
+      Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
@@ -104,7 +105,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
       requestToken.setSecret("someSecret");
       requestToken.setValue("someToken"); 
       MockHttpServletRequest request = new MockHttpServletRequest();
-      Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");
+      Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
@@ -120,7 +121,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
         accessToken.setValue("twitterToken"); 
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        Authentication authentication = new TestingAuthenticationToken(new Account(1L), "plano");        
+        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");        
         request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", accessToken);
         
         // Token should be available before remove
@@ -134,4 +135,9 @@ public class JdbcOAuthConsumerTokenServicesTest {
         assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp where accessToken = 'twitterToken'"));
         assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
     }
+    
+	private Account createAccount() {
+		return new Account(1L, "Craig", "Walls", "craig@habuma.com");
+	}
+	
 }

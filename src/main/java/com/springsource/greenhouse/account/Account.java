@@ -28,12 +28,6 @@ public class Account implements Serializable {
 		this.email = email;
 		this.username = username;
 	}
-
-	// TODO only used for testing. consider removing
-	
-	public Account(Long id) {
-		this(id, null, null, null, null);
-	}
 	
 	public Long getId() {
 		return id;

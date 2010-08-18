@@ -2,6 +2,7 @@ package com.springsource.greenhouse.action;
 
 import org.joda.time.DateTime;
 
+// TODO likely needs a text property
 public abstract class Action {
 	
 	private final Long id;
