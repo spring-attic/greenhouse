@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.signup;
+package com.springsource.greenhouse.account;
 
 public final class Person {
 

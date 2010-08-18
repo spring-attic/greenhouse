@@ -9,17 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
 import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
 @RequestMapping("/signup")
 public class SignupController {
 
-	private final SignupService signupService;
+	private final AccountRepository accountRepository;
+	
+	private final SignedUpGateway gateway;
 	
 	@Inject
-	public SignupController(SignupService signupService) {
-		this.signupService = signupService;
+	public SignupController(AccountRepository accountRepository, SignedUpGateway gateway) {
+		this.accountRepository = accountRepository;
+		this.gateway = gateway;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -33,7 +38,8 @@ public class SignupController {
 			return null;
 		}
 		try {
-			Account account = signupService.signup(form.createPerson());			
+			Account account = accountRepository.createAccount(form.createPerson());		
+			gateway.signedUp(account);
 			SecurityUtils.signin(account);
 		} catch (EmailAlreadyOnFileException e) {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
