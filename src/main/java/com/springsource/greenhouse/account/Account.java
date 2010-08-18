@@ -15,8 +15,6 @@ public class Account implements Serializable {
 	
 	private final String username;
 	
-	// TODO add link to profile picture
-	
 	public Account(Long id, String firstName, String lastName, String email) {
 		this(id, firstName, lastName, email, null);
 	}
@@ -27,12 +25,6 @@ public class Account implements Serializable {
 		this.lastName = lastName;
 		this.email = email;
 		this.username = username;
-	}
-
-	// TODO only used for testing. consider removing
-	
-	public Account(Long id) {
-		this(id, null, null, null, null);
 	}
 	
 	public Long getId() {
@@ -64,7 +56,7 @@ public class Account implements Serializable {
 	}
 	
 	public String getProfilePictureUrl() {
-		// TODO populate
+		// TODO add link to profile picture
 		return null;
 	}
 	

@@ -24,12 +24,13 @@ public class StringTemplateResetPasswordMailConverter implements Converter<Reset
 	
 	public SimpleMailMessage convert(ResetPasswordRequest request) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setFrom("noreply@greenhouse.springsource.com");
+		mailMessage.setFrom("noreply@springsource.com");
 		mailMessage.setTo(request.getAccount().getEmail());
 		StringTemplate textTemplate;
 		mailMessage.setSubject("Reset your Greenhouse password");
 		textTemplate = templateFactory.getStringTemplate(resetPasswordTemplate);
 		textTemplate.put("firstName", request.getAccount().getFirstName());		
+		textTemplate.put("resetUrl", "http://localhost:8080/greenhouse/reset");
 		textTemplate.put("token", request.getToken());
 		mailMessage.setText(textTemplate.render());
 		return mailMessage;

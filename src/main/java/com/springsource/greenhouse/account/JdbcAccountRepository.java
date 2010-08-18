@@ -1,5 +1,7 @@
 package com.springsource.greenhouse.account;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +11,9 @@ import javax.inject.Inject;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
@@ -19,9 +23,38 @@ public class JdbcAccountRepository implements AccountRepository {
 	
 	private final AccountMapper accountMapper = new AccountMapper();
 	
+	private final PasswordEncoder passwordEncoder = new StandardPasswordEncoder("SHA-256", "secret");
+	
 	@Inject
 	public JdbcAccountRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	@Transactional
+	public Account createAccount(Person person) throws EmailAlreadyOnFileException {
+		try {
+			jdbcTemplate.update("insert into Member (firstName, lastName, email, password) values (?, ?, ?, ?)",
+					person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()));
+			Long accountId = jdbcTemplate.queryForLong("call identity()");
+			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail());
+		} catch (DuplicateKeyException e) {
+			throw new EmailAlreadyOnFileException(person.getEmail());
+		}
+	}
+
+	public Account authenticate(String username, String password) throws UsernameNotFoundException, InvalidPasswordException {
+		String query = EmailUtils.isEmail(username) ? 
+				"select id, firstName, lastName, email, username, password from Member where email = ?" : 
+				"select id, firstName, lastName, email, username, password from Member where username = ?";
+		try {
+			return jdbcTemplate.queryForObject(query, passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
+		} catch (EmptyResultDataAccessException e) {
+			throw new UsernameNotFoundException(username);
+		}
+	}
+
+	public void changePassword(Long accountId, String password) {
+		jdbcTemplate.update("update Member set password = ? where id = ?", passwordEncoder.encode(password), accountId);
 	}
 
 	public Account findById(Long id) {
@@ -39,10 +72,11 @@ public class JdbcAccountRepository implements AccountRepository {
 	
 	public Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException {
 		try {
+			// TODO handle case where accessToken is invalid
 			return jdbcTemplate.queryForObject(SELECT_BY_ACCESS_TOKEN, accountMapper, provider, accessToken);
 		} catch (EmptyResultDataAccessException e) {
 			throw new ConnectedAccountNotFoundException(provider);
-		} // TODO handle case where accessToken is invalid
+		}
 	}
 	
 	public List<Account> findFriendAccounts(String provider, List<String> friendIds) {
@@ -67,6 +101,37 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	public void disconnect(Long id, String provider) {
 		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, provider);
+	}
+
+	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {
+		
+		private RowMapper<Account> accountMapper = new AccountMapper();	
+
+		public PasswordProtectedAccount mapRow(ResultSet rs, int row) throws SQLException {
+			Account account = accountMapper.mapRow(rs, row);
+			return new PasswordProtectedAccount(account, rs.getString("password"));
+		}
+	};
+	
+	private static class PasswordProtectedAccount {
+		
+		private Account account;
+		
+		private String encodedPassword;
+
+		public PasswordProtectedAccount(Account account, String encodedPassword) {
+			this.account = account;
+			this.encodedPassword = encodedPassword;
+		}
+	
+		public Account accessAccount(String password, PasswordEncoder passwordEncoder) throws InvalidPasswordException {
+			if (passwordEncoder.matches(password, encodedPassword)) {
+				return account;
+			} else {
+				throw new InvalidPasswordException();
+			}
+		}
+		
 	}
 
 	private static final String SELECT_BY_ID = 

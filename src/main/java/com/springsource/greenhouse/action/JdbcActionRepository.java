@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 public class JdbcActionRepository implements ActionRepository {
 
@@ -15,6 +16,7 @@ public class JdbcActionRepository implements ActionRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
+	@Transactional
 	public SimpleAction createSimpleAction(String type, Long accountId, Location location) {
 		DateTime performTime = new DateTime(DateTimeZone.UTC);
 		Float latitude = location != null ? location.getLatitude() : null;

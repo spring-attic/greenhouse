@@ -5,6 +5,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.springsource.greenhouse.account.Person;
+
 public class SignupForm {
 	
 	@NotEmpty

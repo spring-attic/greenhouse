@@ -26,11 +26,7 @@
 		<authentication-provider ref="usernamePasswordAuthenticationProvider" />
 	</authentication-manager>
 
-	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.signin.UsernamePasswordAuthenticationProvider">
-		<beans:constructor-arg>
-			<beans:bean class="com.springsource.greenhouse.account.JdbcUsernamePasswordAuthenticationService" />
-		</beans:constructor-arg>
-	</beans:bean>
+	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.account.UsernamePasswordAuthenticationProvider" />
 
 	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
 	
@@ -40,5 +36,4 @@
 	
 	<beans:import resource="security-oauth-consumer.xml" />
     
-	<beans:bean class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
 </beans:beans>

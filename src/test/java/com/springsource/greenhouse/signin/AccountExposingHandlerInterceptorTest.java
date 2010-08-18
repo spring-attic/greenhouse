@@ -28,7 +28,7 @@ public class AccountExposingHandlerInterceptorTest {
     @Before
     public void setup() {
         interceptor = new AccountExposingHandlerInterceptor();
-        account = new Account(1L);
+        account = new Account(1L, "Joe", "Schmoe", "joe@schmoe.com");
         TestingAuthenticationToken authentication = new TestingAuthenticationToken(account, "password");
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

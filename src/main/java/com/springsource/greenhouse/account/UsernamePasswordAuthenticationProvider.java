@@ -1,6 +1,8 @@
-package com.springsource.greenhouse.signin;
+package com.springsource.greenhouse.account;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -9,23 +11,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.UsernameNotFoundException;
-import com.springsource.greenhouse.account.InvalidPasswordException;
-import com.springsource.greenhouse.account.UsernamePasswordAuthenticationService;
 
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
-	private UsernamePasswordAuthenticationService authenticationService;
+	private AccountRepository accountRepository;
 	
-	public UsernamePasswordAuthenticationProvider(UsernamePasswordAuthenticationService authenticationService) {
-		this.authenticationService = authenticationService;
+	@Inject
+	public UsernamePasswordAuthenticationProvider(AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
 	}
-	
+
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 		try {
-			Account account = authenticationService.authenticate(token.getName(), (String) token.getCredentials());
+			Account account = accountRepository.authenticate(token.getName(), (String) token.getCredentials());
 			return authenticatedToken(account, authentication);
 		} catch (UsernameNotFoundException e) {
 			throw new org.springframework.security.core.userdetails.UsernameNotFoundException(token.getName(), e);

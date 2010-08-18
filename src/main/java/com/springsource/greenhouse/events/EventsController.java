@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.extras.OAuthAccessToken;
 import org.springframework.social.twitter.SearchResults;
@@ -54,8 +56,12 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.POST)
-	public @ResponseBody void postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+		if (accessToken == null) {
+			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
+		}
 		twitter.updateStatus(accessToken, status);
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -89,8 +95,12 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
-	public @ResponseBody void postSessionTweet(@PathVariable Long id, @PathVariable Short number, @RequestParam String status, @RequestParam double latitude, @RequestParam double longitude, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+	public ResponseEntity<String> postSessionTweet(@PathVariable Long id, @PathVariable Short number, @RequestParam String status, Location currentLocation, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+		if (accessToken == null) {
+			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
+		}		
 		twitter.updateStatus(accessToken, status);
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);		
 	}
 	
 	// for web browser (HTML) clients
