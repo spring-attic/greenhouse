@@ -1,5 +1,11 @@
-Reset your password by going to...
+$firstName$,
 
-http://localhost:8080/greenhouse/reset?token=$token$
+You, or someone on your behalf, requested a password reset.
 
-Thanks
+To reset your password, click the following link:
+
+    $resetUrl$?token=$token$
+
+Sincerely,
+
+The Greenhouse Development Team
