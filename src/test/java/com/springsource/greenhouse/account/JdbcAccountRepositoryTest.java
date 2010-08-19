@@ -1,17 +1,24 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
 
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
@@ -36,6 +43,23 @@ public class JdbcAccountRepositoryTest {
     	db.shutdown();
     }
     
+    @Test
+    public void create() throws EmailAlreadyOnFileException {
+    	// TODO support @Transactional without requiring container XML
+    	PlatformTransactionManager tm = new DataSourceTransactionManager(db);
+    	TransactionStatus txStatus = tm.getTransaction(new DefaultTransactionDefinition());
+    	
+    	Person person = new Person("Jack", "Black", "jack@black.com", "foobie", Gender.Male, new LocalDate(1977, 12, 1));
+    	Account account = accountRepository.createAccount(person);
+    	assertEquals(3L, (long) account.getId());
+    	assertEquals("Jack Black", account.getFullName());
+    	assertEquals("jack@black.com", account.getEmail());
+    	assertEquals("3", account.getProfileKey());
+    	assertEquals(null, account.getProfilePictureUrl());
+    	
+    	tm.rollback(txStatus);
+    }
+
     @Test
     public void findById() {
     	assertExpectedAccount(accountRepository.findById(1L));
