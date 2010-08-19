@@ -10,7 +10,7 @@ create table MemberAction (id identity,
 create table Badge (name varchar,
 					description varchar not null,
 					level tinyint not null,
-					icon varchar not null,
+					imageUrl varchar not null,
 					primary key (name));
 					
 create table AwardedBadge(id identity,

@@ -38,6 +38,15 @@ public class JdbcProfileRepository implements ProfileRepository {
 			}
 		}, accountId);
 	}
+
+	public String findProfilePictureUrl(String profileKey, PictureSize size) {
+		Long accountId = getAccountId(profileKey);
+		if (accountId != null) {
+			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where id = ?", String.class, new PictureUrlMapper(size), accountId);
+		} else {
+			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where username = ?", String.class, new PictureUrlMapper(size), accountId);			
+		}
+	}
 	
 	// internal helpers
 	
@@ -46,8 +55,24 @@ public class JdbcProfileRepository implements ProfileRepository {
 	}
 	
 	private RowMapper<Profile> profileMapper = new RowMapper<Profile>() {
+		
+		private PictureUrlMapper pictureUrlMapper = new PictureUrlMapper(PictureSize.large);
+		
 		public Profile mapRow(ResultSet rs, int row) throws SQLException {
-			return new Profile(rs.getLong("id"), rs.getString("displayName"));
+			return new Profile(rs.getLong("id"), rs.getString("displayName"), pictureUrlMapper.mapRow(rs, row));
+		}
+	};
+
+	private static class PictureUrlMapper implements RowMapper<String> {
+
+		private PictureSize pictureSize;
+		
+		public PictureUrlMapper(PictureSize pictureSize) {
+			this.pictureSize = pictureSize;
+		}
+
+		public String mapRow(ResultSet rs, int row) throws SQLException {
+			return ProfileUtils.picUrl(rs.getLong("id"), pictureSize, rs.getBoolean("pictureSet"), rs.getString("gender").charAt(0));		
 		}
 	};
 
@@ -69,6 +94,8 @@ public class JdbcProfileRepository implements ProfileRepository {
 		}
 	}
 
-	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName from Member";
-	
+	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, gender, pictureSet from Member";
+
+	private static final String SELECT_PROFILE_PIC = "select id, gender, pictureSet from Member";
+
 }

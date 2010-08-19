@@ -7,9 +7,9 @@ $(document).ready(function (){
 		
 		$("<li></li>").
 	    	addClass("newItem").
-	    	append($("<img/>", {"src":activity.memberPictureUrl}).addClass("profile")).
+	    	append($("<img/>", {"src":(activity.memberPictureUrl ? activity.memberPictureUrl : "")}).addClass("profile")).
 	    	append(activity.text).
-	    	append($("<img/>", {"src":activity.imageUrl}).addClass("badge")).
+	    	append($("<img/>", {"src":(activity.imageUrl ? activity.imageUrl : "")}).addClass("badge")).
 	    	prependTo("#recentActivityList");
 		
 		if ($("#recentActivityList li").length == 6) {

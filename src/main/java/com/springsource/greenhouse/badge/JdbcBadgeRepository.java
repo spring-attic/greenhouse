@@ -7,6 +7,9 @@ import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.action.Action;
+
 public class JdbcBadgeRepository implements BadgeRepository {
 
 	private JdbcTemplate jdbcTemplate;
@@ -17,11 +20,12 @@ public class JdbcBadgeRepository implements BadgeRepository {
 	}
 	
 	@Transactional
-	public AwardedBadge createAwardedBadge(String badge, Long accountId, Long actionId) {
+	public AwardedBadge createAwardedBadge(String badge, Account account, Action action) {
 		DateTime awardTime = new DateTime(DateTimeZone.UTC);
-		jdbcTemplate.update("insert into AwardedBadge (badge, awardTime, member, memberAction) values (?, ?, ?, ?)", badge, awardTime.toDate(), accountId, actionId);
+		jdbcTemplate.update("insert into AwardedBadge (badge, awardTime, member, memberAction) values (?, ?, ?, ?)", badge, awardTime.toDate(), account.getId(), action.getId());
 		Long id = jdbcTemplate.queryForLong("call identity()");
-		return new AwardedBadge(id, badge, awardTime, accountId, actionId);
+		String imageUrl = jdbcTemplate.queryForObject("select imageUrl from badge where name = ?", String.class, badge);
+		return new AwardedBadge(id, badge, awardTime, imageUrl, account, action);
 	}
 
 }

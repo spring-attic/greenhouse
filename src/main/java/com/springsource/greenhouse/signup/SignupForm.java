@@ -4,7 +4,9 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.LocalDate;
 
+import com.springsource.greenhouse.account.Gender;
 import com.springsource.greenhouse.account.Person;
 
 public class SignupForm {
@@ -73,6 +75,7 @@ public class SignupForm {
 	}
 
 	public Person createPerson() {
-		return new Person(firstName, lastName, email, password);
+		// TODO add gender and birthdate
+		return new Person(firstName, lastName, email, password, Gender.Male, new LocalDate(1977, 12, 1));
 	}
 }

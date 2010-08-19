@@ -2,6 +2,7 @@ package com.springsource.greenhouse.events;
 
 import javax.inject.Inject;
 
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.badge.ActionTriggeredBadgeAwarder;
 import com.springsource.greenhouse.badge.AwardedBadge;
 import com.springsource.greenhouse.badge.BadgeRepository;
@@ -16,13 +17,13 @@ public class BroadcasterBadgeAwarder implements ActionTriggeredBadgeAwarder<Even
 	}
 	
 	public AwardedBadge awardBadgeForAction(EventTweetAction action) {
-		if (alreadyAwarded(action.getAccountId(), action.getEventId())) {
+		if (alreadyAwarded(action.getAccount(), action.getEventId())) {
 			return null;
 		}
-		return badgeRepository.createAwardedBadge(BADGE_NAME, action.getAccountId(), action.getId());
+		return badgeRepository.createAwardedBadge(BADGE_NAME, action.getAccount(), action);
 	}
 
-	private boolean alreadyAwarded(Long accountId, Long eventId) {
+	private boolean alreadyAwarded(Account account, Long eventId) {
 		return false;
 	}
 	

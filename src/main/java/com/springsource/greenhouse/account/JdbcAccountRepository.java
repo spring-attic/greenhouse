@@ -33,8 +33,8 @@ public class JdbcAccountRepository implements AccountRepository {
 	@Transactional
 	public Account createAccount(Person person) throws EmailAlreadyOnFileException {
 		try {
-			jdbcTemplate.update("insert into Member (firstName, lastName, email, password) values (?, ?, ?, ?)",
-					person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()));
+			jdbcTemplate.update("insert into Member (firstName, lastName, email, password, gender, birthdate) values (?, ?, ?, ?, ?, ?)",
+					person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()), person.getGender().code(), person.getBirthdate().toString());
 			Long accountId = jdbcTemplate.queryForLong("call identity()");
 			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail());
 		} catch (DuplicateKeyException e) {
@@ -101,6 +101,10 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	public void disconnect(Long id, String provider) {
 		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, provider);
+	}
+	
+	public void markProfilePictureSet(Long id) {
+		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
 	}
 
 	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {

@@ -9,5 +9,7 @@ public interface ProfileRepository {
 	Profile findByAccountId(Long accountId);
 
 	List<ConnectedProfile> findConnectedProfiles(Long accountId);
+
+	String findProfilePictureUrl(String profileKey, PictureSize size);
 	
 }

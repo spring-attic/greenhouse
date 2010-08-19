@@ -2,6 +2,7 @@ package com.springsource.greenhouse.events;
 
 import org.joda.time.DateTime;
 
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Action;
 import com.springsource.greenhouse.action.Location;
 
@@ -13,9 +14,9 @@ public final class EventTweetAction extends Action {
 	
 	private final String tweet;
 
-	public EventTweetAction(Long id, DateTime time, Long accountId, Location location,
+	public EventTweetAction(Long id, DateTime time, Account account, Location location,
 			Long eventId, Short sessionNumber, String tweet) {
-		super(id, time, accountId, location);
+		super(id, time, account, location);
 		this.eventId = eventId;
 		this.sessionNumber = sessionNumber;
 		this.tweet = tweet;

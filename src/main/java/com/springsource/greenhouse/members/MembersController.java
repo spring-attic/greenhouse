@@ -39,18 +39,16 @@ public class MembersController {
 		Profile profile = profileRepository.findByKey(profileKey);
 		model.addAttribute(profile);
 		model.addAttribute("connectedProfiles", profileRepository.findConnectedProfiles(profile.getAccountId()));
-		model.addAttribute("metadata", buildOpenGraphMetadata(profile));
+		model.addAttribute("metadata", buildFacebookOpenGraphMetadata(profile));
 		return "members/view";
 	}
 	
 	@RequestMapping("/{profileKey}/picture")
-	public String profilePicture(@PathVariable String profileKey, @RequestParam(required=false) String type) {
-		Profile profile = profileRepository.findByKey(profileKey);
-		return "redirect:http://images.greenhouse.springsource.org/profile-pics/" + profile.getAccountId() + "/" + 
-			(type != null ? type : "normal") + ".jpg";
+	public String profilePicture(@PathVariable String profileKey, @RequestParam(required=false) PictureSize size) {
+		return "redirect:" + profileRepository.findProfilePictureUrl(profileKey, size);
 	}
 	
-	private Map<String, String> buildOpenGraphMetadata(Profile profile) {
+	private Map<String, String> buildFacebookOpenGraphMetadata(Profile profile) {
 		Map<String, String> metadata = new HashMap<String, String>();
 		metadata.put("og:title", profile.getDisplayName());
 		metadata.put("og:type", "public_figure");
