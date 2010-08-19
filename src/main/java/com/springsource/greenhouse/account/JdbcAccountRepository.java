@@ -102,6 +102,10 @@ public class JdbcAccountRepository implements AccountRepository {
 	public void disconnect(Long id, String provider) {
 		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, provider);
 	}
+	
+	public void markProfilePictureSet(Long id) {
+		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
+	}
 
 	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {
 		

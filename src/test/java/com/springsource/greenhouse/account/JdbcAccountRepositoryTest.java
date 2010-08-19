@@ -108,6 +108,12 @@ public class JdbcAccountRepositoryTest {
     public void notConnected() {
     	assertFalse(accountRepository.isConnected(1L, "tripit"));
     }
+    
+    @Test
+    public void markProfilePictureSet() {
+    	accountRepository.markProfilePictureSet(1L);
+    	assertTrue(jdbcTemplate.queryForObject("select pictureSet from Member where id = ?", Boolean.class, 1L));
+    }
 
 	private void assertExpectedAccount(Account account) {
 	    assertEquals("Craig", account.getFirstName());
