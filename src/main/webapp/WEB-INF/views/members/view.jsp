@@ -5,8 +5,7 @@
 	<c:out value="${profile.displayName}" />
 	
 	<div id="picture">
-		<img src="<c:url value="/members/${profile.accountId}/picture?type=large"/>" 
-			 onError="this.src='<c:url value="/resources/images/defaultProfilePicture.png"/>';" />
+		<img src="${profile.pictureUrl}" alt="Profile Picture" />
 	</div>	
 	
 	<div id="connectedProfiles">

@@ -8,10 +8,9 @@ public class AwardedBadgeRecentActivityTransformer {
 
 	@Transformer
 	public RecentActivity forAwardedBadge(AwardedBadge badge) {
-		String message = "Keith Donald was awarded the " + badge.getName() + " badge";
-		String memberPictureUrl = "http://localhost:8080/greenhouse/resources/recent/genericMember.png";
-		String imageUrl = "http://localhost:8080/greenhouse/resources/recent/genericAction.png";
-		RecentActivity activity = new RecentActivity(memberPictureUrl, message, imageUrl);
+		String message = badge.getAccount().getFullName() + " was awarded the " + badge.getName() + " badge";
+		String memberPictureUrl = badge.getAccount().getProfilePictureUrl();
+		RecentActivity activity = new RecentActivity(memberPictureUrl, message, badge.getImageUrl());
 		return activity;
 	}
 }

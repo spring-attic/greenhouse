@@ -2,21 +2,22 @@ package com.springsource.greenhouse.action;
 
 import org.joda.time.DateTime;
 
-// TODO likely needs a text property
+import com.springsource.greenhouse.account.Account;
+
 public abstract class Action {
 	
 	private final Long id;
 
 	private final DateTime time;
 	
-	private final Long accountId;
-
+	private final Account account;
+	
 	private final Location location;
 	
-	public Action(Long id, DateTime time, Long accountId, Location location) {
+	public Action(Long id, DateTime time, Account account, Location location) {
 		this.id = id;
 		this.time = time;
-		this.accountId = accountId;
+		this.account = account;
 		this.location = location;
 	}
 
@@ -28,8 +29,8 @@ public abstract class Action {
 		return time;
 	}
 
-	public Long getAccountId() {
-		return accountId;
+	public Account getAccount() {
+		return account;
 	}
 	
 	public Location getLocation() {

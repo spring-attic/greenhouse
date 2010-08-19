@@ -14,7 +14,7 @@ public class SimpleActionTriggeredBadgeAwarder implements ActionTriggeredBadgeAw
 	}
 
 	public AwardedBadge awardBadgeForAction(SimpleAction action) {
-		return badgeRepository.createAwardedBadge(badgeName, action.getAccountId(), action.getId());
+		return badgeRepository.createAwardedBadge(badgeName, action.getAccount(), action);
 	}
 
 }

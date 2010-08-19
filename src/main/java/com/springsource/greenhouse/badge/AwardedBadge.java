@@ -2,6 +2,9 @@ package com.springsource.greenhouse.badge;
 
 import org.joda.time.DateTime;
 
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.action.Action;
+
 public final class AwardedBadge {
 	
 	private final Long id;
@@ -10,16 +13,19 @@ public final class AwardedBadge {
 		
 	private final DateTime awardTime;
 
-	private final Long accountId;
+	private final String imageUrl;
 	
-	private final Long actionId;
+	private final Account account;
 	
-	public AwardedBadge(Long id, String name, DateTime awardTime, Long accountId, Long actionId) {
+	private final Action action;
+	
+	public AwardedBadge(Long id, String name, DateTime awardTime, String imageUrl, Account account, Action action) {
 		this.id = id;
 		this.name = name;
 		this.awardTime = awardTime;
-		this.accountId = accountId;
-		this.actionId = actionId;
+		this.imageUrl = imageUrl;
+		this.account = account;
+		this.action = action;
 	}
 
 	public Long getId() {
@@ -34,12 +40,16 @@ public final class AwardedBadge {
 		return awardTime;
 	}
 
-	public Long getAccountId() {
-		return accountId;
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	
+	public Account getAccount() {
+		return account;
 	}
 
-	public Long getActionId() {
-		return actionId;
+	public Action getAction() {
+		return action;
 	}
 	
 }

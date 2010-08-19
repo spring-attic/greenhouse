@@ -47,7 +47,8 @@ public class JdbcProfileRepository implements ProfileRepository {
 	
 	private RowMapper<Profile> profileMapper = new RowMapper<Profile>() {
 		public Profile mapRow(ResultSet rs, int row) throws SQLException {
-			return new Profile(rs.getLong("id"), rs.getString("displayName"));
+			Long accountId = rs.getLong("id");
+			return new Profile(accountId, rs.getString("displayName"), ProfileUtils.picUrl(accountId, "large"));
 		}
 	};
 

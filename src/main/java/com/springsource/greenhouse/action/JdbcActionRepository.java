@@ -10,6 +10,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import com.springsource.greenhouse.UserLocationHandlerInterceptor;
+import com.springsource.greenhouse.account.Account;
 
 public class JdbcActionRepository implements ActionRepository {
 
@@ -21,14 +22,14 @@ public class JdbcActionRepository implements ActionRepository {
 	}
 	
 	@Transactional
-	public SimpleAction createSimpleAction(String type, Long accountId) {
-		Location location = resolveUserLocation(accountId);
+	public SimpleAction createSimpleAction(String type, Account account) {
+		Location location = resolveUserLocation(account.getId());
 		DateTime performTime = new DateTime(DateTimeZone.UTC);
 		Float latitude = location != null ? location.getLatitude() : null;
 		Float longitude = location != null ? location.getLongitude() : null;
-		jdbcTemplate.update("insert into MemberAction (actionType, performTime, latitude, longitude, member) values (?, ?, ?, ?, ?)", type, performTime.toDate(), latitude, longitude, accountId);
+		jdbcTemplate.update("insert into MemberAction (actionType, performTime, latitude, longitude, member) values (?, ?, ?, ?, ?)", type, performTime.toDate(), latitude, longitude, account.getId());
 		Long id = jdbcTemplate.queryForLong("call identity()");
-		return new SimpleAction(type, id, performTime, accountId, location);
+		return new SimpleAction(type, id, performTime, account, location);
 	}
 
 	// TODO this web-specific dependency is probably less than ideal

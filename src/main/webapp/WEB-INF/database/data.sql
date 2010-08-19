@@ -5,7 +5,7 @@ insert into Member (firstName, lastName, email, password, username) values ('Jer
 insert into Member (firstName, lastName, email, password, username) values ('Mark', 'Fisher', 'mfisher@vmware.com', '87da6fd4e6a5454bb4c32f5ab99498dc03959302f21069aa444f0f4f8dad8dd7:2e43f0da-725f-4d8e-80f0-5b5c75b4aa40', 'mfisher');
 insert into Member (firstName, lastName, email, password, username) values ('Keri', 'Donald', 'keridonald@gmail.com', 'cacbc4db15b707d60c029fa4c2fa2a7ea400ea3560998398787290cbaee3f429:09f006da-2e19-48b1-ae42-d2115d86ae0d', 'kkdonald');
 
-insert into Badge (name, description, level, icon) values ('Newbie', 'You joined!', 1, 'http://localhost:8080/resources/badges/newbie.png');
+insert into Badge (name, description, level, imageUrl) values ('Newbie', 'You joined!', 1, 'http://localhost:8080/resources/badges/newbie.png');
 
 insert into App (consumerKey, name, description, website, callbackUrl, secret, owner) values ('a08318eb478a1ee31f69a55276f3af64', 'Greenhouse for the iPhone', 'Awesome', 'http://www.springsource.com', 'x-com-springsource-greenhouse://oauth-response', '80e7f8f7ba724aae9103f297e5fb9bdf', 2);
 
