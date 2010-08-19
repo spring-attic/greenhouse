@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.utils;
+package com.springsource.greenhouse.account;
 
 import java.util.Collection;
 
@@ -6,9 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.springsource.greenhouse.account.Account;
 
-public final class SecurityUtils {
+public final class AccountUtils {
 
 	public static void signin(Account account) {
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(account, null, (Collection<GrantedAuthority>)null));

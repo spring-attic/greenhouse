@@ -15,6 +15,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
+import com.springsource.greenhouse.UserLocationHandlerInterceptor;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Location;
 
@@ -64,7 +65,7 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 	private static class LocationWebArgumentResolver implements WebArgumentResolver {
 		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
 			if (Location.class.isAssignableFrom(param.getParameterType())) {
-				return request.getAttribute("currentLocation", WebRequest.SCOPE_REQUEST);
+				return request.getAttribute(UserLocationHandlerInterceptor.USER_LOCATION_ATTRIBUTE, WebRequest.SCOPE_REQUEST);
 			} else {
 				return WebArgumentResolver.UNRESOLVED;
 			}
