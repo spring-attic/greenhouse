@@ -26,4 +26,8 @@ public class RecentActivity {
 		return imageUrl;
 	}
 	
+	public String toString() {
+		return "Recent Activity: " + text;
+	}
+	
 }

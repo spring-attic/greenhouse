@@ -81,6 +81,7 @@ public class FacebookSettingsController {
 		try {
 	        byte[] imageBytes = facebook.getProfilePicture(accessToken);	        
 	        profilePictureService.setProfilePicture(account.getId(), imageBytes);
+	        accountRepository.markProfilePictureSet(account.getId());
 		} catch (ProfilePictureException e) {
 			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
 		}

@@ -5,41 +5,34 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+	<!-- For persisting simple actions -->
+	<beans:bean id="actionRepository" class="com.springsource.greenhouse.action.JdbcActionRepository" />
+
 	<!-- Channel for Member Action messages -->
 	<publish-subscribe-channel id="actionChannel" />
+	
+	<!-- BADGE AWARDING -->
 
-	<!-- TODO
-	<transformer input-channel="actionChannel" output-channel="recentActivity">
-		<beans:bean class="com.springsource.greenhouse.action.ActionRecentActivityTransformerFactoryBean" />	
-	</transformer>
-  	-->
-  	
-	<!-- RecentActivity Channel Adapter -->
-	<!-- TODO replace with Ajax push adapter -->
-	<logging-channel-adapter id="recentActivity" />
-			
+	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.badge.BadgeSystemFactoryBean" />
+	
+	<beans:bean id="badgeRepository" class="com.springsource.greenhouse.badge.JdbcBadgeRepository" />
+		
 	<!-- Sends Member Actions to the badging system for processing -->		 		
 	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="awardedBadgeChannel" />
 
 	<!-- AwardedBadge channel -->
 	<publish-subscribe-channel id="awardedBadgeChannel" />
 
-	<!-- AwardedBadge->RecentActivity Transformer -->
-	<transformer input-channel="awardedBadgeChannel" output-channel="recentActivity">
-		<beans:bean class="com.springsource.greenhouse.badge.AwardedBadgeRecentActivityTransformer" />	
-	</transformer>
-	
 	<!-- TODO AwardedBadge Mail Notifier -->
-
-	<beans:bean id="actionRepository" class="com.springsource.greenhouse.action.JdbcActionRepository" />
 	
-	<!-- TODO SPR-7450 -->
-	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.badge.BadgeSystemFactoryBean">
-		<beans:constructor-arg ref="badgeRepository" />
-	</beans:bean>
 	
-	<beans:bean id="badgeRepository" class="com.springsource.greenhouse.badge.JdbcBadgeRepository">
-		<beans:constructor-arg ref="jdbcTemplate" />
-	</beans:bean>
-		
+	<!-- RECENT ACTIVITY -->
+	<transformer input-channel="actionChannel" output-channel="recentActivity" ref="recentActivityTransformer" />	
+	<transformer input-channel="awardedBadgeChannel" output-channel="recentActivity" ref="recentActivityTransformer" />
+	
+	<beans:bean id="recentActivityTransformer" class="com.springsource.greenhouse.recent.RecentActivityTransformer" />
+	  	
+	<!-- RecentActivity Channel Adapter -->
+	<publish-subscribe-channel id="recentActivity" />
+			
 </beans:beans>

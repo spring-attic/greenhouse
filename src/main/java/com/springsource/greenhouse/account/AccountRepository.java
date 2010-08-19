@@ -23,5 +23,7 @@ public interface AccountRepository {
 	boolean isConnected(Long id, String provider);
 
 	void disconnect(Long id, String provider);
+
+	void markProfilePictureSet(Long id);
 		
 }

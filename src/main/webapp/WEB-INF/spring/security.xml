@@ -18,6 +18,7 @@
 		<intercept-url pattern="/reset" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/members/**" access="permitAll" />
+		<intercept-url pattern="/pubsub/**" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 	</http>
 
