@@ -6,6 +6,10 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+
+import com.springsource.greenhouse.UserLocationHandlerInterceptor;
 
 public class JdbcActionRepository implements ActionRepository {
 
@@ -17,13 +21,24 @@ public class JdbcActionRepository implements ActionRepository {
 	}
 	
 	@Transactional
-	public SimpleAction createSimpleAction(String type, Long accountId, Location location) {
+	public SimpleAction createSimpleAction(String type, Long accountId) {
+		Location location = resolveUserLocation(accountId);
 		DateTime performTime = new DateTime(DateTimeZone.UTC);
 		Float latitude = location != null ? location.getLatitude() : null;
 		Float longitude = location != null ? location.getLongitude() : null;
 		jdbcTemplate.update("insert into MemberAction (actionType, performTime, latitude, longitude, member) values (?, ?, ?, ?, ?)", type, performTime.toDate(), latitude, longitude, accountId);
 		Long id = jdbcTemplate.queryForLong("call identity()");
 		return new SimpleAction(type, id, performTime, accountId, location);
+	}
+
+	// TODO this web-specific dependency is probably less than ideal
+	private Location resolveUserLocation(Long accountId) {
+		RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+		if (attributes != null) {
+			return (Location) attributes.getAttribute(UserLocationHandlerInterceptor.USER_LOCATION_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+		} else {
+			return null;
+		}
 	}
 
 }
