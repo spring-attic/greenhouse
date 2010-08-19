@@ -17,8 +17,8 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.AccountUtils;
 import com.springsource.greenhouse.utils.MemberUtils;
-import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
 @RequestMapping("/settings/twitter")
@@ -87,7 +87,7 @@ public class TwitterSettingsController {
 	private void makeTwitterScreenameGreenhouseUsername(String screenName, Account account) {
 		try {
 			jdbcTemplate.update("update Member set username = ? where id = ?", screenName, account.getId());
-			SecurityUtils.signin(account.newUsername(screenName));
+			AccountUtils.signin(account.newUsername(screenName));
 		} catch (DuplicateKeyException e) {
 			// TODO add an info message that gets displayed under the success message
 		}

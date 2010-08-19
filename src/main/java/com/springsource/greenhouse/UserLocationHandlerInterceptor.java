@@ -9,13 +9,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.springsource.greenhouse.action.Location;
 
-public class CurrentLocationHandlerInterceptor implements HandlerInterceptor {
+public class UserLocationHandlerInterceptor implements HandlerInterceptor {
+
+	public static final String USER_LOCATION_ATTRIBUTE = "userLocation";
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		Float latitude = ServletRequestUtils.getFloatParameter(request, "latitude");
 		Float longitude = ServletRequestUtils.getFloatParameter(request, "longitude");
 		if (latitude != null && longitude != null) {
-			request.setAttribute("currentLocation", new Location(latitude, longitude));
+			request.setAttribute(USER_LOCATION_ATTRIBUTE, new Location(latitude, longitude));
 		}
 		return true;
 	}

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.AccountUtils;
 import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
-import com.springsource.greenhouse.utils.SecurityUtils;
 
 @Controller
 @RequestMapping("/signup")
@@ -40,7 +40,7 @@ public class SignupController {
 		try {
 			Account account = accountRepository.createAccount(form.createPerson());		
 			gateway.signedUp(account);
-			SecurityUtils.signin(account);
+			AccountUtils.signin(account);
 		} catch (EmailAlreadyOnFileException e) {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
 			return null;
