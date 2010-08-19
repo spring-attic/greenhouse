@@ -15,18 +15,25 @@ public class Account implements Serializable {
 	
 	private final String username;
 	
+	private final String profilePictureUrl;
+	
 	public Account(Long id, String firstName, String lastName, String email) {
-		this(id, firstName, lastName, email, null);
+		this(id, firstName, lastName, email, null, null);
 	}
 
 	public Account(Long id, String firstName, String lastName, String email, String username) {
+		this(id, firstName, lastName, email, username, null);
+	}
+
+	public Account(Long id, String firstName, String lastName, String email, String username, String profilePictureUrl) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.username = username;
+		this.profilePictureUrl = profilePictureUrl;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -56,12 +63,11 @@ public class Account implements Serializable {
 	}
 	
 	public String getProfilePictureUrl() {
-		// TODO add link to profile picture
-		return null;
+		return profilePictureUrl;
 	}
 	
 	public Account newUsername(String newUsername) {
-		return new Account(id, firstName, lastName, email, newUsername);
+		return new Account(id, firstName, lastName, email, newUsername, profilePictureUrl);
 	}
 
 }

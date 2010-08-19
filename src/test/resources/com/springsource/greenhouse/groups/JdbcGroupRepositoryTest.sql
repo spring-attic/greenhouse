@@ -1,2 +1,2 @@
-insert into Member (firstName, lastName, email, password, username) values ('Art', 'Names', 'artnames@habuma.com', 'password', 'artnames');					
+insert into Member (firstName, lastName, email, password, username, gender) values ('Art', 'Names', 'artnames@habuma.com', 'password', 'artnames', 'M');					
 insert into MemberGroup (name, profileKey, description, hashtag, leader) values ('Test Group', 'test', 'This is a test group', '#test', 1);

@@ -44,9 +44,8 @@ public class MembersController {
 	}
 	
 	@RequestMapping("/{profileKey}/picture")
-	public String profilePicture(@PathVariable String profileKey, @RequestParam(required=false) String type) {
-		Profile profile = profileRepository.findByKey(profileKey);
-		return "redirect:" + ProfileUtils.picUrl(profile.getAccountId(), type);
+	public String profilePicture(@PathVariable String profileKey, @RequestParam(required=false) PictureSize size) {
+		return "redirect:" + profileRepository.findProfilePictureUrl(profileKey, size);
 	}
 	
 	private Map<String, String> buildFacebookOpenGraphMetadata(Profile profile) {
