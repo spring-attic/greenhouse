@@ -40,30 +40,30 @@ dt.event span.locationAndDate {
 	font-style: italic;
 }
 
-#recentActivity {
+#recentActivityList {
 	list-style: none;
 }
 
-#recentActivity li {
+#recentActivityList li {
 	border: 1px solid #000;
 	height:5em;
 	overflow:hidden;
 }
 
-#recentActivity img {
+#recentActivityList img {
 	width: 5em;
 	vertical-align:middle;
 }
 
-#recentActivity img.profile {
+#recentActivityList img.profile {
 	float:left;
 	padding-right:2em;
 }
 
-#recentActivity img.activity {
+#recentActivityList img.activity {
 	float:right;
 }
 
-#recentActivity li.newItem {
+#recentActivityList li.newItem {
 	display: none;
 }

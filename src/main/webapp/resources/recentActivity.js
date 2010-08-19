@@ -8,16 +8,16 @@ $(document).ready(function (){
 		$("<li></li>").
 	    	addClass("newItem").
 	    	append($("<img/>", { "src" : activity.memberPictureUrl }).addClass("profile")).
-	    	append(activity.text).
+	    	append("<p>" + activity.text + "</p>").
 	    	append($("<img/>", { "src" : activity.imageUrl }).addClass("activity")).
-	    	prependTo("#recentActivity");
+	    	prependTo("#recentActivityList");
 		
-		if ($("#recentActivity li").length == 6) {
-		    $("#recentActivity li:last").slideUp("slow", function() {
+		if ($("#recentActivityList li").length == 6) {
+		    $("#recentActivityList li:last").slideUp("slow", function() {
 		        $(this).remove();
 		    });
 		}
-		$("#recentActivity li.newItem").slideDown("slow", function() {
+		$("#recentActivityList li.newItem").slideDown("slow", function() {
 		    $(this).removeClass("newItem");
 		});
 	}
