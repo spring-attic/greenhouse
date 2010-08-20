@@ -61,13 +61,19 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.updateStatus(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitter.tweet(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
-	public @ResponseBody void postRetweet(@PathVariable Long id, @RequestParam Long tweetId, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
-		//TODO: add controller logic for retweeting about an event
+	public @ResponseBody
+	ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId,
+			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+		if (accessToken == null) {
+			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
+		}
+		twitter.retweet(tweetId, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -105,7 +111,7 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}		
-		twitter.updateStatus(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitter.tweet(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);		
 	}
 	

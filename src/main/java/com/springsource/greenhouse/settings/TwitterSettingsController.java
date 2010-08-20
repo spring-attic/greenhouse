@@ -83,7 +83,7 @@ public class TwitterSettingsController {
 	// internal helpers
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
 		String message = "Join me at the Greenhouse! " + ProfileUrlUtils.url(account);
-		twitterService.updateStatus(message, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitterService.tweet(message, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 	}
 
 	private void makeTwitterScreenameGreenhouseUsername(String screenName, Account account) {
