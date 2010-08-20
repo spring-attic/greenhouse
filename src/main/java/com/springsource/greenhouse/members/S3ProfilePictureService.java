@@ -30,27 +30,22 @@ public class S3ProfilePictureService implements ProfilePictureService {
 	}
 
 	@Async
-	public void setProfilePicture(Long accountId, byte[] imageBytes)
-			throws ProfilePictureException {
+	public void saveProfilePicture(Long accountId, byte[] imageBytes) {
 		try {
-			setProfilePicture(accountId, imageBytes, guessContentType(imageBytes));
+			saveProfilePicture(accountId, imageBytes, guessContentType(imageBytes));
 		} catch (IOException e) {
-			throw new ProfilePictureException("Unable to determine content type of image data.");
+			throw new ProfilePictureException("Unable to determine content type of image data.", e);
 		}
 	}
 
 	@Async
-	public void setProfilePicture(Long accountId, byte[] imageBytes,
-			String contentType) throws ProfilePictureException {
-		validateContentType(contentType);
+	public void saveProfilePicture(Long accountId, byte[] imageBytes, String contentType) {
+		assertContentType(contentType);
+		assertBytesLength(imageBytes);
 		try {
-			if (imageBytes.length > 0) {
-				s3.saveFile(bucketName, "profile-pics/" + accountId + "/normal.jpg", ImageUtils.scaleImageToWidth(imageBytes, 100), contentType);
-				s3.saveFile(bucketName, "profile-pics/" + accountId + "/small.jpg", ImageUtils.scaleImageToWidth(imageBytes, 50), contentType);
-				s3.saveFile(bucketName, "profile-pics/" + accountId + "/large.jpg", ImageUtils.scaleImageToWidth(imageBytes, 200), contentType);
-			} else {
-				throw new ProfilePictureException("Error saving profile picture.");
-			}
+			s3.saveFile(bucketName, "profile-pics/" + accountId + "/normal.jpg", ImageUtils.scaleImageToWidth(imageBytes, 100), contentType);
+			s3.saveFile(bucketName, "profile-pics/" + accountId + "/small.jpg", ImageUtils.scaleImageToWidth(imageBytes, 50), contentType);
+			s3.saveFile(bucketName, "profile-pics/" + accountId + "/large.jpg", ImageUtils.scaleImageToWidth(imageBytes, 200), contentType);
 		} catch (S3ServiceException e) {
 			throw new ProfilePictureException("Error saving profile picture.", e);
 		} catch (IOException e) {
@@ -60,14 +55,20 @@ public class S3ProfilePictureService implements ProfilePictureService {
 
 	private static final List<String> IMAGE_TYPES = Arrays.asList("image/jpeg", "image/gif", "image/png");
 
-	private void validateContentType(String contentType)
-			throws ProfilePictureException {
+	private void assertContentType(String contentType) {
 		if (!IMAGE_TYPES.contains(contentType)) {
-			throw new ProfilePictureException("Cannot accept content type " + contentType + " as profile picture.");
+			throw new IllegalArgumentException("Cannot accept content type '" + contentType + "' as profile picture.");
+		}
+	}
+	
+	private void assertBytesLength(byte[] imageBytes) {
+		if (imageBytes.length == 0) {
+			throw new IllegalArgumentException("Cannot accept empty picture byte[] as profile picture");
 		}
 	}
 
 	private String guessContentType(byte[] imageBytes) throws IOException {
 		return URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(imageBytes));
 	}
+	
 }

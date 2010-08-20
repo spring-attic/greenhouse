@@ -13,4 +13,12 @@ public enum Gender {
 	public char code() {
 		return code;
 	}
+
+	public static Gender valueOf(char charAt) {
+		if (charAt == 'M') {
+			return Gender.Male;
+		} else {
+			return Gender.Female;
+		}
+	}
 }

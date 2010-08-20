@@ -55,7 +55,7 @@ public class JdbcAccountRepositoryTest {
     	assertEquals("Jack Black", account.getFullName());
     	assertEquals("jack@black.com", account.getEmail());
     	assertEquals("3", account.getProfileKey());
-    	assertEquals(null, account.getProfilePictureUrl());
+    	assertEquals("http://images.greenhouse.springsource.org/profile-pics/male/small.jpg", account.getProfilePictureUrl());
     	
     	tm.rollback(txStatus);
     }
@@ -142,7 +142,10 @@ public class JdbcAccountRepositoryTest {
 	private void assertExpectedAccount(Account account) {
 	    assertEquals("Craig", account.getFirstName());
     	assertEquals("Walls", account.getLastName());
+    	assertEquals("Craig Walls", account.getFullName());
     	assertEquals("cwalls@vmware.com", account.getEmail());
     	assertEquals("habuma", account.getUsername());
+    	assertEquals("habuma", account.getProfileKey());
+    	assertEquals("http://images.greenhouse.springsource.org/profile-pics/male/small.jpg", account.getProfilePictureUrl());
     }
 }

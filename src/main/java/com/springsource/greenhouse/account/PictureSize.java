@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.members;
+package com.springsource.greenhouse.account;
 
 public enum PictureSize {
 	small, normal, large

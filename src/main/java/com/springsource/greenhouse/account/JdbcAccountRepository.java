@@ -36,18 +36,15 @@ public class JdbcAccountRepository implements AccountRepository {
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password, gender, birthdate) values (?, ?, ?, ?, ?, ?)",
 					person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()), person.getGender().code(), person.getBirthdate().toString());
 			Long accountId = jdbcTemplate.queryForLong("call identity()");
-			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail());
+			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail(), null, ProfileUrlUtils.defaultPictureUrl(person.getGender(), PictureSize.small));
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
 		}
 	}
 
 	public Account authenticate(String username, String password) throws UsernameNotFoundException, InvalidPasswordException {
-		String query = EmailUtils.isEmail(username) ? 
-				"select id, firstName, lastName, email, username, password from Member where email = ?" : 
-				"select id, firstName, lastName, email, username, password from Member where username = ?";
 		try {
-			return jdbcTemplate.queryForObject(query, passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
+			return jdbcTemplate.queryForObject(usernameQuery(username), passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
 		} catch (EmptyResultDataAccessException e) {
 			throw new UsernameNotFoundException(username);
 		}
@@ -58,22 +55,21 @@ public class JdbcAccountRepository implements AccountRepository {
 	}
 
 	public Account findById(Long id) {
-		return jdbcTemplate.queryForObject(SELECT_BY_ID, accountMapper, id);
+		return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = ?", accountMapper, id);
 	}
 	
 	public Account findByUsername(String username) throws UsernameNotFoundException {
-		String query = EmailUtils.isEmail(username) ? SELECT_BY_EMAIL : SELECT_BY_USERNAME;
 		try {
-			return jdbcTemplate.queryForObject(query, accountMapper, username);
+			return jdbcTemplate.queryForObject(usernameQuery(username), accountMapper, username);
 		} catch (EmptyResultDataAccessException e) {
 			throw new UsernameNotFoundException(username);
 		}
 	}
-	
+
+	// TODO handle case where accessToken is invalid
 	public Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException {
 		try {
-			// TODO handle case where accessToken is invalid
-			return jdbcTemplate.queryForObject(SELECT_BY_ACCESS_TOKEN, accountMapper, provider, accessToken);
+			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from ConnectedAccount where provider = ? and accessToken = ?)", accountMapper, provider, accessToken);
 		} catch (EmptyResultDataAccessException e) {
 			throw new ConnectedAccountNotFoundException(provider);
 		}
@@ -84,7 +80,11 @@ public class JdbcAccountRepository implements AccountRepository {
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", provider);
 		params.put("friendIds", friendIds);
-		return namedTemplate.query(SELECT_FRIEND_ACCOUNTS, params, accountMapper);
+		// TODO compare performance of this subquery to join
+		//private static final String SELECT_FRIEND_ACCOUNTS = 
+	    //		"select m.id, m.firstName, m.lastName, m.email, m.username, m.gender, m.pictureSet from ConnectedAccount a " + 
+		//	"inner join Member m on a.member = m.id where provider = :provider and accountId in ( :friendIds )";
+		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from ConnectedAccount where provider = :provider and accountId in ( :friendIds )) ", params, accountMapper);
 	}
 
 	public void connect(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException {
@@ -107,6 +107,12 @@ public class JdbcAccountRepository implements AccountRepository {
 		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
 	}
 
+	// internal helpers
+	
+	private String usernameQuery(String username) {
+		return EmailUtils.isEmail(username) ? SELECT_ACCOUNT + " where email = ?" : SELECT_ACCOUNT + " where username = ?";
+	}
+	
 	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {
 		
 		private RowMapper<Account> accountMapper = new AccountMapper();	
@@ -138,22 +144,8 @@ public class JdbcAccountRepository implements AccountRepository {
 		
 	}
 
-	private static final String SELECT_BY_ID = 
-		"select id, firstName, lastName, email, username from Member where id = ?";
+	private static final String SELECT_ACCOUNT = "select id, firstName, lastName, email, username, gender, pictureSet from Member";
 	
-	private static final String SELECT_BY_EMAIL = 
-		"select id, firstName, lastName, email, username from Member where email = ?";
-
-	private static final String SELECT_BY_USERNAME = 
-		"select id, firstName, lastName, email, username from Member where username = ?";
-	
-	private static final String SELECT_BY_ACCESS_TOKEN = "select m.id, m.firstName, m.lastName, m.email, m.username from ConnectedAccount a " + 
-		"inner join Member m on a.member = m.id and a.provider = ? and a.accessToken = ?";
-
-	private static final String SELECT_FRIEND_ACCOUNTS = 
-		"select m.id, m.firstName, m.lastName, m.email, m.username from ConnectedAccount a " + 
-		"inner join Member m on a.member = m.id where provider = :provider and accountId in ( :friendIds )";
-
 	private static final String INSERT_CONNECTED_ACCOUNT = 
 		"insert into ConnectedAccount (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
 	

@@ -42,7 +42,7 @@ public class SettingsControllerTest {
     @Test
     public void settingsPage() {
     	ExtendedModelMap model = new ExtendedModelMap();
-    	controller.settingsPage(new Account(1L, "Joe", "Schmoe", "joe@schmoe.com"), model);
+    	controller.settingsPage(new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg"), model);
     	List<Map<String, Object>> apps = (List<Map<String, Object>>) model.get("apps");
     	assertNotNull(apps);   
     	assertEquals(1, apps.size());
@@ -52,7 +52,7 @@ public class SettingsControllerTest {
     
     @Test
     public void disconnectApp() {
-    	assertEquals("redirect:/settings", controller.disconnectApp("authme", new Account(1L, "Joe", "Schmoe", "joe@schmoe.com")));
+    	assertEquals("redirect:/settings", controller.disconnectApp("authme", new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg")));
     	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp"));
     }
 	

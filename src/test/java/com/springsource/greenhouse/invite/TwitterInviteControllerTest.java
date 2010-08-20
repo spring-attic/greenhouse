@@ -39,7 +39,7 @@ public class TwitterInviteControllerTest {
 
 	@Test
 	public void friendFinder() {
-		Account account = new Account(1L, "Joe", "Schmoe", "joe@schmoe.com");
+		Account account = new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg");
 		Model model = new ExtendedModelMap();
 		controller.friendFinder(account, model);
 		assertEquals("habuma", model.asMap().get("username"));
@@ -47,7 +47,7 @@ public class TwitterInviteControllerTest {
 
 	@Test
 	public void friendFrinderNotConnected() {
-		Account account = new Account(2L, "Sue", "Schmoe", "sue@schmoe.com");
+		Account account = new Account(2L, "Sue", "Schmoe", "sue@schmoe.com", "sue", "file://pic.jpg");
 		Model model = new ExtendedModelMap();
 		controller.friendFinder(account, model);
 		assertFalse(model.containsAttribute("username"));
