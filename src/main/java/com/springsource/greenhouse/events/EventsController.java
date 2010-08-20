@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.extras.OAuthAccessToken;
+import org.springframework.social.oauth.SimpleAccessTokenProvider;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -60,7 +61,7 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.updateStatus(accessToken, status);
+		twitter.updateStatus(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 
@@ -99,7 +100,7 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}		
-		twitter.updateStatus(accessToken, status);
+		twitter.updateStatus(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);		
 	}
 	

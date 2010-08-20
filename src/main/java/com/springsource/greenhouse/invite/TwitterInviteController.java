@@ -48,7 +48,7 @@ public class TwitterInviteController {
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken, @RequestParam String username, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> twitterFriends = twitterService.getFriends(accessToken, username);
+			List<String> twitterFriends = twitterService.getFriends(username);
 			model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
 		}
 		return "invite/twitterFriends";

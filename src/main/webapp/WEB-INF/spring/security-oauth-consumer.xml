@@ -22,9 +22,13 @@
 	</beans:bean>
 	
 	<!-- Twitter Client API -->
-	<beans:bean id="twitterService" class="org.springframework.social.twitter.TwitterService" autowire="constructor" />
+	<beans:bean id="twitterService" class="org.springframework.social.twitter.TwitterTemplate">
+		<beans:constructor-arg>
+			<beans:bean class="org.springframework.social.oauth.OAuthSpringSecurityOAuthHelper" autowire="constructor" />
+		</beans:constructor-arg>
+	</beans:bean>
 
 	<!-- Facebook Client API -->
-	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookService" />
+	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate" />
 	
 </beans:beans>

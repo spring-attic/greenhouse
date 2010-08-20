@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerTokenServicesHelper;
+import org.springframework.social.oauth.SimpleAccessTokenProvider;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +59,8 @@ public class TwitterSettingsController {
 			OAuthConsumerToken accessToken = oauthHelper.getAccessToken(TWITTER_PROVIDER, request, authentication);
 			Account account = (Account) authentication.getPrincipal();
 			
-			String screenName = twitterService.getScreenName(accessToken);
+			String screenName = twitterService.getScreenName(
+					new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 			makeTwitterScreenameGreenhouseUsername(screenName, account);
 			jdbcTemplate.update(UPDATE_CONNECTED_ACCOUNT_ID, screenName, account.getId(), TWITTER_PROVIDER);
 			
@@ -81,7 +83,7 @@ public class TwitterSettingsController {
 	// internal helpers
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
 		String message = "Join me at the Greenhouse! " + ProfileUrlUtils.url(account);
-		twitterService.updateStatus(accessToken, message);
+		twitterService.updateStatus(message, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 	}
 
 	private void makeTwitterScreenameGreenhouseUsername(String screenName, Account account) {
