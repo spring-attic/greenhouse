@@ -64,6 +64,11 @@ public class EventsController {
 		twitter.updateStatus(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
+	public @ResponseBody void postRetweet(@PathVariable Long id, @RequestParam Long tweetId, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+		//TODO: add controller logic for retweeting about an event
+	}
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long id, Account account) {
@@ -102,6 +107,11 @@ public class EventsController {
 		}		
 		twitter.updateStatus(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);		
+	}
+	
+	@RequestMapping(value="/{id}/sessions/{number}/retweet", method=RequestMethod.POST)
+	public @ResponseBody void postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+		//TODO: add controller logic for retweeting about a session
 	}
 	
 	// for web browser (HTML) clients
