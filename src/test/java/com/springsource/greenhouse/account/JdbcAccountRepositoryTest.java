@@ -16,6 +16,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.test.annotation.ExpectedException;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -35,7 +36,7 @@ public class JdbcAccountRepositoryTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new ClassPathResource("JdbcAccountRepositoryTest.sql", getClass()));
     	jdbcTemplate = new JdbcTemplate(db);
-    	accountRepository = new JdbcAccountRepository(jdbcTemplate);
+    	accountRepository = new JdbcAccountRepository(jdbcTemplate, new NoOpPasswordEncoder());
     }
     
     @After
@@ -58,6 +59,17 @@ public class JdbcAccountRepositoryTest {
     	assertEquals("http://images.greenhouse.springsource.org/profile-pics/male/small.jpg", account.getProfilePictureUrl());
     	
     	tm.rollback(txStatus);
+    }
+    
+    @Test
+    public void authenticate() throws UsernameNotFoundException, InvalidPasswordException {
+    	Account account = accountRepository.authenticate("kdonald", "password");
+    	assertEquals("Keith Donald", account.getFullName());
+    }
+
+    @Test(expected=InvalidPasswordException.class)
+    public void authenticateInvalidPassword() throws UsernameNotFoundException, InvalidPasswordException {
+    	accountRepository.authenticate("kdonald", "bogus");
     }
 
     @Test

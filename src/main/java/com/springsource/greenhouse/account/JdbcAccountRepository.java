@@ -23,11 +23,12 @@ public class JdbcAccountRepository implements AccountRepository {
 	
 	private final AccountMapper accountMapper = new AccountMapper();
 	
-	private final PasswordEncoder passwordEncoder = new StandardPasswordEncoder("SHA-256", "secret");
-	
+	private final PasswordEncoder passwordEncoder;
+
 	@Inject
-	public JdbcAccountRepository(JdbcTemplate jdbcTemplate) {
+	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Transactional
@@ -44,7 +45,7 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	public Account authenticate(String username, String password) throws UsernameNotFoundException, InvalidPasswordException {
 		try {
-			return jdbcTemplate.queryForObject(usernameQuery(username), passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
+			return jdbcTemplate.queryForObject(passwordProtectedAccountQuery(username), passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
 		} catch (EmptyResultDataAccessException e) {
 			throw new UsernameNotFoundException(username);
 		}
@@ -60,7 +61,7 @@ public class JdbcAccountRepository implements AccountRepository {
 	
 	public Account findByUsername(String username) throws UsernameNotFoundException {
 		try {
-			return jdbcTemplate.queryForObject(usernameQuery(username), accountMapper, username);
+			return jdbcTemplate.queryForObject(accountQuery(username), accountMapper, username);
 		} catch (EmptyResultDataAccessException e) {
 			throw new UsernameNotFoundException(username);
 		}
@@ -109,8 +110,12 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	// internal helpers
 	
-	private String usernameQuery(String username) {
+	private String accountQuery(String username) {
 		return EmailUtils.isEmail(username) ? SELECT_ACCOUNT + " where email = ?" : SELECT_ACCOUNT + " where username = ?";
+	}
+	
+	private String passwordProtectedAccountQuery(String username) {
+		return EmailUtils.isEmail(username) ? SELECT_PASSWORD_PROTECTED_ACCOUNT + " where email = ?" : SELECT_PASSWORD_PROTECTED_ACCOUNT + " where username = ?";
 	}
 	
 	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {
@@ -145,7 +150,9 @@ public class JdbcAccountRepository implements AccountRepository {
 	}
 
 	private static final String SELECT_ACCOUNT = "select id, firstName, lastName, email, username, gender, pictureSet from Member";
-	
+
+	private static final String SELECT_PASSWORD_PROTECTED_ACCOUNT = "select id, firstName, lastName, email, password, username, gender, pictureSet from Member";
+
 	private static final String INSERT_CONNECTED_ACCOUNT = 
 		"insert into ConnectedAccount (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
 	
