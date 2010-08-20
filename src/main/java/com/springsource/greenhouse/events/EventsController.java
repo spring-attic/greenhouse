@@ -69,9 +69,6 @@ public class EventsController {
 	public @ResponseBody
 	ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId,
 			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
-
-		System.out.println("RETWEETING");
-
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
