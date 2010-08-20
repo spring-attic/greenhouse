@@ -16,6 +16,8 @@ import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
+import com.springsource.greenhouse.account.NoOpPasswordEncoder;
+import com.springsource.greenhouse.account.PasswordEncoder;
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class JdbcOAuthProviderTokenServicesTest {
@@ -30,7 +32,8 @@ public class JdbcOAuthProviderTokenServicesTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new ClassPathResource("JdbcOAuthProviderTokenServicesTest.sql", getClass()));
     	JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
-    	JdbcAccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate);
+		PasswordEncoder passwordEncoder = new NoOpPasswordEncoder();
+		JdbcAccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, passwordEncoder);
     	tokenServices = new JdbcOAuthProviderTokenServices(jdbcTemplate, accountRepository);
     }
     
