@@ -28,7 +28,4 @@
 	<!-- Cache of email templates -->
 	<bean id="emailTemplateFactory"  class="org.springframework.templating.StandardStringTemplateFactory" />
    	
-	<!-- Configurable email properties -->
-	<context:property-placeholder location="classpath:email.properties" />   	
-
 </beans>

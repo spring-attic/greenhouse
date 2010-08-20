@@ -21,7 +21,7 @@ public class S3ProfilePictureService implements ProfilePictureService {
 
 	private final S3Operations s3;
 
-	@Value("#{s3Properties['s3.bucket']}")
+	@Value("${s3.bucket}")
 	private String bucketName;
 
 	@Inject

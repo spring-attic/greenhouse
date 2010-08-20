@@ -22,7 +22,7 @@ public class MembersController {
 	
 	private ProfileRepository profileRepository;
 
-	@Value("#{facebookProperties.applicationId}")
+	@Value("${facebook.applicationId}")
 	private String facebookAppId; 
 
 	@Inject

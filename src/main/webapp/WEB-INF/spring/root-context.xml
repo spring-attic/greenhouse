@@ -9,6 +9,9 @@
 	<!-- Turn on support for @Annotation-based configuration e.g. @Inject -->
 	<context:annotation-config />
 
+	<!-- Configurable properties -->
+	<context:property-placeholder location="classpath:application.properties" />   	
+
 	<!-- Configures Shared Data Access Resources -->
 	<import resource="data.xml" />
 				
