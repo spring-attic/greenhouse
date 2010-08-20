@@ -29,7 +29,12 @@
 	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.account.UsernamePasswordAuthenticationProvider" />
 
 	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
-	
+
+	<beans:bean id="passwordEncoder" class="com.springsource.greenhouse.account.StandardPasswordEncoder">
+		<beans:constructor-arg value="${security.encodeAlgorithm}" />
+		<beans:constructor-arg value="${security.encodeSecret}" />
+	</beans:bean>
+		
 	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
 
 	<beans:import resource="security-oauth-provider.xml" />

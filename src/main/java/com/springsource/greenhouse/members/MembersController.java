@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.PictureSize;
 
 @Controller
 @RequestMapping("/members/*")
@@ -21,7 +22,7 @@ public class MembersController {
 	
 	private ProfileRepository profileRepository;
 
-	@Value("#{facebookProperties.applicationId}")
+	@Value("${facebook.applicationId}")
 	private String facebookAppId; 
 
 	@Inject

@@ -10,6 +10,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+import com.springsource.greenhouse.account.PictureSize;
+import com.springsource.greenhouse.account.ProfilePictureUrlMapper;
+
 @Service
 public class JdbcProfileRepository implements ProfileRepository {
 
@@ -42,9 +45,9 @@ public class JdbcProfileRepository implements ProfileRepository {
 	public String findProfilePictureUrl(String profileKey, PictureSize size) {
 		Long accountId = getAccountId(profileKey);
 		if (accountId != null) {
-			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where id = ?", String.class, new PictureUrlMapper(size), accountId);
+			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where id = ?", String.class, new ProfilePictureUrlMapper(size), accountId);
 		} else {
-			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where username = ?", String.class, new PictureUrlMapper(size), accountId);			
+			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where username = ?", String.class, new ProfilePictureUrlMapper(size), accountId);			
 		}
 	}
 	
@@ -56,23 +59,10 @@ public class JdbcProfileRepository implements ProfileRepository {
 	
 	private RowMapper<Profile> profileMapper = new RowMapper<Profile>() {
 		
-		private PictureUrlMapper pictureUrlMapper = new PictureUrlMapper(PictureSize.large);
+		private ProfilePictureUrlMapper profilePictureUrlMapper = new ProfilePictureUrlMapper(PictureSize.large);
 		
 		public Profile mapRow(ResultSet rs, int row) throws SQLException {
-			return new Profile(rs.getLong("id"), rs.getString("displayName"), pictureUrlMapper.mapRow(rs, row));
-		}
-	};
-
-	private static class PictureUrlMapper implements RowMapper<String> {
-
-		private PictureSize pictureSize;
-		
-		public PictureUrlMapper(PictureSize pictureSize) {
-			this.pictureSize = pictureSize;
-		}
-
-		public String mapRow(ResultSet rs, int row) throws SQLException {
-			return ProfileUtils.picUrl(rs.getLong("id"), pictureSize, rs.getBoolean("pictureSet"), rs.getString("gender").charAt(0));		
+			return new Profile(rs.getLong("id"), rs.getString("displayName"), profilePictureUrlMapper.mapRow(rs, row));
 		}
 	};
 

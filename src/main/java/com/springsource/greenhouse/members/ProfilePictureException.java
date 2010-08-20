@@ -1,13 +1,10 @@
 package com.springsource.greenhouse.members;
 
 @SuppressWarnings("serial")
-public class ProfilePictureException extends Exception {
-	
-	public ProfilePictureException(String message) {
-		super(message);
+public class ProfilePictureException extends RuntimeException {
+
+	public ProfilePictureException(String message, Exception cause) {
+		super(message, cause);
 	}
-	
-	public ProfilePictureException(String message, Throwable t) {
-		super(message, t);
-	}
+
 }

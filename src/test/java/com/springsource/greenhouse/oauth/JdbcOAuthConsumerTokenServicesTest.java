@@ -52,7 +52,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
 
     @Test
     public void shouldReturnNullTokenForUnknownUser() {
-        Authentication authentication = new TestingAuthenticationToken(new Account(2L, "Roy", "Clarkson", "rclarkson@vmware.com"), "atlanta");
+        Authentication authentication = new TestingAuthenticationToken(new Account(2L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg"), "atlanta");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("twitter"));
@@ -137,7 +137,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
     }
     
 	private Account createAccount() {
-		return new Account(1L, "Craig", "Walls", "craig@habuma.com");
+		return new Account(1L, "Craig", "Walls", "craig@habuma.com", "habuma", "file://pic.jpg");
 	}
 	
 }

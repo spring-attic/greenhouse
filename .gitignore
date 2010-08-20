@@ -1,3 +1,2 @@
 target
-src/main/webapp/WEB-INF/classes/email.properties
-src/main/webapp/WEB-INF/classes/s3.properties
+src/main/webapp/WEB-INF/classes/application.properties

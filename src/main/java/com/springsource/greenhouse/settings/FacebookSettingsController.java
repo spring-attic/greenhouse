@@ -17,9 +17,9 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountAlreadyConnectedException;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.ProfileUrlUtils;
 import com.springsource.greenhouse.members.ProfilePictureException;
 import com.springsource.greenhouse.members.ProfilePictureService;
-import com.springsource.greenhouse.utils.MemberUtils;
 
 @Controller
 @RequestMapping("/settings")
@@ -67,7 +67,7 @@ public class FacebookSettingsController {
 
 	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account, String accessToken) {
 		facebook.postToWall(accessToken, "Join me at the Greenhouse!", 
-			new FacebookLink(MemberUtils.assembleMemberProfileUrl(request, account), "Greenhouse", "Where Spring developers hang out.", 
+			new FacebookLink(ProfileUrlUtils.url(account), "Greenhouse", "Where Spring developers hang out.", 
 					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
     }
 	
@@ -80,7 +80,7 @@ public class FacebookSettingsController {
 	public void useFacebookProfilePicture(Account account, String accessToken) {
 		try {
 	        byte[] imageBytes = facebook.getProfilePicture(accessToken);	        
-	        profilePictureService.setProfilePicture(account.getId(), imageBytes);
+	        profilePictureService.saveProfilePicture(account.getId(), imageBytes);
 	        accountRepository.markProfilePictureSet(account.getId());
 		} catch (ProfilePictureException e) {
 			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");

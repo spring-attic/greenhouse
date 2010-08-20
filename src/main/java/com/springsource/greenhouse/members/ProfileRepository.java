@@ -2,6 +2,8 @@ package com.springsource.greenhouse.members;
 
 import java.util.List;
 
+import com.springsource.greenhouse.account.PictureSize;
+
 public interface ProfileRepository {
 
 	Profile findByKey(String profileKey);

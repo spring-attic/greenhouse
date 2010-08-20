@@ -17,14 +17,6 @@ public class Account implements Serializable {
 	
 	private final String profilePictureUrl;
 	
-	public Account(Long id, String firstName, String lastName, String email) {
-		this(id, firstName, lastName, email, null, null);
-	}
-
-	public Account(Long id, String firstName, String lastName, String email, String username) {
-		this(id, firstName, lastName, email, username, null);
-	}
-
 	public Account(Long id, String firstName, String lastName, String email, String username, String profilePictureUrl) {
 		this.id = id;
 		this.firstName = firstName;
@@ -33,7 +25,7 @@ public class Account implements Serializable {
 		this.username = username;
 		this.profilePictureUrl = profilePictureUrl;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -66,8 +58,8 @@ public class Account implements Serializable {
 		return profilePictureUrl;
 	}
 	
-	public Account newUsername(String newUsername) {
-		return new Account(id, firstName, lastName, email, newUsername, profilePictureUrl);
+	public Account makeUsername(String username) {
+		return new Account(id, firstName, lastName, email, username, profilePictureUrl);
 	}
 
 }

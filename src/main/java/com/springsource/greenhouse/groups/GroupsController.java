@@ -20,7 +20,7 @@ import com.springsource.greenhouse.events.EventRepository;
 @RequestMapping("/groups")
 public class GroupsController {
 	
-	@Value("#{facebookProperties.applicationId}")
+	@Value("${facebook.applicationId}")
 	private String facebookAppId; 
 
 	private EventRepository eventRepository;	

@@ -18,7 +18,7 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
-import com.springsource.greenhouse.utils.MemberUtils;
+import com.springsource.greenhouse.account.ProfileUrlUtils;
 
 @Controller
 @RequestMapping("/settings/twitter")
@@ -80,14 +80,14 @@ public class TwitterSettingsController {
 
 	// internal helpers
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
-		String message = "Join me at the Greenhouse! " + MemberUtils.assembleMemberProfileUrl(request, account);
+		String message = "Join me at the Greenhouse! " + ProfileUrlUtils.url(account);
 		twitterService.updateStatus(accessToken, message);
 	}
 
 	private void makeTwitterScreenameGreenhouseUsername(String screenName, Account account) {
 		try {
 			jdbcTemplate.update("update Member set username = ? where id = ?", screenName, account.getId());
-			AccountUtils.signin(account.newUsername(screenName));
+			AccountUtils.signin(account.makeUsername(screenName));
 		} catch (DuplicateKeyException e) {
 			// TODO add an info message that gets displayed under the success message
 		}

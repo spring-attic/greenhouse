@@ -30,15 +30,9 @@
 		<jdbc:script location="/WEB-INF/database/data.sql" />
 	</jdbc:embedded-database>
 
-	<!-- Exposes Facebook app properties -->
-	<util:properties id="facebookProperties" location="classpath:facebook.properties" />
-	
-	<!-- Configures S3 File Access -->	
-	<util:properties id="s3Properties" location="classpath:s3.properties" />
-    
 	<bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
-		<constructor-arg value="#{s3Properties['s3.accessKey']}" />
-		<constructor-arg value="#{s3Properties['s3.secretKey']}" />
+		<constructor-arg value="${s3.accessKey}" />
+		<constructor-arg value="${s3.secretKey}" />
 	</bean>
 				
 </beans>
