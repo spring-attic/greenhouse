@@ -56,7 +56,7 @@ public class EventsController {
 		return twitter.search(eventRepository.findEventSearchString(id), page, pageSize);
 	}
 
-	@RequestMapping(value="/{id}/tweets", method=RequestMethod.POST)
+	@RequestMapping(value = "/{id}/tweets", method = RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
@@ -69,6 +69,9 @@ public class EventsController {
 	public @ResponseBody
 	ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId,
 			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+
+		System.out.println("RETWEETING");
+
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
@@ -116,8 +119,14 @@ public class EventsController {
 	}
 	
 	@RequestMapping(value="/{id}/sessions/{number}/retweet", method=RequestMethod.POST)
-	public @ResponseBody void postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
-		//TODO: add controller logic for retweeting about a session
+	@ResponseBody
+	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId,
+			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+		if (accessToken == null) {
+			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
+		}
+		twitter.retweet(tweetId, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
 	// for web browser (HTML) clients
