@@ -66,9 +66,10 @@ public class EventsController {
 	}
 	
 	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
-	public @ResponseBody
-	ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId,
+	@ResponseBody
+	public ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId,
 			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
@@ -119,6 +120,7 @@ public class EventsController {
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId,
 			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
+
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}

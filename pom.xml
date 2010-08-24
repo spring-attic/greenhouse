@@ -344,6 +344,7 @@
 			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 	</repositories>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -409,6 +410,46 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>ghtest</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<id>deploy-to-ghtest</id>
+								<phase>install</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<scp file="${project.build.directory}/${project.build.finalName}.${project.packaging}" 
+											todir="${scp.to.dir}" 
+											keyfile="${scp.key.location}" 
+											passphrase="" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.ant</groupId>
+								<artifactId>ant-jsch</artifactId>
+								<version>1.7.1</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<pluginRepositories>
 		<!-- For testing against latest Spring snapshots -->
 		<pluginRepository>
