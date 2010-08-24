@@ -409,6 +409,13 @@
 				<version>1.0-beta-1</version>
 			</plugin>
 		</plugins>
+		
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 	
 	<profiles>
@@ -450,6 +457,7 @@
 			</build>
 		</profile>
 	</profiles>
+	
 	
 	<pluginRepositories>
 		<!-- For testing against latest Spring snapshots -->
