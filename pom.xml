@@ -432,7 +432,8 @@
 										<scp file="${project.build.directory}/${project.build.finalName}.${project.packaging}" 
 											todir="${scp.to.dir}" 
 											keyfile="${scp.key.location}" 
-											passphrase="" />
+											passphrase="" 
+											trust="true" />
 									</tasks>
 								</configuration>
 							</execution>
