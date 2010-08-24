@@ -13,6 +13,7 @@ import org.jets3t.service.model.S3Object;
 import org.jets3t.service.security.AWSCredentials;
 
 public class S3OperationsImpl implements S3Operations {
+	
 	private AWSCredentials awsCredentials;
 
 	public S3OperationsImpl(String accessKey, String secretAccessKey) {
