@@ -8,6 +8,7 @@
 	</definition>
 
 	<definition name="groups/view" extends="standard">
+		<put-attribute name="title" expression="${group.name} | Greenhouse" />
 		<put-attribute name="content" value="/WEB-INF/views/groups/view.jsp" />
         <put-list-attribute name="scripts">
             <add-attribute value="/social/facebook/all.js"/>

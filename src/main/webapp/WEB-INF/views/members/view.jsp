@@ -2,7 +2,9 @@
 
 <div id="memberProfile">
 
-	<c:out value="${profile.displayName}" />
+	<p>
+		<c:out value="${profile.displayName}" />
+	</p>
 	
 	<div id="picture">
 		<img src="${profile.pictureUrl}" alt="Profile Picture" />
