@@ -18,6 +18,10 @@
 	<c:forEach var="meta" items="${metadata}">
 		<meta property="${meta.key}" content="${meta.value}"/> 
 	</c:forEach>
+	<script>
+		var greenhouse = greenhouse || {};
+		greenhouse.contextPath = "<%=request.getContextPath()%>";
+	</script>
 	<script type="text/javascript" src="<c:url value="/resources/jquery/1.4/jquery.js" />"></script>	
 	<script type="text/javascript" src="<c:url value="/resources/jquery-cookie/1.0/jquery-cookie.js" />"></script>
 </head>
