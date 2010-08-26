@@ -435,13 +435,24 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>
+									<tasks>									
 										<scp file="${project.build.directory}/${project.build.finalName}.${project.packaging}" 
-											todir="${scp.to.dir}" 
+											todir="${scp.username}@${scp.host}:/tmp/greenhouse.war" 
 											keyfile="${scp.key.location}" 
 											passphrase="" 
 											trust="true" />
+										<sshexec keyfile="${scp.key.location}"
+											host="${scp.host}"
+											username="${scp.username}"
+											command="mv /tmp/greenhouse.war ${scp.to.dir}"
 									</tasks>
+									
+									<!-- 
+									
+									 
+									
+									 -->
+									
 								</configuration>
 							</execution>
 						</executions>
