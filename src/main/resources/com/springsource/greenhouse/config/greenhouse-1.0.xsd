@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns="http://www.springsource.com/schema/greenhouse"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:tool="http://www.springframework.org/schema/tool"
+	targetNamespace="http://www.springsource.com/schema/greenhouse"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" />
+	<xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool-3.0.xsd" />
+
+	<xsd:element name="environment-bean">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+			
+			]]></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:sequence>
+						<xsd:element name="when">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+								
+								]]></xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:choice>
+									<xsd:element ref="beans:bean">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[
+										
+											]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:choice>
+								<xsd:attribute name="environment" type="xsd:string" use="required">
+									<xsd:annotation>
+										<xsd:documentation><![CDATA[
+										
+										]]></xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="otherwise">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[
+								
+								]]></xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:choice>
+									<xsd:element ref="beans:bean">
+										<xsd:annotation>
+											<xsd:documentation><![CDATA[
+										
+											]]></xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:choice>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:extension>		
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>

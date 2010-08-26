@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:greenhouse="http://www.springsource.com/schema/greenhouse"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springsource.com/schema/greenhouse http://www.springsource.com/schema/greenhouse/greenhouse-1.0.xsd">
+
+	<greenhouse:environment-bean id="passwordEncoder">
+		<greenhouse:when environment="dev">
+			<bean class="com.springsource.greenhouse.account.NoOpPasswordEncoder" />
+		</greenhouse:when>
+		<greenhouse:otherwise>
+			<bean class="com.springsource.greenhouse.account.StandardPasswordEncoder">
+				<constructor-arg value="MD5" />
+				<constructor-arg value="test" />
+			</bean>
+		</greenhouse:otherwise>
+	</greenhouse:environment-bean>
+		
+</beans>
