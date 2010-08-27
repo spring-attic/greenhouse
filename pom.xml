@@ -356,6 +356,15 @@
 		</repository>
 	</repositories>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<filters>
+			<filter>src/main/filters/application.properties</filter>
+		</filters>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -419,12 +428,7 @@
 				<version>1.0-beta-1</version>
 			</plugin>
 		</plugins>		
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+
 	</build>
 
 	<pluginRepositories>
