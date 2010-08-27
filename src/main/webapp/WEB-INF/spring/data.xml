@@ -4,10 +4,12 @@
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:greenhouse="http://www.springsource.com/schema/greenhouse"	
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd	
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springsource.com/schema/greenhouse http://www.springsource.com/schema/greenhouse/greenhouse-1.0.xsd">
 
 	<!-- Configures transaction management around @Transactional components -->
 	<tx:annotation-driven mode="aspectj" transaction-manager="transactionManager" />
@@ -22,14 +24,25 @@
 		<constructor-arg ref="dataSource" />
 	</bean>
 	
-	<!-- Embedded H2 Database -->		
-	<jdbc:embedded-database id="dataSource" type="H2">
-		<jdbc:script location="/WEB-INF/database/schema-member.sql" />
-		<jdbc:script location="/WEB-INF/database/schema-activity.sql" />
-		<jdbc:script location="/WEB-INF/database/schema-event.sql" />
-		<jdbc:script location="/WEB-INF/database/data.sql" />
-	</jdbc:embedded-database>
-
+	<greenhouse:environment-bean id="dataSource">
+		<greenhouse:when environment="embedded">
+			<jdbc:embedded-database type="H2">
+				<jdbc:script location="/WEB-INF/database/schema-member.sql" />
+				<jdbc:script location="/WEB-INF/database/schema-activity.sql" />
+				<jdbc:script location="/WEB-INF/database/schema-event.sql" />
+				<jdbc:script location="/WEB-INF/database/data.sql" />
+			</jdbc:embedded-database>	
+		</greenhouse:when>
+		<greenhouse:otherwise>
+			<bean class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+			   <property name="driverClass" value="${database.driver}" />
+			   <property name="jdbcUrl" value="${database.url}" />
+			   <property name="username" value="${database.username}"/>
+			   <property name="password" value="${database.password}"/>
+			</bean>
+		</greenhouse:otherwise>
+	</greenhouse:environment-bean>
+		
 	<bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
 		<constructor-arg value="${s3.accessKey}" />
 		<constructor-arg value="${s3.secretKey}" />

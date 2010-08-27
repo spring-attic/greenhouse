@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
+import org.springframework.beans.factory.xml.NamespaceHandler;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
@@ -37,11 +39,21 @@ class EnvironmentBeanDefinitionParser implements BeanDefinitionParser {
 	}
 
 	private void parseAndRegisterBeanDefinition(String beanName, Element parentElement, ParserContext parserContext) {
-		Element beanElement = DomUtils.getChildElementByTagName(parentElement, "bean");		
-		BeanDefinition beanDef = parserContext.getDelegate().parseBeanDefinitionElement(beanElement, beanName, null);
-		BeanDefinitionHolder beanDefHolder = new BeanDefinitionHolder(beanDef, beanName);
-		parserContext.getDelegate().decorateBeanDefinitionIfRequired(beanElement, beanDefHolder);
-		BeanDefinitionReaderUtils.registerBeanDefinition(beanDefHolder, parserContext.getRegistry());
+		Element beanElement = DomUtils.getChildElementByTagName(parentElement, "bean");
+		if (beanElement != null) {
+			BeanDefinition beanDef = parserContext.getDelegate().parseBeanDefinitionElement(beanElement, beanName, null);
+			BeanDefinitionHolder beanDefHolder = new BeanDefinitionHolder(beanDef, beanName);
+			parserContext.getDelegate().decorateBeanDefinitionIfRequired(beanElement, beanDefHolder);
+			BeanDefinitionReaderUtils.registerBeanDefinition(beanDefHolder, parserContext.getRegistry());
+		} else {
+			Element otherElement = DomUtils.getChildElements(parentElement).get(0);
+			BeanDefinition containingBeanDef = new RootBeanDefinition();
+			ParserContext nestedContext = new ParserContext(parserContext.getReaderContext(), parserContext.getDelegate(), containingBeanDef);
+			NamespaceHandler handler = parserContext.getReaderContext().getNamespaceHandlerResolver().resolve(otherElement.getNamespaceURI());
+			BeanDefinition beanDef = handler.parse(otherElement, nestedContext);
+			BeanDefinitionHolder beanDefHolder = new BeanDefinitionHolder(beanDef, beanName);
+			BeanDefinitionReaderUtils.registerBeanDefinition(beanDefHolder, parserContext.getRegistry());			
+		}
 	}
-
+	
 }

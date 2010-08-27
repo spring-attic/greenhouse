@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"	
 	xmlns:greenhouse="http://www.springsource.com/schema/greenhouse"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
 						http://www.springsource.com/schema/greenhouse http://www.springsource.com/schema/greenhouse/greenhouse-1.0.xsd">
 
 	<greenhouse:environment-bean id="passwordEncoder">
-		<greenhouse:when environment="dev">
+		<greenhouse:when environment="embedded">
 			<bean class="com.springsource.greenhouse.account.NoOpPasswordEncoder" />
 		</greenhouse:when>
 		<greenhouse:otherwise>
 			<bean class="com.springsource.greenhouse.account.StandardPasswordEncoder">
 				<constructor-arg value="MD5" />
 				<constructor-arg value="test" />
+			</bean>
+		</greenhouse:otherwise>
+	</greenhouse:environment-bean>
+	
+	<greenhouse:environment-bean id="dataSource">
+		<greenhouse:when environment="embedded">
+			<jdbc:embedded-database type="H2" />
+		</greenhouse:when>
+		<greenhouse:otherwise>
+			<bean class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+			   <property name="driverClass" value="${database.driver}" />
+			   <property name="jdbcUrl" value="${database.url}" />
+			   <property name="username" value="${database.username}"/>
+			   <property name="password" value="${database.password}"/>
 			</bean>
 		</greenhouse:otherwise>
 	</greenhouse:environment-bean>
