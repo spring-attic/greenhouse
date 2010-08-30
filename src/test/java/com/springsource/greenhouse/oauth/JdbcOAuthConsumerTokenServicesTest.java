@@ -15,8 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
+import org.springframework.social.account.Account;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class JdbcOAuthConsumerTokenServicesTest {

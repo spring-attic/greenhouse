@@ -2,6 +2,8 @@ package com.springsource.greenhouse.account;
 
 import java.util.List;
 
+import org.springframework.social.account.Account;
+
 public interface AccountRepository {
 
 	Account createAccount(Person person) throws EmailAlreadyOnFileException;

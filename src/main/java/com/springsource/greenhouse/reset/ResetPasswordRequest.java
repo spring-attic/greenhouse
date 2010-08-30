@@ -1,6 +1,7 @@
 package com.springsource.greenhouse.reset;
 
-import com.springsource.greenhouse.account.Account;
+import org.springframework.social.account.Account;
+
 
 public class ResetPasswordRequest {
 	

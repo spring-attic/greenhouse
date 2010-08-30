@@ -9,6 +9,7 @@ import org.springframework.mobile.DeviceWebArgumentResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;
+import org.springframework.social.account.Account;
 import org.springframework.social.facebook.FacebookWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -16,7 +17,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
 import com.springsource.greenhouse.UserLocationHandlerInterceptor;
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Location;
 
 // TODO - see SPR-7327: it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter

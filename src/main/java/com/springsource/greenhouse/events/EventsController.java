@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.extras.OAuthAccessToken;
-import org.springframework.social.oauth.SimpleAccessTokenProvider;
+import org.springframework.social.account.Account;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Location;
 
 @Controller
@@ -61,7 +60,7 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.tweet(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitter.tweet(status);
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
@@ -73,7 +72,7 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.retweet(tweetId, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitter.retweet(tweetId);
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 
@@ -112,7 +111,7 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}		
-		twitter.tweet(status, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitter.tweet(status);
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);		
 	}
 	
@@ -124,7 +123,7 @@ public class EventsController {
 		if (accessToken == null) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.retweet(tweetId, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitter.retweet(tweetId);
 		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	

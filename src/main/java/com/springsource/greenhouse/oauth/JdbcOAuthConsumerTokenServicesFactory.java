@@ -7,8 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
+import org.springframework.social.account.Account;
 
-import com.springsource.greenhouse.account.Account;
 
 public class JdbcOAuthConsumerTokenServicesFactory implements OAuthConsumerTokenServicesFactory {
   

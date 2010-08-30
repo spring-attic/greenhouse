@@ -13,8 +13,8 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
+import org.springframework.social.account.Account;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
 import com.springsource.greenhouse.account.NoOpPasswordEncoder;
 import com.springsource.greenhouse.account.PasswordEncoder;

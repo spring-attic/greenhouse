@@ -5,9 +5,9 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.social.account.Account;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Action;
 
 public class JdbcBadgeRepository implements BadgeRepository {

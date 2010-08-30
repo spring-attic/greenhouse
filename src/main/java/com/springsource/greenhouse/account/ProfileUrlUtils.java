@@ -1,5 +1,7 @@
 package com.springsource.greenhouse.account;
 
+import org.springframework.social.account.Account;
+
 public abstract class ProfileUrlUtils {
 
 	// TODO do not hardcode this

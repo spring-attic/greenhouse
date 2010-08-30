@@ -1,8 +1,7 @@
 package com.springsource.greenhouse.action;
 
 import org.joda.time.DateTime;
-
-import com.springsource.greenhouse.account.Account;
+import org.springframework.social.account.Account;
 
 public final class SimpleAction extends Action {
 	

@@ -9,14 +9,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerTokenServicesHelper;
-import org.springframework.social.oauth.SimpleAccessTokenProvider;
+import org.springframework.social.account.Account;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
 import com.springsource.greenhouse.account.ProfileUrlUtils;
@@ -59,8 +58,7 @@ public class TwitterSettingsController {
 			OAuthConsumerToken accessToken = oauthHelper.getAccessToken(TWITTER_PROVIDER, request, authentication);
 			Account account = (Account) authentication.getPrincipal();
 			
-			String screenName = twitterService.getScreenName(
-					new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+			String screenName = twitterService.getScreenName();
 			makeTwitterScreenameGreenhouseUsername(screenName, account);
 			jdbcTemplate.update(UPDATE_CONNECTED_ACCOUNT_ID, screenName, account.getId(), TWITTER_PROVIDER);
 			
@@ -83,7 +81,7 @@ public class TwitterSettingsController {
 	// internal helpers
 	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
 		String message = "Join me at the Greenhouse! " + ProfileUrlUtils.url(account);
-		twitterService.tweet(message, new SimpleAccessTokenProvider<OAuthConsumerToken>(accessToken));
+		twitterService.tweet(message);
 	}
 
 	private void makeTwitterScreenameGreenhouseUsername(String screenName, Account account) {

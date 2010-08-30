@@ -1,8 +1,6 @@
 package com.springsource.greenhouse.signin;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,10 +12,8 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.social.account.Account;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor;
 
 public class AccountExposingHandlerInterceptorTest {
 	

@@ -28,6 +28,9 @@
 		</beans:constructor-arg>
 	</beans:bean>
 
+	<!-- TODO: RECONCILE THIS TOKEN SERVICES WITH THE OFFICIAL ONE -->
+	<beans:bean class="org.springframework.social.oauth.JdbcOAuthConsumerTokenServices" autowire="constructor" />	
+
 	<!-- Facebook Client API -->
 	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate" />
 	
