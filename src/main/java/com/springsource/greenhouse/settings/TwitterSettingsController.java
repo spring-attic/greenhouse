@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerTokenServicesHelper;
 import org.springframework.social.account.Account;
@@ -55,7 +54,6 @@ public class TwitterSettingsController {
 		String oauthToken = request.getParameter("oauth_token");
 		if (oauthToken != null && oauthToken.length() > 0) {
 			// TODO FacebookSettingsController uses AccountRepository.connect(); make consistent
-			OAuthConsumerToken accessToken = oauthHelper.getAccessToken(TWITTER_PROVIDER, request, authentication);
 			Account account = (Account) authentication.getPrincipal();
 			
 			String screenName = twitterService.getScreenName();
@@ -64,7 +62,7 @@ public class TwitterSettingsController {
 			
 			if (request.getParameter("tweetIt") != null) {
 				// TODO should this be done asynchronously?
-				tweetConnection(accessToken, request, account);
+				twitterService.tweet("Join me at the Greenhouse! " + ProfileUrlUtils.url(account));
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
 		}
@@ -79,11 +77,6 @@ public class TwitterSettingsController {
 	}
 
 	// internal helpers
-	private void tweetConnection(OAuthConsumerToken accessToken, HttpServletRequest request, Account account) {
-		String message = "Join me at the Greenhouse! " + ProfileUrlUtils.url(account);
-		twitterService.tweet(message);
-	}
-
 	private void makeTwitterScreenameGreenhouseUsername(String screenName, Account account) {
 		try {
 			jdbcTemplate.update("update Member set username = ? where id = ?", screenName, account.getId());

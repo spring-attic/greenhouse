@@ -1,7 +1,6 @@
 package com.springsource.greenhouse.config;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import javax.sql.DataSource;
 
@@ -28,7 +27,7 @@ public class EnvironmentBeanTests {
 		assertNotNull(dataSource);
 		assertTrue(dataSource instanceof BoneCPDataSource);
 	}
-	
+
 	@Test
 	public void embeddedEnvironment() {
 		System.setProperty("environment", "embedded");

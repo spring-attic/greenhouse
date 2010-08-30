@@ -9,9 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
-import org.springframework.security.oauth.extras.OAuthAccessToken;
 import org.springframework.social.account.Account;
+import org.springframework.social.oauth.ConnectedAccountNotFoundException;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -56,24 +55,24 @@ public class EventsController {
 	}
 
 	@RequestMapping(value = "/{id}/tweets", method = RequestMethod.POST)
-	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
-		if (accessToken == null) {
+	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation) {
+		try {
+			twitter.tweet(status);
+			return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		} catch (ConnectedAccountNotFoundException e) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.tweet(status);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId,
-			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
-
-		if (accessToken == null) {
+	public ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
+		try {
+			twitter.retweet(tweetId);
+			return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		} catch (ConnectedAccountNotFoundException e) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.retweet(tweetId);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -107,24 +106,25 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
-	public ResponseEntity<String> postSessionTweet(@PathVariable Long id, @PathVariable Short number, @RequestParam String status, Location currentLocation, @OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
-		if (accessToken == null) {
+	public ResponseEntity<String> postSessionTweet(@PathVariable Long id, @PathVariable Short number,
+			@RequestParam String status, Location currentLocation) {
+		try {
+			twitter.tweet(status);
+			return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		} catch (ConnectedAccountNotFoundException e) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
-		}		
-		twitter.tweet(status);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);		
+		}
 	}
 	
 	@RequestMapping(value="/{id}/sessions/{number}/retweet", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId,
-			@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken) {
-
-		if (accessToken == null) {
+	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
+		try {
+			twitter.retweet(tweetId);
+			return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		} catch (ConnectedAccountNotFoundException e) {
 			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
 		}
-		twitter.retweet(tweetId);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
 	// for web browser (HTML) clients

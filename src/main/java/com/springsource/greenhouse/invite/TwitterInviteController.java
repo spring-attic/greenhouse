@@ -11,8 +11,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
-import org.springframework.security.oauth.extras.OAuthAccessToken;
 import org.springframework.social.account.Account;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -46,7 +44,7 @@ public class TwitterInviteController {
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
-	public String findFriends(@OAuthAccessToken("Twitter") OAuthConsumerToken accessToken, @RequestParam String username, Model model) {
+	public String findFriends(@RequestParam String username, Model model) {
 		if (StringUtils.hasText(username)) {
 			List<String> twitterFriends = twitterService.getFollowed(username);
 			model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
