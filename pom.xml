@@ -356,15 +356,6 @@
 		</repository>
 	</repositories>
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-		<filters>
-			<filter>src/main/filters/application.properties</filter>
-		</filters>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -427,8 +418,38 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.0-beta-1</version>
 			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>publish</id>
+						<phase>deploy</phase>
+						<goals><goal>run</goal></goals>
+						<configuration>
+							<tasks>									
+								<scp file="${project.build.directory}/${project.build.finalName}.${project.packaging}" 
+									todir="${publish.username}@${publish.host}:/tmp/greenhouse.war" 
+									keyfile="${publish.keyfile}"
+									trust="true" />
+								<sshexec host="${publish.host}"
+									username="${publish.username}"
+									command="mv /tmp/greenhouse.war ${publish.path}"
+									keyfile="${publish.keyfile}"
+									trust="true" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant-jsch</artifactId>
+						<version>1.8.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>		
-
 	</build>
 
 	<pluginRepositories>
@@ -455,49 +476,14 @@
 			<snapshots><enabled>false</enabled></snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-		
-	<profiles>
-		<profile>
-			<id>ghtest</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.1</version>
-						<executions>
-							<execution>
-								<id>deploy-to-ghtest</id>
-								<phase>install</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>									
-										<scp file="${project.build.directory}/${project.build.finalName}.${project.packaging}" 
-											todir="${scp.username}@${scp.host}:/tmp/greenhouse.war" 
-											keyfile="${scp.key.location}" 
-											passphrase="" 
-											trust="true" />
-										<sshexec keyfile="${scp.key.location}"
-											host="${scp.host}"
-											username="${scp.username}"
-											command="mv /tmp/greenhouse.war ${scp.to.dir}" 
-											trust="true"/>
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.ant</groupId>
-								<artifactId>ant-jsch</artifactId>
-								<version>1.7.1</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+
+	<distributionManagement>
+		<!-- Temporary until we publish to another release repository -->
+		<snapshotRepository>
+			<id>local</id>
+			<name>local</name>
+			<url>file://${user.home}/.m2/repository</url>
+		</snapshotRepository>
+	</distributionManagement>
 	
 </project>
