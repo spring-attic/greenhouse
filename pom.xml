@@ -5,6 +5,13 @@
 	<groupId>com.springsource</groupId>
 	<artifactId>greenhouse</artifactId>
 	<name>greenhouse</name>
+	<description>The social destination for Spring developers</description>
+	<url>http://greenhouse.springsource.org</url>
+	<inceptionYear>2010</inceptionYear>
+	<organization>
+		<name>SpringSource</name>
+		<url>http://www.springsource.org</url>
+	</organization>	
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -356,6 +363,12 @@
 		</repository>
 	</repositories>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>	
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

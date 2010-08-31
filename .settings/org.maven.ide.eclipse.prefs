@@ -1,9 +1,9 @@
-#Thu Aug 19 11:15:01 CDT 2010
-activeProfiles=
+#Tue Aug 31 12:08:59 EDT 2010
+activeProfiles=greenhouse-dev
 eclipse.preferences.version=1
 fullBuildGoals=process-test-resources
 includeModules=false
 resolveWorkspaceProjects=false
 resourceFilterGoals=process-resources resources\:testResources
-skipCompilerPlugin=true
+skipCompilerPlugin=false
 version=1
