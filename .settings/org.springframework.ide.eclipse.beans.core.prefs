@@ -1,4 +1,4 @@
-#Tue Aug 31 11:44:25 EDT 2010
+#Tue Aug 31 12:24:55 EDT 2010
 //org.springframework.ide.eclipse.beans.core.default.version.http\://spring-security-oauth.codehaus.org/2.0=
 //org.springframework.ide.eclipse.beans.core.default.version.http\://spring-security-oauth.codehaus.org/3.0=
 //org.springframework.ide.eclipse.beans.core.default.version.http\://spring-security-oauth.codehaus.org/oauth2/1.0=
@@ -72,7 +72,7 @@
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/osgi-compendium=osgix
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/oxm=oxm
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/p=p
-//org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/security=security
+//org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/security=sec
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/task=task
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/tx=tx
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/util=util
