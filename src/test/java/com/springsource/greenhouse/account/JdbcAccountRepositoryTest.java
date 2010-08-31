@@ -20,7 +20,6 @@ import org.springframework.social.account.ConnectedAccountNotFoundException;
 import org.springframework.social.account.EmailAlreadyOnFileException;
 import org.springframework.social.account.Gender;
 import org.springframework.social.account.InvalidPasswordException;
-import org.springframework.social.account.JdbcAccountRepository;
 import org.springframework.social.account.NoOpPasswordEncoder;
 import org.springframework.social.account.Person;
 import org.springframework.social.account.UsernameNotFoundException;

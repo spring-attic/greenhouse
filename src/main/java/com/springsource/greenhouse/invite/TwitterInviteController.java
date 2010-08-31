@@ -25,13 +25,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/invite/twitter")
 public class TwitterInviteController {
 	
-	private TwitterOperations twitterService;
+	private TwitterOperations twitterTemplate;
 	
 	private NamedParameterJdbcTemplate jdbcTemplate;
 	
 	@Inject
-	public TwitterInviteController(TwitterOperations twitterService, JdbcTemplate jdbcTemplate) {
-		this.twitterService = twitterService;		
+	public TwitterInviteController(TwitterOperations twitterTemplate, JdbcTemplate jdbcTemplate) {
+		this.twitterTemplate = twitterTemplate;
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 	
@@ -46,7 +46,7 @@ public class TwitterInviteController {
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@RequestParam String username, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> twitterFriends = twitterService.getFollowed(username);
+			List<String> twitterFriends = twitterTemplate.getFollowed(username);
 			model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
 		}
 		return "invite/twitterFriends";
