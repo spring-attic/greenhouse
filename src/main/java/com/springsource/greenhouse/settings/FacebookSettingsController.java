@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.social.account.Account;
+import org.springframework.social.account.AccountAlreadyConnectedException;
+import org.springframework.social.account.AccountRepository;
+import org.springframework.social.account.ProfileUrlUtils;
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookLink;
 import org.springframework.social.facebook.FacebookOperations;
@@ -15,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
-import com.springsource.greenhouse.account.AccountAlreadyConnectedException;
-import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.ProfileUrlUtils;
 import com.springsource.greenhouse.members.ProfilePictureException;
 import com.springsource.greenhouse.members.ProfilePictureService;
 

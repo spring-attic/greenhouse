@@ -14,10 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 import org.springframework.social.account.Account;
+import org.springframework.social.account.JdbcAccountRepository;
+import org.springframework.social.account.NoOpPasswordEncoder;
+import org.springframework.social.account.PasswordEncoder;
 
-import com.springsource.greenhouse.account.JdbcAccountRepository;
-import com.springsource.greenhouse.account.NoOpPasswordEncoder;
-import com.springsource.greenhouse.account.PasswordEncoder;
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
 public class JdbcOAuthProviderTokenServicesTest {

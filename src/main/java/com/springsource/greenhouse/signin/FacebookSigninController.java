@@ -3,6 +3,10 @@ package com.springsource.greenhouse.signin;
 import javax.inject.Inject;
 
 import org.springframework.social.account.Account;
+import org.springframework.social.account.AccountRepository;
+import org.springframework.social.account.AccountUtils;
+import org.springframework.social.account.ConnectedAccountNotFoundException;
+import org.springframework.social.account.UsernameNotFoundException;
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookUserInfo;
@@ -11,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
-import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.AccountUtils;
-import com.springsource.greenhouse.account.ConnectedAccountNotFoundException;
-import com.springsource.greenhouse.account.UsernameNotFoundException;
 
 @Controller
 @RequestMapping("/signin")

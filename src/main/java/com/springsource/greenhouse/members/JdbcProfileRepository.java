@@ -8,10 +8,10 @@ import javax.inject.Inject;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.social.account.PictureSize;
+import org.springframework.social.account.ProfilePictureUrlMapper;
 import org.springframework.stereotype.Service;
 
-import com.springsource.greenhouse.account.PictureSize;
-import com.springsource.greenhouse.account.ProfilePictureUrlMapper;
 
 @Service
 public class JdbcProfileRepository implements ProfileRepository {

@@ -9,7 +9,7 @@ public abstract class Action {
 
 	private final DateTime time;
 	
-	private final org.springframework.social.account.Account account;
+	private final Account account;
 	
 	private final Location location;
 	

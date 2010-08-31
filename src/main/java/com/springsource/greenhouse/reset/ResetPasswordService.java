@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.reset;
 
-import com.springsource.greenhouse.account.UsernameNotFoundException;
+import org.springframework.social.account.UsernameNotFoundException;
 
 public interface ResetPasswordService {
 

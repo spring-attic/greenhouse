@@ -2,7 +2,8 @@ package com.springsource.greenhouse.members;
 
 import java.util.List;
 
-import com.springsource.greenhouse.account.PictureSize;
+import org.springframework.social.account.PictureSize;
+
 
 public interface ProfileRepository {
 

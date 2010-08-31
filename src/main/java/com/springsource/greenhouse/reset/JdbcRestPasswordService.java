@@ -7,11 +7,10 @@ import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.social.account.Account;
+import org.springframework.social.account.AccountRepository;
+import org.springframework.social.account.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.UsernameNotFoundException;
 
 @Service
 public class JdbcRestPasswordService implements ResetPasswordService {

@@ -7,11 +7,11 @@ import javax.sql.DataSource;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.social.account.NoOpPasswordEncoder;
+import org.springframework.social.account.PasswordEncoder;
+import org.springframework.social.account.StandardPasswordEncoder;
 
 import com.jolbox.bonecp.BoneCPDataSource;
-import com.springsource.greenhouse.account.NoOpPasswordEncoder;
-import com.springsource.greenhouse.account.PasswordEncoder;
-import com.springsource.greenhouse.account.StandardPasswordEncoder;
 
 public class EnvironmentBeanTests {
 

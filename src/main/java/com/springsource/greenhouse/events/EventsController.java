@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.social.account.Account;
-import org.springframework.social.oauth.ConnectedAccountNotFoundException;
+import org.springframework.social.account.ConnectedAccountNotFoundException;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;

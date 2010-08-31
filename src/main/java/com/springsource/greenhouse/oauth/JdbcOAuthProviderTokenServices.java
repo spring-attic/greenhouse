@@ -25,9 +25,9 @@ import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenImpl;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
 import org.springframework.social.account.Account;
+import org.springframework.social.account.AccountRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.account.AccountRepository;
 
 @Transactional
 public class JdbcOAuthProviderTokenServices implements OAuthProviderTokenServices {

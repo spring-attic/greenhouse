@@ -1,8 +1,9 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.springframework.social.account.StandardPasswordEncoder;
 
 public class StandardPasswordEncoderTest {
 
