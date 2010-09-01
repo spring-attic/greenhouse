@@ -1,6 +1,9 @@
 package com.springsource.greenhouse.events;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 import java.util.List;
@@ -9,12 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
-import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcEventRepositoryTest {
 
@@ -26,17 +27,16 @@ public class JdbcEventRepositoryTest {
 
 	@Before
 	public void setup() {
-		db = GreenhouseTestDatabaseFactory.createTestDatabase(new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
-				new FileSystemResource("src/main/webapp/WEB-INF/database/schema-activity.sql"),
-				new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
-				new ClassPathResource("JdbcEventRepositoryTest.sql", getClass()));
+		db = new GreenhouseTestDatabaseBuilder().member().group().activity().event().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
 		eventRepository = new JdbcEventRepository(jdbcTemplate);
 	}
 
 	@After
 	public void destroy() {
-		db.shutdown();
+		if (db != null) {
+			db.shutdown();
+		}
 	}
 
 	@Test

@@ -7,12 +7,10 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
-import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcProfileRepositoryTest {
 
@@ -24,17 +22,17 @@ public class JdbcProfileRepositoryTest {
 
 	@Before
 	public void setup() {
-		db = GreenhouseTestDatabaseFactory.createTestDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
-    			new ClassPathResource("JdbcProfileRepositoryTest.sql", getClass()));
+		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
 		profileRepository = new JdbcProfileRepository(jdbcTemplate);
     }
 	
-    @After
-    public void destroy() {
-    		db.shutdown();
-    }
+	@After
+	public void destroy() {
+		if (db != null) {
+			db.shutdown();
+		}
+	}
 
 	@Test
 	public void findByAccountId() {

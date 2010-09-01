@@ -5,12 +5,10 @@ import static org.junit.Assert.assertEquals;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
-import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcGroupRepositoryTest {
 	
@@ -22,17 +20,16 @@ public class JdbcGroupRepositoryTest {
 
 	@Before
 	public void setup() {
-		db = GreenhouseTestDatabaseFactory.createTestDatabase(new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
-				new FileSystemResource("src/main/webapp/WEB-INF/database/schema-activity.sql"),				
-				new FileSystemResource("src/main/webapp/WEB-INF/database/schema-event.sql"),
-				new ClassPathResource("JdbcGroupRepositoryTest.sql", getClass()));
+		db = new GreenhouseTestDatabaseBuilder().member().group().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
 		groupRepository = new JdbcGroupRepository(jdbcTemplate);
 	}
 	
 	@After
 	public void destroy() {
-		db.shutdown();
+		if (db != null) {
+			db.shutdown();
+		}
 	}
 	
 	@Test

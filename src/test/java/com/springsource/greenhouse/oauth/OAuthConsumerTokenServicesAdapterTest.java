@@ -1,12 +1,13 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -18,7 +19,7 @@ import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServi
 import org.springframework.social.account.Account;
 import org.springframework.social.oauth.JdbcAccessTokenTokenServices;
 
-import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class OAuthConsumerTokenServicesAdapterTest {
 
@@ -30,19 +31,19 @@ public class OAuthConsumerTokenServicesAdapterTest {
 
     @Before
     public void setupDatabase() {
-    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
-    			new ClassPathResource("JdbcOAuthConsumerTokenServicesTest.sql", getClass()));
+		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
         jdbcTemplate = new JdbcTemplate(db);
 
 		JdbcAccessTokenTokenServices accessTokenServices = new JdbcAccessTokenTokenServices(jdbcTemplate);
 		tokenServicesFactory = new OAuthConsumerTokenServicesAdapterFactory(accessTokenServices);
     }
 
-    @After
-    public void destroy() {
-    	db.shutdown();
-    }
+	@After
+	public void destroy() {
+		if (db != null) {
+			db.shutdown();
+		}
+	}
     
     @Test
     public void shouldReturnNullTokenForUnknownResource() {
@@ -135,7 +136,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
         ((OAuthConsumerTokenServicesAdapter) tokenServices).removeToken("twitter");
         
         // Token should be gone after remove
-        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp where accessToken = 'twitterToken'"));
+        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'twitterToken'"));
         assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
     }
     
