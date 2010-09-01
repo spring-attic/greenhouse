@@ -1,6 +1,8 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,8 +11,6 @@ import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -27,7 +27,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountRepositoryTest {
 	private EmbeddedDatabase db;
@@ -38,17 +38,17 @@ public class JdbcAccountRepositoryTest {
 
     @Before
     public void setup() {
-    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
-    			new ClassPathResource("JdbcAccountRepositoryTest.sql", getClass()));
+    	db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
     	jdbcTemplate = new JdbcTemplate(db);
     	accountRepository = new JdbcAccountRepository(jdbcTemplate, new NoOpPasswordEncoder());
     }
     
-    @After
-    public void destroy() {
-    	db.shutdown();
-    }
+	@After
+	public void destroy() {
+		if (db != null) {
+			db.shutdown();
+		}
+	}
     
     @Test
     public void create() throws EmailAlreadyOnFileException {

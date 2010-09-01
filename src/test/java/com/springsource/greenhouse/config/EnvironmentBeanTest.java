@@ -1,17 +1,13 @@
 package com.springsource.greenhouse.config;
 
-import static org.junit.Assert.*;
-
-import javax.sql.DataSource;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.social.account.NoOpPasswordEncoder;
 import org.springframework.social.account.PasswordEncoder;
 import org.springframework.social.account.StandardPasswordEncoder;
-
-import com.jolbox.bonecp.BoneCPDataSource;
 
 public class EnvironmentBeanTest {
 
@@ -22,10 +18,6 @@ public class EnvironmentBeanTest {
 		PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
 		assertNotNull(encoder);
 		assertTrue(encoder instanceof StandardPasswordEncoder);
-		
-		DataSource dataSource = context.getBean("dataSource", DataSource.class);
-		assertNotNull(dataSource);
-		assertTrue(dataSource instanceof BoneCPDataSource);
 	}
 
 	@Test
@@ -37,10 +29,6 @@ public class EnvironmentBeanTest {
 		PasswordEncoder encoder = context.getBean("passwordEncoder", PasswordEncoder.class);
 		assertNotNull(encoder);
 		assertTrue(encoder instanceof NoOpPasswordEncoder);
-		
-		DataSource dataSource = context.getBean("dataSource", DataSource.class);
-		assertNotNull(dataSource);
-		assertTrue(dataSource instanceof SimpleDriverDataSource);
 	}
 	
 }

@@ -18,19 +18,5 @@
 			</bean>
 		</greenhouse:otherwise>
 	</greenhouse:environment-bean>
-	
-	<greenhouse:environment-bean id="dataSource">
-		<greenhouse:when environment="embedded">
-			<jdbc:embedded-database type="H2" />
-		</greenhouse:when>
-		<greenhouse:otherwise>
-			<bean class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-			   <property name="driverClass" value="${database.driver}" />
-			   <property name="jdbcUrl" value="${database.url}" />
-			   <property name="username" value="${database.username}"/>
-			   <property name="password" value="${database.password}"/>
-			</bean>
-		</greenhouse:otherwise>
-	</greenhouse:environment-bean>
 		
 </beans>

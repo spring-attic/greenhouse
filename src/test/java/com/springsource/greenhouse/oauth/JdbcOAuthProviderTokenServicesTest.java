@@ -1,12 +1,13 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -18,7 +19,7 @@ import org.springframework.social.account.NoOpPasswordEncoder;
 import org.springframework.social.account.PasswordEncoder;
 
 import com.springsource.greenhouse.account.JdbcAccountRepository;
-import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcOAuthProviderTokenServicesTest {
 
@@ -28,19 +29,19 @@ public class JdbcOAuthProviderTokenServicesTest {
 
     @Before
     public void setup() {
-    	db = GreenhouseTestDatabaseFactory.createTestDatabase(
-    			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
-    			new ClassPathResource("JdbcOAuthProviderTokenServicesTest.sql", getClass()));
+		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
     	JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
 		PasswordEncoder passwordEncoder = new NoOpPasswordEncoder();
 		JdbcAccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, passwordEncoder);
     	tokenServices = new JdbcOAuthProviderTokenServices(jdbcTemplate, accountRepository);
     }
     
-    @After
-    public void destroy() {
-    	db.shutdown();
-    }
+	@After
+	public void destroy() {
+		if (db != null) {
+			db.shutdown();
+		}
+	}
     
     @Test
     public void testOAuthInteraction() {

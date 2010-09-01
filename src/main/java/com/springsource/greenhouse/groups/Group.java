@@ -1,8 +1,11 @@
 package com.springsource.greenhouse.groups;
 
 public class Group {
+	
 	private String name;
+	
 	private String description;
+	
 	private String hashtag;
 
 	public String getName() {
