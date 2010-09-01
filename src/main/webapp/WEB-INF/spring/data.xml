@@ -26,23 +26,15 @@
 	
 	<greenhouse:environment-bean id="dataSource">
 		<greenhouse:when environment="embedded">
-			<jdbc:embedded-database type="H2">
-				<jdbc:script location="/WEB-INF/database/schema-member.sql" />
-				<jdbc:script location="/WEB-INF/database/schema-activity.sql" />
-				<jdbc:script location="/WEB-INF/database/schema-event.sql" />
-				<jdbc:script location="/WEB-INF/database/data.sql" />
-			</jdbc:embedded-database>	
+			<bean class="com.springsource.greenhouse.database.GreenhouseEmbeddedDatabaseFactoryBean" />
 		</greenhouse:when>
 		<greenhouse:otherwise>
-			<bean class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-			   <property name="driverClass" value="${database.driver}" />
-			   <property name="jdbcUrl" value="${database.url}" />
-			   <property name="username" value="${database.username}"/>
-			   <property name="password" value="${database.password}"/>
-			</bean>
+			<bean class="com.springsource.greenhouse.database.GreenhouseConnectionPoolFactoryBean" />
 		</greenhouse:otherwise>
 	</greenhouse:environment-bean>
-		
+
+	<bean class="com.springsource.greenhouse.database.GreenhouseDatabaseInstaller" />
+			
 	<bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
 		<constructor-arg value="${s3.accessKey}" />
 		<constructor-arg value="${s3.secretKey}" />

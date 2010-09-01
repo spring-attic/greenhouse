@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
+import org.springframework.jdbc.versioned.DatabaseUpgrader;
 import org.springframework.jdbc.versioned.DatabaseVersion;
 import org.springframework.jdbc.versioned.GenericDatabaseUpgrader;
-import org.springframework.jdbc.versioned.DatabaseUpgrader;
 
 public class GreenhouseDatabaseInstaller {
 	
@@ -38,12 +38,15 @@ public class GreenhouseDatabaseInstaller {
 		builder.addChange(databaseResource("install/ConnectedApp.sql"));
 		builder.addChange(databaseResource("install/ConnectedAccount.sql"));
 		builder.addChange(databaseResource("install/Reset.sql"));
+		addCustomChanges(builder);
 		database.addChangeSet(builder.getChangeSet());
 		
 		return database;
 	}
-	
-	private Resource databaseResource(String resource) {
+
+	protected void addCustomChanges(DatabaseChangeSetBuilder builder) {}
+
+	protected Resource databaseResource(String resource) {
 		return new ClassPathResource(resource, getClass());
 	}
 }
