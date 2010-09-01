@@ -175,11 +175,6 @@
 			<version>1.2.142</version>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>0.6.7.2</version>
-		</dependency>		
 
 		<!-- JavaMail -->
 		<dependency>
