@@ -10,7 +10,6 @@ create table MemberAction (id identity,
 create table Badge (name varchar,
 					description varchar not null,
 					level tinyint not null,
-					imageUrl varchar not null,
 					primary key (name));
 					
 create table AwardedBadge(id identity,
@@ -22,3 +21,6 @@ create table AwardedBadge(id identity,
 					foreign key (badge) references Badge(name),					
 					foreign key (member) references Member(id),
 					foreign key (memberAction) references MemberAction(id));
+					
+insert into Badge (name, description, level) values ('Newbie', 'You joined!', 1);
+

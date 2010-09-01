@@ -11,7 +11,7 @@ import com.jolbox.bonecp.BoneCPDataSource;
 
 public class GreenhouseConnectionPoolFactoryBean implements FactoryBean<DataSource>, InitializingBean, DisposableBean {
 
-	private BoneCPDataSource dataSource;
+	private BoneCPDataSource connectionPool;
 	
 	@Value("${database.url}")
 	private String url;
@@ -23,18 +23,19 @@ public class GreenhouseConnectionPoolFactoryBean implements FactoryBean<DataSour
 	private String password;
 
 	public void afterPropertiesSet() throws Exception {
-		dataSource = new BoneCPDataSource();
-		dataSource.setJdbcUrl(url);
-		dataSource.setUsername(username);
-		dataSource.setPassword(password);
+		connectionPool = new BoneCPDataSource();
+		connectionPool.setJdbcUrl(url);
+		connectionPool.setUsername(username);
+		connectionPool.setPassword(password);
+		populateDatabase();
 	}
 	
 	public void destroy() throws Exception {
-		dataSource.close();
+		connectionPool.close();
 	}
 
 	public DataSource getObject() throws Exception {
-		return dataSource;
+		return connectionPool;
 	}
 
 	public Class<?> getObjectType() {
@@ -43,6 +44,10 @@ public class GreenhouseConnectionPoolFactoryBean implements FactoryBean<DataSour
 
 	public boolean isSingleton() {
 		return true;
+	}
+	
+	private void populateDatabase() {
+		new GreenhouseDatabaseInstaller(connectionPool).run();
 	}
 	
 }
