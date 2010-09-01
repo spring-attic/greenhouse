@@ -16,16 +16,17 @@ import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenSe
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.social.account.Account;
+import org.springframework.social.oauth.JdbcAccessTokenTokenServices;
 
 import com.springsource.greenhouse.test.utils.GreenhouseTestDatabaseFactory;
 
-public class JdbcOAuthConsumerTokenServicesTest {
+public class OAuthConsumerTokenServicesAdapterTest {
 
 	private EmbeddedDatabase db;
 
 	private JdbcTemplate jdbcTemplate;
     
-	private JdbcOAuthConsumerTokenServicesFactory tokenServicesFactory;
+	private OAuthConsumerTokenServicesAdapterFactory tokenServicesFactory;
 
     @Before
     public void setupDatabase() {
@@ -33,7 +34,9 @@ public class JdbcOAuthConsumerTokenServicesTest {
     			new FileSystemResource("src/main/webapp/WEB-INF/database/schema-member.sql"),
     			new ClassPathResource("JdbcOAuthConsumerTokenServicesTest.sql", getClass()));
         jdbcTemplate = new JdbcTemplate(db);
-        tokenServicesFactory = new JdbcOAuthConsumerTokenServicesFactory(jdbcTemplate);
+
+		JdbcAccessTokenTokenServices accessTokenServices = new JdbcAccessTokenTokenServices(jdbcTemplate);
+		tokenServicesFactory = new OAuthConsumerTokenServicesAdapterFactory(accessTokenServices);
     }
 
     @After
@@ -129,7 +132,7 @@ public class JdbcOAuthConsumerTokenServicesTest {
         assertNotNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
 
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-        ((JdbcOAuthConsumerTokenServices) tokenServices).removeToken("twitter");
+        ((OAuthConsumerTokenServicesAdapter) tokenServices).removeToken("twitter");
         
         // Token should be gone after remove
         assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp where accessToken = 'twitterToken'"));

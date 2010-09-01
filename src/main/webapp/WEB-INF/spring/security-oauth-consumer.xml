@@ -17,8 +17,12 @@
 			access-token-url="https://twitter.com/oauth/access_token" />
 	</resource-details-service>
 
-	<beans:bean id="consumerTokenServicesFactory"  class="com.springsource.greenhouse.oauth.JdbcOAuthConsumerTokenServicesFactory">
+	<beans:bean id="accessTokenService" class="org.springframework.social.oauth.JdbcAccessTokenTokenServices">
 		<beans:constructor-arg ref="jdbcTemplate" />
+	</beans:bean>
+
+	<beans:bean id="consumerTokenServicesFactory"  class="com.springsource.greenhouse.oauth.OAuthConsumerTokenServicesAdapterFactory">
+		<beans:constructor-arg ref="accessTokenService" />
 	</beans:bean>
 	
 	<!-- Twitter Client API -->
@@ -31,13 +35,10 @@
 				consumer support bean. -->
 				<beans:constructor-arg ref="oauthConsumerSupport" />
 				<beans:constructor-arg ref="resourceDetails" />
-				<beans:constructor-arg ref="ts" />
+				<beans:constructor-arg ref="accessTokenService" />
 			</beans:bean>
 		</beans:constructor-arg>
 	</beans:bean>
-
-	<!-- TODO: RECONCILE THIS TOKEN SERVICES WITH THE OFFICIAL ONE -->
-	<beans:bean id="ts" class="org.springframework.social.oauth.JdbcOAuthConsumerTokenServices" autowire="constructor" />	
 
 	<!-- Facebook Client API -->
 	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate" />
