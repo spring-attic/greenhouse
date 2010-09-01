@@ -33,7 +33,9 @@ public class SettingsControllerTest {
     
     @After
     public void destroy() {
-    	db.shutdown();
+    	if (db != null) {
+    		db.shutdown();
+    	}
     }
 
     @Test
