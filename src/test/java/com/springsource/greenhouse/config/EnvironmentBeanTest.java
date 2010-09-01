@@ -13,7 +13,7 @@ import org.springframework.social.account.StandardPasswordEncoder;
 
 import com.jolbox.bonecp.BoneCPDataSource;
 
-public class EnvironmentBeanTests {
+public class EnvironmentBeanTest {
 
 	@Test
 	public void defaultEnvironment() {
