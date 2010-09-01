@@ -5,19 +5,26 @@ import javax.servlet.http.HttpSession;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
+import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
 import org.springframework.social.account.Account;
 import org.springframework.social.oauth.AccessTokenServices;
 
+/**
+ * Implementation of SS-OAuth's session-oriented
+ * {@link OAuthConsumerTokenServices} interface that delegates to an
+ * implementation of Spring Social's AccessTokenServices. This enables SS-OAuth
+ * to deal with consumer tokens through a token services implementation that is
+ * per-session while Spring Social can deal with them through a service that is
+ * a singleton.
+ * 
+ * This adapter also extends SS-OAuth's {@link HttpSessionBasedTokenServices} to
+ * take advantage of session storage of access tokens.
+ * 
+ * @author Craig Walls
+ */
 public class OAuthConsumerTokenServicesAdapter extends HttpSessionBasedTokenServices {
-
-    static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (member, provider, accessToken, secret) values (?, ?, ?, ?)";
-    static final String SELECT_TOKEN_SQL = "select provider, accessToken, secret from ConnectedAccount where member = ? and provider = ?";
-    static final String DELETE_TOKEN_SQL = "delete from ConnectedAccount where member = ? and provider = ?";
-
 	private Account account;
-	
 	private HttpSession session;
-	
 	private AccessTokenServices accessTokenServices;
 
 	public OAuthConsumerTokenServicesAdapter(HttpSession session, AccessTokenServices accessTokenServices,
@@ -42,10 +49,7 @@ public class OAuthConsumerTokenServicesAdapter extends HttpSessionBasedTokenServ
 
 	@Override
 	public void storeToken(String resourceId, OAuthConsumerToken token) {
-		// Don't bother storing request tokens in the DB...session-storage is fine
-		if (token.isAccessToken()) {
-			accessTokenServices.storeToken(resourceId, account, token);
-		}
+		accessTokenServices.storeToken(resourceId, account, token);
 		super.storeToken(resourceId, token);
 	}
 	
