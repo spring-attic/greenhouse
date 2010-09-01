@@ -33,8 +33,6 @@
 		</greenhouse:otherwise>
 	</greenhouse:environment-bean>
 
-	<bean class="com.springsource.greenhouse.database.GreenhouseDatabaseInstaller" />
-			
 	<bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
 		<constructor-arg value="${s3.accessKey}" />
 		<constructor-arg value="${s3.secretKey}" />
