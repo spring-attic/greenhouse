@@ -60,6 +60,9 @@ public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
 			MessageDeliveryException {
 		try {
 			Broadcaster broadcaster = BroadcasterFactory.getDefault().lookup(DefaultBroadcaster.class, this.getComponentName());
+			if (broadcaster == null) {
+				return;
+			}
 			if (log.isDebugEnabled()) {
 				log.debug("Broadcasting message "+message.toString()+" to "+broadcaster.getAtmosphereResources().size()+ " suspended resources.");
 			}

@@ -25,9 +25,6 @@ public class HttpMessageBroadcaster extends DefaultBroadcaster {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void broadcast(AtmosphereResource<?, ?> resource, AtmosphereResourceEvent event) {
-		/*event.setMessage("1234567");
-		super.broadcast(resource, event);
-		return;*/
 		if (!HttpBroadcastMessage.class.isAssignableFrom(event.getMessage().getClass())) {
 			super.broadcast(resource, event);
 			return;
