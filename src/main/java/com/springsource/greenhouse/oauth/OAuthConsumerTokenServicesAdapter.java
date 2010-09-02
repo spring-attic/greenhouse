@@ -6,7 +6,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
-import org.springframework.social.account.Account;
+import com.springsource.greenhouse.account.Account;
 import org.springframework.social.oauth.AccessTokenServices;
 
 /**

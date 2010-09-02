@@ -1,9 +1,6 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,9 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
-import org.springframework.social.account.Account;
-import org.springframework.social.oauth.JdbcAccessTokenTokenServices;
 
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class OAuthConsumerTokenServicesAdapterTest {
@@ -34,7 +30,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
         jdbcTemplate = new JdbcTemplate(db);
 
-		JdbcAccessTokenTokenServices accessTokenServices = new JdbcAccessTokenTokenServices(jdbcTemplate);
+		JdbcAccessTokenServices accessTokenServices = new JdbcAccessTokenServices(jdbcTemplate);
 		tokenServicesFactory = new OAuthConsumerTokenServicesAdapterFactory(accessTokenServices);
     }
 

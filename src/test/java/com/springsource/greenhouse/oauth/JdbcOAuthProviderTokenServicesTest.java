@@ -1,9 +1,6 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,11 +11,11 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.NoOpPasswordEncoder;
-import org.springframework.social.account.PasswordEncoder;
 
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
+import com.springsource.greenhouse.account.NoOpPasswordEncoder;
+import com.springsource.greenhouse.account.PasswordEncoder;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcOAuthProviderTokenServicesTest {

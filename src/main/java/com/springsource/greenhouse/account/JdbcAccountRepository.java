@@ -11,20 +11,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.AccountAlreadyConnectedException;
-import org.springframework.social.account.AccountMapper;
-import org.springframework.social.account.AccountRepository;
-import org.springframework.social.account.ConnectedAccountNotFoundException;
-import org.springframework.social.account.EmailAlreadyOnFileException;
-import org.springframework.social.account.EmailUtils;
-import org.springframework.social.account.InvalidPasswordException;
-import org.springframework.social.account.PasswordEncoder;
-import org.springframework.social.account.Person;
-import org.springframework.social.account.PictureSize;
-import org.springframework.social.account.ProfileUrlUtils;
-import org.springframework.social.account.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.springsource.greenhouse.utils.EmailUtils;
 
 public class JdbcAccountRepository implements AccountRepository {
 	

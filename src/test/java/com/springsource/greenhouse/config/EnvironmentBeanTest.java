@@ -1,13 +1,13 @@
 package com.springsource.greenhouse.config;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.social.account.NoOpPasswordEncoder;
-import org.springframework.social.account.PasswordEncoder;
-import org.springframework.social.account.StandardPasswordEncoder;
+
+import com.springsource.greenhouse.account.NoOpPasswordEncoder;
+import com.springsource.greenhouse.account.PasswordEncoder;
+import com.springsource.greenhouse.account.StandardPasswordEncoder;
 
 public class EnvironmentBeanTest {
 

@@ -12,7 +12,7 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.social.account.Account;
+import com.springsource.greenhouse.account.Account;
 import org.springframework.web.servlet.ModelAndView;
 
 public class AccountExposingHandlerInterceptorTest {

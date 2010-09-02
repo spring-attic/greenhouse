@@ -1,8 +1,6 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,15 +12,6 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.AccountAlreadyConnectedException;
-import org.springframework.social.account.ConnectedAccountNotFoundException;
-import org.springframework.social.account.EmailAlreadyOnFileException;
-import org.springframework.social.account.Gender;
-import org.springframework.social.account.InvalidPasswordException;
-import org.springframework.social.account.NoOpPasswordEncoder;
-import org.springframework.social.account.Person;
-import org.springframework.social.account.UsernameNotFoundException;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;

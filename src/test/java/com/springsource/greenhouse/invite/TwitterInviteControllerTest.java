@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.social.account.Account;
+import com.springsource.greenhouse.account.Account;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 

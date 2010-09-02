@@ -3,14 +3,15 @@ package com.springsource.greenhouse.signup;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
-import org.springframework.social.account.Account;
-import org.springframework.social.account.AccountRepository;
-import org.springframework.social.account.AccountUtils;
-import org.springframework.social.account.EmailAlreadyOnFileException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.AccountUtils;
+import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
 
 @Controller
 @RequestMapping("/signup")

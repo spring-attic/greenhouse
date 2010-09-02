@@ -9,8 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.ConnectedAccountNotFoundException;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Location;
 
 @Controller
@@ -56,23 +55,15 @@ public class EventsController {
 
 	@RequestMapping(value = "/{id}/tweets", method = RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation) {
-		try {
-			twitter.tweet(status);
-			return new ResponseEntity<String>((String) null, HttpStatus.OK);
-		} catch (ConnectedAccountNotFoundException e) {
-			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
-		}
+		twitter.tweet(status);
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
-		try {
-			twitter.retweet(tweetId);
-			return new ResponseEntity<String>((String) null, HttpStatus.OK);
-		} catch (ConnectedAccountNotFoundException e) {
-			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
-		}
+		twitter.retweet(tweetId);
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -108,23 +99,15 @@ public class EventsController {
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long id, @PathVariable Short number,
 			@RequestParam String status, Location currentLocation) {
-		try {
-			twitter.tweet(status);
-			return new ResponseEntity<String>((String) null, HttpStatus.OK);
-		} catch (ConnectedAccountNotFoundException e) {
-			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
-		}
+		twitter.tweet(status);
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}/sessions/{number}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
-		try {
-			twitter.retweet(tweetId);
-			return new ResponseEntity<String>((String) null, HttpStatus.OK);
-		} catch (ConnectedAccountNotFoundException e) {
-			return new ResponseEntity<String>("Account not connected to Twitter", HttpStatus.PRECONDITION_FAILED);
-		}
+		twitter.retweet(tweetId);
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
 	}
 	
 	// for web browser (HTML) clients
