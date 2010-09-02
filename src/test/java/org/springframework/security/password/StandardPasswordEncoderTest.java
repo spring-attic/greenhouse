@@ -1,8 +1,10 @@
-package com.springsource.greenhouse.account;
+package org.springframework.security.password;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.springframework.security.password.StandardPasswordEncoder;
+
 
 public class StandardPasswordEncoderTest {
 

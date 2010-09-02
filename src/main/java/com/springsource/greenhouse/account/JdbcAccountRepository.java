@@ -6,15 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
+@Repository
 public class JdbcAccountRepository implements AccountRepository {
 	
 	private final JdbcTemplate jdbcTemplate;
@@ -23,6 +27,7 @@ public class JdbcAccountRepository implements AccountRepository {
 	
 	private final PasswordEncoder passwordEncoder;
 
+	@Autowired
 	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.passwordEncoder = passwordEncoder;

@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.account;
+package org.springframework.security.password;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

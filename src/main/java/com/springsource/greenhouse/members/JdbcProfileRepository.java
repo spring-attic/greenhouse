@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.springsource.greenhouse.account.PictureSize;
 import com.springsource.greenhouse.account.ProfilePictureUrlMapper;
 
-
 @Service
 public class JdbcProfileRepository implements ProfileRepository {
 

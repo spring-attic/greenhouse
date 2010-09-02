@@ -2,7 +2,6 @@ package com.springsource.greenhouse.account;
 
 import java.util.List;
 
-
 public interface AccountRepository {
 
 	Account createAccount(Person person) throws EmailAlreadyOnFileException;
@@ -14,8 +13,12 @@ public interface AccountRepository {
 	Account findById(Long id);
 
 	Account findByUsername(String username) throws UsernameNotFoundException;
+
+	void markProfilePictureSet(Long id);
+
+	// connected account operations
 	
-	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException; // TODO exception case where accessToken is valid
+	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException; // TODO exception case where accessToken is invalid
 
 	List<Account> findFriendAccounts(String provider, List<String> friendIds);
 	
@@ -24,7 +27,5 @@ public interface AccountRepository {
 	boolean isConnected(Long id, String provider);
 
 	void disconnect(Long id, String provider);
-
-	void markProfilePictureSet(Long id);
 		
 }

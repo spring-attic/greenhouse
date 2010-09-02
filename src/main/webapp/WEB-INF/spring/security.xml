@@ -29,17 +29,16 @@
 		<authentication-provider ref="usernamePasswordAuthenticationProvider" />
 	</authentication-manager>
 
-	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.account.UsernamePasswordAuthenticationProvider" 
-		autowire="constructor" />
+	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.account.UsernamePasswordAuthenticationProvider" />
 
-	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" autowire="constructor"/>
-
+	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
+	
 	<greenhouse:environment-bean id="passwordEncoder">
 		<greenhouse:when environment="embedded">
-			<beans:bean class="com.springsource.greenhouse.account.NoOpPasswordEncoder" />
+			<beans:bean class="org.springframework.security.password.NoOpPasswordEncoder" />
 		</greenhouse:when>
 		<greenhouse:otherwise>
-			<beans:bean class="com.springsource.greenhouse.account.StandardPasswordEncoder">
+			<beans:bean class="org.springframework.security.password.StandardPasswordEncoder">
 				<beans:constructor-arg value="${security.encodeAlgorithm}" />
 				<beans:constructor-arg value="${security.encodeSecret}" />
 			</beans:bean>

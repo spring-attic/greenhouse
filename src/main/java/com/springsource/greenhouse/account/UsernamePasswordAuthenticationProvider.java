@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 
-
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
 	private AccountRepository accountRepository;

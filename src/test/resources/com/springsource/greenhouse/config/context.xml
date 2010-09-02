@@ -9,10 +9,10 @@
 
 	<greenhouse:environment-bean id="passwordEncoder">
 		<greenhouse:when environment="embedded">
-			<bean class="com.springsource.greenhouse.account.NoOpPasswordEncoder" />
+			<bean class="org.springframework.security.password.NoOpPasswordEncoder" />
 		</greenhouse:when>
 		<greenhouse:otherwise>
-			<bean class="com.springsource.greenhouse.account.StandardPasswordEncoder">
+			<bean class="org.springframework.security.password.StandardPasswordEncoder">
 				<constructor-arg value="MD5" />
 				<constructor-arg value="test" />
 			</bean>

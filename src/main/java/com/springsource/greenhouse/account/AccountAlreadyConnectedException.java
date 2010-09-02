@@ -1,7 +1,7 @@
 package com.springsource.greenhouse.account;
 
 @SuppressWarnings("serial")
-public final class AccountAlreadyConnectedException extends Exception {
+public final class AccountAlreadyConnectedException extends AccountException {
 
 	private final String provider;
 	

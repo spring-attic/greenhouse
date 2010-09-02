@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.account;
+package org.springframework.security.password;
 
 public interface PasswordEncoder {
 	

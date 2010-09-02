@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.password.NoOpPasswordEncoder;
+import org.springframework.security.password.PasswordEncoder;
+import org.springframework.security.password.StandardPasswordEncoder;
 
-import com.springsource.greenhouse.account.NoOpPasswordEncoder;
-import com.springsource.greenhouse.account.PasswordEncoder;
-import com.springsource.greenhouse.account.StandardPasswordEncoder;
 
 public class EnvironmentBeanTest {
 
