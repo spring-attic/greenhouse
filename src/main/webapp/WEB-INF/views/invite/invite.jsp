@@ -24,4 +24,5 @@
 	</li>
 </ul>
 
-<facebook:init apiKey="21aa96c8bc23259d0dd2ab99e496c306" />
+<s:eval expression="@apiProvider.apiKey" var="apiKey" />
+<facebook:init apiKey="${apiKey}" />
