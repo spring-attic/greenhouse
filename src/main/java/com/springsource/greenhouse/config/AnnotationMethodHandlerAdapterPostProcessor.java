@@ -9,7 +9,6 @@ import org.springframework.mobile.DeviceWebArgumentResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;
-import com.springsource.greenhouse.account.Account;
 import org.springframework.social.facebook.FacebookWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -17,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
 import com.springsource.greenhouse.UserLocationHandlerInterceptor;
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Location;
 
 // TODO - see SPR-7327: it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter
@@ -25,7 +25,7 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 
 	private final OAuthConsumerTokenServicesFactory oauthTokenFactory;
 	
-	private final String facebookAppKey = "8f007e7ce33d82dc2f5485102b3504c2";
+	private final String facebookAppKey = "21aa96c8bc23259d0dd2ab99e496c306";
 	
 	@Inject
 	public AnnotationMethodHandlerAdapterPostProcessor(OAuthConsumerTokenServicesFactory oauthTokenFactory) {

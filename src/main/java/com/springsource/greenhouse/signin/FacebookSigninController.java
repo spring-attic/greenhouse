@@ -34,7 +34,7 @@ public class FacebookSigninController {
 	@RequestMapping(value = "/fb", method = RequestMethod.POST)
 	public String signinWithFacebook(@FacebookAccessToken String accessToken) {
 		try {
-			Account account = accountRepository.findByConnectedAccount("facebook", accessToken);
+			Account account = accountRepository.findByConnectedAccount("Facebook", accessToken);
 			AccountUtils.signin(account);
 			return "redirect:/";
 		} catch (ConnectedAccountNotFoundException e) {
