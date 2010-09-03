@@ -43,4 +43,7 @@
 	<!-- Facebook Client API -->
 	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate" />
 	
+	<!-- Facebook API provider metadata -->
+	<beans:bean id="facebookProvider" class="com.springsource.greenhouse.account.ApiProvider" />
+	
 </beans:beans>

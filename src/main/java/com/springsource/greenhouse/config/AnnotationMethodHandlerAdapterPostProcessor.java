@@ -15,9 +15,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
-import com.springsource.greenhouse.UserLocationHandlerInterceptor;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Location;
+import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
 
 // TODO - see SPR-7327: it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter
 // support in Spring MVC namespace should be added for that (this would go away then)
