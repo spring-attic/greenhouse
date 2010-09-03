@@ -7,11 +7,6 @@
 		<put-attribute name="title" value="Sign In | Greenhouse" />
 		<put-attribute name="header" value="/WEB-INF/layouts/header.jsp" />
 		<put-attribute name="content" value="/WEB-INF/views/signin/signin.jsp" />
-        <put-list-attribute name="scripts">
-            <add-attribute value="/social/facebook/all.js"/>
-            <add-attribute value="/social/facebook/facebook-extras.js"/>
-            <add-attribute value="/social/facebook/init.js"/>
-        </put-list-attribute>
 	</definition>
 	
 	<definition name="signin-iphone" extends="page-iphone">

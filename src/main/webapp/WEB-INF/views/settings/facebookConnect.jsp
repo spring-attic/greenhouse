@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
 <c:if test="${not empty message}">
 	<div class="${message.type}">${message.text}</div>
@@ -16,3 +17,5 @@
 	<label for="useFBPic">Use my Facebook profile picture as my Greenhouse profile picture</label>
 	<input id="useFBPic" type="checkbox" name="useFBPic" />
 </form>
+
+<facebook:init apiKey="21aa96c8bc23259d0dd2ab99e496c306" />
