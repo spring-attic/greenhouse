@@ -17,5 +17,5 @@
 	<input type="hidden" name="_method" value="DELETE" />
 </form>
 
-<s:eval expression="@apiProvider.apiKey" var="apiKey" />
+<s:eval expression="@facebookApiProvider.apiKey" var="apiKey" />
 <facebook:init apiKey="${apiKey}" />

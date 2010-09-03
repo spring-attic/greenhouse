@@ -1,8 +1,5 @@
 package com.springsource.greenhouse.account;
 
-import org.springframework.stereotype.Component;
-
-@Component("apiProvider")
 public class ApiProvider {
 	
 	public String getApiKey() {
