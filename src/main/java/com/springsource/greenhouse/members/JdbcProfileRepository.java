@@ -6,21 +6,29 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.account.PictureSize;
-import com.springsource.greenhouse.account.ProfilePictureUrlMapper;
+import com.springsource.greenhouse.account.PictureUrlFactory;
+import com.springsource.greenhouse.account.PictureUrlMapper;
 
 @Service
 public class JdbcProfileRepository implements ProfileRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 
+	private final PictureUrlFactory pictureUrlFactory;
+
+	private final RowMapper<Profile> profileMapper;
+
 	@Inject
-	public JdbcProfileRepository(JdbcTemplate jdbcTemplate) {
+	public JdbcProfileRepository(JdbcTemplate jdbcTemplate, FileStorage pictureStorage) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
+		this.profileMapper = new ProfileMapper();
 	}
 	
 	public Profile findByKey(String profileKey) {
@@ -44,10 +52,11 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	public String findProfilePictureUrl(String profileKey, PictureSize size) {
 		Long accountId = getAccountId(profileKey);
+		PictureUrlMapper pictureUrlMapper = new PictureUrlMapper(pictureUrlFactory, size);
 		if (accountId != null) {
-			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where id = ?", String.class, new ProfilePictureUrlMapper(size), accountId);
+			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where id = ?", String.class, pictureUrlMapper, accountId);
 		} else {
-			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where username = ?", String.class, new ProfilePictureUrlMapper(size), accountId);			
+			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where username = ?", String.class, pictureUrlMapper, accountId);			
 		}
 	}
 	
@@ -57,15 +66,15 @@ public class JdbcProfileRepository implements ProfileRepository {
 		return jdbcTemplate.queryForObject(SELECT_PROFILE + " where username = ?", profileMapper, username);
 	}
 	
-	private RowMapper<Profile> profileMapper = new RowMapper<Profile>() {
+	private class ProfileMapper implements RowMapper<Profile> {
 		
-		private ProfilePictureUrlMapper profilePictureUrlMapper = new ProfilePictureUrlMapper(PictureSize.large);
+		private PictureUrlMapper profilePictureUrlMapper = new PictureUrlMapper(pictureUrlFactory, PictureSize.large);
 		
 		public Profile mapRow(ResultSet rs, int row) throws SQLException {
 			return new Profile(rs.getLong("id"), rs.getString("displayName"), profilePictureUrlMapper.mapRow(rs, row));
 		}
 	};
-
+	
 	private Long getAccountId(String id) {
 		try {
 			return Long.parseLong(id);

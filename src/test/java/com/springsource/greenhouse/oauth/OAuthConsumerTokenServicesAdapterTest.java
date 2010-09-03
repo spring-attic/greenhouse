@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
+import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
@@ -29,7 +30,6 @@ public class OAuthConsumerTokenServicesAdapterTest {
     public void setupDatabase() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
         jdbcTemplate = new JdbcTemplate(db);
-
 		JdbcAccessTokenServices accessTokenServices = new JdbcAccessTokenServices(jdbcTemplate);
 		tokenServicesFactory = new OAuthConsumerTokenServicesAdapterFactory(accessTokenServices);
     }
@@ -43,7 +43,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
     
     @Test
     public void shouldReturnNullTokenForUnknownResource() {
-        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("ohloh"));
@@ -52,7 +52,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
 
     @Test
     public void shouldReturnNullTokenForUnknownUser() {
-        Authentication authentication = new TestingAuthenticationToken(new Account(2L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg"), "atlanta");
+        Authentication authentication = new TestingAuthenticationToken(testAccount2(), "atlanta");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         assertNull(tokenServices.getToken("twitter"));
@@ -60,7 +60,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
 
     @Test
     public void shouldReturnTokenForKnownResourceInDB() {
-        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
         MockHttpServletRequest request = new MockHttpServletRequest();
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         OAuthConsumerToken token = tokenServices.getToken("twitter");
@@ -76,7 +76,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
         OAuthConsumerToken linkedInToken = new OAuthConsumerToken();
         request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn", linkedInToken);
         
-        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         OAuthConsumerToken token = tokenServices.getToken("linkedIn");
         assertSame(linkedInToken, token);
@@ -90,7 +90,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
       requestToken.setSecret("someSecret");
       requestToken.setValue("someToken"); 
       MockHttpServletRequest request = new MockHttpServletRequest();
-      Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
+      Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
@@ -105,7 +105,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
       requestToken.setSecret("someSecret");
       requestToken.setValue("someToken"); 
       MockHttpServletRequest request = new MockHttpServletRequest();
-      Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");
+      Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
@@ -121,7 +121,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
         accessToken.setValue("twitterToken"); 
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        Authentication authentication = new TestingAuthenticationToken(createAccount(), "plano");        
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");        
         request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", accessToken);
         
         // Token should be available before remove
@@ -136,8 +136,12 @@ public class OAuthConsumerTokenServicesAdapterTest {
         assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
     }
     
-	private Account createAccount() {
-		return new Account(1L, "Craig", "Walls", "craig@habuma.com", "habuma", "file://pic.jpg");
+	private Account testAccount() {
+		return new Account(1L, "Craig", "Walls", "craig@habuma.com", "habuma", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{profileKey}"));
 	}
+	
+    private Account testAccount2() {
+    	return new Account(2L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{profileKey}"));
+    }
 	
 }

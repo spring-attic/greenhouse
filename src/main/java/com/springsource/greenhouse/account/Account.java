@@ -2,6 +2,8 @@ package com.springsource.greenhouse.account;
 
 import java.io.Serializable;
 
+import org.springframework.web.util.UriTemplate;
+
 @SuppressWarnings("serial")
 public class Account implements Serializable {
 	
@@ -15,15 +17,18 @@ public class Account implements Serializable {
 	
 	private final String username;
 	
-	private final String profilePictureUrl;
+	private final String pictureUrl;
 	
-	public Account(Long id, String firstName, String lastName, String email, String username, String profilePictureUrl) {
+	private final UriTemplate profileUrlTemplate;
+	
+	public Account(Long id, String firstName, String lastName, String email, String username, String pictureUrl, UriTemplate profileUrlTemplate) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.username = username;
-		this.profilePictureUrl = profilePictureUrl;
+		this.pictureUrl = pictureUrl;
+		this.profileUrlTemplate = profileUrlTemplate;
 	}
 	
 	public Long getId() {
@@ -50,16 +55,20 @@ public class Account implements Serializable {
 		return username;
 	}
 	
-	public String getProfileKey() {
-		return username != null ? username : id.toString(); 
+	public String getPictureUrl() {
+		return pictureUrl;
 	}
-	
-	public String getProfilePictureUrl() {
-		return profilePictureUrl;
+
+	public String getProfileUrl() {
+		return profileUrlTemplate.expand(profileId()).toString();
 	}
 	
 	public Account makeUsername(String username) {
-		return new Account(id, firstName, lastName, email, username, profilePictureUrl);
+		return new Account(id, firstName, lastName, email, username, pictureUrl, profileUrlTemplate);
 	}
 
+	private String profileId() {
+		return username != null ? username : id.toString(); 
+	}
+	
 }

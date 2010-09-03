@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.springsource.greenhouse.account.Account;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriTemplate;
 
 public class AccountExposingHandlerInterceptorTest {
 	
@@ -24,7 +25,7 @@ public class AccountExposingHandlerInterceptorTest {
     @Before
     public void setup() {
         interceptor = new AccountExposingHandlerInterceptor();
-        account = new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg");
+        account = new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{profileKey}"));
         TestingAuthenticationToken authentication = new TestingAuthenticationToken(account, "password");
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

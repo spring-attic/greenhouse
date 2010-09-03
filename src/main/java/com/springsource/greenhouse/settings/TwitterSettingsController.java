@@ -17,7 +17,7 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
-import com.springsource.greenhouse.account.ProfileUrlUtils;
+import com.springsource.greenhouse.account.PictureUrlFactory;
 
 @Controller
 @RequestMapping("/settings/twitter")
@@ -62,7 +62,7 @@ public class TwitterSettingsController {
 			
 			if (request.getParameter("tweetIt") != null) {
 				// TODO should this be done asynchronously?
-				twitterService.tweet("Join me at the Greenhouse! " + ProfileUrlUtils.url(account));
+				twitterService.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
 		}

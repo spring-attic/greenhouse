@@ -1,6 +1,9 @@
 package com.springsource.greenhouse.oauth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,9 +16,11 @@ import org.springframework.security.oauth.provider.token.OAuthAccessProviderToke
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 import org.springframework.security.password.NoOpPasswordEncoder;
 import org.springframework.security.password.PasswordEncoder;
+import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
+import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcOAuthProviderTokenServicesTest {
@@ -29,7 +34,7 @@ public class JdbcOAuthProviderTokenServicesTest {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
     	JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
 		PasswordEncoder passwordEncoder = new NoOpPasswordEncoder();
-		JdbcAccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, passwordEncoder);
+		JdbcAccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, passwordEncoder, new StubFileStorage(), new UriTemplate("http://localhost:8080/members/{id}").toString());
     	tokenServices = new JdbcOAuthProviderTokenServices(jdbcTemplate, accountRepository);
     }
     
@@ -58,7 +63,7 @@ public class JdbcOAuthProviderTokenServicesTest {
     	assertEquals(token.getCallbackUrl(), token2.getCallbackUrl());
     	assertEquals(token.getVerifier(), token.getVerifier());
     	
-    	Authentication auth = new TestingAuthenticationToken(new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg"), "atlanta");
+    	Authentication auth = new TestingAuthenticationToken(testAccount(), "atlanta");
     	tokenServices.authorizeRequestToken(token.getValue(), "12345", auth);
 
     	OAuthProviderToken token3 = tokenServices.getToken(token.getValue());
@@ -112,7 +117,7 @@ public class JdbcOAuthProviderTokenServicesTest {
         assertEquals(token.getCallbackUrl(), token2.getCallbackUrl());
         assertEquals(token.getVerifier(), token.getVerifier());
         
-        Authentication auth = new TestingAuthenticationToken(new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg"), "atlanta");
+        Authentication auth = new TestingAuthenticationToken(testAccount(), "atlanta");
         tokenServices.authorizeRequestToken(token.getValue(), "12345", auth);
 
         OAuthProviderToken token3 = tokenServices.getToken(token.getValue());
@@ -186,5 +191,9 @@ public class JdbcOAuthProviderTokenServicesTest {
     	account = (Account) accessToken2.getUserAuthentication().getPrincipal();
     	assertEquals(1L, (Object) account.getId());
     	assertEquals("OAuth", accessToken2.getUserAuthentication().getCredentials());
+    }
+    
+    private Account testAccount() {
+    	return new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{profileKey}"));
     }
 }

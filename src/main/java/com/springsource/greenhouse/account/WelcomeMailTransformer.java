@@ -30,7 +30,7 @@ public class WelcomeMailTransformer {
 		StringTemplate textTemplate;
 		textTemplate = templateFactory.getStringTemplate(welcomeTemplate);
 		textTemplate.put("firstName", account.getFirstName());
-		textTemplate.put("profileKey", account.getProfileKey());
+		textTemplate.put("profileUrl", account.getProfileUrl());
 		mailMessage.setText(textTemplate.render());
 		return mailMessage;
 	}

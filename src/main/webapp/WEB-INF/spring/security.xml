@@ -31,7 +31,12 @@
 
 	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.account.UsernamePasswordAuthenticationProvider" />
 
-	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
+	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository">
+		<beans:constructor-arg ref="jdbcTemplate" />
+		<beans:constructor-arg ref="passwordEncoder" />
+		<beans:constructor-arg ref="pictureStorage" />
+		<beans:constructor-arg value="${application.url}/members/{profileKey}" />		
+	</beans:bean>
 	
 	<greenhouse:environment-bean id="passwordEncoder">
 		<greenhouse:when environment="embedded">
