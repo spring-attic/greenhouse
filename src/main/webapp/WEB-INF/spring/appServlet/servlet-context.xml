@@ -25,8 +25,10 @@
 		<beans:bean class="com.springsource.greenhouse.home.UserLocationHandlerInterceptor" />
 		<beans:bean class="com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor" />
 		<beans:bean class="com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor" />
-		<beans:bean class="org.springframework.mobile.DeviceDetectingHandlerInterceptor">
-			<beans:constructor-arg ref="wurflManager" />
+		<beans:bean class="org.springframework.mobile.mvc.DeviceResolvingHandlerInterceptor">
+			<beans:constructor-arg>
+				<beans:bean class="org.springframework.mobile.config.DeviceResolverFactoryBean" />
+			</beans:constructor-arg>
 		</beans:bean>
 	</interceptors>
 		
@@ -46,9 +48,6 @@
 		<beans:property name="checkRefresh" value="true" />
 	</beans:bean>
 	
-	<!-- Configures WURFL for detecting mobile device capabilities -->
-	<beans:bean id="wurflManager" class="org.springframework.mobile.WURFLManagerFactoryBean" />
-
 	<!-- Configures File Upload -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="500000" />

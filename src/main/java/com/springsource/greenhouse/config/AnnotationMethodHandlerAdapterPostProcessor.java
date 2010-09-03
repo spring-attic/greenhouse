@@ -6,7 +6,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
-import org.springframework.mobile.DeviceWebArgumentResolver;
+import org.springframework.mobile.mvc.DeviceWebArgumentResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;

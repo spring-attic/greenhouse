@@ -2,7 +2,7 @@ package com.springsource.greenhouse.oauth;
 
 import javax.inject.Inject;
 
-import org.springframework.mobile.DeviceModel;
+import org.springframework.mobile.Device;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
@@ -27,7 +27,7 @@ public class ConfirmAccessController {
 
 	@RequestMapping(value="/oauth/confirm_access", method=RequestMethod.GET)
 	protected String confirmAccessForm(@RequestParam(value="oauth_token", required=true) String oauthToken,
-			@RequestParam(value="oauth_callback", required = false) String callback, DeviceModel device, Model model)  {
+			@RequestParam(value="oauth_callback", required = false) String callback, Device device, Model model)  {
 		ConsumerDetails consumer = consumerDetailsService.loadConsumerByConsumerKey(tokenServices.getToken(oauthToken).getConsumerKey());
 		model.addAttribute("oauth_token", oauthToken);
 		if (callback != null) {

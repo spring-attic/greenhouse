@@ -259,13 +259,6 @@
 			<version>1.5.3</version>
 		</dependency>
 
-		<!-- WURFL -->
-		<dependency>
-			<groupId>net.sourceforge.wurfl</groupId>
-			<artifactId>wurfl</artifactId>
-			<version>1.0.1</version>
-		</dependency>
-		
 		<!-- File Upload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
