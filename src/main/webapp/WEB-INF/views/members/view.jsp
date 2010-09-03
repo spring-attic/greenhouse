@@ -27,5 +27,5 @@
 	
 </div>
 
-<s:eval expression="@facebookApiProvider.apiKey" var="apiKey" />
+<s:eval expression="@facebookProvider.apiKey" var="apiKey" />
 <facebook:init apiKey="${apiKey}" />
