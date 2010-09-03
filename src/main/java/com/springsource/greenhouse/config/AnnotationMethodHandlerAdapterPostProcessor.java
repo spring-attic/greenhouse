@@ -3,6 +3,7 @@ package com.springsource.greenhouse.config;
 import javax.inject.Inject;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
 import org.springframework.mobile.DeviceWebArgumentResolver;
@@ -24,8 +25,9 @@ import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
 public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProcessor {
 
 	private final OAuthConsumerTokenServicesFactory oauthTokenFactory;
-	
-	private final String facebookAppKey = "21aa96c8bc23259d0dd2ab99e496c306";
+
+	@Value("#{facebookProvider.apiKey}")
+	private String facebookAppKey;
 	
 	@Inject
 	public AnnotationMethodHandlerAdapterPostProcessor(OAuthConsumerTokenServicesFactory oauthTokenFactory) {
