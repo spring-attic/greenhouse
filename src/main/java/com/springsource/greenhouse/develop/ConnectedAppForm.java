@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.develop;
 
-public class AppRegistrationForm {
+public class ConnectedAppForm {
 	
 	private String name;
 	
