@@ -6,8 +6,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
-import com.springsource.greenhouse.account.Account;
 import org.springframework.social.oauth.AccessTokenServices;
+
+import com.springsource.greenhouse.account.Account;
 
 /**
  * Implementation of SS-OAuth's session-oriented
@@ -25,7 +26,7 @@ import org.springframework.social.oauth.AccessTokenServices;
 public class OAuthConsumerTokenServicesAdapter extends HttpSessionBasedTokenServices {
 	private Account account;
 	private HttpSession session;
-	private AccessTokenServices accessTokenServices;
+	private AccessTokenServices<OAuthConsumerToken> accessTokenServices;
 
 	public OAuthConsumerTokenServicesAdapter(HttpSession session, AccessTokenServices accessTokenServices,
 			Account account) {
