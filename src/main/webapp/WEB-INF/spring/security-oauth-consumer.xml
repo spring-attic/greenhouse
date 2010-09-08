@@ -28,7 +28,7 @@
 	<!-- Twitter Client API -->
 	<beans:bean id="twitter" class="org.springframework.social.twitter.TwitterTemplate">
 		<beans:constructor-arg>
-			<beans:bean class="org.springframework.social.oauth.SSOAuth1EnabledRestTemplateFactory">
+			<beans:bean class="org.springframework.social.oauth1.SSOAuth1EnabledRestTemplateFactory">
 				<beans:constructor-arg value="Twitter" />
 			</beans:bean>
 		</beans:constructor-arg>

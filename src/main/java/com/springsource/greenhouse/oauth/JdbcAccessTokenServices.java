@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
-import org.springframework.social.oauth.SSOAuthAccessTokenServices;
+import org.springframework.social.oauth1.SSOAuthAccessTokenServices;
 
 import com.springsource.greenhouse.account.Account;
 
