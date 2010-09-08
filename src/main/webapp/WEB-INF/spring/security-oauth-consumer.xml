@@ -26,7 +26,7 @@
 	</beans:bean>
 	
 	<!-- Twitter Client API -->
-	<beans:bean id="oauthTemplate" class="org.springframework.social.oauth.OAuthSpringSecurityOAuthTemplate">
+	<beans:bean id="oauth1RequestAuthorizer" class="org.springframework.social.oauth.SSOAuthClientRequestAuthorizer">
 		<beans:constructor-arg ref="oauthConsumerSupport" />
 		<beans:constructor-arg>
 			<beans:bean factory-bean="resourceDetails" factory-method="loadProtectedResourceDetailsById">
@@ -35,7 +35,6 @@
 		</beans:constructor-arg>
 		<beans:constructor-arg ref="accessTokenService" />
 	</beans:bean>
-	<beans:bean id="oauth1RequestAuthorizer" class="org.springframework.social.oauth.OAuth1ClientRequestAuthorizer" autowire="constructor" />
 
 	<beans:bean id="oauthRestTemplate" class="org.springframework.social.oauth.OAuthEnabledRestTemplate" autowire="constructor" />	
 	<beans:bean id="twitter" class="org.springframework.social.twitter.TwitterTemplate" autowire="constructor"  />
