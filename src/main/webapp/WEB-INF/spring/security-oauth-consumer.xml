@@ -35,7 +35,8 @@
 		</beans:constructor-arg>
 		<beans:constructor-arg ref="accessTokenService" />
 	</beans:bean>
-	<beans:bean id="oauth1RequestDecorotor" class="org.springframework.social.oauth.OAuth1ClientRequestAuthorizer" autowire="constructor" />
+	<beans:bean id="oauth1RequestAuthorizer" class="org.springframework.social.oauth.OAuth1ClientRequestAuthorizer" autowire="constructor" />
+
 	<beans:bean id="oauthRestTemplate" class="org.springframework.social.oauth.OAuthEnabledRestTemplate" autowire="constructor" />	
 	<beans:bean id="twitter" class="org.springframework.social.twitter.TwitterTemplate" autowire="constructor"  />
 
