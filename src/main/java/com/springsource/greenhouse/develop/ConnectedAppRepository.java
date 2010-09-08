@@ -8,6 +8,13 @@ public interface ConnectedAppRepository {
 
 	ConnectedApp findConnectedApp(Long accountId, String slug);
 	
-	String createConnectedApp(ConnectedAppForm form);
+	String updateConnectedApp(Long accountId, String slug, ConnectedAppForm form);
+
+	void deleteConnectedApp(Long accountId, String slug);
+
+	ConnectedAppForm getNewAppForm();
 	
+	ConnectedAppForm getAppForm(Long accountId, String slug);
+
+	String createConnectedApp(ConnectedAppForm form);
 }
