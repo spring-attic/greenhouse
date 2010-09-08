@@ -26,18 +26,13 @@
 	</beans:bean>
 	
 	<!-- Twitter Client API -->
-	<beans:bean id="oauth1RequestAuthorizer" class="org.springframework.social.oauth.SSOAuthClientRequestAuthorizer">
-		<beans:constructor-arg ref="oauthConsumerSupport" />
+	<beans:bean id="twitter" class="org.springframework.social.twitter.TwitterTemplate">
 		<beans:constructor-arg>
-			<beans:bean factory-bean="resourceDetails" factory-method="loadProtectedResourceDetailsById">
+			<beans:bean class="org.springframework.social.oauth.SSOAuth1EnabledRestTemplateFactory">
 				<beans:constructor-arg value="Twitter" />
 			</beans:bean>
 		</beans:constructor-arg>
-		<beans:constructor-arg ref="accessTokenService" />
 	</beans:bean>
-
-	<beans:bean id="oauthRestTemplate" class="org.springframework.social.oauth.OAuthEnabledRestTemplate" autowire="constructor" />	
-	<beans:bean id="twitter" class="org.springframework.social.twitter.TwitterTemplate" autowire="constructor"  />
 
 	<!-- Facebook Client API -->
 	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate" />
