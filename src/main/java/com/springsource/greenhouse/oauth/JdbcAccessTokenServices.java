@@ -9,11 +9,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
-import org.springframework.social.oauth.AccessTokenServices;
+import org.springframework.social.oauth1.SSOAuthAccessTokenServices;
 
 import com.springsource.greenhouse.account.Account;
 
-public class JdbcAccessTokenServices implements AccessTokenServices {
+public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
 
 	static final String SELECT_TOKEN_SQL = "select provider, accessToken, secret from ConnectedAccount where member = ? and provider = ?";
     static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (member, provider, accessToken, secret) values (?, ?, ?, ?)";

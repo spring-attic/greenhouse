@@ -26,16 +26,10 @@
 	</beans:bean>
 	
 	<!-- Twitter Client API -->
-	<beans:bean id="twitterService" class="org.springframework.social.twitter.TwitterTemplate">
+	<beans:bean id="twitter" class="org.springframework.social.twitter.TwitterTemplate">
 		<beans:constructor-arg>
-			<beans:bean class="org.springframework.social.oauth.OAuthSpringSecurityOAuthTemplate">
+			<beans:bean class="org.springframework.social.oauth1.SSOAuth1EnabledRestTemplateFactory">
 				<beans:constructor-arg value="Twitter" />
-				<!-- TODO: I don't like how I have to know the name of the consumer support bean. Considering
-				having this implementation of OAuthTemplate be ApplicationContextAware and have it seek out the
-				consumer support bean. -->
-				<beans:constructor-arg ref="oauthConsumerSupport" />
-				<beans:constructor-arg ref="resourceDetails" />
-				<beans:constructor-arg ref="accessTokenService" />
 			</beans:bean>
 		</beans:constructor-arg>
 	</beans:bean>
