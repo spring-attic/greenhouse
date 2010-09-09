@@ -33,9 +33,10 @@
 		</greenhouse:otherwise>
 	</greenhouse:environment-bean>
 
-	<bean id="s3Operations" class="org.springframework.s3.S3OperationsImpl">
+	<bean id="pictureStorage" class="org.springframework.data.S3FileStorage">
 		<constructor-arg value="${s3.accessKey}" />
 		<constructor-arg value="${s3.secretKey}" />
+		<constructor-arg value="images.greenhouse.springsource.org" />
 	</bean>
 				
 </beans>

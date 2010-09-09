@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ImageUtils {
+	
 	public static byte[] scaleImageToWidth(byte[] originalBytes, int scaledWidth) throws IOException {
 		BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(originalBytes));
 		int originalWidth = originalImage.getWidth();
@@ -24,4 +25,5 @@ public class ImageUtils {
 		ImageIO.write(scaledImage, "jpeg", byteStream);
 		return byteStream.toByteArray();
 	}
+	
 }

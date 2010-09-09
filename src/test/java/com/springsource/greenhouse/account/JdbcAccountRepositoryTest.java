@@ -14,18 +14,11 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.AccountAlreadyConnectedException;
-import org.springframework.social.account.ConnectedAccountNotFoundException;
-import org.springframework.social.account.EmailAlreadyOnFileException;
-import org.springframework.social.account.Gender;
-import org.springframework.social.account.InvalidPasswordException;
-import org.springframework.social.account.NoOpPasswordEncoder;
-import org.springframework.social.account.Person;
-import org.springframework.social.account.UsernameNotFoundException;
+import org.springframework.security.password.NoOpPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -40,7 +33,7 @@ public class JdbcAccountRepositoryTest {
     public void setup() {
     	db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
     	jdbcTemplate = new JdbcTemplate(db);
-    	accountRepository = new JdbcAccountRepository(jdbcTemplate, new NoOpPasswordEncoder());
+    	accountRepository = new JdbcAccountRepository(jdbcTemplate, new NoOpPasswordEncoder(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
     }
     
 	@After
@@ -61,8 +54,8 @@ public class JdbcAccountRepositoryTest {
     	assertEquals(3L, (long) account.getId());
     	assertEquals("Jack Black", account.getFullName());
     	assertEquals("jack@black.com", account.getEmail());
-    	assertEquals("3", account.getProfileKey());
-    	assertEquals("http://images.greenhouse.springsource.org/profile-pics/male/small.jpg", account.getProfilePictureUrl());
+    	assertEquals("http://localhost:8080/members/3", account.getProfileUrl());
+    	assertEquals("http://localhost:8080/resources/profile-pics/male/small.jpg", account.getPictureUrl());
     	
     	tm.rollback(txStatus);
     }
@@ -163,7 +156,7 @@ public class JdbcAccountRepositoryTest {
     	assertEquals("Craig Walls", account.getFullName());
     	assertEquals("cwalls@vmware.com", account.getEmail());
     	assertEquals("habuma", account.getUsername());
-    	assertEquals("habuma", account.getProfileKey());
-    	assertEquals("http://images.greenhouse.springsource.org/profile-pics/male/small.jpg", account.getProfilePictureUrl());
+    	assertEquals("http://localhost:8080/members/habuma", account.getProfileUrl());
+    	assertEquals("http://localhost:8080/resources/profile-pics/male/small.jpg", account.getPictureUrl());
     }
 }

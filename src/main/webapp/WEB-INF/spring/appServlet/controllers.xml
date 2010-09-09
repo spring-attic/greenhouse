@@ -9,8 +9,20 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<!-- Scan for web application components to deploy -->
-	<context:component-scan base-package="com.springsource.greenhouse" />
-
+	<context:component-scan base-package="com.springsource.greenhouse.home" />
+	<context:component-scan base-package="com.springsource.greenhouse.signin" />
+	<context:component-scan base-package="com.springsource.greenhouse.signup" />
+	<context:component-scan base-package="com.springsource.greenhouse.settings" />
+	<context:component-scan base-package="com.springsource.greenhouse.reset" />
+	<context:component-scan base-package="com.springsource.greenhouse.members" />
+	<context:component-scan base-package="com.springsource.greenhouse.invite" />
+	<context:component-scan base-package="com.springsource.greenhouse.events" />
+	<context:component-scan base-package="com.springsource.greenhouse.recent" />	
+	<context:component-scan base-package="com.springsource.greenhouse.develop" />
+	
+	<!-- TODO: belongs implemented in a generic fashion and deployed automatically in security-oauth-provider.xml -->
+	<bean class="com.springsource.greenhouse.oauth.ConfirmAccessController" />
+	
 	<!-- Configurable properties TODO: this is also loaded in the root-context.xml; can we load just once instead? See GREENHOUSE-308 -->
 	<context:property-placeholder location="classpath:application.properties" />   	
 	 

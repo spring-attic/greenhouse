@@ -3,29 +3,31 @@ package com.springsource.greenhouse.config;
 import javax.inject.Inject;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
-import org.springframework.mobile.DeviceWebArgumentResolver;
+import org.springframework.mobile.mvc.DeviceWebArgumentResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerAccessTokenWebArgumentResolver;
-import org.springframework.social.account.Account;
 import org.springframework.social.facebook.FacebookWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
-import com.springsource.greenhouse.UserLocationHandlerInterceptor;
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.Location;
+import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
 
 // TODO - see SPR-7327: it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter
 // support in Spring MVC namespace should be added for that (this would go away then)
 public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProcessor {
 
 	private final OAuthConsumerTokenServicesFactory oauthTokenFactory;
-	
-	private final String facebookAppKey = "8f007e7ce33d82dc2f5485102b3504c2";
+
+	@Value("#{facebookProvider.apiKey}")
+	private String facebookAppKey;
 	
 	@Inject
 	public AnnotationMethodHandlerAdapterPostProcessor(OAuthConsumerTokenServicesFactory oauthTokenFactory) {

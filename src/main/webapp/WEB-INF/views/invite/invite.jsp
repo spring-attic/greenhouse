@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
+<%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
 <div class="header">
 	<h2>Invite friends to the Greenhouse</h2>
@@ -23,5 +24,5 @@
 	</li>
 </ul>
 
-<div id="fb-root"></div>	
-
+<s:eval expression="@facebookProvider.apiKey" var="apiKey" />
+<facebook:init apiKey="${apiKey}" />

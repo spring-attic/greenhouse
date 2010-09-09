@@ -5,12 +5,13 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.social.account.Account;
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import com.springsource.greenhouse.UserLocationHandlerInterceptor;
 
 public class JdbcActionRepository implements ActionRepository {
 

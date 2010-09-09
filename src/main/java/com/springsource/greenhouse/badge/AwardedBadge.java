@@ -1,7 +1,7 @@
 package com.springsource.greenhouse.badge;
 
 import org.joda.time.DateTime;
-import org.springframework.social.account.Account;
+import com.springsource.greenhouse.account.Account;
 
 import com.springsource.greenhouse.action.Action;
 

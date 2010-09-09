@@ -6,10 +6,7 @@
 		<a href="<c:url value="/signin" />">Sign In</a>
 	</c:if>
 	<c:if test="${account != null}">
-		<s:url var="profileUrl" value="/members/{profileKey}">
-			<s:param name="profileKey" value="${account.profileKey}" />
-		</s:url>
-		<a href="${profileUrl}"><c:out value="${account.firstName}" escapeXml="true"/></a> | <a href="<c:url value="/invite" />">Invite</a> | <a href="<c:url value="/events" />">Events</a> | <a href="<c:url value="/settings" />">Settings</a> | <a href="<c:url value="/signout" />">Sign Out</a>
+		<a href="${account.profileUrl}"><c:out value="${account.firstName}" escapeXml="true"/></a> | <a href="<c:url value="/invite" />">Invite</a> | <a href="<c:url value="/events" />">Events</a> | <a href="<c:url value="/settings" />">Settings</a> | <a href="<c:url value="/signout" />">Sign Out</a>
 	</c:if>
 </div>
 <h1>

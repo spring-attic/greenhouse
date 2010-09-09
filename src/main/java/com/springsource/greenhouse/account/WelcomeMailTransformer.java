@@ -7,7 +7,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.integration.annotation.Transformer;
 import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.social.account.Account;
 import org.springframework.templating.StringTemplate;
 import org.springframework.templating.StringTemplateFactory;
 
@@ -31,7 +30,7 @@ public class WelcomeMailTransformer {
 		StringTemplate textTemplate;
 		textTemplate = templateFactory.getStringTemplate(welcomeTemplate);
 		textTemplate.put("firstName", account.getFirstName());
-		textTemplate.put("profileKey", account.getProfileKey());
+		textTemplate.put("profileUrl", account.getProfileUrl());
 		mailMessage.setText(textTemplate.render());
 		return mailMessage;
 	}

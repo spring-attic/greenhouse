@@ -5,8 +5,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
-import org.springframework.social.account.Gender;
-import org.springframework.social.account.Person;
+
+import com.springsource.greenhouse.account.Gender;
+import com.springsource.greenhouse.account.Person;
 
 public class SignupForm {
 	

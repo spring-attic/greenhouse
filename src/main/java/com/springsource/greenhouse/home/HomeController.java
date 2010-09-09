@@ -1,4 +1,4 @@
-package com.springsource.greenhouse;
+package com.springsource.greenhouse.home;
 
 import java.security.Principal;
 

@@ -11,8 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.social.account.Account;
+import com.springsource.greenhouse.account.Account;
 import org.springframework.ui.ExtendedModelMap;
+import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -41,7 +42,7 @@ public class SettingsControllerTest {
     @Test
     public void settingsPage() {
     	ExtendedModelMap model = new ExtendedModelMap();
-    	controller.settingsPage(new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg"), model);
+    	controller.settingsPage(testAccount(), model);
     	List<Map<String, Object>> apps = (List<Map<String, Object>>) model.get("apps");
     	assertNotNull(apps);   
     	assertEquals(1, apps.size());
@@ -51,8 +52,11 @@ public class SettingsControllerTest {
     
     @Test
     public void disconnectApp() {
-    	assertEquals("redirect:/settings", controller.disconnectApp("authme", new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg")));
+    	assertEquals("redirect:/settings", controller.disconnectApp("authme", testAccount()));
     	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp"));
     }
 	
+    private Account testAccount() {
+    	return new Account(1L, "Joe", "Schmoe", "joe@schmoe.com", "joe", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{profileKey}"));
+    }
 }

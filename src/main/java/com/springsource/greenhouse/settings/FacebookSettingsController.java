@@ -1,13 +1,11 @@
 package com.springsource.greenhouse.settings;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.AccountAlreadyConnectedException;
-import org.springframework.social.account.AccountRepository;
-import org.springframework.social.account.ProfileUrlUtils;
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookLink;
 import org.springframework.social.facebook.FacebookOperations;
@@ -18,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
-import com.springsource.greenhouse.members.ProfilePictureException;
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountAlreadyConnectedException;
+import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
 @Controller
@@ -67,7 +67,7 @@ public class FacebookSettingsController {
 
 	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account, String accessToken) {
 		facebook.postToWall(accessToken, "Join me at the Greenhouse!", 
-			new FacebookLink(ProfileUrlUtils.url(account), "Greenhouse", "Where Spring developers hang out.", 
+			new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.", 
 					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
     }
 	
@@ -82,7 +82,7 @@ public class FacebookSettingsController {
 	        byte[] imageBytes = facebook.getProfilePicture(accessToken);	        
 	        profilePictureService.saveProfilePicture(account.getId(), imageBytes);
 	        accountRepository.markProfilePictureSet(account.getId());
-		} catch (ProfilePictureException e) {
+		} catch (IOException e) {
 			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
 		}
 	}

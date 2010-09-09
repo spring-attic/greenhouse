@@ -6,37 +6,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.AccountAlreadyConnectedException;
-import org.springframework.social.account.AccountMapper;
-import org.springframework.social.account.AccountRepository;
-import org.springframework.social.account.ConnectedAccountNotFoundException;
-import org.springframework.social.account.EmailAlreadyOnFileException;
-import org.springframework.social.account.EmailUtils;
-import org.springframework.social.account.InvalidPasswordException;
-import org.springframework.social.account.PasswordEncoder;
-import org.springframework.social.account.Person;
-import org.springframework.social.account.PictureSize;
-import org.springframework.social.account.ProfileUrlUtils;
-import org.springframework.social.account.UsernameNotFoundException;
+import org.springframework.security.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriTemplate;
 
+import com.springsource.greenhouse.utils.EmailUtils;
+
+@Repository
 public class JdbcAccountRepository implements AccountRepository {
 	
 	private final JdbcTemplate jdbcTemplate;
 	
-	private final AccountMapper accountMapper = new AccountMapper();
-	
 	private final PasswordEncoder passwordEncoder;
 
-	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
+	private final PictureUrlFactory pictureUrlFactory;
+	
+	private final UriTemplate profileUrlTemplate;
+
+	private final AccountMapper accountMapper;
+	
+	@Autowired
+	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, FileStorage pictureStorage, String profileUrlTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.passwordEncoder = passwordEncoder;
+		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
+		this.profileUrlTemplate = new UriTemplate(profileUrlTemplate);
+		this.accountMapper = new AccountMapper(new PictureUrlMapper(pictureUrlFactory, PictureSize.small), this.profileUrlTemplate);
 	}
 
 	@Transactional
@@ -45,7 +48,8 @@ public class JdbcAccountRepository implements AccountRepository {
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password, gender, birthdate) values (?, ?, ?, ?, ?, ?)",
 					person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()), person.getGender().code(), person.getBirthdate().toString());
 			Long accountId = jdbcTemplate.queryForLong("call identity()");
-			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail(), null, ProfileUrlUtils.defaultPictureUrl(person.getGender(), PictureSize.small));
+			String pictureUrl = pictureUrlFactory.defaultPictureUrl(person.getGender(), PictureSize.small);
+			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail(), null, pictureUrl, profileUrlTemplate);
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
 		}
@@ -89,10 +93,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", provider);
 		params.put("friendIds", friendIds);
-		// TODO compare performance of this subquery to join
-		//private static final String SELECT_FRIEND_ACCOUNTS = 
-	    //		"select m.id, m.firstName, m.lastName, m.email, m.username, m.gender, m.pictureSet from ConnectedAccount a " + 
-		//	"inner join Member m on a.member = m.id where provider = :provider and accountId in ( :friendIds )";
 		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from ConnectedAccount where provider = :provider and accountId in ( :friendIds )) ", params, accountMapper);
 	}
 
@@ -127,9 +127,6 @@ public class JdbcAccountRepository implements AccountRepository {
 	}
 	
 	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {
-		
-		private RowMapper<Account> accountMapper = new AccountMapper();	
-
 		public PasswordProtectedAccount mapRow(ResultSet rs, int row) throws SQLException {
 			Account account = accountMapper.mapRow(rs, row);
 			return new PasswordProtectedAccount(account, rs.getString("password"));

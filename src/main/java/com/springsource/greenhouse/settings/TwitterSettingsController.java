@@ -8,15 +8,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerTokenServicesHelper;
-import org.springframework.social.account.Account;
-import org.springframework.social.account.AccountRepository;
-import org.springframework.social.account.AccountUtils;
-import org.springframework.social.account.ProfileUrlUtils;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
+
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.AccountUtils;
+import com.springsource.greenhouse.account.PictureUrlFactory;
 
 @Controller
 @RequestMapping("/settings/twitter")
@@ -61,7 +62,7 @@ public class TwitterSettingsController {
 			
 			if (request.getParameter("tweetIt") != null) {
 				// TODO should this be done asynchronously?
-				twitterService.tweet("Join me at the Greenhouse! " + ProfileUrlUtils.url(account));
+				twitterService.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
 		}
