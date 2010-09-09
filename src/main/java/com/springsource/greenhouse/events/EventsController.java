@@ -9,6 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.social.core.ForbiddenSocialOperationException;
+import org.springframework.social.core.SocialException;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -55,15 +57,13 @@ public class EventsController {
 
 	@RequestMapping(value = "/{id}/tweets", method = RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation) {
-		twitter.tweet(status);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		return postTweet(status);
 	}
 	
 	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
-		twitter.retweet(tweetId);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		return postRetweet(tweetId);
 	}
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -99,15 +99,13 @@ public class EventsController {
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long id, @PathVariable Short number,
 			@RequestParam String status, Location currentLocation) {
-		twitter.tweet(status);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		return postTweet(status);
 	}
 	
 	@RequestMapping(value="/{id}/sessions/{number}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
-		twitter.retweet(tweetId);
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		return postRetweet(tweetId);
 	}
 	
 	// for web browser (HTML) clients
@@ -118,4 +116,27 @@ public class EventsController {
 		return "events/list";
 	}
 	
+	// Common tweet/reweet methods
+	private ResponseEntity<String> postTweet(String status) {
+		try {
+			twitter.tweet(status);
+			return new ResponseEntity<String>((String) null, HttpStatus.OK);
+		} catch (ForbiddenSocialOperationException e) {
+			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
+		} catch (SocialException e) {
+			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	private ResponseEntity<String> postRetweet(Long tweetId) {
+		try {
+			twitter.retweet(tweetId);
+		} catch (ForbiddenSocialOperationException e) {
+			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
+		} catch (SocialException e) {
+			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<String>((String) null, HttpStatus.OK);
+	}
+
 }
