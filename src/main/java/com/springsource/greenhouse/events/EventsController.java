@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.social.core.ForbiddenSocialOperationException;
 import org.springframework.social.core.SocialException;
+import org.springframework.social.core.SocialSecurityException;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -123,6 +124,8 @@ public class EventsController {
 			return new ResponseEntity<String>((String) null, HttpStatus.OK);
 		} catch (ForbiddenSocialOperationException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
+		} catch (SocialSecurityException e) {
+			return new ResponseEntity<String>((String) null, HttpStatus.PRECONDITION_FAILED);
 		} catch (SocialException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -133,6 +136,8 @@ public class EventsController {
 			twitter.retweet(tweetId);
 		} catch (ForbiddenSocialOperationException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
+		} catch (SocialSecurityException e) {
+			return new ResponseEntity<String>((String) null, HttpStatus.PRECONDITION_FAILED);
 		} catch (SocialException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
