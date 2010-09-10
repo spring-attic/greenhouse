@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
-import org.springframework.security.encrypt.StandardStringEncryptor;
 import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.stereotype.Repository;
 
