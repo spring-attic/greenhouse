@@ -1,9 +1,11 @@
 create table App (consumerKey varchar,
 				name varchar not null unique, 
 				description varchar not null,
-				website varchar not null unique,
+				organization varchar,
+				website varchar,
 				callbackUrl varchar,
-				secret varchar not null,
+				secret varchar not null unique,
+				slug varchar not null unique,
 				owner bigint not null,
 				primary key (consumerKey),
 				foreign key (owner) references Member(id));

@@ -12,6 +12,9 @@ public class SlugUtils {
 	  private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
 
 	  public static String toSlug(String input) {
+		if (input == null) {
+			throw new IllegalArgumentException("Input cannot be null");
+		}
 	    String nowhitespace = WHITESPACE.matcher(input).replaceAll("-");
 	    String normalized = Normalizer.normalize(nowhitespace, Form.NFD);
 	    String slug = NONLATIN.matcher(normalized).replaceAll("");

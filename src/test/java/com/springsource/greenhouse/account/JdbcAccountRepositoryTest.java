@@ -14,11 +14,10 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.security.password.NoOpPasswordEncoder;
+import org.springframework.security.encrypt.NoOpPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 

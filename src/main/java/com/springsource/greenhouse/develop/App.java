@@ -1,8 +1,8 @@
 package com.springsource.greenhouse.develop;
 
-public class ConnectedApp {
+public class App {
 	
-	private final ConnectedAppSummary summary;
+	private final AppSummary summary;
 
 	private final String apiKey;
 	
@@ -10,14 +10,14 @@ public class ConnectedApp {
 	
 	private final String callbackUrl;
 
-	public ConnectedApp(ConnectedAppSummary summary, String apiKey, String secret, String callbackUrl) {
+	public App(AppSummary summary, String apiKey, String secret, String callbackUrl) {
 		this.summary = summary;
 		this.apiKey = apiKey;
 		this.secret = secret;
 		this.callbackUrl = callbackUrl;
 	}
 
-	public ConnectedAppSummary getSummary() {
+	public AppSummary getSummary() {
 		return summary;
 	}
 

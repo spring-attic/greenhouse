@@ -1,4 +1,4 @@
-package org.springframework.security.password;
+package org.springframework.security.encrypt;
 
 public class NoOpPasswordEncoder implements PasswordEncoder {
 

@@ -12,10 +12,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.encrypt.NoOpPasswordEncoder;
+import org.springframework.security.encrypt.PasswordEncoder;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
-import org.springframework.security.password.NoOpPasswordEncoder;
-import org.springframework.security.password.PasswordEncoder;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;

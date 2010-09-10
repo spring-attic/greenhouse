@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.develop;
 
-public class ConnectedAppSummary {
+public class AppSummary {
 	
 	private final String name;
 	
@@ -10,7 +10,7 @@ public class ConnectedAppSummary {
 
 	private final String slug;
 	
-	public ConnectedAppSummary(String name, String iconUrl, String description, String slug) {
+	public AppSummary(String name, String iconUrl, String description, String slug) {
 		this.name = name;
 		this.iconUrl = iconUrl;
 		this.description = description;
