@@ -39,7 +39,7 @@ public class JdbcAppRepository implements AppRepository {
 
 	public String updateApp(Long accountId, String slug, AppForm form) {
 		String newSlug = createSlug(form.getName());
-		jdbcTemplate.update(UPDATE_APP_FORM, appMapper, accountId, slug);
+		jdbcTemplate.update(UPDATE_APP_FORM, form.getName(), form.getDescription(), form.getOrganization(), form.getWebsite(), form.getCallbackUrl(), newSlug, accountId, slug);
 		return newSlug;
 	}
 
@@ -71,9 +71,9 @@ public class JdbcAppRepository implements AppRepository {
 
 	private static final String SELECT_APP = "select name, description, slug, consumerKey, secret, callbackUrl from App where owner = ? and slug = ?";
 
-	private static final String SELECT_APP_FORM = "select name, description, organization, website, callbackUrl, slug, from App where member = ? and slug = ?";
+	private static final String SELECT_APP_FORM = "select name, description, organization, website, callbackUrl from App where owner = ? and slug = ?";
 
-	private static final String UPDATE_APP_FORM = "update App set name = ?, description = ?, organization = ?, website = ?, callbackUrl = ?, slug = ? where member = ? and slug = ?";
+	private static final String UPDATE_APP_FORM = "update App set name = ?, description = ?, organization = ?, website = ?, callbackUrl = ?, slug = ? where owner = ? and slug = ?";
 
 	private static final String DELETE_APP = "delete from App where owner = ? and slug = ?";
 

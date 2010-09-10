@@ -1,6 +1,7 @@
 package com.springsource.greenhouse.develop;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.StandardStringEncryptor;
+import org.springframework.security.encrypt.StringEncryptor;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -21,11 +23,13 @@ public class JdbcAppRepositoryTest {
 
 	private JdbcTemplate jdbcTemplate;
 
+	private StringEncryptor encryptor = new StandardStringEncryptor("PBEWithMD5AndDES", "secret");
+	
     @Before
     public void setup() {
     	db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
     	jdbcTemplate = new JdbcTemplate(db);
-    	appRepository = new JdbcAppRepository(jdbcTemplate, new StandardStringEncryptor("PBEWithMD5AndDES", "secret"));
+    	appRepository = new JdbcAppRepository(jdbcTemplate, encryptor);
     }
     
 	@After
@@ -57,7 +61,16 @@ public class JdbcAppRepositoryTest {
     public void noAppSummaries() {
     	assertEquals(0, appRepository.findAppSummaries(1L).size());
     }
-      
+
+    @Test
+    public void findApp() {
+    	App app = appRepository.findApp(3L, "greenhouse-for-the-iphone");
+    	assertEquals("Greenhouse for the iPhone", app.getSummary().getName());
+    	assertEquals("123456789", app.getApiKey());
+    	assertNotNull("987654321", app.getSecret());
+    	assertEquals("x-com-springsource-greenhouse://oauth-response", app.getCallbackUrl());
+    }
+    
     @Test
     public void createApp() {
     	AppForm form = new AppForm();
@@ -68,7 +81,27 @@ public class JdbcAppRepositoryTest {
     	
     	App app = appRepository.findApp(1L, slug);
     	assertEquals("My App", app.getSummary().getName());
+    	assertNotNull(app.getApiKey());
+    	assertNotNull(app.getSecret());
     	assertEquals(null, app.getCallbackUrl());
+    }
+
+    @Test
+    public void updateApp() {
+    	AppForm form = appRepository.getAppForm(2L, "greenhouse-for-facebook");
+    	form.setName("Greenhouse for Twitter");
+    	form.setWebsite("http://www.twitter.com");
+    	String slug = appRepository.updateApp(2L, "greenhouse-for-facebook", form);
+    	assertEquals("greenhouse-for-twitter", slug);
+    	form = appRepository.getAppForm(2L, "greenhouse-for-twitter");
+    	assertEquals("Greenhouse for Twitter", form.getName());
+    	assertEquals("http://www.twitter.com", form.getWebsite());
+     }
+
+    @Test
+    public void deleteApp() {
+    	appRepository.deleteApp(2L, "greenhouse-for-facebook");
+    	assertEquals(0, appRepository.findAppSummaries(2L).size());
     }
 
 }
