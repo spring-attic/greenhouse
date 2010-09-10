@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class StandardPasswordEncoder implements PasswordEncoder {
 
-	private ByteDigester digester;
+	private Digester digester;
 
 	private byte[] secret;
 
@@ -19,7 +19,7 @@ public class StandardPasswordEncoder implements PasswordEncoder {
 	private int saltLength = 8;
 
 	public StandardPasswordEncoder(String algorithm, String secret) {
-		this.digester = new ByteDigester(algorithm);
+		this.digester = new Digester(algorithm);
 		this.secret = utf8Encode(secret);
 	}
 
