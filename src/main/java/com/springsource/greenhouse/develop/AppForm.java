@@ -6,9 +6,9 @@ public class AppForm {
 	
 	private String description;
 	
-	private String website;
-	
 	private String organization;
+
+	private String website;
 	
 	private String callbackUrl;
 
@@ -28,20 +28,20 @@ public class AppForm {
 		this.description = description;
 	}
 
-	public String getWebsite() {
-		return website;
-	}
-
-	public void setWebsite(String website) {
-		this.website = website;
-	}
-
 	public String getOrganization() {
 		return organization;
 	}
 
 	public void setOrganization(String organization) {
 		this.organization = organization;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 
 	public String getCallbackUrl() {
