@@ -32,7 +32,7 @@ public class JdbcAccountRepositoryTest {
     public void setup() {
     	db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
     	jdbcTemplate = new JdbcTemplate(db);
-    	accountRepository = new JdbcAccountRepository(jdbcTemplate, new NoOpPasswordEncoder(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+    	accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
     }
     
 	@After

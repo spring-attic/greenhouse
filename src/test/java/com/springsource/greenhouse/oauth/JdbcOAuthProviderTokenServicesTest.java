@@ -33,7 +33,7 @@ public class JdbcOAuthProviderTokenServicesTest {
     public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
     	JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
-		PasswordEncoder passwordEncoder = new NoOpPasswordEncoder();
+		PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 		JdbcAccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, passwordEncoder, new StubFileStorage(), new UriTemplate("http://localhost:8080/members/{id}").toString());
     	tokenServices = new JdbcOAuthProviderTokenServices(jdbcTemplate, accountRepository);
     }

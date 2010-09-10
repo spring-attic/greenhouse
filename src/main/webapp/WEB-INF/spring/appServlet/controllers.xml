@@ -18,7 +18,8 @@
 	<context:component-scan base-package="com.springsource.greenhouse.invite" />
 	<context:component-scan base-package="com.springsource.greenhouse.events" />
 	<context:component-scan base-package="com.springsource.greenhouse.recent" />	
-	
+	<context:component-scan base-package="com.springsource.greenhouse.develop" />
+		
 	<!-- TODO: belongs implemented in a generic fashion and deployed automatically in security-oauth-provider.xml -->
 	<bean class="com.springsource.greenhouse.oauth.ConfirmAccessController" />
 	
