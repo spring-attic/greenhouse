@@ -8,6 +8,7 @@ public class ChangePasswordForm {
 	
 	@NotEmpty
 	@Size(min=6)
+	// TODO confirmation constraint
 	private String password;
 
 	private String confirmPassword;
