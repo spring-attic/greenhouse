@@ -20,7 +20,7 @@ public class App {
 	public AppSummary getSummary() {
 		return summary;
 	}
-
+	
 	public String getApiKey() {
 		return apiKey;
 	}

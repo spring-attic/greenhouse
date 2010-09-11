@@ -1,9 +1,13 @@
 package com.springsource.greenhouse.develop;
 
+import javax.validation.constraints.NotNull;
+
 public class AppForm {
 	
+	@NotNull
 	private String name;
 	
+	@NotNull
 	private String description;
 	
 	private String organization;

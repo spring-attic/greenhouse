@@ -26,51 +26,49 @@ public class AppController {
 	}
 
 	@RequestMapping(method=RequestMethod.GET)
-	public List<AppSummary> appList(Account account) {
+	public List<AppSummary> list(Account account) {
 		return connectedAppRepository.findAppSummaries(account.getId());
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
-	public String createApp(@Valid AppForm form, BindingResult bindingResult, Account account) {
-		// TODO SPR-7539 push this check back into the framework code
+	public String create(@Valid AppForm form, BindingResult bindingResult, Account account) {
 		if (bindingResult.hasErrors()) {
-			return null;
+			return "develop/apps/new";
 		}
-		String slug = connectedAppRepository.createApp(account.getId(), form);
-		return "redirect:/develop/apps/" + slug;
+		return "redirect:/develop/apps/" + connectedAppRepository.createApp(account.getId(), form);
 	}
 	
 	@RequestMapping(value="/{slug}", method=RequestMethod.GET)
-	public String getAppView(@PathVariable String slug, Account account, Model model) {
-		App app = connectedAppRepository.findApp(account.getId(), slug);
-		model.addAttribute(app);
+	public String view(@PathVariable String slug, Account account, Model model) {
+		model.addAttribute(connectedAppRepository.findApp(account.getId(), slug));
+		model.addAttribute("slug", slug);
 		return "develop/apps/view";
 	}
 	
 	@RequestMapping(value="/{slug}", method=RequestMethod.DELETE)
-	public String deleteApp(@PathVariable String slug, Account account) {
+	public String delete(@PathVariable String slug, Account account) {
 		connectedAppRepository.deleteApp(account.getId(), slug);
 		return "redirect:/develop/apps";
 	}
 
-	@RequestMapping(value="/{slug}", method=RequestMethod.POST)
-	public String updateApp(@PathVariable String slug, @Valid AppForm form, BindingResult bindingResult, Account account) {
+	@RequestMapping(value="/{slug}", method=RequestMethod.PUT)
+	public String update(@PathVariable String slug, @Valid AppForm form, BindingResult bindingResult, Account account, Model model) {
 		if (bindingResult.hasErrors()) {
-			return null;
+			model.addAttribute("slug", slug);			
+			return "develop/apps/edit";
 		}
-		slug = connectedAppRepository.updateApp(account.getId(), slug, form);
-		return "redirect:/develop/apps/" + slug;
+		return "redirect:/develop/apps/" + connectedAppRepository.updateApp(account.getId(), slug, form);
 	}
 
 	@RequestMapping(value="/new", method=RequestMethod.GET)
-	public AppForm getNewAppForm() {
+	public AppForm newForm() {
 		return connectedAppRepository.getNewAppForm();
 	}
 
 	@RequestMapping(value="/edit/{slug}", method=RequestMethod.GET)
-	public String getEditAppForm(@PathVariable String slug, Account account, Model model) {
-		AppForm form = connectedAppRepository.getAppForm(account.getId(), slug);
-		model.addAttribute(form);		
+	public String editForm(@PathVariable String slug, Account account, Model model) {
+		model.addAttribute(connectedAppRepository.getAppForm(account.getId(), slug));
+		model.addAttribute("slug", slug);
 		return "develop/apps/edit";
 	}
 	

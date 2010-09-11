@@ -4,23 +4,19 @@
 <tiles-definitions>
 
 	<definition name="develop/apps" extends="standard">
-		<put-attribute name="content" value="develop/apps/list" />
+		<put-attribute name="content" value="/WEB-INF/views/develop/apps/list.jsp" />
  	</definition>
 
 	<definition name="develop/apps/new" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/develop/apps/form.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/develop/apps/new.jsp" />
 	</definition>
 
 	<definition name="develop/apps/edit" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/develop/apps/form.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/develop/apps/edit.jsp" />
 	</definition>
 	
 	<definition name="develop/apps/view" extends="standard">
 		<put-attribute name="content" value="/WEB-INF/views/develop/apps/view.jsp" />
-	</definition>
-	
-	<definition name="develop/apps/list" template="/WEB-INF/views/develop/apps/list.jsp">
-		<put-attribute name="appSummary" value="/WEB-INF/views/develop/apps/appSummary.jsp" />
 	</definition>
 	
 </tiles-definitions>

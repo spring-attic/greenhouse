@@ -2,6 +2,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib tagdir="/WEB-INF/tags/develop/apps" prefix="apps" %>
 
+<h2>App Settings</h2>
+
 <apps:summary value="${app.summary}" />
 
 <dl>
@@ -11,11 +13,11 @@
 	<dd>${app.secret}</dd>
 </dl>
 
-<form id="deleteApp" action="<c:url value="/develop/apps/${app.summary.slug}" />" method="post">
+<form id="deleteApp" action="<c:url value="/develop/apps/${slug}" />" method="post">
 	<input type="hidden" name="_method" value="DELETE" />
-	<button>Delete</button>
+	<p><button type="submit">Delete</button></p>
 </form>
 
 <ul>
-	<li><a href="<c:url value="/develop/apps/edit/${app.summary.slug}" />">Edit details</a></li>
+	<li><a href="<c:url value="/develop/apps/edit/${slug}" />">Edit details</a></li>
 </ul>
