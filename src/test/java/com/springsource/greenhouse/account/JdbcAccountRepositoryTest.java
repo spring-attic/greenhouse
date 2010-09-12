@@ -10,18 +10,18 @@ import java.util.List;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.NoOpPasswordEncoder;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.test.transaction.TransactionalMethodRule;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountRepositoryTest {
+	
 	private EmbeddedDatabase db;
 	
 	private JdbcAccountRepository accountRepository;
@@ -41,13 +41,10 @@ public class JdbcAccountRepositoryTest {
 			db.shutdown();
 		}
 	}
-    
+
     @Test
+    @Transactional
     public void create() throws EmailAlreadyOnFileException {
-    	// TODO support @Transactional without requiring container XML
-    	PlatformTransactionManager tm = new DataSourceTransactionManager(db);
-    	TransactionStatus txStatus = tm.getTransaction(new DefaultTransactionDefinition());
-    	
     	Person person = new Person("Jack", "Black", "jack@black.com", "foobie", Gender.Male, new LocalDate(1977, 12, 1));
     	Account account = accountRepository.createAccount(person);
     	assertEquals(3L, (long) account.getId());
@@ -55,8 +52,6 @@ public class JdbcAccountRepositoryTest {
     	assertEquals("jack@black.com", account.getEmail());
     	assertEquals("http://localhost:8080/members/3", account.getProfileUrl());
     	assertEquals("http://localhost:8080/resources/profile-pics/male/small.jpg", account.getPictureUrl());
-    	
-    	tm.rollback(txStatus);
     }
     
     @Test
@@ -158,4 +153,8 @@ public class JdbcAccountRepositoryTest {
     	assertEquals("http://localhost:8080/members/habuma", account.getProfileUrl());
     	assertEquals("http://localhost:8080/resources/profile-pics/male/small.jpg", account.getPictureUrl());
     }
+	
+	@Rule
+	public TransactionalMethodRule transactional = new TransactionalMethodRule();
+
 }

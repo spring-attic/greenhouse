@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -29,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 
-
 @Transactional
 public class JdbcOAuthProviderTokenServices implements OAuthProviderTokenServices {
 	
@@ -52,58 +50,50 @@ public class JdbcOAuthProviderTokenServices implements OAuthProviderTokenService
 	    token.setSecret(generateSecret());	    
 	    token.setCallbackUrl(callbackUrl);
 	    token.setTimestamp(System.currentTimeMillis());
-	    jdbcTemplate.update("insert into OAuthToken (tokenValue, app, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)", token.getValue(), token.getConsumerKey(), token.getSecret(), token.getCallbackUrl(), token.getTimestamp());
+	    // TODO save to an in-memory store instead
+	    // jdbcTemplate.update("insert into OAuthToken (tokenValue, app, secret, callbackUrl, updateTimestamp) values (?, ?, ?, ?, ?)", token.getValue(), token.getConsumerKey(), token.getSecret(), token.getCallbackUrl(), token.getTimestamp());
 		return token;
 	}
 
 	public void authorizeRequestToken(String requestToken, String verifier, Authentication authentication) throws AuthenticationException {
 		Account account = (Account) authentication.getPrincipal();
-		jdbcTemplate.update("update OAuthToken set member = ?, verifier = ?, updateTimestamp = ? where tokenValue = ?", account.getId(), verifier, System.currentTimeMillis(), requestToken);
+		// TODO update in-memory store instead
+		// jdbcTemplate.update("update OAuthToken set member = ?, verifier = ?, updateTimestamp = ? where tokenValue = ?", account.getId(), verifier, System.currentTimeMillis(), requestToken);
 	}
 	
 	public OAuthAccessProviderToken createAccessToken(String requestToken) throws AuthenticationException {
-		Map<String, Object> row = jdbcTemplate.queryForMap("select app, member from OAuthToken where tokenValue = ?", requestToken);	
-		jdbcTemplate.update("delete from OAuthToken where tokenValue = ?", requestToken);
+		// TODO delete from inmemory store instead
+		//Map<String, Object> row = jdbcTemplate.queryForMap("select app, member from OAuthToken where tokenValue = ?", requestToken);	
+		//jdbcTemplate.update("delete from OAuthToken where tokenValue = ?", requestToken);
 		OAuthProviderTokenImpl token = new OAuthProviderTokenImpl();
 	    token.setValue(UUID.randomUUID().toString());
 	    token.setAccessToken(true);
-	    token.setConsumerKey((String) row.get("app"));
+	    //token.setConsumerKey(authToken.getConsumerKey());
 	    token.setSecret(generateSecret());
-	    jdbcTemplate.update("delete from ConnectedApp where app = ? and member = ?", token.getConsumerKey(), row.get("member"));	    
-	    jdbcTemplate.update("insert into ConnectedApp (accessToken, app, member, secret) values (?, ?, ?, ?)", token.getValue(), token.getConsumerKey(), row.get("member"), token.getSecret());
+	    // todo make compile
+	    //Long accountId = ((Account)authToken.getAuthentication().getPrincipal()).getId();
+	    //jdbcTemplate.update("delete from ConnectedApp where member = ? and app = ?", token.getConsumerKey(), accountId);	    
+	    //jdbcTemplate.update("insert into ConnectedApp (member, app, accessToken, secret) values (?, ?, ?, ?)", appId, row.get("member"), token.getValue(), token.getSecret());
 		return token;
 	}	
 	
 	public OAuthProviderToken getToken(final String token) throws AuthenticationException {
-		if (jdbcTemplate.queryForInt("select count(*) from OAuthToken where tokenValue = ?", token) == 1) {
-			return jdbcTemplate.queryForObject("select app, secret, callbackUrl, updateTimestamp, verifier from OAuthToken where tokenValue = ?", new RowMapper<OAuthProviderToken>() {
+		// TODO check inmemory store for oauth token first
+		try {
+			// todo push this code back into a repository decoupled from spring security oauth
+			return jdbcTemplate.queryForObject("select c.member, c.secret a.apiKey, from ConnectedApp c inner join App a on c.app = a.id where accessToken = ?", new RowMapper<OAuthProviderToken>() {
 				public OAuthProviderToken mapRow(ResultSet rs, int rowNum) throws SQLException {
 					OAuthProviderTokenImpl holder = new OAuthProviderTokenImpl();
 					holder.setValue(token);
+					holder.setAccessToken(true);
 					holder.setConsumerKey(rs.getString("app"));
+					holder.setUserAuthentication(createUserAuthentication(rs.getLong("member")));
 					holder.setSecret(rs.getString("secret"));
-					holder.setCallbackUrl(rs.getString("callbackUrl"));
-					holder.setTimestamp(rs.getLong("updateTimestamp"));
-					holder.setVerifier(rs.getString("verifier"));
 					return holder;
 				}
 			}, token);
-		} else {
-			try {
-				return jdbcTemplate.queryForObject("select app, member, secret from ConnectedApp where accessToken = ?", new RowMapper<OAuthProviderToken>() {
-					public OAuthProviderToken mapRow(ResultSet rs, int rowNum) throws SQLException {
-						OAuthProviderTokenImpl holder = new OAuthProviderTokenImpl();
-						holder.setValue(token);
-						holder.setAccessToken(true);
-						holder.setConsumerKey(rs.getString("app"));
-						holder.setUserAuthentication(createUserAuthentication(rs.getLong("member")));
-						holder.setSecret(rs.getString("secret"));
-						return holder;
-					}
-				}, token);
-			} catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 				throw new InvalidOAuthTokenException("Access token '" + token + "' is not valid");
-			}
 		}
 	}
 	

@@ -7,11 +7,14 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.StandardStringEncryptor;
 import org.springframework.security.encrypt.StringEncryptor;
+import org.springframework.test.transaction.TransactionalMethodRule;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -24,7 +27,7 @@ public class JdbcAppRepositoryTest {
 	private JdbcTemplate jdbcTemplate;
 
 	private StringEncryptor encryptor = new StandardStringEncryptor("PBEWithMD5AndDES", "secret");
-	
+
     @Before
     public void setup() {
     	db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
@@ -72,6 +75,7 @@ public class JdbcAppRepositoryTest {
     }
     
     @Test
+    @Transactional
     public void createApp() {
     	AppForm form = new AppForm();
     	form.setName("My App");
@@ -104,5 +108,7 @@ public class JdbcAppRepositoryTest {
     	assertEquals(0, appRepository.findAppSummaries(2L).size());
     }
 
-}
+	@Rule
+	public TransactionalMethodRule transactional = new TransactionalMethodRule();
 
+}

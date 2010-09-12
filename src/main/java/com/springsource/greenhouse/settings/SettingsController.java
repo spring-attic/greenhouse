@@ -27,7 +27,7 @@ public class SettingsController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public void settingsPage(Account account, Model model) {
-		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select c.name as name, ac.accessToken from ConnectedApp ac, App c where ac.member = ? and ac.app = c.consumerKey", account.getId());
+		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select a.name as name, c.accessToken from ConnectedApp c, App a where c.member = ? and c.app = a.id", account.getId());
 		model.addAttribute("apps", apps);
 	}
 	
