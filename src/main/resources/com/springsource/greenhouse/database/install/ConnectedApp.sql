@@ -21,4 +21,4 @@ create table ConnectedApp (app varchar,
 					secret varchar not null,
 					primary key (app, member),
 					foreign key (member) references Member(id),
-					foreign key (app) references App(id));
+					foreign key (app) references App(id) on delete cascade);

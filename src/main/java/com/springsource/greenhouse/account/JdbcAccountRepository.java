@@ -79,7 +79,18 @@ public class JdbcAccountRepository implements AccountRepository {
 		}
 	}
 
-	// TODO handle case where accessToken is invalid
+	public void markProfilePictureSet(Long id) {
+		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
+	}
+
+	public void connectAccount(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException {
+		try {
+			jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
+		} catch (DuplicateKeyException e) {
+			throw new AccountAlreadyConnectedException(provider, accountId);
+		}
+	}
+
 	public Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException {
 		try {
 			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from ConnectedAccount where provider = ? and accessToken = ?)", accountMapper, provider, accessToken);
@@ -88,6 +99,14 @@ public class JdbcAccountRepository implements AccountRepository {
 		}
 	}
 	
+	public boolean hasConnectedAccount(Long id, String provider) {
+		return jdbcTemplate.queryForInt(SELECT_CONNECTION_COUNT, id, provider) == 1;		
+	}
+
+	public void disconnectAccount(Long id, String provider) {
+		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, provider);
+	}
+
 	public List<Account> findFriendAccounts(String provider, List<String> friendIds) {
 		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
@@ -95,25 +114,15 @@ public class JdbcAccountRepository implements AccountRepository {
 		params.put("friendIds", friendIds);
 		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from ConnectedAccount where provider = :provider and accountId in ( :friendIds )) ", params, accountMapper);
 	}
-
-	public void connect(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException {
-		try {
-			jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
-		} catch (DuplicateKeyException e) {
-			throw new AccountAlreadyConnectedException(provider, accountId);
-		}
-	}
-
-	public boolean isConnected(Long id, String provider) {
-		return jdbcTemplate.queryForInt(SELECT_CONNECTION_COUNT, id, provider) == 1;		
-	}
-
-	public void disconnect(Long id, String provider) {
-		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, provider);
-	}
 	
-	public void markProfilePictureSet(Long id) {
-		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
+	public ConnectedApp connectApp(Long accountId, String apiKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ConnectedApp findConnectedApp(String accessToken) throws ConnectedAppNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	// internal helpers

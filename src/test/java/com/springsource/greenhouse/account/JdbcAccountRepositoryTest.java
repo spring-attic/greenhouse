@@ -110,32 +110,32 @@ public class JdbcAccountRepositoryTest {
     @Test
     public void disconnectAccount() {
     	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
-    	accountRepository.disconnect(1L, "facebook");
+    	accountRepository.disconnectAccount(1L, "facebook");
     	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
     }
     
     @Test
     public void connectAccount() throws Exception {
     	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
-    	accountRepository.connect(1L, "tripit", "accessToken", "cwalls");
+    	accountRepository.connectAccount(1L, "tripit", "accessToken", "cwalls");
     	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
     	assertExpectedAccount(accountRepository.findByConnectedAccount("tripit", "accessToken"));
     }
 
     @Test(expected=AccountAlreadyConnectedException.class)
     public void accountAlreadyConnected() throws Exception {
-    	accountRepository.connect(1L, "facebook", "accessToken", "cwalls");
+    	accountRepository.connectAccount(1L, "facebook", "accessToken", "cwalls");
     }
 
     
     @Test
     public void isConnected() {
-    	assertTrue(accountRepository.isConnected(1L, "facebook"));
+    	assertTrue(accountRepository.hasConnectedAccount(1L, "facebook"));
     }
 
     @Test
     public void notConnected() {
-    	assertFalse(accountRepository.isConnected(1L, "tripit"));
+    	assertFalse(accountRepository.hasConnectedAccount(1L, "tripit"));
     }
     
     @Test

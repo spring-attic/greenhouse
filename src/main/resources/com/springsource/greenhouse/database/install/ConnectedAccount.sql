@@ -13,6 +13,6 @@ create table ConnectedAccount (member bigint,
 					secret varchar, 
 					primary key (member, provider),
 					foreign key (member) references Member(id),
-					foreign key (provider) references AccountProvider(name));
+					foreign key (provider) references AccountProvider(name) on delete cascade);
 create unique index AccessTokenKey on ConnectedAccount(provider, accessToken);
 create unique index ProviderAccountKey on ConnectedAccount(provider, accountId);

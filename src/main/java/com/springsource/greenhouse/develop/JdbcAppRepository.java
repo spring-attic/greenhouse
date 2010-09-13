@@ -22,7 +22,7 @@ public class JdbcAppRepository implements AppRepository {
 	
 	private StringEncryptor encryptor;
 	
-	private SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator("SHA1PRNG");
+	private SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator();
 
 	@Inject
 	public JdbcAppRepository(JdbcTemplate jdbcTemplate, StringEncryptor encryptor) {

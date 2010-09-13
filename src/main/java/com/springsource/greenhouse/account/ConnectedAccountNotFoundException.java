@@ -6,7 +6,7 @@ public final class ConnectedAccountNotFoundException extends AccountException {
 	private final String provider;
 	
 	public ConnectedAccountNotFoundException(String provider) {
-		super("connected account not found");
+		super("account not connected to provider " + provider);
 		this.provider = provider;
 	}
 

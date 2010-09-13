@@ -10,22 +10,30 @@ public interface AccountRepository {
 
 	void changePassword(Long accountId, String password);
 	
-	Account findById(Long id);
+	Account findById(Long accountId);
 
 	Account findByUsername(String username) throws UsernameNotFoundException;
 
-	void markProfilePictureSet(Long id);
+	void markProfilePictureSet(Long accountId);
 
 	// connected account operations
 	
-	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException; // TODO exception case where accessToken is invalid
+	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException;
 
-	List<Account> findFriendAccounts(String provider, List<String> friendIds);
+	// TODO should we allow the user to connect again and overwrite previous connection details?
+	void connectAccount(Long accountId, String provider, String accessToken, String providerAccountId) throws AccountAlreadyConnectedException;
+
+	boolean hasConnectedAccount(Long accountId, String provider);
+
+	void disconnectAccount(Long accountId, String provider);
+
+	List<Account> findFriendAccounts(String provider, List<String> providerFriendAccountIds);
 	
-	void connect(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException;
+	// connected app operations
+	
+	ConnectedApp connectApp(Long accountId, String apiKey);
 
-	boolean isConnected(Long id, String provider);
+	// TODO - we would like to pass in apiKey here but unfortunately Spring Security OAuth does not make it available where this method is delegated to
+	ConnectedApp findConnectedApp(String accessToken) throws ConnectedAppNotFoundException;
 
-	void disconnect(Long id, String provider);
-		
 }

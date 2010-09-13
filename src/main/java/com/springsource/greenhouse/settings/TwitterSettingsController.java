@@ -42,7 +42,7 @@ public class TwitterSettingsController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public String connectView(Account account) {
-		if (accountRepository.isConnected(account.getId(), TWITTER_PROVIDER)) {
+		if (accountRepository.hasConnectedAccount(account.getId(), TWITTER_PROVIDER)) {
 			return "settings/twitterConnected";
 		} else {
 			return "settings/twitterConnect";

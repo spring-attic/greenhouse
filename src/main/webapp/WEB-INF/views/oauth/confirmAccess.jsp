@@ -7,10 +7,7 @@
 <c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION" />
 <h2>Grant access</h2>
 
-<p>I grant "${consumer.consumerName}" access to the following resource:</p>
-<ul>
-	<li>${consumer.resourceName} - ${consumer.resourceDescription}</li>
-</ul>
+<p>The application <b>${consumer.consumerName}</b> would like the ability to read and update your data on Greenhouse.</p>
 
 <spring:url value="/oauth/authorize" var="authorize_url" />
 <form action="${authorize_url}" method="post">
