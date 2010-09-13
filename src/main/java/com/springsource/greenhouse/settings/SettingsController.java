@@ -27,13 +27,13 @@ public class SettingsController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public void settingsPage(Account account, Model model) {
-		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select a.name as name, c.accessToken from ConnectedApp c, App a where c.member = ? and c.app = a.id", account.getId());
+		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select a.name as name, c.accessToken from AppConnection c, App a where c.member = ? and c.app = a.id", account.getId());
 		model.addAttribute("apps", apps);
 	}
 	
 	@RequestMapping(value="/apps/{accessToken}", method=RequestMethod.DELETE)
 	public String disconnectApp(@PathVariable String accessToken, Account account) {
-		jdbcTemplate.update("delete from ConnectedApp where accessToken = ? and member = ?", accessToken, account.getId());
+		jdbcTemplate.update("delete from AppConnection where accessToken = ? and member = ?", accessToken, account.getId());
 		return "redirect:/settings";
 	}
 }

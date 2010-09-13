@@ -1,10 +1,10 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Collections;
 import java.util.List;
@@ -103,9 +103,9 @@ public class JdbcAccountRepositoryTest {
     
     @Test
     public void connectAccount() throws Exception {
-    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
+    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'tripit'"));
     	accountRepository.connectAccount(1L, "tripit", "accessToken", "cwalls");
-    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
+    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'tripit'"));
     	assertExpectedAccount(accountRepository.findByAccountConnection("tripit", "accessToken"));
     }
 
@@ -126,9 +126,9 @@ public class JdbcAccountRepositoryTest {
 
     @Test
     public void disconnectAccount() {
-    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
+    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'facebook'"));
     	accountRepository.disconnectAccount(1L, "facebook");
-    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
+    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'facebook'"));
     }
     
     @Test
