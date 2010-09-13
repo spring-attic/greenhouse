@@ -25,9 +25,9 @@
 
 	<!-- TODO AwardedBadge Mail Notifier -->
 	
-	
 	<!-- RECENT ACTIVITY -->
-	<transformer input-channel="actionChannel" output-channel="recentActivity" ref="recentActivityTransformer" />	
+	<transformer input-channel="actionChannel" output-channel="recentActivity" ref="recentActivityTransformer" />
+		
 	<transformer input-channel="awardedBadgeChannel" output-channel="recentActivity" ref="recentActivityTransformer" />
 	
 	<beans:bean id="recentActivityTransformer" class="com.springsource.greenhouse.recent.RecentActivityTransformer" />

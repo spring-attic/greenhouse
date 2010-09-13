@@ -43,7 +43,6 @@
 		</greenhouse:when>
 		<greenhouse:otherwise>
 			<beans:bean class="org.springframework.security.encrypt.StandardPasswordEncoder">
-				<beans:constructor-arg value="${security.encodeAlgorithm}" />
 				<beans:constructor-arg value="${security.encodeSecret}" />
 			</beans:bean>
 		</greenhouse:otherwise>
@@ -55,7 +54,6 @@
 		</greenhouse:when>
 		<greenhouse:otherwise>
 			<beans:bean class="org.springframework.security.encrypt.StandardStringEncryptor">
-				<beans:constructor-arg value="${security.encryptAlgorithm}" />
 				<beans:constructor-arg value="${security.encryptSecret}" />
 			</beans:bean>
 		</greenhouse:otherwise>
