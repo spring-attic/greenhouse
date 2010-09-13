@@ -3,7 +3,6 @@ package com.springsource.greenhouse.oauth.provider;
 import javax.inject.Inject;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.provider.token.InvalidOAuthTokenException;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
@@ -26,19 +25,19 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 		this.accountRepository = accountRepository;
 	}
 	
-	public OAuthProviderToken createUnauthorizedRequestToken(String consumerKey, String callbackUrl) throws AuthenticationException {
+	public OAuthProviderToken createUnauthorizedRequestToken(String consumerKey, String callbackUrl) {
 		return providerTokenFor(sessionManager.newOAuthSession(consumerKey, callbackUrl));
 	}
 
-	public void authorizeRequestToken(String requestToken, String verifier, Authentication authentication) throws AuthenticationException {
+	public void authorizeRequestToken(String requestToken, String verifier, Authentication authentication) {
 		sessionManager.authorizeRequestToken(requestToken, authentication, verifier);
 	}
 	
-	public OAuthAccessProviderToken createAccessToken(String requestToken) throws AuthenticationException {
+	public OAuthAccessProviderToken createAccessToken(String requestToken) {
 		return providerTokenFor(sessionManager.grantAccess(requestToken));
 	}
 
-	public OAuthProviderToken getToken(String tokenValue) throws AuthenticationException {
+	public OAuthProviderToken getToken(String tokenValue) {
 		OAuthSession session = sessionManager.getSession(tokenValue);
 		if (session != null) {
 			return providerTokenFor(session);
@@ -47,7 +46,7 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 			ConnectedApp connectedApp = accountRepository.findConnectedApp(tokenValue);
 			return providerTokenFor(connectedApp);			
 		} catch (ConnectedAppNotFoundException e) {
-			throw new InvalidOAuthTokenException("Could not find app connection for provided access token " + tokenValue);
+			throw new InvalidOAuthTokenException("Could not find OAuthSession or AppConnection for provided OAuth token " + tokenValue);
 		}
 	}
 	
