@@ -15,7 +15,7 @@ create table AppDeveloper (app bigint,
 				foreign key (app) references App(id) on delete cascade,				
 				foreign key (member) references Member(id));
 
-create table ConnectedApp (app varchar,
+create table AppConnection (app varchar,
 					member bigint,
 					accessToken varchar not null unique,					
 					secret varchar not null,

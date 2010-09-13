@@ -1,5 +1,6 @@
 package com.springsource.greenhouse.account;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -105,22 +106,22 @@ public class JdbcAccountRepositoryTest {
     	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
     	accountRepository.connectAccount(1L, "tripit", "accessToken", "cwalls");
     	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'tripit'"));
-    	assertExpectedAccount(accountRepository.findByConnectedAccount("tripit", "accessToken"));
+    	assertExpectedAccount(accountRepository.findByAccountConnection("tripit", "accessToken"));
     }
 
-    @Test(expected=AccountAlreadyConnectedException.class)
+    @Test(expected=AccountConnectionAlreadyExists.class)
     public void accountAlreadyConnected() throws Exception {
     	accountRepository.connectAccount(1L, "facebook", "accessToken", "cwalls");
     }
 
     @Test
     public void findConnectedAccount() throws Exception {
-    	assertExpectedAccount(accountRepository.findByConnectedAccount("facebook", "accesstoken"));
+    	assertExpectedAccount(accountRepository.findByAccountConnection("facebook", "accesstoken"));
     }
 
-    @Test(expected=ConnectedAccountNotFoundException.class)
+    @Test(expected=InvalidAccessTokenException.class)
     public void connectedAccountNotFound() throws Exception {
-    	accountRepository.findByConnectedAccount("badtoken", "facebook");
+    	accountRepository.findByAccountConnection("badtoken", "facebook");
     }
 
     @Test
@@ -139,21 +140,28 @@ public class JdbcAccountRepositoryTest {
         
     @Test
     public void isConnected() {
-    	assertTrue(accountRepository.hasConnectedAccount(1L, "facebook"));
+    	assertTrue(accountRepository.hasAccountConnection(1L, "facebook"));
     }
 
     @Test
     public void notConnected() {
-    	assertFalse(accountRepository.hasConnectedAccount(1L, "tripit"));
+    	assertFalse(accountRepository.hasAccountConnection(1L, "tripit"));
     }
     
     @Test
-    public void connectApp() throws InvalidApiKeyException {
-    	ConnectedApp app = accountRepository.connectApp(1L, "123456789");
-    	assertEquals("123456789", app.getApiKey());
-    	assertEquals((Long) 1L, app.getAccountId());
-    	assertNotNull(app.getAccessToken());
-    	assertNotNull(app.getSecret());
+    public void connectApp() throws InvalidApiKeyException, InvalidAccessTokenException {
+    	AppConnection connection = accountRepository.connectApp(1L, "123456789");
+    	assertEquals((Long) 1L, connection.getAccountId());
+    	assertEquals("123456789", connection.getApiKey());
+    	assertNotNull(connection.getAccessToken());
+    	assertNotNull(connection.getSecret());
+    	
+      	AppConnection connection2 = accountRepository.findAppConnection(connection.getAccessToken());
+      	assertEquals(connection.getAccountId(), connection2.getAccountId());
+      	assertEquals(connection.getApiKey(), connection2.getApiKey());
+      	assertEquals(connection.getAccessToken(), connection2.getAccessToken());
+      	assertEquals(connection.getSecret(), connection2.getSecret());
+
     }
 
     @Test(expected=InvalidApiKeyException.class)
@@ -162,12 +170,23 @@ public class JdbcAccountRepositoryTest {
     }
 
     @Test
-    public void findConnectedApp() throws ConnectedAppNotFoundException {
-    	ConnectedApp connection = accountRepository.findConnectedApp("234567890");
+    public void findConnectedApp() throws InvalidAccessTokenException {
+    	AppConnection connection = accountRepository.findAppConnection("234567890");
     	assertEquals((Long) 1L, connection.getAccountId());
     	assertEquals("123456789", connection.getApiKey());
     	assertEquals("234567890", connection.getAccessToken());
     	assertEquals("345678901", connection.getSecret());
+    }
+    
+    @Test
+    public void disconnectedApp() throws InvalidApiKeyException {
+    	AppConnection app = accountRepository.connectApp(1L, "123456789");    	
+    	accountRepository.disconnectApp(1L, app.getAccessToken());
+    	try {
+        	accountRepository.findAppConnection("123456789");
+    		fail("Should have failed");
+    	} catch (InvalidAccessTokenException e) {
+    	}
     }
 
 	private void assertExpectedAccount(Account account) {

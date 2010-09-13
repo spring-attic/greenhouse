@@ -1,7 +1,7 @@
 package com.springsource.greenhouse.account;
 
 @SuppressWarnings("serial")
-public class InvalidApiKeyException extends Exception {
+public class InvalidApiKeyException extends AccountException {
 
 	private String apiKey;
 	

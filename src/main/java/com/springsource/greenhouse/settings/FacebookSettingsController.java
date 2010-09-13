@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountAlreadyConnectedException;
+import com.springsource.greenhouse.account.AccountConnectionAlreadyExists;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
@@ -40,7 +40,7 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.GET)
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
-		if (accountRepository.hasConnectedAccount(account.getId(), FACEBOOK_PROVIDER)) {
+		if (accountRepository.hasAccountConnection(account.getId(), FACEBOOK_PROVIDER)) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "settings/facebookConnected";
 		} else {
@@ -59,7 +59,7 @@ public class FacebookSettingsController {
 				useFacebookProfilePicture(account, accessToken);
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
-		} catch (AccountAlreadyConnectedException e) {
+		} catch (AccountConnectionAlreadyExists e) {
 			FlashMap.setErrorMessage("Unable to connect: Your Facebook account is already connected to a Greenhouse account.");
 		}
 		return "redirect:/settings/facebook";			

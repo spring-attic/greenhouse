@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.ConnectedApp;
+import com.springsource.greenhouse.account.AppConnection;
 import com.springsource.greenhouse.account.InvalidApiKeyException;
 
 public class StandardOAuthSessionManager implements OAuthSessionManager {
@@ -46,13 +46,13 @@ public class StandardOAuthSessionManager implements OAuthSessionManager {
 		return session;
 	}
 
-	public ConnectedApp grantAccess(String requestToken) throws InvalidRequestTokenException {
+	public AppConnection grantAccess(String requestToken) throws InvalidRequestTokenException {
 		StandardOAuthSession session = getStandardSession(requestToken);
 		if (!session.authorized()) {
 			throw new IllegalStateException("OAuthSession is not yet authorized");
 		}
 		try {
-			ConnectedApp connection = accountRepository.connectApp(session.getAuthorizingAccountId(), session.getApiKey());
+			AppConnection connection = accountRepository.connectApp(session.getAuthorizingAccountId(), session.getApiKey());
 			sessions.remove(requestToken);
 			return connection;
 		} catch (InvalidApiKeyException e) {

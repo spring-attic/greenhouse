@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.account;
 
-public final class ConnectedApp {
+public final class AppConnection {
 
 	private final Long accountId;
 	
@@ -10,7 +10,7 @@ public final class ConnectedApp {
 	
 	private final String secret;
 	
-	public ConnectedApp(Long accountId, String apiKey, String accessToken, String secret) {
+	public AppConnection(Long accountId, String apiKey, String accessToken, String secret) {
 		this.accountId = accountId;
 		this.apiKey = apiKey;
 		this.accessToken = accessToken;

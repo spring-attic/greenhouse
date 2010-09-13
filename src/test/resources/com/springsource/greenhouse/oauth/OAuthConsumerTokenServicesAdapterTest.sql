@@ -3,4 +3,4 @@ insert into Member (firstName, lastName, email, password, username, gender, birt
 insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('twitter', 'whatev', 'secret', 'http://www.twitter.com', 'http://www.twitter.com', 'http://www.twitter.com');
 insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('myspace', 'whatev', 'secret', 'http://www.twitter.com', 'http://www.twitter.com', 'http://www.twitter.com');
 
-insert into ConnectedAccount (member, provider, accessToken, secret) values (1, 'twitter', 'twitterToken', 'twitterTokenSecret');
+insert into AccountConnection (member, provider, accessToken, secret) values (1, 'twitter', 'twitterToken', 'twitterTokenSecret');

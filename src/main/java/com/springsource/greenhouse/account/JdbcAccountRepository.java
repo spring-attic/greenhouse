@@ -90,28 +90,28 @@ public class JdbcAccountRepository implements AccountRepository {
 		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
 	}
 
-	public void connectAccount(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException {
+	public void connectAccount(Long id, String provider, String accessToken, String accountId) throws AccountConnectionAlreadyExists {
 		try {
-			jdbcTemplate.update(INSERT_CONNECTED_ACCOUNT, id, provider, accessToken, accountId);
+			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, id, provider, accessToken, accountId);
 		} catch (DuplicateKeyException e) {
-			throw new AccountAlreadyConnectedException(provider, accountId);
+			throw new AccountConnectionAlreadyExists(provider, accountId);
 		}
 	}
 
-	public Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException {
+	public Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException {
 		try {
-			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from ConnectedAccount where provider = ? and accessToken = ?)", accountMapper, provider, accessToken);
+			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)", accountMapper, provider, accessToken);
 		} catch (EmptyResultDataAccessException e) {
-			throw new ConnectedAccountNotFoundException(provider);
+			throw new InvalidAccessTokenException(accessToken);
 		}
 	}
 	
-	public boolean hasConnectedAccount(Long id, String provider) {
-		return jdbcTemplate.queryForInt(SELECT_CONNECTION_COUNT, id, provider) == 1;		
+	public boolean hasAccountConnection(Long id, String provider) {
+		return jdbcTemplate.queryForInt(SELECT_ACCOUNT_CONNECTION_COUNT, id, provider) == 1;		
 	}
 
 	public void disconnectAccount(Long id, String provider) {
-		jdbcTemplate.update(DELETE_CONNECTED_ACCOUNT, id, provider);
+		jdbcTemplate.update(DELETE_ACCOUNT_CONNECTION, id, provider);
 	}
 
 	public List<Account> findFriendAccounts(String provider, List<String> friendIds) {
@@ -119,11 +119,11 @@ public class JdbcAccountRepository implements AccountRepository {
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", provider);
 		params.put("friendIds", friendIds);
-		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from ConnectedAccount where provider = :provider and accountId in ( :friendIds )) ", params, accountMapper);
+		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :friendIds )) ", params, accountMapper);
 	}
 	
 	@Transactional
-	public ConnectedApp connectApp(Long accountId, String apiKey) throws InvalidApiKeyException {
+	public AppConnection connectApp(Long accountId, String apiKey) throws InvalidApiKeyException {
 		String accessToken = keyGenerator.generateKey();
 		String secret = keyGenerator.generateKey();
 		Long appId;
@@ -132,19 +132,27 @@ public class JdbcAccountRepository implements AccountRepository {
 		} catch (EmptyResultDataAccessException e) {
 			throw new InvalidApiKeyException(apiKey);
 		}
-		jdbcTemplate.update("delete from ConnectedApp where app = ? and member = ?", appId, accountId);		
-		jdbcTemplate.update("insert into ConnectedApp (app, member, accessToken, secret) values (?, ?, ?, ?)", appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
-		return new ConnectedApp(accountId, apiKey, accessToken, secret);
+		jdbcTemplate.update("delete from AppConnection where app = ? and member = ?", appId, accountId);		
+		jdbcTemplate.update("insert into AppConnection (app, member, accessToken, secret) values (?, ?, ?, ?)", appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
+		return new AppConnection(accountId, apiKey, accessToken, secret);
 	}
 
-	public ConnectedApp findConnectedApp(String accessToken) throws ConnectedAppNotFoundException {
-		return jdbcTemplate.queryForObject("select c.member, a.apiKey, c.accessToken, c.secret from ConnectedApp c inner join App a on c.app = a.id where c.accessToken = ?", new RowMapper<ConnectedApp>() {
-			public ConnectedApp mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new ConnectedApp(rs.getLong("member"), encryptor.decrypt(rs.getString("apiKey")), encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
-			}
-		}, encryptor.encrypt(accessToken));
+	public AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException {
+		try {
+			return jdbcTemplate.queryForObject("select c.member, a.apiKey, c.accessToken, c.secret from AppConnection c inner join App a on c.app = a.id where c.accessToken = ?", new RowMapper<AppConnection>() {
+				public AppConnection mapRow(ResultSet rs, int rowNum) throws SQLException {
+					return new AppConnection(rs.getLong("member"), encryptor.decrypt(rs.getString("apiKey")), encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
+				}
+			}, encryptor.encrypt(accessToken));
+		} catch (EmptyResultDataAccessException e) {
+			throw new InvalidAccessTokenException(accessToken);
+		}
 	}
 
+	public void disconnectApp(Long accountId, String accessToken) {
+		jdbcTemplate.update("delete from AppConnection where accessToken = ? and member = ?", accessToken, accountId);		
+	}
+	
 	// internal helpers
 	
 	private String accountQuery(String username) {
@@ -187,13 +195,13 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	private static final String SELECT_PASSWORD_PROTECTED_ACCOUNT = "select id, firstName, lastName, email, password, username, gender, pictureSet from Member";
 
-	private static final String INSERT_CONNECTED_ACCOUNT = 
-		"insert into ConnectedAccount (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
+	private static final String INSERT_ACCOUNT_CONNECTION = 
+		"insert into AccountConnection (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
 	
-	private static final String SELECT_CONNECTION_COUNT = 
-		"select count(*) from ConnectedAccount where member = ? and provider = ?";
+	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = 
+		"select count(*) from AccountConnection where member = ? and provider = ?";
 
-	private static final String DELETE_CONNECTED_ACCOUNT = 
-		"delete from ConnectedAccount where member = ? and provider = ?";
+	private static final String DELETE_ACCOUNT_CONNECTION = 
+		"delete from AccountConnection where member = ? and provider = ?";
 	
 }

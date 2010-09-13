@@ -16,24 +16,25 @@ public interface AccountRepository {
 
 	void markProfilePictureSet(Long accountId);
 
-	// connected account operations
+	// account connection operations
 	
-	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException;
+	// TODO should we allow the user to connect again and overwrite previous connection details? this would be consistent with connectApp but does it make sense?
+	void connectAccount(Long accountId, String provider, String accessToken, String providerAccountId) throws AccountConnectionAlreadyExists;
 
-	// TODO should we allow the user to connect again and overwrite previous connection details?
-	void connectAccount(Long accountId, String provider, String accessToken, String providerAccountId) throws AccountAlreadyConnectedException;
+	boolean hasAccountConnection(Long accountId, String provider);
 
-	boolean hasConnectedAccount(Long accountId, String provider);
+	Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException;
 
 	void disconnectAccount(Long accountId, String provider);
 
 	List<Account> findFriendAccounts(String provider, List<String> providerFriendAccountIds);
 	
-	// connected app operations
+	// app connection operations
 	
-	ConnectedApp connectApp(Long accountId, String apiKey) throws InvalidApiKeyException;
+	AppConnection connectApp(Long accountId, String apiKey) throws InvalidApiKeyException;
 
-	// TODO - we would like to pass in apiKey here but unfortunately Spring Security OAuth does not make it available where this method is delegated to
-	ConnectedApp findConnectedApp(String accessToken) throws ConnectedAppNotFoundException;
+	AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException;
+	
+	void disconnectApp(Long accountId, String accessToken);
 
 }

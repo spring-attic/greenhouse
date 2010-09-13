@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.oauth.provider;
 
-import com.springsource.greenhouse.account.ConnectedApp;
+import com.springsource.greenhouse.account.AppConnection;
 
 public interface OAuthSessionManager {
 	
@@ -10,6 +10,6 @@ public interface OAuthSessionManager {
 	
 	OAuthSession authorize(String requestToken, Long authorizingAccountId, String verifier) throws InvalidRequestTokenException;
 	
-	ConnectedApp grantAccess(String requestToken) throws InvalidRequestTokenException;
+	AppConnection grantAccess(String requestToken) throws InvalidRequestTokenException;
 	
 }

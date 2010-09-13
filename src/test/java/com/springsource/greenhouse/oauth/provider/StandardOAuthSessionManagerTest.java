@@ -15,8 +15,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.NoOpPasswordEncoder;
 import org.springframework.security.encrypt.StandardStringEncryptor;
 
-import com.springsource.greenhouse.account.ConnectedApp;
-import com.springsource.greenhouse.account.ConnectedAppNotFoundException;
+import com.springsource.greenhouse.account.AppConnection;
+import com.springsource.greenhouse.account.InvalidAccessTokenException;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
@@ -44,11 +44,11 @@ public class StandardOAuthSessionManagerTest {
 	}
 	
 	@Test
-	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, ConnectedAppNotFoundException {
+	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, InvalidAccessTokenException {
 		executeOAuthSessionLifecycle(2);
 	}
 
-	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException, ConnectedAppNotFoundException {
+	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException, InvalidAccessTokenException {
 		for (int i = 0; i < numberOfTimes; i++) {
 			OAuthSession session = sessionManager.newOAuthSession("123456789", "x-com-springsource-greenhouse://oauth-response");
 			assertEquals("123456789", session.getApiKey());
@@ -76,13 +76,13 @@ public class StandardOAuthSessionManagerTest {
 			assertTrue(session.authorized());
 			assertEquals("verifier", session.getVerifier());
 			
-			ConnectedApp app = sessionManager.grantAccess(requestToken);
-			assertEquals((Long) 1L, app.getAccountId());
-			assertEquals("123456789", app.getApiKey());
-			assertNotNull(app.getAccessToken());
-			assertFalse(requestToken.equals(app.getAccessToken()));
-			assertNotNull(app.getSecret());
-			assertFalse(secret.equals(app.getSecret()));
+			AppConnection connection = sessionManager.grantAccess(requestToken);
+			assertEquals((Long) 1L, connection.getAccountId());
+			assertEquals("123456789", connection.getApiKey());
+			assertNotNull(connection.getAccessToken());
+			assertFalse(requestToken.equals(connection.getAccessToken()));
+			assertNotNull(connection.getSecret());
+			assertFalse(secret.equals(connection.getSecret()));
 			
 			try {
 				sessionManager.getSession(requestToken);
@@ -91,13 +91,13 @@ public class StandardOAuthSessionManagerTest {
 				
 			}
 			
-			app = accountRepository.findConnectedApp(app.getAccessToken());
-			assertEquals((Long) 1L, app.getAccountId());
-			assertEquals("123456789", app.getApiKey());
-			assertNotNull(app.getAccessToken());
-			assertFalse(requestToken.equals(app.getAccessToken()));
-			assertNotNull(app.getSecret());
-			assertFalse(secret.equals(app.getSecret()));			
+			connection = accountRepository.findAppConnection(connection.getAccessToken());
+			assertEquals((Long) 1L, connection.getAccountId());
+			assertEquals("123456789", connection.getApiKey());
+			assertNotNull(connection.getAccessToken());
+			assertFalse(requestToken.equals(connection.getAccessToken()));
+			assertNotNull(connection.getSecret());
+			assertFalse(secret.equals(connection.getSecret()));			
 		}
 	}
 }

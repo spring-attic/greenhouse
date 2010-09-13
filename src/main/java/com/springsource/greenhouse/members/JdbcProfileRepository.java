@@ -41,7 +41,7 @@ public class JdbcProfileRepository implements ProfileRepository {
 	}
 
 	public List<ConnectedProfile> findConnectedProfiles(Long accountId) {
-		return jdbcTemplate.query("select provider, accountId from ConnectedAccount where member = ? order by provider", new RowMapper<ConnectedProfile>() {
+		return jdbcTemplate.query("select provider, accountId from AccountConnection where member = ? order by provider", new RowMapper<ConnectedProfile>() {
 			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
 				String provider = rs.getString("provider");
 				String accountId = rs.getString("accountId");

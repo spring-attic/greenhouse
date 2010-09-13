@@ -14,8 +14,8 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenServi
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.ConnectedApp;
-import com.springsource.greenhouse.account.ConnectedAppNotFoundException;
+import com.springsource.greenhouse.account.AppConnection;
+import com.springsource.greenhouse.account.InvalidAccessTokenException;
 
 public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTokenServices {
 	
@@ -58,8 +58,8 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 			return providerTokenFor(sessionManager.getSession(tokenValue));
 		} catch (InvalidRequestTokenException e) {
 			try {
-				return providerTokenFor(accountRepository.findConnectedApp(tokenValue));
-			} catch (ConnectedAppNotFoundException ex) {
+				return providerTokenFor(accountRepository.findAppConnection(tokenValue));
+			} catch (InvalidAccessTokenException ex) {
 				throw new InvalidOAuthTokenException("Could not find OAuthSession or AppConnection for provided OAuth request token " + tokenValue);
 			}
 		}
@@ -71,8 +71,8 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 		return new OAuthSessionProviderToken(session);
 	}
 	
-	private OAuthAccessProviderToken providerTokenFor(ConnectedApp connectedApp) {
-		return new ConnectedAppProviderToken(connectedApp, accountRepository);
+	private OAuthAccessProviderToken providerTokenFor(AppConnection connection) {
+		return new AppConnectionProviderToken(connection, accountRepository);
 	}	
 
 	@SuppressWarnings("serial")
@@ -110,15 +110,15 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 	}
 	
 	@SuppressWarnings("serial")
-	private static class ConnectedAppProviderToken implements OAuthAccessProviderToken {
+	private static class AppConnectionProviderToken implements OAuthAccessProviderToken {
 
-		private ConnectedApp connection;
+		private AppConnection connection;
 
 		private AccountRepository accountRepository;
 		
 		private Authentication userAuthentication;
 		
-		public ConnectedAppProviderToken(ConnectedApp connection, AccountRepository accountRepository) {
+		public AppConnectionProviderToken(AppConnection connection, AccountRepository accountRepository) {
 			this.connection = connection;
 		}
 
