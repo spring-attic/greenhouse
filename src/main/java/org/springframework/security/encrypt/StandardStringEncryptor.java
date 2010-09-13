@@ -21,6 +21,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
+// TODO switch from DES to AES
 public class StandardStringEncryptor implements StringEncryptor {
 
 	private SecretKey secretKey;
@@ -29,24 +30,28 @@ public class StandardStringEncryptor implements StringEncryptor {
 
 	private Cipher decryptor;
 
-	private SecureRandomSaltGenerator saltGenerator = new SecureRandomSaltGenerator("SHA1PRNG");
-
-	private int saltLength;
-
-	public StandardStringEncryptor(String algorithm, String secret) {
-		init(algorithm, secret);
+	private SaltFactory saltFactory;
+	
+	public StandardStringEncryptor(String secret) {
+		init("PBEWithMD5AndDES", secret, null);
 	}
-
+	
+	public StandardStringEncryptor(String secret, String salt) {
+		init("PBEWithMD5AndDES", secret, salt);
+	}
+	
 	public String encrypt(String text) {
 		try {
-			byte[] salt = nextRandomSalt();
+			byte[] salt = saltFactory.getSalt();
 			PBEParameterSpec spec = new PBEParameterSpec(salt, 1000);
 			byte[] encrypted;
 			synchronized (encryptor) {
 				encryptor.init(Cipher.ENCRYPT_MODE, secretKey, spec);
 				encrypted = encryptor.doFinal(utf8Encode(text));
 			}
-			encrypted = concatenate(salt, encrypted);
+			if (saltFactory.isRandomSalt()) {
+				encrypted = concatenate(salt, encrypted);
+			}
 			return encode(encrypted);
 		} catch (InvalidKeyException e) {
 			throw new IllegalArgumentException("Unable to initialize due to invalid secret key", e);
@@ -61,8 +66,10 @@ public class StandardStringEncryptor implements StringEncryptor {
 
 	public String decrypt(String encryptedText) {
 		byte[] encrypted = decode(encryptedText);
-		byte[] salt = subArray(encrypted, 0, saltLength);
-		encrypted = subArray(encrypted, saltLength, encrypted.length);
+		byte[] salt = decodeSalt(encrypted);
+		if (saltFactory.isRandomSalt()) {
+			encrypted = stripSalt(encrypted, salt);
+		}
 		try {
 			PBEParameterSpec spec = new PBEParameterSpec(salt, 1000);
 			byte[] decrypted;
@@ -82,11 +89,15 @@ public class StandardStringEncryptor implements StringEncryptor {
 		}
 	}
 
-	private void init(String algorithm, String secret) {
+	private void init(String algorithm, String secret, String salt) {
 		secretKey = newSecretKey(algorithm, secret);
 		encryptor = newCipher(algorithm);
 		decryptor = newCipher(algorithm);
-		saltLength = getSaltLengthFor(encryptor);
+		if (salt != null) {
+			saltFactory = new SiteGlobalSaltFactory(salt);
+		} else {
+			saltFactory = new SecureRandomSaltFactory(getSaltLengthFor(encryptor));
+		}
 	}
 
 	private Cipher newCipher(String algorithm) {
@@ -117,15 +128,23 @@ public class StandardStringEncryptor implements StringEncryptor {
 		return algorithmBlockSize > 0 ? algorithmBlockSize : 8;
 	}
 	
-	private byte[] nextRandomSalt() {
-		return saltGenerator.generateSalt(saltLength);
-	}
-
 	private String encode(byte[] bytes) {
 		return hexEncode(bytes);
 	}
 	
 	private byte[] decode(String encoded) {
 		return hexDecode(encoded);
+	}
+	
+	private byte[] decodeSalt(byte[] encrypted) {
+		if (saltFactory.isRandomSalt()) {
+			return subArray(encrypted, 0, saltFactory.getSaltLength());
+		} else {
+			return saltFactory.getSalt();
+		}
+	}
+
+	private byte[] stripSalt(byte[] encrypted, byte[] salt) {
+		return subArray(encrypted, salt.length, encrypted.length);
 	}
 }

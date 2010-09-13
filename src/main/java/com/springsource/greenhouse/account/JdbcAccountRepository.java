@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.encrypt.PasswordEncoder;
+import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
+import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriTemplate;
@@ -25,6 +27,8 @@ public class JdbcAccountRepository implements AccountRepository {
 	
 	private final JdbcTemplate jdbcTemplate;
 	
+	private final StringEncryptor encryptor;
+	
 	private final PasswordEncoder passwordEncoder;
 
 	private final PictureUrlFactory pictureUrlFactory;
@@ -32,10 +36,13 @@ public class JdbcAccountRepository implements AccountRepository {
 	private final UriTemplate profileUrlTemplate;
 
 	private final AccountMapper accountMapper;
+
+	private final SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator();
 	
 	@Autowired
-	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, FileStorage pictureStorage, String profileUrlTemplate) {
+	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, StringEncryptor encryptor, PasswordEncoder passwordEncoder, FileStorage pictureStorage, String profileUrlTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.encryptor = encryptor;
 		this.passwordEncoder = passwordEncoder;
 		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
 		this.profileUrlTemplate = new UriTemplate(profileUrlTemplate);
@@ -115,14 +122,27 @@ public class JdbcAccountRepository implements AccountRepository {
 		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from ConnectedAccount where provider = :provider and accountId in ( :friendIds )) ", params, accountMapper);
 	}
 	
-	public ConnectedApp connectApp(Long accountId, String apiKey) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional
+	public ConnectedApp connectApp(Long accountId, String apiKey) throws InvalidApiKeyException {
+		String accessToken = keyGenerator.generateKey();
+		String secret = keyGenerator.generateKey();
+		Long appId;
+		try {
+			appId = jdbcTemplate.queryForLong("select id from App where apiKey = ?", encryptor.encrypt(apiKey));
+		} catch (EmptyResultDataAccessException e) {
+			throw new InvalidApiKeyException(apiKey);
+		}
+		jdbcTemplate.update("delete from ConnectedApp where app = ? and member = ?", appId, accountId);		
+		jdbcTemplate.update("insert into ConnectedApp (app, member, accessToken, secret) values (?, ?, ?, ?)", appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
+		return new ConnectedApp(accountId, apiKey, accessToken, secret);
 	}
 
 	public ConnectedApp findConnectedApp(String accessToken) throws ConnectedAppNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		return jdbcTemplate.queryForObject("select c.member, a.apiKey, c.accessToken, c.secret from ConnectedApp c inner join App a on c.app = a.id where c.accessToken = ?", new RowMapper<ConnectedApp>() {
+			public ConnectedApp mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new ConnectedApp(rs.getLong("member"), encryptor.decrypt(rs.getString("apiKey")), encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
+			}
+		}, encryptor.encrypt(accessToken));
 	}
 
 	// internal helpers

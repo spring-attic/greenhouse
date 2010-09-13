@@ -26,7 +26,7 @@ public class JdbcAppRepositoryTest {
 
 	private JdbcTemplate jdbcTemplate;
 
-	private StringEncryptor encryptor = new StandardStringEncryptor("PBEWithMD5AndDES", "secret");
+	private StringEncryptor encryptor = new StandardStringEncryptor("secret");
 
     @Before
     public void setup() {

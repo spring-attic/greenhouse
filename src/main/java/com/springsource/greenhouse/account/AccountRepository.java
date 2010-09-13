@@ -31,7 +31,7 @@ public interface AccountRepository {
 	
 	// connected app operations
 	
-	ConnectedApp connectApp(Long accountId, String apiKey);
+	ConnectedApp connectApp(Long accountId, String apiKey) throws InvalidApiKeyException;
 
 	// TODO - we would like to pass in apiKey here but unfortunately Spring Security OAuth does not make it available where this method is delegated to
 	ConnectedApp findConnectedApp(String accessToken) throws ConnectedAppNotFoundException;

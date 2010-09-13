@@ -14,13 +14,16 @@ public class StandardPasswordEncoder implements PasswordEncoder {
 
 	private byte[] secret;
 
-	private SecureRandomSaltGenerator saltGenerator = new SecureRandomSaltGenerator("SHA1PRNG");
+	private SecureRandomSaltFactory saltFactory;
 
-	private int saltLength = 8;
-
-	public StandardPasswordEncoder(String algorithm, String secret) {
-		this.digester = new Digester(algorithm);
+	public StandardPasswordEncoder(String secret) {
+		this("SHA-256", "SUN", secret);
+	}
+	
+	public StandardPasswordEncoder(String algorithm, String provider, String secret) {
+		this.digester = new Digester(algorithm, provider);
 		this.secret = utf8Encode(secret);
+		this.saltFactory = new SecureRandomSaltFactory();
 	}
 
 	public String encode(String rawPassword) {
@@ -29,14 +32,14 @@ public class StandardPasswordEncoder implements PasswordEncoder {
 
 	public boolean matches(String rawPassword, String encodedPassword) {
 		byte[] digested = decode(encodedPassword);
-		byte[] salt = subArray(digested, 0, saltLength);
+		byte[] salt = subArray(digested, 0, saltFactory.getSaltLength());
 		return matches(digested, digest(rawPassword, salt));
 	}
 
 	// internal helpers
 
 	private byte[] nextRandomSalt() {
-		return saltGenerator.generateSalt(saltLength);
+		return saltFactory.getSalt();
 	}
 
 	private String encode(String rawPassword, byte[] salt) {

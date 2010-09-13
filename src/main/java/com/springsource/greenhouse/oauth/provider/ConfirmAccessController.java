@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-// TODO refactor to remove dependency on Spring Security OAuth APIs
+// TODO consider refactoring to remove dependency on Spring Security OAuth APIs
 @Controller
 public class ConfirmAccessController {
 

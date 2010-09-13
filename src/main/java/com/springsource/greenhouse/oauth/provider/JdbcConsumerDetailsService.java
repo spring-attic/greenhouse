@@ -15,6 +15,7 @@ import org.springframework.security.oauth.provider.BaseConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 
+// TODO consider refactoring to query a repo, then adapt result to ConsumerDetails
 public class JdbcConsumerDetailsService implements ConsumerDetailsService {
 
 	private JdbcTemplate jdbcTemplate;

@@ -8,7 +8,7 @@ public interface OAuthSessionManager {
 
 	OAuthSession getSession(String requestToken);
 	
-	void authorizeRequestToken(String requestToken, Object userPrincipal, String verifier);
+	void authorize(String requestToken, Long authorizingAccountId, String verifier);
 	
 	ConnectedApp grantAccess(String requestToken);
 	

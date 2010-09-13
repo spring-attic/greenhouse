@@ -2,6 +2,7 @@ package com.springsource.greenhouse.account;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
@@ -15,6 +16,8 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.NoOpPasswordEncoder;
+import org.springframework.security.encrypt.StandardStringEncryptor;
+import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +31,17 @@ public class JdbcAccountRepositoryTest {
 
 	private JdbcTemplate jdbcTemplate;
 
+	private String salt = "5b8bd7612cdab5ed";
+	
+	private StringEncryptor encryptor;
+	
     @Before
     public void setup() {
-    	db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
+    	db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().connectedApp().testData(getClass()).getDatabase();
     	jdbcTemplate = new JdbcTemplate(db);
-    	accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+    	encryptor = new StandardStringEncryptor("secret", salt);
+    	System.out.println(encryptor.encrypt("345678901"));
+    	accountRepository = new JdbcAccountRepository(jdbcTemplate, encryptor, NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
     }
     
 	@After
@@ -91,28 +100,12 @@ public class JdbcAccountRepositoryTest {
     }
 
     @Test
-    public void findConnectedAccount() throws Exception {
-    	assertExpectedAccount(accountRepository.findByConnectedAccount("facebook", "accesstoken"));
+    public void markProfilePictureSet() {
+    	accountRepository.markProfilePictureSet(1L);
+    	assertTrue(jdbcTemplate.queryForObject("select pictureSet from Member where id = ?", Boolean.class, 1L));
     }
 
-    @Test(expected=ConnectedAccountNotFoundException.class)
-    public void connectedAccountNotFound() throws Exception {
-    	accountRepository.findByConnectedAccount("badtoken", "facebook");
-    }
-    
-    @Test
-    public void findFriendAccounts() throws Exception {
-    	List<Account> accounts = accountRepository.findFriendAccounts("facebook", Collections.singletonList("1"));
-    	assertEquals(1, accounts.size());
-    	assertExpectedAccount(accounts.get(0));
-    }
-    
-    @Test
-    public void disconnectAccount() {
-    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
-    	accountRepository.disconnectAccount(1L, "facebook");
-    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
-    }
+    // connected account tests
     
     @Test
     public void connectAccount() throws Exception {
@@ -127,7 +120,30 @@ public class JdbcAccountRepositoryTest {
     	accountRepository.connectAccount(1L, "facebook", "accessToken", "cwalls");
     }
 
+    @Test
+    public void findConnectedAccount() throws Exception {
+    	assertExpectedAccount(accountRepository.findByConnectedAccount("facebook", "accesstoken"));
+    }
+
+    @Test(expected=ConnectedAccountNotFoundException.class)
+    public void connectedAccountNotFound() throws Exception {
+    	accountRepository.findByConnectedAccount("badtoken", "facebook");
+    }
+
+    @Test
+    public void disconnectAccount() {
+    	assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
+    	accountRepository.disconnectAccount(1L, "facebook");
+    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where member = 1 and provider = 'facebook'"));
+    }
     
+    @Test
+    public void findFriendAccounts() throws Exception {
+    	List<Account> accounts = accountRepository.findFriendAccounts("facebook", Collections.singletonList("1"));
+    	assertEquals(1, accounts.size());
+    	assertExpectedAccount(accounts.get(0));
+    }
+        
     @Test
     public void isConnected() {
     	assertTrue(accountRepository.hasConnectedAccount(1L, "facebook"));
@@ -139,9 +155,26 @@ public class JdbcAccountRepositoryTest {
     }
     
     @Test
-    public void markProfilePictureSet() {
-    	accountRepository.markProfilePictureSet(1L);
-    	assertTrue(jdbcTemplate.queryForObject("select pictureSet from Member where id = ?", Boolean.class, 1L));
+    public void connectApp() throws InvalidApiKeyException {
+    	ConnectedApp app = accountRepository.connectApp(1L, "123456789");
+    	assertEquals("123456789", app.getApiKey());
+    	assertEquals((Long) 1L, app.getAccountId());
+    	assertNotNull(app.getAccessToken());
+    	assertNotNull(app.getSecret());
+    }
+
+    @Test(expected=InvalidApiKeyException.class)
+    public void connectAppInvalidApiKey() throws InvalidApiKeyException {
+    	accountRepository.connectApp(1L, "invalidApiKey");
+    }
+
+    @Test
+    public void findConnectedApp() throws ConnectedAppNotFoundException {
+    	ConnectedApp connection = accountRepository.findConnectedApp("234567890");
+    	assertEquals((Long) 1L, connection.getAccountId());
+    	assertEquals("123456789", connection.getApiKey());
+    	assertEquals("234567890", connection.getAccessToken());
+    	assertEquals("345678901", connection.getSecret());
     }
 
 	private void assertExpectedAccount(Account account) {

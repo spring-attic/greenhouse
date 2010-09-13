@@ -10,9 +10,9 @@ public interface OAuthSession {
 	
 	String getSecret();
 
-	boolean userAuthorized();
+	boolean authorized();
 	
-	Object getAuthorizingUser();
+	Long getAuthorizingAccountId();
 
 	String getVerifier();
 

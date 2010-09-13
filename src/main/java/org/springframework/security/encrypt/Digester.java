@@ -2,6 +2,7 @@ package org.springframework.security.encrypt;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 public class Digester {
 
@@ -9,11 +10,13 @@ public class Digester {
 
 	private int iterations = 1000;
 	
-	public Digester(String algorithm) {
+	public Digester(String algorithm, String provider) {
 		try {
-			messageDigest = MessageDigest.getInstance(algorithm);
+			messageDigest = MessageDigest.getInstance(algorithm, provider);
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalStateException("No such hashing algorithm", e);
+		} catch (NoSuchProviderException e) {
+			throw new IllegalStateException("No such provider for hashing algorithm", e);
 		}
 	}
 

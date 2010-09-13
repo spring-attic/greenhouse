@@ -22,12 +22,13 @@ public class JdbcAppRepository implements AppRepository {
 	
 	private StringEncryptor encryptor;
 	
-	private SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator();
+	private SecureRandomStringKeyGenerator keyGenerator;
 
 	@Inject
 	public JdbcAppRepository(JdbcTemplate jdbcTemplate, StringEncryptor encryptor) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.encryptor = encryptor;
+		this.keyGenerator = new SecureRandomStringKeyGenerator();
 	}
 
 	public List<AppSummary> findAppSummaries(Long accountId) {
