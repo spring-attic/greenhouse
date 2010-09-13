@@ -29,25 +29,32 @@ public class StandardOAuthSessionManager implements OAuthSessionManager {
 		return session;
 	}
 
-	public OAuthSession getSession(String requestToken) {
-		return sessions.get(requestToken);
+	public OAuthSession getSession(String requestToken) throws InvalidRequestTokenException {
+		OAuthSession session = sessions.get(requestToken);
+		if (session == null) {
+			throw new InvalidRequestTokenException(requestToken);
+		}
+		return session;
 	}
 
-	public void authorize(String requestToken, Long authorizingAccountId, String verifier) {
-		StandardOAuthSession session = getRequiredSession(requestToken);
+	public OAuthSession authorize(String requestToken, Long authorizingAccountId, String verifier) throws InvalidRequestTokenException {
+		StandardOAuthSession session = getStandardSession(requestToken);
 		if (session.authorized()) {
 			throw new IllegalStateException("OAuthSession is already authorized");
 		}
 		session.authorize(authorizingAccountId, verifier);
+		return session;
 	}
 
-	public ConnectedApp grantAccess(String requestToken) {
-		StandardOAuthSession session = getRequiredSession(requestToken);
+	public ConnectedApp grantAccess(String requestToken) throws InvalidRequestTokenException {
+		StandardOAuthSession session = getStandardSession(requestToken);
 		if (!session.authorized()) {
 			throw new IllegalStateException("OAuthSession is not yet authorized");
 		}
 		try {
-			return accountRepository.connectApp(session.getAuthorizingAccountId(), session.getApiKey());
+			ConnectedApp connection = accountRepository.connectApp(session.getAuthorizingAccountId(), session.getApiKey());
+			sessions.remove(requestToken);
+			return connection;
 		} catch (InvalidApiKeyException e) {
 			throw new IllegalStateException("Unable to grant access due to session - have the App's key changed?", e);
 		}
@@ -55,12 +62,8 @@ public class StandardOAuthSessionManager implements OAuthSessionManager {
 	
 	// internal helpers
 	
-	private StandardOAuthSession getRequiredSession(String requestToken) {
-		StandardOAuthSession session = sessions.get(requestToken);
-		if (session == null) {
-			throw new IllegalArgumentException("No OAuthSession for request token " + requestToken);
-		}
-		return session;
+	private StandardOAuthSession getStandardSession(String requestToken) throws InvalidRequestTokenException {
+		return (StandardOAuthSession) getSession(requestToken);
 	}
 	
 	private static class StandardOAuthSession implements OAuthSession {

@@ -37,24 +37,31 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 		if (!(authentication.getPrincipal() instanceof Account)) {
 			throw new IllegalArgumentException("Authenticated user principal is not of expected Account type");
 		}
-		Long authorizingAccountId = ((Account) authentication.getPrincipal()).getId();
-		sessionManager.authorize(requestToken, authorizingAccountId, verifier);
+		try {
+			Long authorizingAccountId = ((Account) authentication.getPrincipal()).getId();			
+			sessionManager.authorize(requestToken, authorizingAccountId, verifier);
+		} catch (InvalidRequestTokenException e) {
+			throw new InvalidOAuthTokenException(e.getMessage());
+		}
 	}
 	
 	public OAuthAccessProviderToken createAccessToken(String requestToken) {
-		return providerTokenFor(sessionManager.grantAccess(requestToken));
+		try {
+			return providerTokenFor(sessionManager.grantAccess(requestToken));
+		} catch (InvalidRequestTokenException e) {
+			throw new InvalidOAuthTokenException(e.getMessage());
+		}
 	}
 
 	public OAuthProviderToken getToken(String tokenValue) {
-		OAuthSession session = sessionManager.getSession(tokenValue);
-		if (session != null) {
-			return providerTokenFor(session);
-		}
 		try {
-			ConnectedApp connectedApp = accountRepository.findConnectedApp(tokenValue);
-			return providerTokenFor(connectedApp);			
-		} catch (ConnectedAppNotFoundException e) {
-			throw new InvalidOAuthTokenException("Could not find OAuthSession or AppConnection for provided OAuth token " + tokenValue);
+			return providerTokenFor(sessionManager.getSession(tokenValue));
+		} catch (InvalidRequestTokenException e) {
+			try {
+				return providerTokenFor(accountRepository.findConnectedApp(tokenValue));
+			} catch (ConnectedAppNotFoundException ex) {
+				throw new InvalidOAuthTokenException("Could not find OAuthSession or AppConnection for provided OAuth request token " + tokenValue);
+			}
 		}
 	}
 	

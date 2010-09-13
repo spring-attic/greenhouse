@@ -6,10 +6,10 @@ public interface OAuthSessionManager {
 	
 	OAuthSession newOAuthSession(String apiKey, String callbackUrl);
 
-	OAuthSession getSession(String requestToken);
+	OAuthSession getSession(String requestToken) throws InvalidRequestTokenException;
 	
-	void authorize(String requestToken, Long authorizingAccountId, String verifier);
+	OAuthSession authorize(String requestToken, Long authorizingAccountId, String verifier) throws InvalidRequestTokenException;
 	
-	ConnectedApp grantAccess(String requestToken);
+	ConnectedApp grantAccess(String requestToken) throws InvalidRequestTokenException;
 	
 }

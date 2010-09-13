@@ -17,7 +17,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.NoOpPasswordEncoder;
 import org.springframework.security.encrypt.StandardStringEncryptor;
-import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,17 +30,11 @@ public class JdbcAccountRepositoryTest {
 
 	private JdbcTemplate jdbcTemplate;
 
-	private String salt = "5b8bd7612cdab5ed";
-	
-	private StringEncryptor encryptor;
-	
     @Before
     public void setup() {
     	db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().connectedApp().testData(getClass()).getDatabase();
     	jdbcTemplate = new JdbcTemplate(db);
-    	encryptor = new StandardStringEncryptor("secret", salt);
-    	System.out.println(encryptor.encrypt("345678901"));
-    	accountRepository = new JdbcAccountRepository(jdbcTemplate, encryptor, NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+    	accountRepository = new JdbcAccountRepository(jdbcTemplate, new StandardStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
     }
     
 	@After

@@ -31,6 +31,7 @@ public class ConfirmAccessController {
 			@RequestParam(value="oauth_callback", required = false) String callback, Device device, Model model)  {
 		ConsumerDetails consumer = consumerDetailsService.loadConsumerByConsumerKey(tokenServices.getToken(oauthToken).getConsumerKey());
 		model.addAttribute("oauth_token", oauthToken);
+		// TODO this doesn't seem to be used in UserAuthorizationProcessingFilter
 		if (callback != null) {
 			model.addAttribute("oauth_callback", callback);
 		}
