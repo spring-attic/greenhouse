@@ -120,6 +120,7 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 		
 		public AppConnectionProviderToken(AppConnection connection, AccountRepository accountRepository) {
 			this.connection = connection;
+			this.accountRepository = accountRepository;
 		}
 
 		public String getConsumerKey() {
