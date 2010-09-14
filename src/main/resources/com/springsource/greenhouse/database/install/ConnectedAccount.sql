@@ -12,7 +12,6 @@ create table AccountConnection (member bigint,
 					accountId varchar,
 					secret varchar, 
 					primary key (member, provider),
-					foreign key (member) references Member(id),
-					foreign key (provider) references AccountProvider(name) on delete cascade);
+					foreign key (member) references Member(id));
 create unique index AccessTokenKey on AccountConnection(provider, accessToken);
 create unique index ProviderAccountKey on AccountConnection(provider, accountId);
