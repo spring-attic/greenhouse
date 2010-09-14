@@ -39,7 +39,6 @@
 		<beans:constructor-arg>
 			<beans:bean class="org.springframework.social.facebook.FacebookOAuthEnabledRestTemplateFactory" />
 		</beans:constructor-arg>
-		<beans:constructor-arg ref="accessTokenService" />
 	</beans:bean>
 	
 	<!-- Facebook API provider metadata -->
