@@ -54,7 +54,7 @@ public class TwitterInviteController {
 
 	private String lookupTwitterId(Account account) {
 		try {
-		    return jdbcTemplate.getJdbcOperations().queryForObject("select accountId from ConnectedAccount where member = ? and provider = 'Twitter'", 
+		    return jdbcTemplate.getJdbcOperations().queryForObject("select accountId from AccountConnection where member = ? and provider = 'Twitter'", 
 				new RowMapper<String>() {
 		    		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 					    return rs.getString("accountId");

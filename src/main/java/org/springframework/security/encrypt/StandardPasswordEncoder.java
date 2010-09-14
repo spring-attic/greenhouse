@@ -14,31 +14,30 @@ public class StandardPasswordEncoder implements PasswordEncoder {
 
 	private byte[] secret;
 
-	private SecureRandomSaltGenerator saltGenerator = new SecureRandomSaltGenerator("SHA1PRNG");
+	private SecureRandomKeyGenerator saltGenerator;
 
-	private int saltLength = 8;
-
-	public StandardPasswordEncoder(String algorithm, String secret) {
-		this.digester = new Digester(algorithm);
+	public StandardPasswordEncoder(String secret) {
+		this("SHA-256", "SUN", secret);
+	}
+	
+	public StandardPasswordEncoder(String algorithm, String provider, String secret) {
+		this.digester = new Digester(algorithm, provider);
 		this.secret = utf8Encode(secret);
+		this.saltGenerator = new SecureRandomKeyGenerator();
 	}
 
 	public String encode(String rawPassword) {
-		return encode(rawPassword, nextRandomSalt());
+		return encode(rawPassword, saltGenerator.generateKey());
 	}
 
 	public boolean matches(String rawPassword, String encodedPassword) {
 		byte[] digested = decode(encodedPassword);
-		byte[] salt = subArray(digested, 0, saltLength);
+		byte[] salt = subArray(digested, 0, saltGenerator.getKeyLength());
 		return matches(digested, digest(rawPassword, salt));
 	}
 
 	// internal helpers
-
-	private byte[] nextRandomSalt() {
-		return saltGenerator.generateSalt(saltLength);
-	}
-
+	
 	private String encode(String rawPassword, byte[] salt) {
 		byte[] digest = digest(rawPassword, salt);
 		return hexEncode(digest);

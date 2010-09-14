@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth;
+package com.springsource.greenhouse.oauth.provider;
 
 import javax.inject.Inject;
 
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+// TODO consider refactoring to remove dependency on Spring Security OAuth APIs
 @Controller
 public class ConfirmAccessController {
 
@@ -30,6 +31,7 @@ public class ConfirmAccessController {
 			@RequestParam(value="oauth_callback", required = false) String callback, Device device, Model model)  {
 		ConsumerDetails consumer = consumerDetailsService.loadConsumerByConsumerKey(tokenServices.getToken(oauthToken).getConsumerKey());
 		model.addAttribute("oauth_token", oauthToken);
+		// TODO this doesn't seem to be used in UserAuthorizationProcessingFilter
 		if (callback != null) {
 			model.addAttribute("oauth_callback", callback);
 		}

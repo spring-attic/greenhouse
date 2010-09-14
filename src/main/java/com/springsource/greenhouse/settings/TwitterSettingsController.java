@@ -42,7 +42,7 @@ public class TwitterSettingsController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public String connectView(Account account) {
-		if (accountRepository.isConnected(account.getId(), TWITTER_PROVIDER)) {
+		if (accountRepository.hasAccountConnection(account.getId(), TWITTER_PROVIDER)) {
 			return "settings/twitterConnected";
 		} else {
 			return "settings/twitterConnect";
@@ -95,6 +95,6 @@ public class TwitterSettingsController {
 	private static final String TWITTER_PROVIDER = "Twitter";
 	
 	private static final String UPDATE_CONNECTED_ACCOUNT_ID = 
-		"update ConnectedAccount set accountId = ? where member = ? and provider = ?";
+		"update AccountConnection set accountId = ? where member = ? and provider = ?";
 	
 }

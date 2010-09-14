@@ -53,7 +53,7 @@ public class SettingsControllerTest {
     @Test
     public void disconnectApp() {
     	assertEquals("redirect:/settings", controller.disconnectApp("authme", testAccount()));
-    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedApp"));
+    	assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AppConnection"));
     }
 	
     private Account testAccount() {

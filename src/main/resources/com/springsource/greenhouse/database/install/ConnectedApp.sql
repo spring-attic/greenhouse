@@ -1,30 +1,24 @@
-create table App (consumerKey varchar,
+create table App (id identity,
 				name varchar not null unique, 
+				slug varchar not null unique,
 				description varchar not null,
 				organization varchar,
 				website varchar,
-				callbackUrl varchar,
+				apiKey varchar unique,
 				secret varchar not null unique,
-				slug varchar not null unique,
-				owner bigint not null,
-				primary key (consumerKey),
-				foreign key (owner) references Member(id));
-					
-create table ConnectedApp (app varchar,
+				callbackUrl varchar,
+				primary key (id));
+
+create table AppDeveloper (app bigint,
+				member bigint, 
+				primary key (app, member),
+				foreign key (app) references App(id) on delete cascade,				
+				foreign key (member) references Member(id));
+
+create table AppConnection (app varchar,
 					member bigint,
 					accessToken varchar not null unique,					
 					secret varchar not null,
 					primary key (app, member),
 					foreign key (member) references Member(id),
-					foreign key (app) references App(consumerKey));
-					
-create table OAuthToken (tokenValue varchar,
-					app varchar not null,
-					member bigint,
-					secret varchar not null,
-					callbackUrl varchar,
-					updateTimestamp bigint not null,
-					verifier varchar,
-					primary key (tokenValue),
-					foreign key (member) references Member(id),
-					foreign key (app) references App(consumerKey));
+					foreign key (app) references App(id) on delete cascade);

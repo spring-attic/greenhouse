@@ -15,10 +15,6 @@ import com.springsource.greenhouse.account.Account;
 
 public class JdbcAccessTokenServices implements AccessTokenServices {
 
-	static final String SELECT_TOKEN_SQL = "select provider, accessToken, secret from ConnectedAccount where member = ? and provider = ?";
-    static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (member, provider, accessToken, secret) values (?, ?, ?, ?)";
-    static final String DELETE_TOKEN_SQL = "delete from ConnectedAccount where member = ? and provider = ?";
-
 	private JdbcTemplate jdbcTemplate;
 	
 	public JdbcAccessTokenServices(JdbcTemplate jdbcTemplate) {
@@ -27,7 +23,6 @@ public class JdbcAccessTokenServices implements AccessTokenServices {
 
 	public AccessToken getToken(String resourceId, Object principal) throws AuthenticationException {
 		assertThatPrincipalIsAnAccount(principal);
-
 		Account account = (Account) principal;
 		List<AccessToken> accessTokens = jdbcTemplate.query(SELECT_TOKEN_SQL, new RowMapper<AccessToken>() {
 			public AccessToken mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -44,7 +39,6 @@ public class JdbcAccessTokenServices implements AccessTokenServices {
 	public void storeToken(String resourceId, Object principal, AccessToken token) {
 		assertThatPrincipalIsAnAccount(principal);
 		Account account = (Account) principal;
-
 		jdbcTemplate.update(INSERT_TOKEN_SQL, account.getId(), token.getProviderId(), token.getValue(),
 					token.getSecret());
 	}
@@ -60,4 +54,9 @@ public class JdbcAccessTokenServices implements AccessTokenServices {
 			throw new BadCredentialsException("Expected principal to be an Account object");
 		}
 	}
+	
+	static final String SELECT_TOKEN_SQL = "select provider, accessToken, secret from AccountConnection where member = ? and provider = ?";
+    static final String INSERT_TOKEN_SQL = "insert into AccountConnection (member, provider, accessToken, secret) values (?, ?, ?, ?)";
+    static final String DELETE_TOKEN_SQL = "delete from AccountConnection where member = ? and provider = ?";
+
 }

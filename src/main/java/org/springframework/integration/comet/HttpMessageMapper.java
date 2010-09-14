@@ -23,7 +23,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.integration.Message;
 import org.springframework.integration.MessagingException;
-import org.springframework.integration.core.MessageBuilder;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.http.MultipartAwareFormHttpMessageConverter;
 import org.springframework.integration.http.SerializingHttpMessageConverter;
 import org.springframework.integration.mapping.HeaderMapper;

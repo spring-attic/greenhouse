@@ -52,11 +52,11 @@ public class FacebookSettingsController {
 	public String connectAccountToFacebook(HttpServletRequest request, Account account,
 			@FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId) {
 		try {
-			if (accessToken != null) {
-				accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);
+			if(accessToken != null) {
+				accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);		
 				if (request.getParameter("postIt") != null) {
 					postGreenhouseConnectionToWall(request, account);
-				}
+				}			
 				if (request.getParameter("useFBPic") != null) {
 					useFacebookProfilePicture(account, accessToken);
 				}

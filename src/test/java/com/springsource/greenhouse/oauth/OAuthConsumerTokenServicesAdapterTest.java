@@ -40,106 +40,102 @@ public class OAuthConsumerTokenServicesAdapterTest {
 			db.shutdown();
 		}
 	}
+    
+    @Test
+    public void shouldReturnNullTokenForUnknownResource() {
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        assertNull(tokenServices.getToken("ohloh"));
+    }
 
-	@Test
-	public void shouldReturnNullTokenForUnknownResource() {
-		Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-		assertNull(tokenServices.getToken("ohloh"));
-	}
 
-	@Test
-	public void shouldReturnNullTokenForUnknownUser() {
-		Authentication authentication = new TestingAuthenticationToken(testAccount2(), "atlanta");
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-		assertNull(tokenServices.getToken("twitter"));
-	}
+    @Test
+    public void shouldReturnNullTokenForUnknownUser() {
+        Authentication authentication = new TestingAuthenticationToken(testAccount2(), "atlanta");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        assertNull(tokenServices.getToken("twitter"));
+    }
 
-	@Test
-	public void shouldReturnTokenForKnownResourceInDB() {
-		Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-		OAuthConsumerToken token = tokenServices.getToken("twitter");
-		assertNotNull(token);
-		assertEquals("twitter", token.getResourceId());
-		assertEquals("twitterToken", token.getValue());
-		assertEquals("twitterTokenSecret", token.getSecret());
-	}
+    @Test
+    public void shouldReturnTokenForKnownResourceInDB() {
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        OAuthConsumerToken token = tokenServices.getToken("twitter");
+        assertNotNull(token);
+        assertEquals("twitter", token.getResourceId());
+        assertEquals("twitterToken", token.getValue());
+        assertEquals("twitterTokenSecret", token.getSecret());
+    }
 
-	@Test
-	public void shouldReturnTokenForKnownResourceInSession() {
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		OAuthConsumerToken linkedInToken = new OAuthConsumerToken();
-		request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn", linkedInToken);
+    @Test
+    public void shouldReturnTokenForKnownResourceInSession() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        OAuthConsumerToken linkedInToken = new OAuthConsumerToken();
+        request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#linkedIn", linkedInToken);
+        
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        OAuthConsumerToken token = tokenServices.getToken("linkedIn");
+        assertSame(linkedInToken, token);
+    }
+    
+    @Test
+    public void shouldStoreRequestToken() {
+      OAuthConsumerToken requestToken = new OAuthConsumerToken();
+      requestToken.setAccessToken(false);
+      requestToken.setResourceId("myspace");
+      requestToken.setSecret("someSecret");
+      requestToken.setValue("someToken"); 
+      MockHttpServletRequest request = new MockHttpServletRequest();
+      Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
+      OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+      tokenServices.storeToken("myspace", requestToken);      
+      assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
+      assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken = 'someToken'"));
+    }
+    
+    @Test
+    public void shouldStoreAccessToken() {
+      OAuthConsumerToken requestToken = new OAuthConsumerToken();
+      requestToken.setAccessToken(true);
+      requestToken.setResourceId("myspace");
+      requestToken.setSecret("someSecret");
+      requestToken.setValue("someToken"); 
+      MockHttpServletRequest request = new MockHttpServletRequest();
+      Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
+      OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+      tokenServices.storeToken("myspace", requestToken);      
+      assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
+      assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken='someToken'"));
+    }
+    
+    @Test
+    public void shouldRemoveToken() {
+        OAuthConsumerToken accessToken = new OAuthConsumerToken();
+        accessToken.setAccessToken(true);
+        accessToken.setResourceId("twitter");
+        accessToken.setSecret("twitterTokenSecret");
+        accessToken.setValue("twitterToken"); 
 
-		Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
-		OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-		OAuthConsumerToken token = tokenServices.getToken("linkedIn");
-		assertSame(linkedInToken, token);
-	}
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");        
+        request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", accessToken);
+        
+        // Token should be available before remove
+        assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken = 'twitterToken'"));
+        assertNotNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
 
-	@Test
-	public void shouldStoreRequestToken() {
-		OAuthConsumerToken requestToken = new OAuthConsumerToken();
-		requestToken.setAccessToken(false);
-		requestToken.setResourceId("myspace");
-		requestToken.setSecret("someSecret");
-		requestToken.setValue("someToken");
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
-		OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-		tokenServices.storeToken("myspace", requestToken);
-		assertSame(requestToken,
-				request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
-		assertEquals(0,
-				jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'someToken'"));
-	}
-
-	@Test
-	public void shouldStoreAccessToken() {
-		OAuthConsumerToken requestToken = new OAuthConsumerToken();
-		requestToken.setAccessToken(true);
-		requestToken.setResourceId("myspace");
-		requestToken.setSecret("someSecret");
-		requestToken.setValue("someToken");
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
-		OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-		tokenServices.storeToken("myspace", requestToken);
-		assertSame(requestToken,
-				request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
-		assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken='someToken'"));
-	}
-
-	@Test
-	public void shouldRemoveToken() {
-		OAuthConsumerToken accessToken = new OAuthConsumerToken();
-		accessToken.setAccessToken(true);
-		accessToken.setResourceId("twitter");
-		accessToken.setSecret("twitterTokenSecret");
-		accessToken.setValue("twitterToken");
-
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		Authentication authentication = new TestingAuthenticationToken(testAccount(), "plano");
-		request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", accessToken);
-
-		// Token should be available before remove
-		assertEquals(1,
-				jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'twitterToken'"));
-		assertNotNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
-
-		OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
-		((OAuthConsumerTokenServicesAdapter) tokenServices).removeToken("twitter");
-
-		// Token should be gone after remove
-		assertEquals(0,
-				jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'twitterToken'"));
-		assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
-	}
-
+        OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
+        ((OAuthConsumerTokenServicesAdapter) tokenServices).removeToken("twitter");
+        
+        // Token should be gone after remove
+        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken = 'twitterToken'"));
+        assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
+    }
+    
 	private Account testAccount() {
 		return new Account(1L, "Craig", "Walls", "craig@habuma.com", "habuma", "file://pic.jpg", new UriTemplate(
 				"http://localhost:8080/members/{profileKey}"));
