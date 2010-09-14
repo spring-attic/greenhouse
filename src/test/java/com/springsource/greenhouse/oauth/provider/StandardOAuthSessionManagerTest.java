@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.NoOpPasswordEncoder;
-import org.springframework.security.encrypt.StandardStringEncryptor;
+import org.springframework.security.encrypt.SearchableStringEncryptor;
 
 import com.springsource.greenhouse.account.AppConnection;
 import com.springsource.greenhouse.account.InvalidAccessTokenException;
@@ -32,7 +32,7 @@ public class StandardOAuthSessionManagerTest {
 	@Before
 	public void setUp() {
     	db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();		
-    	accountRepository = new JdbcAccountRepository(new JdbcTemplate(db), new StandardStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+    	accountRepository = new JdbcAccountRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		sessionManager = new StandardOAuthSessionManager(accountRepository);
 	}
 	

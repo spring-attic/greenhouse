@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.NoOpPasswordEncoder;
-import org.springframework.security.encrypt.StandardStringEncryptor;
+import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +31,11 @@ public class JdbcAccountRepositoryTest {
 
 	private JdbcTemplate jdbcTemplate;
 
-    @Before
+	@Before
     public void setup() {
     	db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().connectedApp().testData(getClass()).getDatabase();
     	jdbcTemplate = new JdbcTemplate(db);
-    	accountRepository = new JdbcAccountRepository(jdbcTemplate, new StandardStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+    	accountRepository = new JdbcAccountRepository(jdbcTemplate, new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
     }
     
 	@After
@@ -170,7 +170,7 @@ public class JdbcAccountRepositoryTest {
     }
 
     @Test
-    public void findConnectedApp() throws InvalidAccessTokenException {
+    public void findAppConnection() throws InvalidAccessTokenException {
     	AppConnection connection = accountRepository.findAppConnection("234567890");
     	assertEquals((Long) 1L, connection.getAccountId());
     	assertEquals("123456789", connection.getApiKey());
@@ -179,7 +179,7 @@ public class JdbcAccountRepositoryTest {
     }
     
     @Test
-    public void disconnectedApp() throws InvalidApiKeyException {
+    public void disconnectApp() throws InvalidApiKeyException {
     	AppConnection app = accountRepository.connectApp(1L, "123456789");    	
     	accountRepository.disconnectApp(1L, app.getAccessToken());
     	try {
