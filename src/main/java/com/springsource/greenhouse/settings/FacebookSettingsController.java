@@ -49,24 +49,28 @@ public class FacebookSettingsController {
 	}
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(HttpServletRequest request, Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId) {
+	public String connectAccountToFacebook(HttpServletRequest request, Account account,
+			@FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId) {
 		try {
-			accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);		
-			if (request.getParameter("postIt") != null) {
-				postGreenhouseConnectionToWall(request, account, accessToken);
-			}			
-			if (request.getParameter("useFBPic") != null) {
-				useFacebookProfilePicture(account, accessToken);
+			if (accessToken != null) {
+				accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);
+				if (request.getParameter("postIt") != null) {
+					postGreenhouseConnectionToWall(request, account);
+				}
+				if (request.getParameter("useFBPic") != null) {
+					useFacebookProfilePicture(account, accessToken);
+				}
+				FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 			}
-			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 		} catch (AccountAlreadyConnectedException e) {
 			FlashMap.setErrorMessage("Unable to connect: Your Facebook account is already connected to a Greenhouse account.");
 		}
 		return "redirect:/settings/facebook";			
 	}
 
-	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account, String accessToken) {
-		facebook.postToWall(accessToken, "Join me at the Greenhouse!", 
+	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account) {
+		facebook.postToWall(
+				"Join me at the Greenhouse!",
 			new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.", 
 					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
     }

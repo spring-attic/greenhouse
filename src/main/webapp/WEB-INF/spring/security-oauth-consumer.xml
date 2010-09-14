@@ -35,7 +35,12 @@
 	</beans:bean>
 
 	<!-- Facebook Client API -->
-	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate" />
+	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate">
+		<beans:constructor-arg>
+			<beans:bean class="org.springframework.social.facebook.FacebookOAuthEnabledRestTemplateFactory" />
+		</beans:constructor-arg>
+		<beans:constructor-arg ref="accessTokenService" />
+	</beans:bean>
 	
 	<!-- Facebook API provider metadata -->
 	<beans:bean id="facebookProvider" class="com.springsource.greenhouse.account.ApiProvider" />
