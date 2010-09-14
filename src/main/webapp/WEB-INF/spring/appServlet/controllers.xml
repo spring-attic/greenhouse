@@ -16,6 +16,7 @@
 	<context:component-scan base-package="com.springsource.greenhouse.reset" />
 	<context:component-scan base-package="com.springsource.greenhouse.members" />
 	<context:component-scan base-package="com.springsource.greenhouse.invite" />
+	<context:component-scan base-package="com.springsource.greenhouse.groups" />	
 	<context:component-scan base-package="com.springsource.greenhouse.events" />
 	<context:component-scan base-package="com.springsource.greenhouse.recent" />	
 	<context:component-scan base-package="com.springsource.greenhouse.develop" />

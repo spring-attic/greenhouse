@@ -14,7 +14,6 @@ public class SecureRandomKeyGeneratorTests {
 	@Test
 	public void generateKey() {
 		byte[] bytes = generator.generateKey();
-		System.out.println(EncodingUtils.hexEncode(bytes));
 		assertEquals(8, bytes.length);
 		assertFalse(Arrays.equals(bytes, generator.generateKey()));
 	}
