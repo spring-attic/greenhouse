@@ -16,16 +16,20 @@
 		<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
 	</c:forEach>	
 	<script type="text/javascript" src="<c:url value="/resources/jquery/jquery-1.4.2.js" />"></script>
+	<script type="text/javascript">
+		window.scrollTo(0, 1);
+	</script>
 </head>
 <body>
 	<div id="header">
-		<h2>Greenhouse</h2>
+		<img src="<c:url value="/resources/gh-header-logo.png" />">
 	</div>
 	<div id="content">
 		<tiles:insertAttribute name="content" />
 	</div>
 	<div id="footer">
-		Copyright (c) 2010 SpringSource
+		<p><img src="<c:url value="/resources/springsource-logo.png" />" /></p>
+		<p>© Copyright 2010 SpringSource, a division of VMware.</p>
 	</div>
 	<tiles:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true" />
 	<c:forEach var="script" items="${scripts}">

@@ -1,7 +1,31 @@
 @import url("messages/messages.css");
 @import url("form-iphone.css");
 
-body {
-	font-family: Lucida Grande, sans-serif;
+body 
+{
+	margin: 0px;
+	margin-bottom: 10px;
+	font-family: Helvetica;
 	font-size: 1em;
+	color: #666666;
 }
+
+#content
+{
+	margin-left: 36px;
+	margin-right: 36px;
+}
+
+#footer
+{
+	font-size: .625em;
+	text-align: center;	
+}
+
+h2
+{
+	font-size: 1.075em; 
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
