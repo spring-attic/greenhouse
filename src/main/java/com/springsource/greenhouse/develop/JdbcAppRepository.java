@@ -13,6 +13,7 @@ import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springsource.greenhouse.account.InvalidApiKeyException;
 import com.springsource.greenhouse.utils.SlugUtils;
 
 @Repository
@@ -35,8 +36,12 @@ public class JdbcAppRepository implements AppRepository {
 		return jdbcTemplate.query(SELECT_APPS, appSummaryMapper, accountId);
 	}
 
-	public App findApp(Long accountId, String slug) {
-		return jdbcTemplate.queryForObject(SELECT_APP, appMapper, accountId, slug);
+	public App findAppBySlug(Long accountId, String slug) {
+		return jdbcTemplate.queryForObject(SELECT_APP_BY_SLUG, appMapper, accountId, slug);
+	}
+
+	public App findAppByApiKey(String apiKey) throws InvalidApiKeyException {
+		return jdbcTemplate.queryForObject(SELECT_APP_BY_API_KEY, appMapper, encryptor.encrypt(apiKey));
 	}
 
 	public String updateApp(Long accountId, String slug, AppForm form) {
@@ -74,7 +79,9 @@ public class JdbcAppRepository implements AppRepository {
 	
 	private static final String SELECT_APPS = "select a.name, a.slug, a.description from App a inner join AppDeveloper d on a.id = d.app where d.member = ?";
 
-	private static final String SELECT_APP = "select a.name, a.slug, a.description, a.apiKey, a.secret, a.callbackUrl from App a inner join AppDeveloper d on a.id = d.app where d.member = ? and a.slug = ?";
+	private static final String SELECT_APP_BY_SLUG = "select a.name, a.slug, a.description, a.apiKey, a.secret, a.callbackUrl from App a inner join AppDeveloper d on a.id = d.app where d.member = ? and a.slug = ?";
+
+	private static final String SELECT_APP_BY_API_KEY = "select a.name, a.slug, a.description, a.apiKey, a.secret, a.callbackUrl from App a where a.apiKey = ?";
 
 	private static final String SELECT_APP_FORM = "select a.name, a.description, a.organization, a.website, a.callbackUrl from App a inner join AppDeveloper d on a.id = d.app where d.member = ? and a.slug = ?";
 
