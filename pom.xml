@@ -167,7 +167,20 @@
 			<version>1.2.16</version>
 			<scope>runtime</scope>
 		</dependency>
-
+		<!-- Declared to exclude commons-logging (would be resolved transitively otherwise) -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>			
+			</exclusions>
+		</dependency>
+	
 		<!-- Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -276,6 +289,13 @@
 			<groupId>net.java.dev.jets3t</groupId>
 			<artifactId>jets3t</artifactId>
 			<version>0.7.4</version>
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>				
+			</exclusions>			
 		</dependency>
 		
 		<!-- Comet -->

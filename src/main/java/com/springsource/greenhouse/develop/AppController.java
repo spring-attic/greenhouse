@@ -40,7 +40,7 @@ public class AppController {
 	
 	@RequestMapping(value="/{slug}", method=RequestMethod.GET)
 	public String view(@PathVariable String slug, Account account, Model model) {
-		model.addAttribute(connectedAppRepository.findApp(account.getId(), slug));
+		model.addAttribute(connectedAppRepository.findAppBySlug(account.getId(), slug));
 		model.addAttribute("slug", slug);
 		return "develop/apps/view";
 	}

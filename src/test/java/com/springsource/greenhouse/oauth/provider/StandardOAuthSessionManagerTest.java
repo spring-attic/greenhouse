@@ -22,35 +22,38 @@ import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class StandardOAuthSessionManagerTest {
-	
+
 	private EmbeddedDatabase db;
 
 	private StandardOAuthSessionManager sessionManager;
 
 	private JdbcAccountRepository accountRepository;
-	
+
 	@Before
 	public void setUp() {
-    	db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();		
-    	accountRepository = new JdbcAccountRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
+		accountRepository = new JdbcAccountRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"),
+				NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		sessionManager = new StandardOAuthSessionManager(accountRepository);
 	}
-	
+
 	@After
 	public void destroy() {
 		if (db != null) {
 			db.shutdown();
 		}
 	}
-	
+
 	@Test
 	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, InvalidAccessTokenException {
 		executeOAuthSessionLifecycle(2);
 	}
 
-	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException, InvalidAccessTokenException {
+	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException,
+			InvalidAccessTokenException {
 		for (int i = 0; i < numberOfTimes; i++) {
-			OAuthSession session = sessionManager.newOAuthSession("123456789", "x-com-springsource-greenhouse://oauth-response");
+			OAuthSession session = sessionManager.newOAuthSession("123456789",
+					"x-com-springsource-greenhouse://oauth-response");
 			assertEquals("123456789", session.getApiKey());
 			assertEquals("x-com-springsource-greenhouse://oauth-response", session.getCallbackUrl());
 			String requestToken = session.getRequestToken();
@@ -59,7 +62,7 @@ public class StandardOAuthSessionManagerTest {
 			assertNotNull(secret);
 			assertFalse(session.authorized());
 			assertNull(session.getVerifier());
-			
+
 			session = sessionManager.getSession(session.getRequestToken());
 			assertEquals("123456789", session.getApiKey());
 			assertEquals("x-com-springsource-greenhouse://oauth-response", session.getCallbackUrl());
@@ -75,7 +78,7 @@ public class StandardOAuthSessionManagerTest {
 			assertEquals(secret, session.getSecret());
 			assertTrue(session.authorized());
 			assertEquals("verifier", session.getVerifier());
-			
+
 			AppConnection connection = sessionManager.grantAccess(requestToken);
 			assertEquals((Long) 1L, connection.getAccountId());
 			assertEquals("123456789", connection.getApiKey());
@@ -83,21 +86,21 @@ public class StandardOAuthSessionManagerTest {
 			assertFalse(requestToken.equals(connection.getAccessToken()));
 			assertNotNull(connection.getSecret());
 			assertFalse(secret.equals(connection.getSecret()));
-			
+
 			try {
 				sessionManager.getSession(requestToken);
 				fail("Should have thrown exception");
 			} catch (InvalidRequestTokenException e) {
-				
+
 			}
-			
+
 			connection = accountRepository.findAppConnection(connection.getAccessToken());
 			assertEquals((Long) 1L, connection.getAccountId());
 			assertEquals("123456789", connection.getApiKey());
 			assertNotNull(connection.getAccessToken());
 			assertFalse(requestToken.equals(connection.getAccessToken()));
 			assertNotNull(connection.getSecret());
-			assertFalse(secret.equals(connection.getSecret()));			
+			assertFalse(secret.equals(connection.getSecret()));
 		}
 	}
 }

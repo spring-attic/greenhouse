@@ -55,9 +55,9 @@ public class CipherUtils {
 		try {
 			return cipher.doFinal(input);
 		} catch (IllegalBlockSizeException e) {
-			throw new IllegalStateException("Unable to encrypt due to illegal block size", e);
+			throw new IllegalStateException("Unable to invoke Cipher due to illegal block size", e);
 		} catch (BadPaddingException e) {
-			throw new IllegalStateException("Unable to encrypt due to bad padding", e);
+			throw new IllegalStateException("Unable to invoke Cipher due to bad padding", e);
 		}		
 	}
 }

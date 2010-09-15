@@ -31,34 +31,38 @@ import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class OAuthSessionManagerProviderTokenServicesTest {
-	
+
 	private EmbeddedDatabase db;
 
 	private OAuthSessionManagerProviderTokenServices tokenServices;
-	
+
 	@Before
 	public void setUp() {
-    	db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(StandardOAuthSessionManagerTest.class).getDatabase();		
-    	AccountRepository accountRepository = new JdbcAccountRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(StandardOAuthSessionManagerTest.class).getDatabase();
+		AccountRepository accountRepository = new JdbcAccountRepository(new JdbcTemplate(db),
+				new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(),
+				new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		OAuthSessionManager sessionManager = new StandardOAuthSessionManager(accountRepository);
 		tokenServices = new OAuthSessionManagerProviderTokenServices(sessionManager, accountRepository);
 	}
-	
+
 	@After
 	public void destroy() {
 		if (db != null) {
 			db.shutdown();
 		}
 	}
-	
+
 	@Test
 	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, InvalidAccessTokenException {
 		executeOAuthSessionLifecycle(2);
 	}
 
-	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException, InvalidAccessTokenException {
+	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException,
+			InvalidAccessTokenException {
 		for (int i = 0; i < numberOfTimes; i++) {
-			OAuthProviderToken token = tokenServices.createUnauthorizedRequestToken("123456789", "x-com-springsource-greenhouse://oauth-response");
+			OAuthProviderToken token = tokenServices.createUnauthorizedRequestToken("123456789",
+					"x-com-springsource-greenhouse://oauth-response");
 			assertEquals("123456789", token.getConsumerKey());
 			assertEquals("x-com-springsource-greenhouse://oauth-response", token.getCallbackUrl());
 			String requestToken = token.getValue();
@@ -66,7 +70,7 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 			assertNotNull(requestToken);
 			assertNotNull(secret);
 			assertNull(token.getVerifier());
-			
+
 			token = tokenServices.getToken(token.getValue());
 			assertEquals("123456789", token.getConsumerKey());
 			assertEquals("x-com-springsource-greenhouse://oauth-response", token.getCallbackUrl());
@@ -75,34 +79,35 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 			assertNull(token.getVerifier());
 
 			Account account = new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", null, null, null);
-			Authentication auth = new UsernamePasswordAuthenticationToken(account, null, (Collection<GrantedAuthority>)null);		
+			Authentication auth = new UsernamePasswordAuthenticationToken(account, null,
+					(Collection<GrantedAuthority>) null);
 			tokenServices.authorizeRequestToken(requestToken, "verifier", auth);
-			
-			token = tokenServices.getToken(token.getValue());			
+
+			token = tokenServices.getToken(token.getValue());
 			assertEquals("123456789", token.getConsumerKey());
 			assertEquals("x-com-springsource-greenhouse://oauth-response", token.getCallbackUrl());
 			assertEquals(requestToken, token.getValue());
 			assertEquals(secret, token.getSecret());
 			assertEquals("verifier", token.getVerifier());
-			
+
 			OAuthAccessProviderToken accessToken = tokenServices.createAccessToken(token.getValue());
 			assertEquals("123456789", accessToken.getConsumerKey());
 			assertNotNull(accessToken.getValue());
 			assertFalse(requestToken.equals(accessToken.getValue()));
 			assertNotNull(accessToken.getSecret());
 			assertFalse(secret.equals(accessToken.getSecret()));
-			
+
 			try {
 				tokenServices.getToken(requestToken);
 				fail("Should have thrown exception");
 			} catch (InvalidOAuthTokenException e) {
-				
+
 			}
-			
+
 			Authentication auth2 = accessToken.getUserAuthentication();
 			assertNotNull(auth2);
 			assertTrue(auth2.getPrincipal() instanceof Account);
-			assertEquals((Long) 1L, ((Account)auth2.getPrincipal()).getId());
+			assertEquals((Long) 1L, ((Account) auth2.getPrincipal()).getId());
 		}
 	}
 }
