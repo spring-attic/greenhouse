@@ -28,6 +28,7 @@ import org.springframework.integration.http.MultipartAwareFormHttpMessageConvert
 import org.springframework.integration.http.SerializingHttpMessageConverter;
 import org.springframework.integration.mapping.HeaderMapper;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -100,6 +101,10 @@ public class HttpMessageMapper {
 			content = message.getPayload();
 		}
 		for (HttpMessageConverter converter : this.getMessageConverters()) {
+			if (CollectionUtils.isEmpty(request.getHeaders().getAccept())) {
+				//TODO - This is needed because the headers never get set with WebSocket.  Make this configurable.
+				request.getHeaders().set("Accept", "application/json");
+			}
 			for (MediaType acceptType : request.getHeaders().getAccept()) {
 				if (converter.canWrite(content.getClass(), acceptType)) {
 					try {

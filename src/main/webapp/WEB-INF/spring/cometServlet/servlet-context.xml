@@ -14,6 +14,7 @@
 				
 	<bean name="/recent/notifications" class="org.springframework.integration.comet.AsyncHttpRequestHandlingMessageAdapter">
 		<property name="messageChannel" ref="recentActivity" />
+		<property name="messageThreshold" value="2" />
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"/>
