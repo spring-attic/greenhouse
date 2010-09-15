@@ -1,9 +1,8 @@
 package com.springsource.greenhouse.signup;
 
-import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 
 import com.springsource.greenhouse.account.Gender;
@@ -11,23 +10,22 @@ import com.springsource.greenhouse.account.Person;
 
 public class SignupForm {
 	
-	@NotEmpty
+	@NotNull
 	private String firstName;
 
-	@NotEmpty
+	@NotNull
 	private String lastName;
 
-	@NotEmpty
+	@NotNull
 	@Size(max=320)
 	private String email;
 
-	@NotEmpty
+	@NotNull
 	@Size(min=6)
-	private String password = "";
+	// TODO confirmation constraint	
+	private String password;
 
-	@NotEmpty
-	@Size(min=6)
-	private String confirmPassword = "";
+	private String confirmPassword;
 
 	public String getFirstName() {
 		return firstName;
@@ -69,11 +67,6 @@ public class SignupForm {
 		this.confirmPassword = confirmPassword;
 	}
 	
-	@AssertTrue(message="could not confirm")
-	public boolean isPasswordConfirmed() {
-		return password.equals(confirmPassword);
-	}
-
 	public Person createPerson() {
 		// TODO add gender and birthdate
 		return new Person(firstName, lastName, email, password, Gender.Male, new LocalDate(1977, 12, 1));

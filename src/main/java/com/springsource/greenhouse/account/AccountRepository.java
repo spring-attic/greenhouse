@@ -10,22 +10,31 @@ public interface AccountRepository {
 
 	void changePassword(Long accountId, String password);
 	
-	Account findById(Long id);
+	Account findById(Long accountId);
 
 	Account findByUsername(String username) throws UsernameNotFoundException;
 
-	void markProfilePictureSet(Long id);
+	void markProfilePictureSet(Long accountId);
 
-	// connected account operations
+	// account connection operations
 	
-	Account findByConnectedAccount(String provider, String accessToken) throws ConnectedAccountNotFoundException; // TODO exception case where accessToken is invalid
+	// TODO should we allow the user to connect again and overwrite previous connection details? this would be consistent with connectApp but does it make sense?
+	void connectAccount(Long accountId, String provider, String accessToken, String providerAccountId) throws AccountConnectionAlreadyExists;
 
-	List<Account> findFriendAccounts(String provider, List<String> friendIds);
+	boolean hasAccountConnection(Long accountId, String provider);
+
+	Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException;
+
+	void disconnectAccount(Long accountId, String provider);
+
+	List<Account> findFriendAccounts(String provider, List<String> providerFriendAccountIds);
 	
-	void connect(Long id, String provider, String accessToken, String accountId) throws AccountAlreadyConnectedException;
+	// app connection operations
+	
+	AppConnection connectApp(Long accountId, String apiKey) throws InvalidApiKeyException;
 
-	boolean isConnected(Long id, String provider);
+	AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException;
+	
+	void disconnectApp(Long accountId, String accessToken);
 
-	void disconnect(Long id, String provider);
-		
 }

@@ -94,7 +94,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
-      assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'someToken'"));
+      assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken = 'someToken'"));
     }
     
     @Test
@@ -109,7 +109,7 @@ public class OAuthConsumerTokenServicesAdapterTest {
       OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
       tokenServices.storeToken("myspace", requestToken);      
       assertSame(requestToken, request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#myspace"));
-      assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken='someToken'"));
+      assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken='someToken'"));
     }
     
     @Test
@@ -125,14 +125,14 @@ public class OAuthConsumerTokenServicesAdapterTest {
         request.getSession().setAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter", accessToken);
         
         // Token should be available before remove
-        assertEquals(1, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'twitterToken'"));
+        assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken = 'twitterToken'"));
         assertNotNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
 
         OAuthConsumerTokenServices tokenServices = tokenServicesFactory.getTokenServices(authentication, request);
         ((OAuthConsumerTokenServicesAdapter) tokenServices).removeToken("twitter");
         
         // Token should be gone after remove
-        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from ConnectedAccount where accessToken = 'twitterToken'"));
+        assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where accessToken = 'twitterToken'"));
         assertNull(request.getSession().getAttribute(HttpSessionBasedTokenServices.KEY_PREFIX + "#twitter"));
     }
     

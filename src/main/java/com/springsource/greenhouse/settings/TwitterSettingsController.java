@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServicesFactory;
 import org.springframework.security.oauth.extras.OAuthConsumerTokenServicesHelper;
+import org.springframework.social.core.SocialException;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
-import com.springsource.greenhouse.account.PictureUrlFactory;
 
 @Controller
 @RequestMapping("/settings/twitter")
@@ -42,7 +42,7 @@ public class TwitterSettingsController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public String connectView(Account account) {
-		if (accountRepository.isConnected(account.getId(), TWITTER_PROVIDER)) {
+		if (accountRepository.hasAccountConnection(account.getId(), TWITTER_PROVIDER)) {
 			return "settings/twitterConnected";
 		} else {
 			return "settings/twitterConnect";
@@ -61,8 +61,14 @@ public class TwitterSettingsController {
 			jdbcTemplate.update(UPDATE_CONNECTED_ACCOUNT_ID, screenName, account.getId(), TWITTER_PROVIDER);
 			
 			if (request.getParameter("tweetIt") != null) {
-				// TODO should this be done asynchronously?
-				twitterService.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
+				try {
+					twitterService.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
+				} catch (SocialException e) {
+					// This should only happen if a duplicate tweet is
+					// attempted. And that should only happen at this point in
+					// the app if the user is repeatedly linking/unlinking with
+					// Twitter. Not sure it's necessary to do anything here.
+				}
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
 		}
@@ -89,6 +95,6 @@ public class TwitterSettingsController {
 	private static final String TWITTER_PROVIDER = "Twitter";
 	
 	private static final String UPDATE_CONNECTED_ACCOUNT_ID = 
-		"update ConnectedAccount set accountId = ? where member = ? and provider = ?";
+		"update AccountConnection set accountId = ? where member = ? and provider = ?";
 	
 }

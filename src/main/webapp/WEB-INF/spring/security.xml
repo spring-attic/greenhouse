@@ -31,24 +31,35 @@
 
 	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.account.UsernamePasswordAuthenticationProvider" />
 
+	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
+
 	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository">
 		<beans:constructor-arg value="${application.url}/members/{profileKey}" />		
 	</beans:bean>
 	
 	<greenhouse:environment-bean id="passwordEncoder">
 		<greenhouse:when environment="embedded">
-			<beans:bean class="org.springframework.security.password.NoOpPasswordEncoder" />
+			<beans:bean class="org.springframework.security.encrypt.NoOpPasswordEncoder" factory-method="getInstance" />
 		</greenhouse:when>
 		<greenhouse:otherwise>
-			<beans:bean class="org.springframework.security.password.StandardPasswordEncoder">
-				<beans:constructor-arg value="${security.encodeAlgorithm}" />
-				<beans:constructor-arg value="${security.encodeSecret}" />
+			<beans:bean class="org.springframework.security.encrypt.StandardPasswordEncoder">
+				<beans:constructor-arg value="${security.encryptPassword}" />
 			</beans:bean>
 		</greenhouse:otherwise>
 	</greenhouse:environment-bean>
-	
-	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
 
+	<greenhouse:environment-bean id="stringEncryptor">
+		<greenhouse:when environment="embedded">
+			<beans:bean class="org.springframework.security.encrypt.NoOpStringEncryptor" factory-method="getInstance" />
+		</greenhouse:when>
+		<greenhouse:otherwise>
+			<beans:bean class="org.springframework.security.encrypt.SearchableStringEncryptor">
+				<beans:constructor-arg value="${security.encryptPassword}" />
+				<beans:constructor-arg value="${security.encryptSalt}" />
+			</beans:bean>
+		</greenhouse:otherwise>
+	</greenhouse:environment-bean>
+		
 	<beans:import resource="security-oauth-provider.xml" />
 	
 	<beans:import resource="security-oauth-consumer.xml" />

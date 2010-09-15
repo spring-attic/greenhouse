@@ -15,10 +15,6 @@ import com.springsource.greenhouse.account.Account;
 
 public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
 
-	static final String SELECT_TOKEN_SQL = "select provider, accessToken, secret from ConnectedAccount where member = ? and provider = ?";
-    static final String INSERT_TOKEN_SQL = "insert into ConnectedAccount (member, provider, accessToken, secret) values (?, ?, ?, ?)";
-    static final String DELETE_TOKEN_SQL = "delete from ConnectedAccount where member = ? and provider = ?";
-
 	private JdbcTemplate jdbcTemplate;
 	
 	public JdbcAccessTokenServices(JdbcTemplate jdbcTemplate) {
@@ -27,7 +23,6 @@ public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
 
 	public OAuthConsumerToken getToken(String resourceId, Object principal) throws AuthenticationException {
 		assertThatPrincipalIsAnAccount(principal);
-
 		Account account = (Account) principal;
 		List<OAuthConsumerToken> accessTokens = jdbcTemplate.query(SELECT_TOKEN_SQL, new RowMapper<OAuthConsumerToken>() {
 			public OAuthConsumerToken mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -38,7 +33,7 @@ public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
 				token.setSecret(rs.getString("secret"));
 				return token;
 			}
-				}, account.getId(), resourceId);
+		}, account.getId(), resourceId);
 		OAuthConsumerToken accessToken = null;
 		if (accessTokens.size() > 0) {
 			accessToken = accessTokens.get(0);
@@ -49,10 +44,8 @@ public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
 	public void storeToken(String resourceId, Object principal, OAuthConsumerToken token) {
 		assertThatPrincipalIsAnAccount(principal);
 		Account account = (Account) principal;
-
 		if (token.isAccessToken()) {
-			jdbcTemplate.update(INSERT_TOKEN_SQL, account.getId(), token.getResourceId(), token.getValue(),
-					token.getSecret());
+			jdbcTemplate.update(INSERT_TOKEN_SQL, account.getId(), token.getResourceId(), token.getValue(), token.getSecret());
 		}
 	}
 
@@ -67,4 +60,9 @@ public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
 			throw new BadCredentialsException("Expected principal to be an Account object");
 		}
 	}
+	
+	static final String SELECT_TOKEN_SQL = "select provider, accessToken, secret from AccountConnection where member = ? and provider = ?";
+    static final String INSERT_TOKEN_SQL = "insert into AccountConnection (member, provider, accessToken, secret) values (?, ?, ?, ?)";
+    static final String DELETE_TOKEN_SQL = "delete from AccountConnection where member = ? and provider = ?";
+
 }

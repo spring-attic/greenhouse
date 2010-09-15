@@ -25,8 +25,12 @@
 		<property name="realmName" value="Greenhouse" />
 	</bean>
 			
-	<bean id="consumerDetails" class="com.springsource.greenhouse.oauth.JdbcConsumerDetailsService" />
+	<bean id="consumerDetails" class="com.springsource.greenhouse.oauth.provider.JdbcConsumerDetailsService" />
 
-    <bean id="tokenServices" class="com.springsource.greenhouse.oauth.JdbcOAuthProviderTokenServices" />
+    <bean id="tokenServices" class="com.springsource.greenhouse.oauth.provider.OAuthSessionManagerProviderTokenServices">
+    	<constructor-arg>
+    		<bean class="com.springsource.greenhouse.oauth.provider.StandardOAuthSessionManager" />
+    	</constructor-arg>
+    </bean>
     	
 </beans>

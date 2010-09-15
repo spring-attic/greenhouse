@@ -13,7 +13,7 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
-import com.springsource.greenhouse.account.ConnectedAccountNotFoundException;
+import com.springsource.greenhouse.account.InvalidAccessTokenException;
 import com.springsource.greenhouse.account.UsernameNotFoundException;
 
 
@@ -34,10 +34,10 @@ public class FacebookSigninController {
 	@RequestMapping(value = "/fb", method = RequestMethod.POST)
 	public String signinWithFacebook(@FacebookAccessToken String accessToken) {
 		try {
-			Account account = accountRepository.findByConnectedAccount("Facebook", accessToken);
+			Account account = accountRepository.findByAccountConnection("Facebook", accessToken);
 			AccountUtils.signin(account);
 			return "redirect:/";
-		} catch (ConnectedAccountNotFoundException e) {
+		} catch (InvalidAccessTokenException e) {
 			return handleConnectedAccountNotFound(facebook.getUserInfo(accessToken));
 		} // TODO handle case where accessToken is invalid
 	}

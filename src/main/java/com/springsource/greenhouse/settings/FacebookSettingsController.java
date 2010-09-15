@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountAlreadyConnectedException;
+import com.springsource.greenhouse.account.AccountConnectionAlreadyExists;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
@@ -40,7 +40,7 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.GET)
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
-		if (accountRepository.isConnected(account.getId(), FACEBOOK_PROVIDER)) {
+		if (accountRepository.hasAccountConnection(account.getId(), FACEBOOK_PROVIDER)) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "settings/facebookConnected";
 		} else {
@@ -51,7 +51,7 @@ public class FacebookSettingsController {
 	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
 	public String connectAccountToFacebook(HttpServletRequest request, Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId) {
 		try {
-			accountRepository.connect(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);		
+			accountRepository.connectAccount(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);		
 			if (request.getParameter("postIt") != null) {
 				postGreenhouseConnectionToWall(request, account, accessToken);
 			}			
@@ -59,7 +59,7 @@ public class FacebookSettingsController {
 				useFacebookProfilePicture(account, accessToken);
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
-		} catch (AccountAlreadyConnectedException e) {
+		} catch (AccountConnectionAlreadyExists e) {
 			FlashMap.setErrorMessage("Unable to connect: Your Facebook account is already connected to a Greenhouse account.");
 		}
 		return "redirect:/settings/facebook";			
@@ -73,7 +73,7 @@ public class FacebookSettingsController {
 	
 	@RequestMapping(value="/facebook", method=RequestMethod.DELETE)
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
-		accountRepository.disconnect(account.getId(), FACEBOOK_PROVIDER);
+		accountRepository.disconnectAccount(account.getId(), FACEBOOK_PROVIDER);
 		return "redirect:/settings/facebook";
 	}
 	

@@ -1,70 +1,39 @@
-form {
-	font-size: 1em;
-	/*width: 40em;*/
-	color: #1b1b1b;
+form 
+{
 	text-align: left;
-	/*position: relative;*/
-	margin: 1em auto
 }
 
 /* Elements */
-form label, form legend {
+form label, form legend 
+{
 	padding: 0;
 	margin: 0.3em 0;
 }
 
-form fieldset {
-	padding: 0.7em;
-	border: 1px solid #ddd;
-	margin: 0 0 0.5em 0;
-}
-
-form label {
+form label 
+{
 	font-weight: bold;
 }
 
-form fieldset input {
-	/*width: 70%;*/
+form input[type="text"], form input[type="password"] 
+{
+	width: 100%;
 	line-height: 1.5em;
-	padding: 0.15em;
 }
 
-form .radio input, form .checkbox input {
-	width: auto;
-	border: none;
-}
-
-form input, form textarea, form select {
+form input, form textarea, form select 
+{
 	display: block;
 	margin-bottom: 1em;
-	font-size: 1em;
-	border: 1px solid #bbb;
+	margin-right: 1em;
 	padding: 0.15em;
-	margin-right: 1em
-}
-
-form .radio label, form .radio input, form .checkbox label, form .checkbox input {
-	display: inline;
-	margin: 0 1.5em 0 0
-}
-
-form .radio input, form .checkbox input {
-	margin: 0 0.3em 0 0
-}
-
-form .multiple label {
-	float: left;
-	width: 29%;
-	overflow: hidden;
-	padding-left: 1px;
-}
-
-form .multiple input {
-	cursor: pointer;
+	border: 1px solid #bbb;
+	font-size: 1em;
 }
 
 /* Button */
-form button {
+form button 
+{
 	margin: 0.3em 0;
 	border: 1px solid #ccc;
 	background-color: #eee;

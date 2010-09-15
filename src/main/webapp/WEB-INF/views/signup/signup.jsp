@@ -36,8 +36,7 @@
   		<form:input path="email" />
   		
   		<form:label path="password">
-	  		<!-- TODO the form:errors will fail to render password field errors since its for the passwordConfirmed property -->
-  			Password (at least 6 characters) <form:errors path="passwordConfirmed" cssClass="error" />
+  			Password (at least 6 characters) <form:errors path="password" cssClass="error" />
   		</form:label>
   		<form:password path="password" />
 

@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.security.password.NoOpPasswordEncoder;
-import org.springframework.security.password.PasswordEncoder;
-import org.springframework.security.password.StandardPasswordEncoder;
+import org.springframework.security.encrypt.NoOpPasswordEncoder;
+import org.springframework.security.encrypt.PasswordEncoder;
+import org.springframework.security.encrypt.StandardPasswordEncoder;
 
 
 public class EnvironmentBeanTest {
