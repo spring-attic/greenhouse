@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
@@ -41,7 +42,11 @@ public class JdbcAppRepository implements AppRepository {
 	}
 
 	public App findAppByApiKey(String apiKey) throws InvalidApiKeyException {
-		return jdbcTemplate.queryForObject(SELECT_APP_BY_API_KEY, appMapper, encryptor.encrypt(apiKey));
+		try {
+			return jdbcTemplate.queryForObject(SELECT_APP_BY_API_KEY, appMapper, encryptor.encrypt(apiKey));
+		} catch (EmptyResultDataAccessException e) {
+			throw new InvalidApiKeyException(apiKey);
+		}
 	}
 
 	public String updateApp(Long accountId, String slug, AppForm form) {
