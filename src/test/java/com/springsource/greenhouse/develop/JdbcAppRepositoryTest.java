@@ -74,6 +74,11 @@ public class JdbcAppRepositoryTest {
 		App app = appRepository.findAppByApiKey("123456789");
 		assertExpectedApp(app);
 	}
+	
+	@Test(expected=InvalidApiKeyException.class)
+	public void findByAppKeyInvalidKey() throws InvalidApiKeyException {
+		appRepository.findAppByApiKey("invalid");
+	}
 
 	@Test
 	@Transactional
