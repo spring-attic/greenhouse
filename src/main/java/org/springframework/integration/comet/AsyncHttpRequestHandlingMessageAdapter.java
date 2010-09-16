@@ -1,6 +1,12 @@
 package org.springframework.integration.comet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +25,10 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.integration.Message;
+import org.springframework.integration.MessageChannel;
 import org.springframework.integration.MessageDeliveryException;
 import org.springframework.integration.MessageHandlingException;
 import org.springframework.integration.MessageRejectedException;
-import org.springframework.integration.MessagingException;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.integration.MessageChannel;
 import org.springframework.integration.core.MessageHandler;
 import org.springframework.integration.core.PollableChannel;
 import org.springframework.integration.core.SubscribableChannel;
@@ -33,7 +37,9 @@ import org.springframework.integration.endpoint.EventDrivenConsumer;
 import org.springframework.integration.endpoint.PollingConsumer;
 import org.springframework.integration.http.DefaultHttpHeaderMapper;
 import org.springframework.integration.mapping.HeaderMapper;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.HttpRequestHandler;
  
 public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
@@ -55,16 +61,40 @@ public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
 	
 	private volatile boolean extractResponsePayload = true;
 	
+	//Hopefully this threshold handling is temporary until we get the BroadcasterCache working as it should
+	private volatile int messageThreshold = 0;
+	
+	private volatile BlockingQueue<HttpBroadcastMessage> messageQueue;
+	
 	public void handleMessage(Message<?> message)
 			throws MessageRejectedException, MessageHandlingException,
 			MessageDeliveryException {
 		try {
-			Broadcaster broadcaster = BroadcasterFactory.getDefault().lookup(DefaultBroadcaster.class, this.getComponentName());
-			if (log.isDebugEnabled()) {
-				log.debug("Broadcasting message "+message.toString()+" to "+broadcaster.getAtmosphereResources().size()+ " suspended resources.");
+			HttpBroadcastMessage httpMessage = new HttpBroadcastMessage(MessageBuilder.fromMessage(message).setHeaderIfAbsent(ENDPOINT_PATH_HEADER, 
+					this.getComponentName()).build(), this.extractResponsePayload, this.headerMapper);
+			messageQueue.add(httpMessage);
+			if (messageQueue.size() >= messageThreshold) {
+				Broadcaster broadcaster = BroadcasterFactory.getDefault().lookup(DefaultBroadcaster.class, this.getComponentName());
+				if (broadcaster == null) {
+					//TODO - This will potentially cause lost messages...fix that
+					log.warn("Message received but no Broadcaster available.");
+					return;
+				}
+				List<HttpBroadcastMessage> broadcastMessages = new ArrayList<HttpBroadcastMessage>();
+				messageQueue.drainTo(broadcastMessages);
+				if (broadcastMessages.size() > 0) {
+					if (log.isInfoEnabled()) {
+						log.info("Broadcasting message "+message.toString()+" to "+broadcaster.getAtmosphereResources().size()+ " suspended resources.");
+					}
+					Future<Object> future = broadcaster.broadcast(broadcastMessages);
+					if (future != null) {
+						future.get();
+					}
+					if (log.isDebugEnabled()) {
+						log.debug("Broadcast operation for "+broadcastMessages+" executed.");
+					}
+				}
 			}
-			Message<?> messageToBroadcast = MessageBuilder.fromMessage(message).setHeaderIfAbsent(ENDPOINT_PATH_HEADER, this.getComponentName()).build();
-			broadcaster.broadcast(new HttpBroadcastMessage(messageToBroadcast, this.extractResponsePayload, this.headerMapper));
 		} catch (Exception ex) {
 			throw new IllegalStateException("Broadcast failed", ex);
 		}
@@ -100,8 +130,8 @@ public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
 
 	private void subscribe(
 			AtmosphereResource<HttpServletRequest, HttpServletResponse> resource) {
-		if (log.isDebugEnabled()) {
-			log.debug("Handling subscription request for resource with broadcaster ID: "+resource.getBroadcaster().getID());
+		if (log.isInfoEnabled()) {
+			log.info("Handling subscription request for resource with broadcaster ID: "+resource.getBroadcaster().getID());
 		}
 		//Write a content type (for all future responses) as best guessed from the configured converters, since this is our
 		//only chance to write the headers.
@@ -120,25 +150,51 @@ public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
 								response.getHeaders().setContentType(defaultType);
 							}
 						}
-						try {
-							response.getBody().flush();
-							resource.suspend();
-							if (log.isDebugEnabled()) {
-								log.debug("Resource with broadcaster ID: "+resource.getBroadcaster().getID()+" suspended.");
-							}
-							return;							
-						} catch (IOException ex) {
-							throw new MessagingException("An error occurred while trying to write the Content-Type header during the initial subscription request.", ex);
+						doSuspend(resource);
+						if (log.isInfoEnabled()) {
+							log.info("Resource with broadcaster ID: "+resource.getBroadcaster().getID()+" suspended.");
 						}
-						
+						return;							
 					}
 				}
 			}
 		}
-		resource.suspend();
-		if (log.isDebugEnabled()) {
-			log.debug("Resource with broadcaster ID: "+resource.getBroadcaster().getID()+" suspended without writing a Content-Type.");
+		
+		doSuspend(resource);
+		
+		if (log.isInfoEnabled()) {
+			log.info("Resource with broadcaster ID: "+resource.getBroadcaster().getID()+" suspended without writing a Content-Type.");
 		}
+	}
+
+	private void doSuspend(
+			AtmosphereResource<HttpServletRequest, HttpServletResponse> resource) {
+		boolean flushComment = isFlushCommentsRequired(resource.getRequest());
+		setResumeOnBroadcast(resource.getRequest());
+		
+		//TODO - Allow setting an explicit long-poll timeout
+		resource.suspend(-1L, flushComment);
+	}
+
+	private boolean isFlushCommentsRequired(HttpServletRequest request) {
+		String upgrade = request.getHeader("Connection");
+        if (StringUtils.hasText(upgrade) && upgrade.equalsIgnoreCase("Upgrade")) {
+           return false;
+        } else if (isLongPolling(request)) {
+            return false;
+        }
+        return true;
+	}
+
+	private void setResumeOnBroadcast(HttpServletRequest request) {
+		if (isLongPolling(request)) {
+			request.setAttribute(AtmosphereServlet.RESUME_ON_BROADCAST, new Boolean(true));
+        }
+	}
+	
+	private boolean isLongPolling(HttpServletRequest request) {
+		String transport = request.getHeader("X-Atmosphere-Transport");
+		return StringUtils.hasText(transport) && transport.equals("long-polling");
 	}
 
 	private void publish(
@@ -166,6 +222,7 @@ public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
 
 	@Override
 	protected void doStart() {
+		this.messageQueue = new LinkedBlockingQueue<HttpBroadcastMessage>();
 		this.consumerEndpoint.start();
 	}
 
@@ -176,5 +233,9 @@ public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
 
 	public void setMessageChannel(MessageChannel messageChannel) {
 		this.messageChannel = messageChannel;
+	}
+
+	public void setMessageThreshold(int messageThreshold) {
+		this.messageThreshold = messageThreshold;
 	}
 }

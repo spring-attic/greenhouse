@@ -27,6 +27,7 @@ jQuery.atmosphere = function()
             responseBody : '',
             headers : [],
             state : "messageReceived",
+            lastMessageDate: null,
             transport : "polling",
             push : [],
             error: null,
@@ -34,6 +35,7 @@ jQuery.atmosphere = function()
         },
 
         request : {},
+        abordingConnection: false,
         logLevel : 'info',
         callbacks: [],
         activeTransport : null,
@@ -93,6 +95,7 @@ jQuery.atmosphere = function()
          * Always make sure one transport is used, not two at the same time except for Websocket.
          */
         closeSuspendedConnection : function () {
+            abordingConnection = true;
             if (activeRequest != null) {
                 activeRequest.abort();
             }
@@ -101,6 +104,7 @@ jQuery.atmosphere = function()
                 jQuery.atmosphere.websocket.close();
                 jQuery.atmosphere.websocket = null;
             }
+            abordingConnection = false;
         },
 
         executeRequest: function()
@@ -151,9 +155,10 @@ jQuery.atmosphere = function()
                 ajaxRequest.open(request.method, request.url, true);
                 ajaxRequest.setRequestHeader("X-Atmosphere-Framework", jQuery.atmosphere.version);
                 ajaxRequest.setRequestHeader("X-Atmosphere-Transport", request.transport);
-                ajaxRequest.setRequestHeader("X-Cache-Date", new Date());
+                // response.lastMessageDate ? response.lastMessageDate : 
+                ajaxRequest.setRequestHeader("X-Cache-Date", new Date().getTime());
                 for(var x in request.headers) {
-                	ajaxRequest.setRequestHeader(x, request.headers[x]);
+                    ajaxRequest.setRequestHeader(x, request.headers[x]);
                 }
 
                 if (!$.browser.msie) {
@@ -176,6 +181,8 @@ jQuery.atmosphere = function()
 
                 ajaxRequest.onreadystatechange = function()
                 {
+                    if (abordingConnection) return;
+
                     var junkForWebkit = false;
                     var update = false;
                     if (ajaxRequest.readyState == 4) {
@@ -217,6 +224,9 @@ jQuery.atmosphere = function()
                         try {
                             response.status = ajaxRequest.status;
                             response.headers = ajaxRequest.getAllResponseHeaders();
+                            if (ajaxRequest.getResponseHeader("X-Cache-Date")) {
+                            	response.lastMessageDate = ajaxRequest.getResponseHeader("X-Cache-Date");
+                            }
                         }
                         catch(e) {
                             response.status = 404;

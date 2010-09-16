@@ -2,6 +2,8 @@ package org.springframework.integration.comet;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,12 @@ import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.atmosphere.cpr.DefaultBroadcaster;
+import org.springframework.http.HttpHeaders;
+import org.springframework.integration.Message;
 import org.springframework.integration.MessagingException;
+import org.springframework.integration.http.DefaultHttpHeaderMapper;
+import org.springframework.integration.mapping.HeaderMapper;
+import org.springframework.integration.support.MessageBuilder;
 
 public class HttpMessageBroadcaster extends DefaultBroadcaster {
 
@@ -22,17 +29,28 @@ public class HttpMessageBroadcaster extends DefaultBroadcaster {
 	
 	private final HttpMessageMapper messageMapper = new HttpMessageMapper();
 	
-	@SuppressWarnings("unchecked")
+	private volatile HeaderMapper<HttpHeaders> headerMapper = new DefaultHttpHeaderMapper();
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected void broadcast(AtmosphereResource<?, ?> resource, AtmosphereResourceEvent event) {
-		/*event.setMessage("1234567");
-		super.broadcast(resource, event);
-		return;*/
-		if (!HttpBroadcastMessage.class.isAssignableFrom(event.getMessage().getClass())) {
+	protected void broadcast(AtmosphereResource<?, ?> resource, AtmosphereResourceEvent event) { 
+		List<HttpBroadcastMessage> messages = new ArrayList<HttpBroadcastMessage>();
+		if (event.getMessage() instanceof List) {
+			List messageBacklog = (List) event.getMessage();
+			if (!messageBacklog.isEmpty() && messageBacklog.get(0) instanceof HttpBroadcastMessage) {
+				messages.addAll(messageBacklog);
+			} else {
+				super.broadcast(resource, event);
+				return;
+			}
+		} else if (HttpBroadcastMessage.class.isAssignableFrom(event.getMessage().getClass())){
+			messages.add((HttpBroadcastMessage) event.getMessage());
+		} else {
 			super.broadcast(resource, event);
 			return;
 		}
-		HttpBroadcastMessage broadcastMessage = (HttpBroadcastMessage) event.getMessage();
+		
+		Message<?> broadcastMessage = mergeMessagesForBroadcast(messages);
 		HttpServletRequest request = (HttpServletRequest) resource.getRequest();
 		HttpServletResponse response = (HttpServletResponse) resource.getResponse();
 		try {
@@ -43,11 +61,11 @@ public class HttpMessageBroadcaster extends DefaultBroadcaster {
 		}
 		
 		HttpMessageBroadcasterResponseWrapper responseWrapper = new HttpMessageBroadcasterResponseWrapper(response); 
-		messageMapper.writeMessage(request, responseWrapper, broadcastMessage.getMessage(), broadcastMessage.isExtractPayload(), broadcastMessage.getHeaderMapper());
+		messageMapper.writeMessage(request, responseWrapper, broadcastMessage, true, headerMapper);
 		try {
 			response.getOutputStream().write(responseWrapper.toByteArray());
-			if (log.isDebugEnabled()) {
-				log.debug("Wrote "+responseWrapper.toByteArray().length+" bytes to response.");
+			if (log.isInfoEnabled()) {
+				log.info("Wrote "+responseWrapper.toByteArray().length+" bytes to response.");
 			}
 			response.getOutputStream().flush();
 		} catch (IOException ex) {
@@ -60,6 +78,14 @@ public class HttpMessageBroadcaster extends DefaultBroadcaster {
         }
 	}
 	
+	private Message<?> mergeMessagesForBroadcast(List<HttpBroadcastMessage> messages) {
+		List<Object> payloads = new ArrayList<Object>();
+		for(HttpBroadcastMessage message : messages) {
+			payloads.add(message.getMessage().getPayload());
+		}
+		return MessageBuilder.withPayload(payloads).build();
+	}
+
 	private static class HttpMessageBroadcasterResponseWrapper extends HttpServletResponseWrapper {
 
 			private final ByteArrayOutputStream content = new ByteArrayOutputStream();
