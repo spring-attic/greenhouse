@@ -38,11 +38,11 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 
 	@Before
 	public void setUp() {
-		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(StandardOAuthSessionManagerTest.class).getDatabase();
+		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(ConcurrentMapOAuthSessionManagerTest.class).getDatabase();
 		AccountRepository accountRepository = new JdbcAccountRepository(new JdbcTemplate(db),
 				new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"), NoOpPasswordEncoder.getInstance(),
 				new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		OAuthSessionManager sessionManager = new StandardOAuthSessionManager(accountRepository);
+		OAuthSessionManager sessionManager = new ConcurrentMapOAuthSessionManager(accountRepository);
 		tokenServices = new OAuthSessionManagerProviderTokenServices(sessionManager, accountRepository);
 	}
 
