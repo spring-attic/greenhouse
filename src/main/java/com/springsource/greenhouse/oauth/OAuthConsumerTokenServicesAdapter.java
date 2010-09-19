@@ -6,6 +6,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.consumer.token.HttpSessionBasedTokenServices;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.token.OAuthConsumerTokenServices;
+import org.springframework.social.oauth.AccessToken;
 import org.springframework.social.oauth.AccessTokenServices;
 
 import com.springsource.greenhouse.account.Account;
@@ -26,7 +27,7 @@ import com.springsource.greenhouse.account.Account;
 public class OAuthConsumerTokenServicesAdapter extends HttpSessionBasedTokenServices {
 	private Account account;
 	private HttpSession session;
-	private AccessTokenServices<OAuthConsumerToken> accessTokenServices;
+	private AccessTokenServices accessTokenServices;
 
 	public OAuthConsumerTokenServicesAdapter(HttpSession session, AccessTokenServices accessTokenServices,
 			Account account) {
@@ -36,21 +37,28 @@ public class OAuthConsumerTokenServicesAdapter extends HttpSessionBasedTokenServ
 		this.accessTokenServices = accessTokenServices;
 	}
 
-	@Override
 	public OAuthConsumerToken getToken(String resourceId) throws AuthenticationException {
         OAuthConsumerToken token = super.getToken(resourceId);
 		if (token == null) {
-			token = accessTokenServices.getToken(resourceId, account);
-			if (token != null) {
+			AccessToken accessToken = accessTokenServices.getToken(resourceId, account);
+
+			if (accessToken != null) {
+				token = new OAuthConsumerToken();
+				token.setAccessToken(true);
+				token.setValue(accessToken.getValue());
+				token.setSecret(accessToken.getSecret());
+				token.setResourceId(accessToken.getProviderId());
 				super.storeToken(resourceId, token);
 			}
 		}
 		return token;
 	}
 
-	@Override
 	public void storeToken(String resourceId, OAuthConsumerToken token) {
-		accessTokenServices.storeToken(resourceId, account, token);
+		if (token.isAccessToken()) {
+			accessTokenServices.storeToken(resourceId, account, new AccessToken(token.getValue(), token.getSecret(),
+					resourceId));
+		}
 		super.storeToken(resourceId, token);
 	}
 	

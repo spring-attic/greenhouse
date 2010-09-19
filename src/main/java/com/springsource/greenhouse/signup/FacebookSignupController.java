@@ -2,7 +2,6 @@ package com.springsource.greenhouse.signup;
 
 import javax.inject.Inject;
 
-import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookUserInfo;
 import org.springframework.stereotype.Controller;
@@ -22,8 +21,8 @@ public class FacebookSignupController {
 	}
 	
 	@RequestMapping(value="/fb", method = RequestMethod.GET)
-	public String signupForm(@FacebookAccessToken String accessToken, Model model) {
-		FacebookUserInfo userInfo = facebook.getUserInfo(accessToken);		
+	public String signupForm(Model model) {
+		FacebookUserInfo userInfo = facebook.getUserInfo();
 		SignupForm signupForm = new SignupForm();
 		signupForm.setFirstName(userInfo.getFirstName());
 		signupForm.setLastName(userInfo.getLastName());

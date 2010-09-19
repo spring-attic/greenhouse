@@ -8,12 +8,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth.consumer.token.OAuthConsumerToken;
-import org.springframework.social.oauth1.SSOAuthAccessTokenServices;
+import org.springframework.social.oauth.AccessToken;
+import org.springframework.social.oauth.AccessTokenServices;
 
 import com.springsource.greenhouse.account.Account;
 
-public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
+public class JdbcAccessTokenServices implements AccessTokenServices {
 
 	private JdbcTemplate jdbcTemplate;
 	
@@ -21,32 +21,26 @@ public class JdbcAccessTokenServices implements SSOAuthAccessTokenServices {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public OAuthConsumerToken getToken(String resourceId, Object principal) throws AuthenticationException {
+	public AccessToken getToken(String resourceId, Object principal) throws AuthenticationException {
 		assertThatPrincipalIsAnAccount(principal);
 		Account account = (Account) principal;
-		List<OAuthConsumerToken> accessTokens = jdbcTemplate.query(SELECT_TOKEN_SQL, new RowMapper<OAuthConsumerToken>() {
-			public OAuthConsumerToken mapRow(ResultSet rs, int rowNum) throws SQLException {
-				OAuthConsumerToken token = new OAuthConsumerToken();
-				token.setAccessToken(true);
-				token.setValue(rs.getString("accessToken"));
-				token.setResourceId(rs.getString("provider"));
-				token.setSecret(rs.getString("secret"));
-				return token;
+		List<AccessToken> accessTokens = jdbcTemplate.query(SELECT_TOKEN_SQL, new RowMapper<AccessToken>() {
+			public AccessToken mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new AccessToken(rs.getString("accessToken"), rs.getString("secret"), rs.getString("provider"));
 			}
-		}, account.getId(), resourceId);
-		OAuthConsumerToken accessToken = null;
+				}, account.getId(), resourceId);
+		AccessToken accessToken = null;
 		if (accessTokens.size() > 0) {
 			accessToken = accessTokens.get(0);
 		}
 		return accessToken;
 	}
 
-	public void storeToken(String resourceId, Object principal, OAuthConsumerToken token) {
+	public void storeToken(String resourceId, Object principal, AccessToken token) {
 		assertThatPrincipalIsAnAccount(principal);
 		Account account = (Account) principal;
-		if (token.isAccessToken()) {
-			jdbcTemplate.update(INSERT_TOKEN_SQL, account.getId(), token.getResourceId(), token.getValue(), token.getSecret());
-		}
+		jdbcTemplate.update(INSERT_TOKEN_SQL, account.getId(), token.getProviderId(), token.getValue(),
+					token.getSecret());
 	}
 
 	public void removeToken(String resourceId, Object principal) {

@@ -38,7 +38,7 @@ public class FacebookSigninController {
 			AccountUtils.signin(account);
 			return "redirect:/";
 		} catch (InvalidAccessTokenException e) {
-			return handleConnectedAccountNotFound(facebook.getUserInfo(accessToken));
+			return handleConnectedAccountNotFound(facebook.getUserInfo());
 		} // TODO handle case where accessToken is invalid
 	}
 

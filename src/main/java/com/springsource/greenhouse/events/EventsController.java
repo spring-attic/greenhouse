@@ -9,9 +9,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.social.core.ForbiddenSocialOperationException;
+import org.springframework.social.core.AccountNotConnectedException;
+import org.springframework.social.core.OperationNotPermittedException;
 import org.springframework.social.core.SocialException;
-import org.springframework.social.core.SocialSecurityException;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -122,9 +122,9 @@ public class EventsController {
 		try {
 			twitter.tweet(status);
 			return new ResponseEntity<String>((String) null, HttpStatus.OK);
-		} catch (ForbiddenSocialOperationException e) {
+		} catch (OperationNotPermittedException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
-		} catch (SocialSecurityException e) {
+		} catch (AccountNotConnectedException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.PRECONDITION_FAILED);
 		} catch (SocialException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -134,9 +134,9 @@ public class EventsController {
 	private ResponseEntity<String> postRetweet(Long tweetId) {
 		try {
 			twitter.retweet(tweetId);
-		} catch (ForbiddenSocialOperationException e) {
+		} catch (OperationNotPermittedException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
-		} catch (SocialSecurityException e) {
+		} catch (AccountNotConnectedException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.PRECONDITION_FAILED);
 		} catch (SocialException e) {
 			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);

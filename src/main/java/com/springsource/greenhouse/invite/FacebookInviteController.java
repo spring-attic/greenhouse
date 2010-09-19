@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,8 +30,8 @@ public class FacebookInviteController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public void friendFinder(@FacebookAccessToken String accessToken, Model model) {
-		List<String> friendIds = facebook.getFriendIds(accessToken);
+	public void friendFinder(Model model) {
+		List<String> friendIds = facebook.getFriendIds();
 		model.addAttribute("friendAccounts", accountRepository.findFriendAccounts("facebook", friendIds));
 	}
 	

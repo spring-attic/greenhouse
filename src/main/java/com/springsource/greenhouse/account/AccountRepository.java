@@ -36,5 +36,4 @@ public interface AccountRepository {
 	AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException;
 	
 	void disconnectApp(Long accountId, String accessToken);
-
 }

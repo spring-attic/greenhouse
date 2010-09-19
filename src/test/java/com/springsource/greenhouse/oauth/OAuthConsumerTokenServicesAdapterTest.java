@@ -23,16 +23,16 @@ public class OAuthConsumerTokenServicesAdapterTest {
 	private EmbeddedDatabase db;
 
 	private JdbcTemplate jdbcTemplate;
-    
+
 	private OAuthConsumerTokenServicesAdapterFactory tokenServicesFactory;
 
-    @Before
-    public void setupDatabase() {
+	@Before
+	public void setupDatabase() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
-        jdbcTemplate = new JdbcTemplate(db);
+		jdbcTemplate = new JdbcTemplate(db);
 		JdbcAccessTokenServices accessTokenServices = new JdbcAccessTokenServices(jdbcTemplate);
 		tokenServicesFactory = new OAuthConsumerTokenServicesAdapterFactory(accessTokenServices);
-    }
+	}
 
 	@After
 	public void destroy() {
@@ -137,11 +137,13 @@ public class OAuthConsumerTokenServicesAdapterTest {
     }
     
 	private Account testAccount() {
-		return new Account(1L, "Craig", "Walls", "craig@habuma.com", "habuma", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{profileKey}"));
+		return new Account(1L, "Craig", "Walls", "craig@habuma.com", "habuma", "file://pic.jpg", new UriTemplate(
+				"http://localhost:8080/members/{profileKey}"));
 	}
-	
-    private Account testAccount2() {
-    	return new Account(2L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{profileKey}"));
-    }
-	
+
+	private Account testAccount2() {
+		return new Account(2L, "Roy", "Clarkson", "rclarkson@vmware.com", "roy", "file://pic.jpg", new UriTemplate(
+				"http://localhost:8080/members/{profileKey}"));
+	}
+
 }

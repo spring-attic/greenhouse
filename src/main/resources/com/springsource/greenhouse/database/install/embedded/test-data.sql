@@ -11,6 +11,9 @@ insert into AppDeveloper (app, member) values (1, 1);
 insert into AppDeveloper (app, member) values (1, 2);
 insert into AppDeveloper (app, member) values (1, 3);
 
+insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('Twitter', 'QLM4vX68dBRLG1sE7zSJiA', '4Ah41ojlwi249GCI1UU5oKolmNDpjLLXgPKwGfVs0', 'https://twitter.com/oauth/request_token', 'https://twitter.com/oauth/authorize', 'https://twitter.com/oauth/access_token');
+insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('Facebook', '21aa96c8bc23259d0dd2ab99e496c306', 'f9f627194d471fb915dfbc856d347288', '', '', '');
+
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier conference series for Spring technologies', 'springone2gx', '#springone2gx', 1);
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('Atlanta Spring Users Group', 'The Spring developers in the Greater Atlanta area', 'atl', '#atlspring', 1);
 
