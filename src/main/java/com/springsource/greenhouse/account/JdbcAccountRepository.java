@@ -109,10 +109,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		}
 	}
 
-	public boolean hasAccountConnection(Long id, String provider) {
-		return jdbcTemplate.queryForInt(SELECT_ACCOUNT_CONNECTION_COUNT, id, provider) == 1;
-	}
-
 	public void disconnectAccount(Long id, String provider) {
 		jdbcTemplate.update(DELETE_ACCOUNT_CONNECTION, id, provider);
 	}
@@ -203,8 +199,6 @@ public class JdbcAccountRepository implements AccountRepository {
 	private static final String SELECT_PASSWORD_PROTECTED_ACCOUNT = "select id, firstName, lastName, email, password, username, gender, pictureSet from Member";
 
 	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
-
-	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
 
 	private static final String DELETE_ACCOUNT_CONNECTION = "delete from AccountConnection where member = ? and provider = ?";
 

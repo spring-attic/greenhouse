@@ -33,6 +33,16 @@ public class JdbcAccountProviderTest {
 	}
 
 	@Test
+	public void isConnected() {
+		assertTrue(accountProvider.isConnected(1L));
+	}
+
+	@Test
+	public void isConnected_noAccountConnection() {
+		assertFalse(accountProvider.isConnected(2L));
+	}
+
+	@Test
 	public void getProviderAccountId() {
 		assertEquals("habuma", accountProvider.getProviderAccountId(1L));
 	}

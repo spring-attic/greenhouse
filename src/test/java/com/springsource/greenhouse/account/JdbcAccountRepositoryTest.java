@@ -136,16 +136,6 @@ public class JdbcAccountRepositoryTest {
 	}
 
 	@Test
-	public void isConnected() {
-		assertTrue(accountRepository.hasAccountConnection(1L, "facebook"));
-	}
-
-	@Test
-	public void notConnected() {
-		assertFalse(accountRepository.hasAccountConnection(1L, "tripit"));
-	}
-
-	@Test
 	public void connectApp() throws InvalidApiKeyException, InvalidAccessTokenException {
 		AppConnection connection = accountRepository.connectApp(1L, "123456789");
 		assertEquals((Long) 1L, connection.getAccountId());

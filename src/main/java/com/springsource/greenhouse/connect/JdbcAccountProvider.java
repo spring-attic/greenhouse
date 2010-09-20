@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import com.springsource.greenhouse.account.Account;
 
 class JdbcAccountProvider implements AccountProvider {
-
 	private final String name;
 	
 	private final String apiKey;
@@ -68,8 +67,7 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public boolean isConnected(Long accountId) {
-		// TODO
-		return false;
+		return jdbcTemplate.queryForInt(SELECT_ACCOUNT_CONNECTION_COUNT, accountId, name) == 1;
 	}
 
 	public RestOperations getApi(Long accountId) {
@@ -82,9 +80,7 @@ class JdbcAccountProvider implements AccountProvider {
 
 	public String getProviderAccountId(Long accountId) {
 		try {
-			return jdbcTemplate.queryForObject(
-					"select accountId from AccountConnection where provider = ? and member = ?", String.class, name,
-					accountId);
+			return jdbcTemplate.queryForObject(SELECT_PROVIDER_ACCOUNT_ID, String.class, name, accountId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -119,5 +115,9 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 	
 	private static final String SELECT_ACCOUNT_CONNECTION = "select accessToken, secret, provider from AccountConnection where provider = ? and member = ?";
+
+	private static final String SELECT_PROVIDER_ACCOUNT_ID = "select accountId from AccountConnection where provider = ? and member = ?";
+
+	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
 
 }

@@ -21,8 +21,6 @@ public interface AccountRepository {
 	// TODO should we allow the user to connect again and overwrite previous connection details? this would be consistent with connectApp but does it make sense?
 	void connectAccount(Long accountId, String provider, String accessToken, String providerAccountId) throws AccountConnectionAlreadyExists;
 
-	boolean hasAccountConnection(Long accountId, String provider);
-
 	Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException;
 
 	void disconnectAccount(Long accountId, String provider);
