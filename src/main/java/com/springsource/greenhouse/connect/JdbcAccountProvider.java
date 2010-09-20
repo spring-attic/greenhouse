@@ -4,22 +4,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.FileStorage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.social.oauth.OAuthClientRequestSigner;
 import org.springframework.social.oauth.OAuthSigningClientHttpRequestFactory;
 import org.springframework.social.oauth1.ScribeOAuth1RequestSigner;
 import org.springframework.social.twitter.TwitterErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountMapper;
+import com.springsource.greenhouse.account.PictureSize;
+import com.springsource.greenhouse.account.PictureUrlFactory;
+import com.springsource.greenhouse.account.PictureUrlMapper;
 
 class JdbcAccountProvider implements AccountProvider {
 	private final String name;
@@ -32,13 +42,17 @@ class JdbcAccountProvider implements AccountProvider {
 	
 	private final JdbcTemplate jdbcTemplate;
 
-	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl,
-			String authorizeUrl, String accessTokenUrl, JdbcTemplate jdbcTemplate) {
+	private final AccountMapper accountMapper;
+
+	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl,
+			String accessTokenUrl, JdbcTemplate jdbcTemplate, FileStorage pictureStorage, String profileUrlTemplate) {
 		this.name = name;
 		this.apiKey = apiKey;
 		this.secret = secret;
 		this.authorizeUrl = authorizeUrl;
 		this.jdbcTemplate = jdbcTemplate;
+		this.accountMapper = new AccountMapper(new PictureUrlMapper(new PictureUrlFactory(pictureStorage),
+				PictureSize.small), new UriTemplate(profileUrlTemplate));
 	}
 
 	public String getName() {
@@ -94,8 +108,12 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Set<Account> findAccountsWithProviderAccountIds(Collection<String> providerAccountIds) {
-		// TODO
-		return null;
+		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+		Map<String, Object> params = new HashMap<String, Object>(2, 1);
+		params.put("provider", name);
+		params.put("friendIds", providerAccountIds);
+		return new HashSet<Account>(namedTemplate.query(SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS, params,
+				accountMapper));
 	}
 
 	public void disconnect(Long accountId) {
@@ -128,6 +146,9 @@ class JdbcAccountProvider implements AccountProvider {
 	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
 
 	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
+
+	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = "select id, firstName, lastName, email, username, gender, pictureSet "
+			+ "from Member where id in (select member from AccountConnection where provider = :provider and accountId in ( :friendIds )) ";
 
 	private static final String DELETE_ACCOUNT_CONNECTION = "delete from AccountConnection where member = ? and provider = ?";
 }

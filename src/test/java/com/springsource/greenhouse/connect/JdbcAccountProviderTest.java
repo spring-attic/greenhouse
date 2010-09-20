@@ -1,6 +1,11 @@
 package com.springsource.greenhouse.connect;
 
+import static java.util.Arrays.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,6 +13,8 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountProviderTest {
@@ -21,7 +28,7 @@ public class JdbcAccountProviderTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		JdbcAccountProviderRepository providerRepository = new JdbcAccountProviderRepository(jdbcTemplate);
+		JdbcAccountProviderRepository providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		accountProvider = (TwitterAccountProvider) providerRepository.findAccountProviderByName("twitter");
 	}
 
@@ -71,6 +78,17 @@ public class JdbcAccountProviderTest {
 	@Test
 	public void getProviderAccountId_noAccountConnection() {
 		assertEquals(null, accountProvider.getProviderAccountId(2L));
+	}
+
+	@Test
+	public void findFriendAccounts() throws Exception {
+		Set<Account> accounts = accountProvider.findAccountsWithProviderAccountIds(asList("habuma", "rclarkson",
+				"nobody"));
+		assertEquals(2, accounts.size());
+		ArrayList<Account> accountList = new ArrayList<Account>(accounts);
+		assertThat(accountList.get(0).getId(), anyOf(is(1L), is(3L)));
+		assertThat(accountList.get(1).getId(), anyOf(is(1L), is(3L)));
+		assertThat(accountList.get(0).getId(), not(equalTo(accountList.get(1).getId())));
 	}
 
 	@Test

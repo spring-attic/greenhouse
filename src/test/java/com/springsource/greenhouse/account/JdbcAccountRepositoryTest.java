@@ -2,9 +2,6 @@ package com.springsource.greenhouse.account;
 
 import static org.junit.Assert.*;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
@@ -106,13 +103,6 @@ public class JdbcAccountRepositoryTest {
 	@Test(expected = InvalidAccessTokenException.class)
 	public void connectedAccountNotFound() throws Exception {
 		accountRepository.findByAccountConnection("badtoken", "facebook");
-	}
-
-	@Test
-	public void findFriendAccounts() throws Exception {
-		List<Account> accounts = accountRepository.findFriendAccounts("facebook", Collections.singletonList("1"));
-		assertEquals(1, accounts.size());
-		assertExpectedAccount(accounts.get(0));
 	}
 
 	@Test

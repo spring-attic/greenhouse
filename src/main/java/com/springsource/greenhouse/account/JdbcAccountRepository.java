@@ -2,9 +2,6 @@ package com.springsource.greenhouse.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -12,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.encrypt.PasswordEncoder;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 import org.springframework.security.encrypt.StringEncryptor;
@@ -98,15 +94,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		} catch (EmptyResultDataAccessException e) {
 			throw new InvalidAccessTokenException(accessToken);
 		}
-	}
-
-	public List<Account> findFriendAccounts(String provider, List<String> friendIds) {
-		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
-		Map<String, Object> params = new HashMap<String, Object>(2, 1);
-		params.put("provider", provider);
-		params.put("friendIds", friendIds);
-		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :friendIds )) ",
-				params, accountMapper);
 	}
 
 	@Transactional

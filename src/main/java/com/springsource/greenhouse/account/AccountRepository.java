@@ -1,6 +1,5 @@
 package com.springsource.greenhouse.account;
 
-import java.util.List;
 
 public interface AccountRepository {
 
@@ -20,8 +19,6 @@ public interface AccountRepository {
 	
 	// TODO should we allow the user to connect again and overwrite previous connection details? this would be consistent with connectApp but does it make sense?
 	Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException;
-
-	List<Account> findFriendAccounts(String provider, List<String> providerFriendAccountIds);
 	
 	// app connection operations
 	

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.util.UriTemplate;
 
-class AccountMapper implements RowMapper<Account> {
+public class AccountMapper implements RowMapper<Account> {
 	
 	private final PictureUrlMapper pictureUrlMapper;
 	
