@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
@@ -63,7 +64,12 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public void connect(Long accountId, ConnectionDetails details) {
-		// TODO
+		try {
+			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, name, details.getAccessToken(), accountId);
+		} catch (DuplicateKeyException e) {
+			// TODO: What to do here? Previously it was:
+			// throw new AccountConnectionAlreadyExists(name, accountId);
+		}
 	}
 
 	public boolean isConnected(Long accountId) {
@@ -75,7 +81,8 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public void saveProviderAccountId(Long accountId, String providerAccountId) {
-		// TODO
+		jdbcTemplate.update("update AccountConnection set accountId = ? where provider = ? and member = ?",
+				providerAccountId, name, accountId);
 	}
 
 	public String getProviderAccountId(Long accountId) {
@@ -92,7 +99,7 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public void disconnect(Long accountId) {
-		// TODO
+		jdbcTemplate.update(DELETE_ACCOUNT_CONNECTION, accountId, name);
 	}
 
 	// internal helpers
@@ -120,4 +127,7 @@ class JdbcAccountProvider implements AccountProvider {
 
 	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
 
+	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
+
+	private static final String DELETE_ACCOUNT_CONNECTION = "delete from AccountConnection where member = ? and provider = ?";
 }

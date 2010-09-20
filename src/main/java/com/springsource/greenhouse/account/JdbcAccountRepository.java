@@ -91,15 +91,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
 	}
 
-	public void connectAccount(Long id, String provider, String accessToken, String accountId)
-			throws AccountConnectionAlreadyExists {
-		try {
-			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, id, provider, accessToken, accountId);
-		} catch (DuplicateKeyException e) {
-			throw new AccountConnectionAlreadyExists(provider, accountId);
-		}
-	}
-
 	public Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException {
 		try {
 			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)",
@@ -107,10 +98,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		} catch (EmptyResultDataAccessException e) {
 			throw new InvalidAccessTokenException(accessToken);
 		}
-	}
-
-	public void disconnectAccount(Long id, String provider) {
-		jdbcTemplate.update(DELETE_ACCOUNT_CONNECTION, id, provider);
 	}
 
 	public List<Account> findFriendAccounts(String provider, List<String> friendIds) {
@@ -197,9 +184,4 @@ public class JdbcAccountRepository implements AccountRepository {
 	private static final String SELECT_ACCOUNT = "select id, firstName, lastName, email, username, gender, pictureSet from Member";
 
 	private static final String SELECT_PASSWORD_PROTECTED_ACCOUNT = "select id, firstName, lastName, email, password, username, gender, pictureSet from Member";
-
-	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
-
-	private static final String DELETE_ACCOUNT_CONNECTION = "delete from AccountConnection where member = ? and provider = ?";
-
 }

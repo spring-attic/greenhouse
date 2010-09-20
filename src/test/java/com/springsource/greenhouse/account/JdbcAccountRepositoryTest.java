@@ -99,19 +99,6 @@ public class JdbcAccountRepositoryTest {
 	// connected account tests
 
 	@Test
-	public void connectAccount() throws Exception {
-		assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'tripit'"));
-		accountRepository.connectAccount(1L, "tripit", "accessToken", "cwalls");
-		assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'tripit'"));
-		assertExpectedAccount(accountRepository.findByAccountConnection("tripit", "accessToken"));
-	}
-
-	@Test(expected = AccountConnectionAlreadyExists.class)
-	public void accountAlreadyConnected() throws Exception {
-		accountRepository.connectAccount(1L, "facebook", "accessToken", "cwalls");
-	}
-
-	@Test
 	public void findConnectedAccount() throws Exception {
 		assertExpectedAccount(accountRepository.findByAccountConnection("facebook", "accesstoken"));
 	}
@@ -119,13 +106,6 @@ public class JdbcAccountRepositoryTest {
 	@Test(expected = InvalidAccessTokenException.class)
 	public void connectedAccountNotFound() throws Exception {
 		accountRepository.findByAccountConnection("badtoken", "facebook");
-	}
-
-	@Test
-	public void disconnectAccount() {
-		assertEquals(1, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'facebook'"));
-		accountRepository.disconnectAccount(1L, "facebook");
-		assertEquals(0, jdbcTemplate.queryForInt("select count(*) from AccountConnection where member = 1 and provider = 'facebook'"));
 	}
 
 	@Test
@@ -188,5 +168,4 @@ public class JdbcAccountRepositoryTest {
 
 	@Rule
 	public TransactionalMethodRule transactional = new TransactionalMethodRule();
-
 }
