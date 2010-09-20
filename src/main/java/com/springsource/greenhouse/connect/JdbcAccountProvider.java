@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -80,8 +81,13 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public String getProviderAccountId(Long accountId) {
-		// TODO
-		return null;
+		try {
+			return jdbcTemplate.queryForObject(
+					"select accountId from AccountConnection where provider = ? and member = ?", String.class, name,
+					accountId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	public Set<Account> findAccountsWithProviderAccountIds(Collection<String> providerAccountIds) {

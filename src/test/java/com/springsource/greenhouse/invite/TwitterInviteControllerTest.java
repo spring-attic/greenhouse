@@ -1,7 +1,6 @@
 package com.springsource.greenhouse.invite;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.connect.JdbcAccountProviderRepository;
+import com.springsource.greenhouse.connect.TwitterAccountProvider;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class TwitterInviteControllerTest {
@@ -27,7 +28,10 @@ public class TwitterInviteControllerTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		controller = new TwitterInviteController(null);
+		JdbcAccountProviderRepository providerRepository = new JdbcAccountProviderRepository(jdbcTemplate);
+		TwitterAccountProvider twitterProvider = (TwitterAccountProvider) providerRepository
+				.findAccountProviderByName("twitter");
+		controller = new TwitterInviteController(twitterProvider);
 	}
 
 	@After
@@ -46,7 +50,7 @@ public class TwitterInviteControllerTest {
 	}
 
 	@Test
-	public void friendFrinderNotConnected() {
+	public void friendFinderNotConnected() {
 		Account account = new Account(2L, "Sue", "Schmoe", "sue@schmoe.com", "sue", "file://pic.jpg", new UriTemplate("http://localhost:8080/members/{id}"));
 		Model model = new ExtendedModelMap();
 		controller.friendFinder(account, model);
