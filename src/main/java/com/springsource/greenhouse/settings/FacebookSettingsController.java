@@ -17,30 +17,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountConnectionAlreadyExists;
-import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.connect.ConnectionDetails;
+import com.springsource.greenhouse.connect.FacebookAccountProvider;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
 @Controller
-@RequestMapping("/settings")
+@RequestMapping("/settings/facebook")
 public class FacebookSettingsController {
-	
-	private final AccountRepository accountRepository;
-	
-	private final FacebookOperations facebook;
+
+	private final FacebookAccountProvider accountProvider;
 	
 	private final ProfilePictureService profilePictureService;
 
 	@Inject
-	public FacebookSettingsController(AccountRepository accountRepository, FacebookOperations facebook, ProfilePictureService profilePictureService) {
-		this.accountRepository = accountRepository;
-		this.facebook = facebook;
+	public FacebookSettingsController(FacebookAccountProvider accountProvider, ProfilePictureService profilePictureService) {
+		this.accountProvider = accountProvider;
 		this.profilePictureService = profilePictureService;
 	}
 	
-	@RequestMapping(value="/facebook", method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
-		if (accountRepository.hasAccountConnection(account.getId(), FACEBOOK_PROVIDER)) {
+		if (accountProvider.isConnected(account.getId())) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "settings/facebookConnected";
 		} else {
@@ -48,47 +45,40 @@ public class FacebookSettingsController {
 		}
 	}
 	
-	@RequestMapping(value="/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(HttpServletRequest request, Account account,
-			@FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId) {
-		try {
-			accountRepository.connectAccount(account.getId(), FACEBOOK_PROVIDER, accessToken, facebookUserId);
-			if (request.getParameter("postIt") != null) {
-				postGreenhouseConnectionToWall(request, account);
-			}
-			if (request.getParameter("useFBPic") != null) {
-				useFacebookProfilePicture(account, accessToken);
-			}
-			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
-		} catch (AccountConnectionAlreadyExists e) {
-			FlashMap.setErrorMessage("Unable to connect: Your Facebook account is already connected to a Greenhouse account.");
+	@RequestMapping(method=RequestMethod.POST) 
+	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken,
+			@FacebookUserId String facebookUserId, HttpServletRequest request) {
+		accountProvider.connect(account.getId(), new ConnectionDetails(accessToken, facebookUserId));
+		if (request.getParameter("postIt") != null) {
+			postToWall(account);
 		}
+		if (request.getParameter("useFBPic") != null) {
+			useFacebookProfilePicture(account, accessToken);
+		}
+		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 		return "redirect:/settings/facebook";			
 	}
-
-	private void postGreenhouseConnectionToWall(HttpServletRequest request, Account account) {
-		facebook.postToWall(
-				"Join me at the Greenhouse!",
-			new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.", 
-					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
-    }
 	
-	@RequestMapping(value="/facebook", method=RequestMethod.DELETE)
+	@RequestMapping(method=RequestMethod.DELETE)
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
-		accountRepository.disconnectAccount(account.getId(), FACEBOOK_PROVIDER);
+		accountProvider.disconnect(account.getId());
 		return "redirect:/settings/facebook";
 	}
 	
-	public void useFacebookProfilePicture(Account account, String accessToken) {
+	private void postToWall(Account account) {
+		accountProvider.getFacebookApi(account.getId()).postToWall("Join me at the Greenhouse!",
+			new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.", 
+					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
+	}
+	
+	private void useFacebookProfilePicture(Account account, String accessToken) {
 		try {
-	        byte[] imageBytes = facebook.getProfilePicture(accessToken);	        
+			FacebookOperations facebookApi = accountProvider.getFacebookApi(account.getId());			
+	        byte[] imageBytes = facebookApi.getProfilePicture(accessToken);	        
 	        profilePictureService.saveProfilePicture(account.getId(), imageBytes);
-	        accountRepository.markProfilePictureSet(account.getId());
 		} catch (IOException e) {
 			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
 		}
 	}
 	
-	private static final String FACEBOOK_PROVIDER = "Facebook";
-
 }

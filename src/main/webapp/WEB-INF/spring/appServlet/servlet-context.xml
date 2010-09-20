@@ -14,9 +14,7 @@
 	<task:annotation-driven/>
 	
 	<!-- Installs Greenhouse-specific @Controller extensions not configurable via the mvc namespace -->
-	<beans:bean class="com.springsource.greenhouse.config.AnnotationMethodHandlerAdapterPostProcessor">
-		<beans:constructor-arg ref="consumerTokenServicesFactory" />
-	</beans:bean>
+	<beans:bean class="com.springsource.greenhouse.config.AnnotationMethodHandlerAdapterPostProcessor" />
 	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />

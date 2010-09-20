@@ -1,17 +1,9 @@
 package com.springsource.greenhouse.invite;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import com.springsource.greenhouse.account.Account;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,61 +12,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.connect.TwitterAccountProvider;
 
 @Controller
 @RequestMapping("/invite/twitter")
 public class TwitterInviteController {
 	
-	private TwitterOperations twitterTemplate;
-	
-	private NamedParameterJdbcTemplate jdbcTemplate;
+	private TwitterAccountProvider accountProvider;
 	
 	@Inject
-	public TwitterInviteController(TwitterOperations twitterTemplate, JdbcTemplate jdbcTemplate) {
-		this.twitterTemplate = twitterTemplate;
-		this.jdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+	public TwitterInviteController(TwitterAccountProvider accountProvider) {
+		this.accountProvider = accountProvider;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		String twitterId = lookupTwitterId(account);		
+		String twitterId = accountProvider.getProviderAccountId(account.getId());	
 		if (twitterId != null) {			
 			model.addAttribute("username", twitterId);
 		}
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
-	public String findFriends(@RequestParam String username, Model model) {
+	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> twitterFriends = twitterTemplate.getFollowed(username);
-			model.addAttribute("friends", findGreenhouseTwitterFriends(twitterFriends));
+			TwitterOperations twitterApi = accountProvider.getTwitterApi(account.getId());			
+			List<String> screenNames = twitterApi.getFollowed(username);
+			model.addAttribute("friendAccounts", accountProvider.findAccountsWithProviderAccountIds(screenNames));
 		}
 		return "invite/twitterFriends";
 	}
-
-	private String lookupTwitterId(Account account) {
-		try {
-		    return jdbcTemplate.getJdbcOperations().queryForObject("select accountId from AccountConnection where member = ? and provider = 'Twitter'", 
-				new RowMapper<String>() {
-		    		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-					    return rs.getString("accountId");
-					}
-				}, account.getId());
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
-    }
 	
-	private List<GreenhouseFriend> findGreenhouseTwitterFriends(List<String> twitterFriends) {
-	    return jdbcTemplate.query("select username, firstName, lastName from Member where username in ( :names )",
-	    		Collections.singletonMap("names", twitterFriends),
-	    		new RowMapper<GreenhouseFriend>() {
-					public GreenhouseFriend mapRow(ResultSet rs, int rowNum) throws SQLException {
-						GreenhouseFriend friend = new GreenhouseFriend();
-						friend.setUsername(rs.getString("username"));
-						friend.setName(rs.getString("firstName") + " " + rs.getString("lastName"));
-					    return friend;
-					}
-				});
-    }
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.TwitterOperations;
@@ -20,20 +21,17 @@ import com.springsource.greenhouse.events.EventRepository;
 @RequestMapping("/groups")
 public class GroupsController {
 	
-	@Value("${facebook.applicationId}")
-	private String facebookAppId; 
+	private GroupRepository groupRepository;
 
 	private EventRepository eventRepository;	
 	
-	private TwitterOperations twitter;
-	
-	private GroupRepository groupRepository;
+	private Provider<TwitterOperations> twitterApi;
 
 	@Inject
-	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, TwitterOperations twitter) {
+	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, Provider<TwitterOperations> twitterApi) {
 		this.groupRepository = groupRepository;
 		this.eventRepository = eventRepository;
-		this.twitter = twitter;
+		this.twitterApi = twitterApi;
 	}
 	
 	@RequestMapping(value="/{groupKey}")
@@ -48,7 +46,7 @@ public class GroupsController {
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String name, Model model) {
 		Event event = eventRepository.findEventByName(group, year, month, name);
 		model.addAttribute(event);
-		model.addAttribute(twitter.search(event.getHashtag(), 1, 10));
+		model.addAttribute(twitterApi.get().search(event.getHashtag(), 1, 10));
 		return "groups/event";
 	}	
 	
@@ -60,4 +58,8 @@ public class GroupsController {
 		metadata.put("fb:app_id", facebookAppId);
 		return metadata;		
 	}
+	
+	@Value("#{facebookAccountProvider.appId}")
+	private String facebookAppId;
+
 }

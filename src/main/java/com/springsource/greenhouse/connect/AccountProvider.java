@@ -1,62 +1,63 @@
 package com.springsource.greenhouse.connect;
 
+import java.util.Collection;
+import java.util.Set;
+
 import org.springframework.web.client.RestOperations;
 
-public abstract class AccountProvider {
-	private String name;
-	private String apiKey;
-	private String apiSecret;
-	private String requestTokenUrl;
-	private String authorizeUrl;
-	private String accessTokenUrl;
+import com.springsource.greenhouse.account.Account;
 
-	public String getApiKey() {
-		return apiKey;
-	}
+public interface AccountProvider {
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
-	}
+	/**
+	 * The name of the account provider.  Unique.
+	 */
+	String getName();
+	
+	/**
+	 * The api key that identifies the client application to the provider.
+	 */
+	String getApiKey();
 
-	public String getApiSecret() {
-		return apiSecret;
-	}
+	Token fetchNewRequestToken();
+	
+	String getAuthorizeUrl();
+	
+	Token fetchAccessToken(Token requestToken, String verifier);
+	
+	/**
+	 * Connect an account with this provider.
+	 */
+	void connect(Long accountId, ConnectionDetails details);
+	
+	/**
+	 * True if the account is connected to this provider.
+	 */
+	boolean isConnected(Long accountId);
 
-	public void setApiSecret(String apiSecret) {
-		this.apiSecret = apiSecret;
-	}
+	/**
+	 * Stores the id of the user on the provider's system with their local account record.
+	 */
+	void saveProviderAccountId(Long accountId, String providerAccountId);
 
-	public String getRequestTokenUrl() {
-		return requestTokenUrl;
-	}
+	/**
+	 * The id of the user on the provider's system.
+	 */
+	String getProviderAccountId(Long accountId);
 
-	public void setRequestTokenUrl(String requestTokenUrl) {
-		this.requestTokenUrl = requestTokenUrl;
-	}
+	Set<Account> findAccountsWithProviderAccountIds(Collection<String> providerAccountIds);
 
-	public String getAuthorizeUrl() {
-		return authorizeUrl;
-	}
+	/**
+	 * A generic REST client that can be used to invoke the Provider's API on behalf
+	 * of the user with the specified account id.
+	 * @param accountId the user's internal account identifier
+	 */
+	RestOperations getApi(Long accountId);
 
-	public void setAuthorizeUrl(String authorizeUrl) {
-		this.authorizeUrl = authorizeUrl;
-	}
-
-	public String getAccessTokenUrl() {
-		return accessTokenUrl;
-	}
-
-	public void setAccessTokenUrl(String accessTokenUrl) {
-		this.accessTokenUrl = accessTokenUrl;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public abstract RestOperations getAccountConnectionOperations(Long accountId);
+	/**
+	 * Disconnects an account connected to this provider.
+	 * If the account is not connected, this method has no effect.
+	 */
+	void disconnect(Long accountId);
+	
 }

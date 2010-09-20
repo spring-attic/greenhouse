@@ -1,55 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://spring-security-oauth.codehaus.org/3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				xmlns:beans="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
-				xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://spring-security-oauth.codehaus.org/3.0 http://spring-security-oauth.codehaus.org/schema/spring-security-oauth-3.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+						
+	<!-- For loading AccountProviders -->	
+	<bean id="accountProviderRepository" class="com.springsource.greenhouse.connect.JdbcAccountProviderRepository" />
 
-	<consumer resource-details-service-ref="resourceDetails" token-services-factory-ref="consumerTokenServicesFactory">
-		<url pattern="/settings/twitter/authorize**" resources="Twitter" />
-	</consumer>
-
-	<resource-details-service id="resourceDetails">
-		<resource id="Twitter" key="QLM4vX68dBRLG1sE7zSJiA"
-			secret="4Ah41ojlwi249GCI1UU5oKolmNDpjLLXgPKwGfVs0"
-			request-token-url="https://twitter.com/oauth/request_token"
-			user-authorization-url="https://twitter.com/oauth/authorize"
-			access-token-url="https://twitter.com/oauth/access_token" />
-	</resource-details-service>
-
-	<beans:bean id="accessTokenService" class="com.springsource.greenhouse.oauth.JdbcAccessTokenServices">
-		<beans:constructor-arg ref="jdbcTemplate" />
-	</beans:bean>
-
-	<beans:bean id="consumerTokenServicesFactory"  class="com.springsource.greenhouse.oauth.OAuthConsumerTokenServicesAdapterFactory">
-		<beans:constructor-arg ref="accessTokenService" />
-	</beans:bean>
+	<!-- Twitter Account Connections -->
 	
-	<!-- Twitter Client API -->
-	<beans:bean id="twitter" class="org.springframework.social.twitter.TwitterTemplate">
-		<beans:constructor-arg>
-			<beans:bean class="com.springsource.greenhouse.connect.AccountConnectionOperationsFactory" factory-method="getProviderOperations"
-					scope="session">
-				<beans:constructor-arg ref="jdbcTemplate" />
-				<beans:constructor-arg value="Twitter" />
-				<aop:scoped-proxy/>
-			</beans:bean>
-		</beans:constructor-arg>
-	</beans:bean>
+	<bean id="twitterAccountProvider" factory-bean="accountProviderRepository" factory-method="findAccountProviderByName">
+		<constructor-arg value="twitter" />
+	</bean>
 
-	<!-- Facebook Client API -->
-	<beans:bean id="facebook" class="org.springframework.social.facebook.FacebookTemplate">
-		<beans:constructor-arg>
-			<beans:bean class="com.springsource.greenhouse.connect.AccountConnectionOperationsFactory" factory-method="getProviderOperations"
-					scope="session">
-				<beans:constructor-arg ref="jdbcTemplate" />
-				<beans:constructor-arg value="Facebook" />
-				<aop:scoped-proxy/>
-			</beans:bean>
-		</beans:constructor-arg>
-	</beans:bean>
+  	<bean id="twitterApi" factory-bean="twitterAccountProvider" factory-method="getTwitterApi" scope="request">
+  		<constructor-arg value="#{request.userPrincipal}" />
+  	</bean>
+
+	<!-- Facebook Account Connections -->
 	
-	<!-- Facebook API provider metadata -->
-	<beans:bean id="facebookProvider" class="com.springsource.greenhouse.account.ApiProvider" />
+	<bean id="facebookAccountProvider" factory-bean="accountProviderRepository" factory-method="findAccountProviderByName">
+		<constructor-arg value="facebook" />
+	</bean>
+
+  	<bean id="facebookApi" factory-bean="twitterAccountProvider" factory-method="getFacebookApi" scope="request">
+  		<constructor-arg value="#{request.userPrincipal}" />
+  	</bean>
 	
-</beans:beans>
+</beans>

@@ -13,6 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor;
+
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriTemplate;
 

@@ -9,7 +9,6 @@ import com.springsource.greenhouse.account.Account;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-
 public class AccountExposingHandlerInterceptor implements HandlerInterceptor {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

@@ -14,6 +14,7 @@ import org.springframework.security.oauth.provider.ConsumerDetails;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
+import com.springsource.greenhouse.oauth.provider.AppConsumerDetailsService;
 
 public class AppConsumerDetailsServiceTest {
 

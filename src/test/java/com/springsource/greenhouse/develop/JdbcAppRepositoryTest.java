@@ -16,6 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.InvalidApiKeyException;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.develop.App;
+import com.springsource.greenhouse.develop.AppForm;
+import com.springsource.greenhouse.develop.AppSummary;
+import com.springsource.greenhouse.develop.JdbcAppRepository;
 
 public class JdbcAppRepositoryTest {
 

@@ -29,6 +29,10 @@ import com.springsource.greenhouse.account.InvalidAccessTokenException;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.oauth.provider.ConcurrentMapOAuthSessionManager;
+import com.springsource.greenhouse.oauth.provider.InvalidRequestTokenException;
+import com.springsource.greenhouse.oauth.provider.OAuthSessionManager;
+import com.springsource.greenhouse.oauth.provider.OAuthSessionManagerProviderTokenServices;
 
 public class OAuthSessionManagerProviderTokenServicesTest {
 

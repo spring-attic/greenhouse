@@ -3,15 +3,13 @@ package com.springsource.greenhouse.events;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.social.core.AccountNotConnectedException;
-import org.springframework.social.core.OperationNotPermittedException;
-import org.springframework.social.core.SocialException;
 import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -31,12 +29,12 @@ public class EventsController {
 	
 	private EventRepository eventRepository;
 	
-	private TwitterOperations twitter;
+	private Provider<TwitterOperations> twitterApi;
 		
 	@Inject
-	public EventsController(EventRepository eventRepository, TwitterOperations twitter) {
+	public EventsController(EventRepository eventRepository, Provider<TwitterOperations> twitterApi) {
 		this.eventRepository = eventRepository;
-		this.twitter = twitter;
+		this.twitterApi = twitterApi;
 	}
 	
 	// for web service (JSON) clients
@@ -53,18 +51,20 @@ public class EventsController {
 	
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults tweets(@PathVariable Long id,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
-		return twitter.search(eventRepository.findEventSearchString(id), page, pageSize);
+		return twitterApi.get().search(eventRepository.findEventSearchString(id), page, pageSize);
 	}
 
 	@RequestMapping(value = "/{id}/tweets", method = RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation) {
-		return postTweet(status);
+		twitterApi.get().tweet(status);
+		return new ResponseEntity<String>(HttpStatus.OK);		
 	}
 	
 	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
-		return postRetweet(tweetId);
+		twitterApi.get().retweet(tweetId);
+		return new ResponseEntity<String>(HttpStatus.OK);		
 	}
 
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -94,19 +94,21 @@ public class EventsController {
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long id, @PathVariable Short number, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
-		return twitter.search(eventRepository.findSessionSearchString(id, number), page, pageSize);
+		return twitterApi.get().search(eventRepository.findSessionSearchString(id, number), page, pageSize);
 	}
 
 	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long id, @PathVariable Short number,
 			@RequestParam String status, Location currentLocation) {
-		return postTweet(status);
+		twitterApi.get().tweet(status);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}/sessions/{number}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
-		return postRetweet(tweetId);
+		twitterApi.get().retweet(tweetId);
+		return new ResponseEntity<String>(HttpStatus.OK);		
 	}
 	
 	// for web browser (HTML) clients
@@ -117,31 +119,4 @@ public class EventsController {
 		return "events/list";
 	}
 	
-	// Common tweet/reweet methods
-	private ResponseEntity<String> postTweet(String status) {
-		try {
-			twitter.tweet(status);
-			return new ResponseEntity<String>((String) null, HttpStatus.OK);
-		} catch (OperationNotPermittedException e) {
-			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
-		} catch (AccountNotConnectedException e) {
-			return new ResponseEntity<String>((String) null, HttpStatus.PRECONDITION_FAILED);
-		} catch (SocialException e) {
-			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	private ResponseEntity<String> postRetweet(Long tweetId) {
-		try {
-			twitter.retweet(tweetId);
-		} catch (OperationNotPermittedException e) {
-			return new ResponseEntity<String>((String) null, HttpStatus.FORBIDDEN);
-		} catch (AccountNotConnectedException e) {
-			return new ResponseEntity<String>((String) null, HttpStatus.PRECONDITION_FAILED);
-		} catch (SocialException e) {
-			return new ResponseEntity<String>((String) null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<String>((String) null, HttpStatus.OK);
-	}
-
 }

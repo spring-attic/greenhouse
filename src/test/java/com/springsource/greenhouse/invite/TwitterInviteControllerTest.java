@@ -27,7 +27,7 @@ public class TwitterInviteControllerTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		controller = new TwitterInviteController(null, jdbcTemplate);
+		controller = new TwitterInviteController(null);
 	}
 
 	@After

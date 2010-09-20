@@ -40,29 +40,23 @@ public class JdbcAccountRepository implements AccountRepository {
 	private final SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator();
 
 	@Autowired
-	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, StringEncryptor encryptor, PasswordEncoder passwordEncoder,
-			FileStorage pictureStorage, String profileUrlTemplate) {
+	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, StringEncryptor encryptor, PasswordEncoder passwordEncoder, FileStorage pictureStorage, String profileUrlTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.encryptor = encryptor;
 		this.passwordEncoder = passwordEncoder;
 		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
 		this.profileUrlTemplate = new UriTemplate(profileUrlTemplate);
-		this.accountMapper = new AccountMapper(new PictureUrlMapper(pictureUrlFactory, PictureSize.small),
-				this.profileUrlTemplate);
+		this.accountMapper = new AccountMapper(new PictureUrlMapper(pictureUrlFactory, PictureSize.small), this.profileUrlTemplate);
 	}
 
 	@Transactional
 	public Account createAccount(Person person) throws EmailAlreadyOnFileException {
 		try {
-			jdbcTemplate
-					.update("insert into Member (firstName, lastName, email, password, gender, birthdate) values (?, ?, ?, ?, ?, ?)",
-							person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder
-									.encode(person.getPassword()), person.getGender().code(), person.getBirthdate()
-									.toString());
+			jdbcTemplate.update("insert into Member (firstName, lastName, email, password, gender, birthdate) values (?, ?, ?, ?, ?, ?)",
+				person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()), person.getGender().code(), person.getBirthdate().toString());
 			Long accountId = jdbcTemplate.queryForLong("call identity()");
 			String pictureUrl = pictureUrlFactory.defaultPictureUrl(person.getGender(), PictureSize.small);
-			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail(), null,
-					pictureUrl, profileUrlTemplate);
+			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail(), null, pictureUrl, profileUrlTemplate);
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
 		}
@@ -71,8 +65,7 @@ public class JdbcAccountRepository implements AccountRepository {
 	public Account authenticate(String username, String password) throws UsernameNotFoundException,
 			InvalidPasswordException {
 		try {
-			return jdbcTemplate.queryForObject(passwordProtectedAccountQuery(username), passwordProtectedAccountMapper,
-					username).accessAccount(password, passwordEncoder);
+			return jdbcTemplate.queryForObject(passwordProtectedAccountQuery(username), passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
 		} catch (EmptyResultDataAccessException e) {
 			throw new UsernameNotFoundException(username);
 		}
@@ -109,8 +102,7 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	public Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException {
 		try {
-			return jdbcTemplate.queryForObject(SELECT_ACCOUNT
-					+ " where id = (select member from AccountConnection where provider = ? and accessToken = ?)",
+			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)",
 					accountMapper, provider, accessToken);
 		} catch (EmptyResultDataAccessException e) {
 			throw new InvalidAccessTokenException(accessToken);
@@ -130,10 +122,8 @@ public class JdbcAccountRepository implements AccountRepository {
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", provider);
 		params.put("friendIds", friendIds);
-		return namedTemplate
-				.query(SELECT_ACCOUNT
-						+ " where id in (select member from AccountConnection where provider = :provider and accountId in ( :friendIds )) ",
-						params, accountMapper);
+		return namedTemplate.query(SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :friendIds )) ",
+				params, accountMapper);
 	}
 
 	@Transactional
@@ -147,23 +137,20 @@ public class JdbcAccountRepository implements AccountRepository {
 			throw new InvalidApiKeyException(apiKey);
 		}
 		jdbcTemplate.update("delete from AppConnection where app = ? and member = ?", appId, accountId);
-		jdbcTemplate.update("insert into AppConnection (app, member, accessToken, secret) values (?, ?, ?, ?)", appId,
-				accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
+		jdbcTemplate.update("insert into AppConnection (app, member, accessToken, secret) values (?, ?, ?, ?)",
+				appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
 		return new AppConnection(accountId, apiKey, accessToken, secret);
 	}
 
 	public AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException {
 		try {
-			return jdbcTemplate
-					.queryForObject(
-							"select c.member, a.apiKey, c.accessToken, c.secret from AppConnection c inner join App a on c.app = a.id where c.accessToken = ?",
-							new RowMapper<AppConnection>() {
-								public AppConnection mapRow(ResultSet rs, int rowNum) throws SQLException {
-									return new AppConnection(rs.getLong("member"), encryptor.decrypt(rs
-											.getString("apiKey")), encryptor.decrypt(rs.getString("accessToken")),
-											encryptor.decrypt(rs.getString("secret")));
-								}
-							}, encryptor.encrypt(accessToken));
+			return jdbcTemplate.queryForObject("select c.member, a.apiKey, c.accessToken, c.secret from AppConnection c inner join App a on c.app = a.id where c.accessToken = ?",
+				new RowMapper<AppConnection>() {
+					public AppConnection mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return new AppConnection(rs.getLong("member"), encryptor.decrypt(rs.getString("apiKey")),
+								encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
+					}
+				}, encryptor.encrypt(accessToken));
 		} catch (EmptyResultDataAccessException e) {
 			throw new InvalidAccessTokenException(accessToken);
 		}
@@ -176,13 +163,11 @@ public class JdbcAccountRepository implements AccountRepository {
 	// internal helpers
 
 	private String accountQuery(String username) {
-		return EmailUtils.isEmail(username) ? SELECT_ACCOUNT + " where email = ?" : SELECT_ACCOUNT
-				+ " where username = ?";
+		return EmailUtils.isEmail(username) ? SELECT_ACCOUNT + " where email = ?" : SELECT_ACCOUNT + " where username = ?";
 	}
 
 	private String passwordProtectedAccountQuery(String username) {
-		return EmailUtils.isEmail(username) ? SELECT_PASSWORD_PROTECTED_ACCOUNT + " where email = ?"
-				: SELECT_PASSWORD_PROTECTED_ACCOUNT + " where username = ?";
+		return EmailUtils.isEmail(username) ? SELECT_PASSWORD_PROTECTED_ACCOUNT + " where email = ?" : SELECT_PASSWORD_PROTECTED_ACCOUNT + " where username = ?";
 	}
 
 	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {
