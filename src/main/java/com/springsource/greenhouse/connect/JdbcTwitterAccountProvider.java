@@ -3,6 +3,7 @@ package com.springsource.greenhouse.connect;
 import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.twitter.TwitterTemplate;
 
 class JdbcTwitterAccountProvider extends JdbcAccountProvider implements TwitterAccountProvider {
 
@@ -14,8 +15,7 @@ class JdbcTwitterAccountProvider extends JdbcAccountProvider implements TwitterA
 	}
 
 	public TwitterOperations getTwitterApi(Long accountId) {
-		// TODO
-		return null;
+		return new TwitterTemplate(getApi(accountId));
 	}
 
 }

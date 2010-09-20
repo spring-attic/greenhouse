@@ -4,6 +4,7 @@ import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookRequestSigner;
+import org.springframework.social.facebook.FacebookTemplate;
 import org.springframework.social.oauth.OAuthClientRequestSigner;
 
 class JdbcFacebookAccountProvider extends JdbcAccountProvider implements FacebookAccountProvider {
@@ -16,8 +17,7 @@ class JdbcFacebookAccountProvider extends JdbcAccountProvider implements Faceboo
 	}
 
 	public FacebookOperations getFacebookApi(Long accountId) {
-		// TODO
-		return null;
+		return new FacebookTemplate(getApi(accountId));
 	}
 
 	public Long getAppId() {
