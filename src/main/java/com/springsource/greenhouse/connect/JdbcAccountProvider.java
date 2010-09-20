@@ -9,9 +9,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.TwitterApi;
+import org.scribe.model.Verifier;
+import org.scribe.oauth.OAuthService;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.FileStorage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,13 +26,9 @@ import org.springframework.social.oauth1.ScribeOAuth1RequestSigner;
 import org.springframework.social.twitter.TwitterErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
-import com.springsource.greenhouse.account.PictureSize;
-import com.springsource.greenhouse.account.PictureUrlFactory;
-import com.springsource.greenhouse.account.PictureUrlMapper;
 
 class JdbcAccountProvider implements AccountProvider {
 	private final String name;
@@ -45,14 +44,13 @@ class JdbcAccountProvider implements AccountProvider {
 	private final AccountMapper accountMapper;
 
 	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl,
-			String accessTokenUrl, JdbcTemplate jdbcTemplate, FileStorage pictureStorage, String profileUrlTemplate) {
+			String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {;
 		this.name = name;
 		this.apiKey = apiKey;
 		this.secret = secret;
 		this.authorizeUrl = authorizeUrl;
 		this.jdbcTemplate = jdbcTemplate;
-		this.accountMapper = new AccountMapper(new PictureUrlMapper(new PictureUrlFactory(pictureStorage),
-				PictureSize.small), new UriTemplate(profileUrlTemplate));
+		this.accountMapper = accountMapper;
 	}
 
 	public String getName() {
@@ -64,8 +62,9 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchNewRequestToken() {
-		// TODO
-		return null;
+		OAuthService service = new ServiceBuilder().apiKey(apiKey).apiSecret(secret).provider(TwitterApi.class).build();
+		org.scribe.model.Token requestToken = service.getRequestToken();
+		return new Token(requestToken.getToken(), requestToken.getSecret());
 	}
 
 	public String getAuthorizeUrl() {
@@ -73,8 +72,12 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchAccessToken(Token requestToken, String verifier) {
-		// TODO
-		return null;
+		org.scribe.model.Token scribeToken = new org.scribe.model.Token(requestToken.getValue(),
+				requestToken.getValue());
+		ServiceBuilder builder = new ServiceBuilder();
+		org.scribe.model.Token accessToken = builder.apiKey(apiKey).apiSecret(secret).provider(TwitterApi.class)
+				.build().getAccessToken(scribeToken, new Verifier(verifier));
+		return new Token(accessToken.getToken(), accessToken.getSecret());
 	}
 
 	public void connect(Long accountId, ConnectionDetails details) {
