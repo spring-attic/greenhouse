@@ -16,7 +16,7 @@
 	</bean>
 
   	<bean id="twitterApi" factory-bean="twitterAccountProvider" factory-method="getTwitterApi" scope="request">
-  		<constructor-arg value="#{request.userPrincipal}" />
+  		<constructor-arg value="#{request.getAttribute('account').id}" />
   	</bean>
 
 	<!-- Facebook Account Connections -->
@@ -26,7 +26,7 @@
 	</bean>
 
   	<bean id="facebookApi" factory-bean="twitterAccountProvider" factory-method="getFacebookApi" scope="request">
-  		<constructor-arg value="#{request.userPrincipal}" />
+  		<constructor-arg value="#{request.getAttribute('account').id}" />
   	</bean>
 	
 </beans>

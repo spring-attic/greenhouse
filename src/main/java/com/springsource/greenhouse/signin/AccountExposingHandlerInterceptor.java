@@ -12,16 +12,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class AccountExposingHandlerInterceptor implements HandlerInterceptor {
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
+		if (auth != null && auth.getPrincipal() instanceof Account) {
+			request.setAttribute("account", auth.getPrincipal());
+		}
 		return true;
 	}
 
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-		if (modelAndView != null) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (auth != null && auth.getPrincipal() instanceof Account) {
-				modelAndView.addObject(auth.getPrincipal());
-			}
-		}
 	}
 
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {		    
