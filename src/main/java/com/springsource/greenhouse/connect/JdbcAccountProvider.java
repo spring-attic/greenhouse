@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.scribe.exceptions.OAuthException;
 import org.scribe.extractors.BaseStringExtractorImpl;
 import org.scribe.extractors.HeaderExtractorImpl;
 import org.scribe.extractors.TokenExtractorImpl;
@@ -98,15 +99,21 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchAccessToken(Token requestToken, String verifier, String callbackUrl) {
-		org.scribe.model.Token scribeRequestToken = new org.scribe.model.Token(requestToken.getValue(), requestToken.getSecret());
-		org.scribe.model.Token accessToken = getOAuthService(callbackUrl).getAccessToken(scribeRequestToken,
-				new Verifier(verifier));
-		return new Token(accessToken.getToken(), accessToken.getSecret());
+		try {
+			org.scribe.model.Token scribeRequestToken = new org.scribe.model.Token(requestToken.getValue(),
+					requestToken.getSecret());
+			org.scribe.model.Token accessToken = getOAuthService(callbackUrl).getAccessToken(scribeRequestToken,
+					new Verifier(verifier));
+			return new Token(accessToken.getToken(), accessToken.getSecret());
+		} catch (OAuthException e) {
+			return null;
+		}
 	}
 
 	public void connect(Long accountId, ConnectionDetails details) {
 		try {
-			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, name, details.getAccessToken(), accountId);
+			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, name, details.getAccessToken(),
+					details.getAccessTokenSecret(), accountId);
 		} catch (DuplicateKeyException e) {
 			// TODO: What to do here? Previously it was:
 			// throw new AccountConnectionAlreadyExists(name, accountId);
@@ -183,7 +190,7 @@ class JdbcAccountProvider implements AccountProvider {
 
 	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
 
-	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, accountId) values (?, ?, ?, ?)";
+	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, secret, accountId) values (?, ?, ?, ?, ?)";
 
 	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = "select id, firstName, lastName, email, username, gender, pictureSet "
 			+ "from Member where id in (select member from AccountConnection where provider = :provider and accountId in ( :friendIds )) ";

@@ -48,7 +48,7 @@ public class FacebookSettingsController {
 	@RequestMapping(method=RequestMethod.POST) 
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken,
 			@FacebookUserId String facebookUserId, HttpServletRequest request) {
-		accountProvider.connect(account.getId(), new ConnectionDetails(accessToken, facebookUserId));
+		accountProvider.connect(account.getId(), new ConnectionDetails(accessToken, "", facebookUserId));
 		if (request.getParameter("postIt") != null) {
 			postToWall(account);
 		}

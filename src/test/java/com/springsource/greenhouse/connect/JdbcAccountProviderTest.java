@@ -40,16 +40,44 @@ public class JdbcAccountProviderTest {
 	}
 
 	@Test
+	public void fetchNewRequestToken() {
+		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
+		// requests, callbacks, etc. Will fill out this test when I have more
+		// time to do it properly.
+	}
+
+	@Test
+	public void fetchNewRequestToken_Failed() {
+		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
+		// requests, callbacks, etc. Will fill out this test when I have more
+		// time to do it properly.
+	}
+
+	@Test
+	public void fetchAccessToken() {
+		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
+		// requests, callbacks, etc. Will fill out this test when I have more
+		// time to do it properly.
+	}
+
+	@Test
+	public void fetchAccessToken_Failed() {
+		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
+		// requests, callbacks, etc. Will fill out this test when I have more
+		// time to do it properly.
+	}
+
+	@Test
 	public void connect() {
 		assertFalse(accountProvider.isConnected(2L));
-		accountProvider.connect(2L, new ConnectionDetails("ACCESS_TOKEN", "Twitter"));
+		accountProvider.connect(2L, new ConnectionDetails("ACCESS_TOKEN", "SECRET", "Twitter"));
 		assertTrue(accountProvider.isConnected(2L));
 	}
 
 	@Test
 	public void connect_alreadyConnected() {
 		assertFalse(accountProvider.isConnected(2L));
-		accountProvider.connect(1L, new ConnectionDetails("ACCESS_TOKEN", "Twitter"));
+		accountProvider.connect(1L, new ConnectionDetails("ACCESS_TOKEN", "SECRET", "Twitter"));
 		// TODO: What should be the outcome here?
 	}
 

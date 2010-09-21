@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.AccountMapper;
@@ -15,7 +14,7 @@ import com.springsource.greenhouse.account.PictureSize;
 import com.springsource.greenhouse.account.PictureUrlFactory;
 import com.springsource.greenhouse.account.PictureUrlMapper;
 
-@Repository
+//@Repository
 public class JdbcAccountProviderRepository implements AccountProviderRepository {
 	
 	private final JdbcTemplate jdbcTemplate;

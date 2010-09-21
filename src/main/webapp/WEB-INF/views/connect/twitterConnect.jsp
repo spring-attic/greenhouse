@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<form action="<c:url value="/settings/twitter/authorize" />">
+<form action="<c:url value="/connect/twitter" />" method="POST">
 	<div class="formInfo">
 		<h2>Connect to Twitter</h2>
 		<p>
