@@ -5,7 +5,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 						
 	<!-- For loading AccountProviders -->	
-	<bean id="accountProviderRepository" class="com.springsource.greenhouse.connect.JdbcAccountProviderRepository" />
+	<bean id="accountProviderRepository" class="com.springsource.greenhouse.connect.JdbcAccountProviderRepository">
+		<constructor-arg value="http://greenhouse.springsource.org/members/{id}" />
+	</bean>
 
 	<!-- Twitter Account Connections -->
 	

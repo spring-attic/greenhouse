@@ -9,10 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.TwitterApi;
-import org.scribe.model.Verifier;
-import org.scribe.oauth.OAuthService;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
@@ -33,9 +29,9 @@ import com.springsource.greenhouse.account.AccountMapper;
 class JdbcAccountProvider implements AccountProvider {
 	private final String name;
 	
-	private final String apiKey;
+	protected final String apiKey;
 	
-	private final String secret;
+	protected final String secret;
 	
 	private final String authorizeUrl;
 	
@@ -44,7 +40,7 @@ class JdbcAccountProvider implements AccountProvider {
 	private final AccountMapper accountMapper;
 
 	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl,
-			String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {;
+			String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
 		this.name = name;
 		this.apiKey = apiKey;
 		this.secret = secret;
@@ -62,9 +58,7 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchNewRequestToken() {
-		OAuthService service = new ServiceBuilder().apiKey(apiKey).apiSecret(secret).provider(TwitterApi.class).build();
-		org.scribe.model.Token requestToken = service.getRequestToken();
-		return new Token(requestToken.getToken(), requestToken.getSecret());
+		return null;
 	}
 
 	public String getAuthorizeUrl() {
@@ -72,12 +66,7 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchAccessToken(Token requestToken, String verifier) {
-		org.scribe.model.Token scribeToken = new org.scribe.model.Token(requestToken.getValue(),
-				requestToken.getValue());
-		ServiceBuilder builder = new ServiceBuilder();
-		org.scribe.model.Token accessToken = builder.apiKey(apiKey).apiSecret(secret).provider(TwitterApi.class)
-				.build().getAccessToken(scribeToken, new Verifier(verifier));
-		return new Token(accessToken.getToken(), accessToken.getSecret());
+		return null;
 	}
 
 	public void connect(Long accountId, ConnectionDetails details) {
