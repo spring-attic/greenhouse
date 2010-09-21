@@ -31,11 +31,11 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 	public Object postProcessAfterInitialization(Object bean, String name) throws BeansException {
 		if (bean instanceof AnnotationMethodHandlerAdapter) {
 			AnnotationMethodHandlerAdapter controllerInvoker = (AnnotationMethodHandlerAdapter) bean;
-			WebArgumentResolver[] resolvers = new WebArgumentResolver[5];
+			WebArgumentResolver[] resolvers = new WebArgumentResolver[4];
 			resolvers[0] = new DeviceWebArgumentResolver();
 			resolvers[1] = new AccountWebArgumentResolver();
-			resolvers[3] = new FacebookWebArgumentResolver(facebookAppKey);
-			resolvers[4] = new LocationWebArgumentResolver();
+			resolvers[2] = new FacebookWebArgumentResolver(facebookAppKey);
+			resolvers[3] = new LocationWebArgumentResolver();
 			controllerInvoker.setCustomArgumentResolvers(resolvers);
 		}
 		return bean;
