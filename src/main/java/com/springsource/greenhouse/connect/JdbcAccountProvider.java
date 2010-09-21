@@ -16,6 +16,7 @@ import org.scribe.model.OAuthConfig;
 import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuth10aServiceImpl;
+import org.scribe.oauth.OAuthService;
 import org.scribe.services.HMACSha1SignatureService;
 import org.scribe.services.TimestampServiceImpl;
 import org.springframework.dao.DuplicateKeyException;
@@ -48,17 +49,23 @@ class JdbcAccountProvider implements AccountProvider {
 
 	private final AccountMapper accountMapper;
 
-	private OAuth10aServiceImpl oauthService;
+	private final String requestTokenUrl;
+
+	private final String accessTokenUrl;
 
 	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl,
 			String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
 		this.name = name;
 		this.apiKey = apiKey;
 		this.secret = secret;
+		this.requestTokenUrl = requestTokenUrl;
 		this.authorizeUrl = authorizeUrl;
+		this.accessTokenUrl = accessTokenUrl;
 		this.jdbcTemplate = jdbcTemplate;
 		this.accountMapper = accountMapper;
+	}
 
+	private OAuthService getOAuthService(String callbackUrl) {
 		OAuthConfig config = new OAuthConfig();
 		config.setRequestTokenEndpoint(requestTokenUrl);
 		config.setAccessTokenEndpoint(accessTokenUrl);
@@ -66,7 +73,9 @@ class JdbcAccountProvider implements AccountProvider {
 		config.setRequestTokenVerb(Verb.POST);
 		config.setApiKey(apiKey);
 		config.setApiSecret(secret);
-		oauthService = new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(),
+		config.setCallback(callbackUrl);
+
+		return new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(),
 				new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(),
 				new TokenExtractorImpl(), config);
 	}
@@ -79,8 +88,8 @@ class JdbcAccountProvider implements AccountProvider {
 		return apiKey;
 	}
 
-	public Token fetchNewRequestToken() {
-		org.scribe.model.Token requestToken = oauthService.getRequestToken();
+	public Token fetchNewRequestToken(String callbackUrl) {
+		org.scribe.model.Token requestToken = getOAuthService(callbackUrl).getRequestToken();
 		return new Token(requestToken.getToken(), requestToken.getSecret());
 	}
 
@@ -88,9 +97,10 @@ class JdbcAccountProvider implements AccountProvider {
 		return authorizeUrl;
 	}
 
-	public Token fetchAccessToken(Token requestToken, String verifier) {
+	public Token fetchAccessToken(Token requestToken, String verifier, String callbackUrl) {
 		org.scribe.model.Token scribeRequestToken = new org.scribe.model.Token(requestToken.getValue(), requestToken.getSecret());
-		org.scribe.model.Token accessToken = oauthService.getAccessToken(scribeRequestToken, new Verifier(verifier));
+		org.scribe.model.Token accessToken = getOAuthService(callbackUrl).getAccessToken(scribeRequestToken,
+				new Verifier(verifier));
 		return new Token(accessToken.getToken(), accessToken.getSecret());
 	}
 

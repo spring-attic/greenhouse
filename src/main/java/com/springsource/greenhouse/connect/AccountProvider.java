@@ -19,11 +19,11 @@ public interface AccountProvider {
 	 */
 	String getApiKey();
 
-	Token fetchNewRequestToken();
+	Token fetchNewRequestToken(String callbackUrl);
 	
 	String getAuthorizeUrl();
 	
-	Token fetchAccessToken(Token requestToken, String verifier);
+	Token fetchAccessToken(Token requestToken, String verifier, String callbackUrl);
 	
 	/**
 	 * Connect an account with this provider.
