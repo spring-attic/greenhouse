@@ -9,6 +9,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.scribe.extractors.BaseStringExtractorImpl;
+import org.scribe.extractors.HeaderExtractorImpl;
+import org.scribe.extractors.TokenExtractorImpl;
+import org.scribe.model.OAuthConfig;
+import org.scribe.model.Verb;
+import org.scribe.model.Verifier;
+import org.scribe.oauth.OAuth10aServiceImpl;
+import org.scribe.services.HMACSha1SignatureService;
+import org.scribe.services.TimestampServiceImpl;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
@@ -29,15 +38,17 @@ import com.springsource.greenhouse.account.AccountMapper;
 class JdbcAccountProvider implements AccountProvider {
 	private final String name;
 	
-	protected final String apiKey;
+	private final String apiKey;
 	
-	protected final String secret;
+	private final String secret;
 	
 	private final String authorizeUrl;
 	
 	private final JdbcTemplate jdbcTemplate;
 
 	private final AccountMapper accountMapper;
+
+	private OAuth10aServiceImpl oauthService;
 
 	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl,
 			String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
@@ -47,6 +58,17 @@ class JdbcAccountProvider implements AccountProvider {
 		this.authorizeUrl = authorizeUrl;
 		this.jdbcTemplate = jdbcTemplate;
 		this.accountMapper = accountMapper;
+
+		OAuthConfig config = new OAuthConfig();
+		config.setRequestTokenEndpoint(requestTokenUrl);
+		config.setAccessTokenEndpoint(accessTokenUrl);
+		config.setAccessTokenVerb(Verb.POST);
+		config.setRequestTokenVerb(Verb.POST);
+		config.setApiKey(apiKey);
+		config.setApiSecret(secret);
+		oauthService = new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(),
+				new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(),
+				new TokenExtractorImpl(), config);
 	}
 
 	public String getName() {
@@ -58,7 +80,8 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchNewRequestToken() {
-		return null;
+		org.scribe.model.Token requestToken = oauthService.getRequestToken();
+		return new Token(requestToken.getToken(), requestToken.getSecret());
 	}
 
 	public String getAuthorizeUrl() {
@@ -66,7 +89,9 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchAccessToken(Token requestToken, String verifier) {
-		return null;
+		org.scribe.model.Token scribeRequestToken = new org.scribe.model.Token(requestToken.getValue(), requestToken.getSecret());
+		org.scribe.model.Token accessToken = oauthService.getAccessToken(scribeRequestToken, new Verifier(verifier));
+		return new Token(accessToken.getToken(), accessToken.getSecret());
 	}
 
 	public void connect(Long accountId, ConnectionDetails details) {
