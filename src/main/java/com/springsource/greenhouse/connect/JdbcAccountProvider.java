@@ -118,7 +118,18 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public RestOperations getApi(Long accountId) {
-		return jdbcTemplate.queryForObject(SELECT_ACCOUNT_CONNECTION, apiMapper, name, accountId);
+		if (isConnected(accountId)) {
+			return jdbcTemplate.queryForObject(SELECT_ACCOUNT_CONNECTION, apiMapper, name, accountId);
+		} else {
+			// TODO address duplication with RowMapper below
+			RestTemplate rest = new RestTemplate();
+			rest.setErrorHandler(new TwitterErrorHandler());
+			// Facebook uses "text/javascript" as the JSON content type
+			MappingJacksonHttpMessageConverter json = new MappingJacksonHttpMessageConverter();
+			json.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "javascript")));
+			rest.getMessageConverters().add(json);
+			return rest;			
+		}
 	}
 
 	public void saveProviderAccountId(Long accountId, String providerAccountId) {
