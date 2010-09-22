@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.settings;
+package com.springsource.greenhouse.connect;
 
 import java.io.IOException;
 
@@ -17,20 +17,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.ConnectionDetails;
-import com.springsource.greenhouse.connect.FacebookAccountProvider;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
 @Controller
-@RequestMapping("/settings/facebook")
-public class FacebookSettingsController {
+@RequestMapping("/connect/facebook")
+public class FacebookConnectController {
 
 	private final FacebookAccountProvider accountProvider;
 	
 	private final ProfilePictureService profilePictureService;
 
 	@Inject
-	public FacebookSettingsController(FacebookAccountProvider accountProvider, ProfilePictureService profilePictureService) {
+	public FacebookConnectController(FacebookAccountProvider accountProvider, ProfilePictureService profilePictureService) {
 		this.accountProvider = accountProvider;
 		this.profilePictureService = profilePictureService;
 	}
@@ -39,9 +37,9 @@ public class FacebookSettingsController {
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
 		if (accountProvider.isConnected(account.getId())) {
 			model.addAttribute("facebookUserId", facebookUserId);
-			return "settings/facebookConnected";
+			return "connect/facebookConnected";
 		} else {
-			return "settings/facebookConnect";
+			return "connect/facebookConnect";
 		}
 	}
 	
@@ -56,13 +54,13 @@ public class FacebookSettingsController {
 			useFacebookProfilePicture(account, facebookUserId);
 		}
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
-		return "redirect:/settings/facebook";			
+		return "redirect:/connect/facebook";
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE)
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
 		accountProvider.disconnect(account.getId());
-		return "redirect:/settings/facebook";
+		return "redirect:/connect/facebook";
 	}
 	
 	private void postToWall(Account account) {

@@ -10,5 +10,13 @@
     <definition name="connect/twitterConnected" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/connect/twitterConnected.jsp" />
     </definition>
+   
+    <definition name="connect/facebookConnect" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/connect/facebookConnect.jsp" />
+    </definition>
 
+    <definition name="connect/facebookConnected" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/connect/facebookConnected.jsp" />
+    </definition>
+    
 </tiles-definitions>

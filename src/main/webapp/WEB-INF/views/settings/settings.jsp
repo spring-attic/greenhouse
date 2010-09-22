@@ -26,6 +26,6 @@
 	</div>
 	<div id="facebook">
 		<h4>Facebook</h4>
-		<a href="<s:url value="/settings/facebook" />">Connect to Facebook</a>	
+		<a href="<s:url value="/connect/facebook" />">Connect to Facebook</a>	
 	</div>
 </div>

@@ -6,7 +6,7 @@
 	<div class="${message.type}">${message.text}</div>
 </c:if>
 
-<form id="fb_signin" action="<c:url value="/settings/facebook" />" method="post">
+<form id="fb_signin" action="<c:url value="/connect/facebook" />" method="post">
 	<div class="formInfo">
 		<h2>Connect to Facebook</h2>
 		<p>Click the button to connect your Greenhouse account with your Facebook account.</p>
