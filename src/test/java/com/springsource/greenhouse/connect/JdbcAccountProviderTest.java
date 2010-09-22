@@ -24,12 +24,15 @@ public class JdbcAccountProviderTest {
 
 	private AccountProvider accountProvider;
 
+	private JdbcAccountProviderRepository providerRepository;
+
 	@Before
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		JdbcAccountProviderRepository providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		accountProvider = (TwitterAccountProvider) providerRepository.findAccountProviderByName("twitter");
+		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, new StubFileStorage(),
+				"http://localhost:8080/members/{profileKey}");
+		accountProvider = providerRepository.findAccountProviderByName("twitter");
 	}
 
 	@After
@@ -37,34 +40,6 @@ public class JdbcAccountProviderTest {
 		if (db != null) {
 			db.shutdown();
 		}
-	}
-
-	@Test
-	public void fetchNewRequestToken() {
-		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
-		// requests, callbacks, etc. Will fill out this test when I have more
-		// time to do it properly.
-	}
-
-	@Test
-	public void fetchNewRequestToken_Failed() {
-		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
-		// requests, callbacks, etc. Will fill out this test when I have more
-		// time to do it properly.
-	}
-
-	@Test
-	public void fetchAccessToken() {
-		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
-		// requests, callbacks, etc. Will fill out this test when I have more
-		// time to do it properly.
-	}
-
-	@Test
-	public void fetchAccessToken_Failed() {
-		// TODO : Testing OAuth token retrieval is non-trivial, involving HTTP
-		// requests, callbacks, etc. Will fill out this test when I have more
-		// time to do it properly.
 	}
 
 	@Test

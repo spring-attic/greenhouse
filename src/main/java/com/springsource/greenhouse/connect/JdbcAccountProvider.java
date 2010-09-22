@@ -75,8 +75,12 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public Token fetchNewRequestToken(String callbackUrl) {
-		org.scribe.model.Token requestToken = getOAuthService(callbackUrl).getRequestToken();
-		return new Token(requestToken.getToken(), requestToken.getSecret());
+		try {
+			org.scribe.model.Token requestToken = getOAuthService(callbackUrl).getRequestToken();
+			return new Token(requestToken.getToken(), requestToken.getSecret());
+		} catch (OAuthException e) {
+			throw new UnableToFetchRequestTokenException(e);
+		}
 	}
 
 	public String getAuthorizeUrl() {
@@ -113,15 +117,18 @@ class JdbcAccountProvider implements AccountProvider {
 		if (isConnected(accountId)) {
 			return jdbcTemplate.queryForObject(SELECT_ACCOUNT_CONNECTION, apiMapper, name, accountId);
 		} else {
-			// TODO address duplication with RowMapper below
-			RestTemplate rest = new RestTemplate();
-			rest.setErrorHandler(new TwitterErrorHandler());
-			// Facebook uses "text/javascript" as the JSON content type
-			MappingJacksonHttpMessageConverter json = new MappingJacksonHttpMessageConverter();
-			json.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "javascript")));
-			rest.getMessageConverters().add(json);
-			return rest;			
+			return buildRestTemplate();
 		}
+	}
+
+	private RestTemplate buildRestTemplate() {
+		RestTemplate rest = new RestTemplate();
+		rest.setErrorHandler(new TwitterErrorHandler());
+		// Facebook uses "text/javascript" as the JSON content type
+		MappingJacksonHttpMessageConverter json = new MappingJacksonHttpMessageConverter();
+		json.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "javascript")));
+		rest.getMessageConverters().add(json);
+		return rest;
 	}
 
 	public void saveProviderAccountId(Long accountId, String providerAccountId) {
@@ -154,13 +161,9 @@ class JdbcAccountProvider implements AccountProvider {
 	
 	private final RowMapper<RestOperations> apiMapper = new RowMapper<RestOperations>() {
 		public RestOperations mapRow(ResultSet rs, int row) throws SQLException {
-			RestTemplate rest = new RestTemplate(new OAuthSigningClientHttpRequestFactory(
+			RestTemplate rest = buildRestTemplate();
+			rest.setRequestFactory(new OAuthSigningClientHttpRequestFactory(
 					getRequestSigner(rs.getString("accessToken"), rs.getString("secret"))));
-			rest.setErrorHandler(new TwitterErrorHandler());
-			// Facebook uses "text/javascript" as the JSON content type
-			MappingJacksonHttpMessageConverter json = new MappingJacksonHttpMessageConverter();
-			json.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "javascript")));
-			rest.getMessageConverters().add(json);
 			return rest;
 		}
 	};
