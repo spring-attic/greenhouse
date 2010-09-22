@@ -43,15 +43,6 @@ public class TwitterConnectController {
 		return "redirect:" + twitterProvider.getAuthorizeUrl() + "?oauth_token=" + requestToken.getValue();
 	}
 
-	private String buildCallbackUrl(boolean tweetIt, ServletWebRequest request) {
-		HttpServletRequest servletRequest = request.getRequest();
-		int port = servletRequest.getLocalPort();
-		String portPart = (port == 80 || port == 443) ? "" : ":" + port;
-		String urlBase = servletRequest.getScheme() + "://" + servletRequest.getServerName() + portPart
-				+ servletRequest.getContextPath();
-		return urlBase + "/connect/twitter" + (tweetIt ? "?tweetIt=on" : "");
-	}
-
 	@RequestMapping(value = "/twitter", method = RequestMethod.GET, params = "oauth_token")
 	public String twitterCallback(@RequestParam("oauth_token") String token,
 			@RequestParam("oauth_verifier") String verifier, Account account, boolean tweetIt, WebRequest request) {
@@ -88,5 +79,14 @@ public class TwitterConnectController {
 	public String disconnectTwitter(Account account, HttpServletRequest request, Authentication authentication) {
 		twitterProvider.disconnect(account.getId());
 		return "redirect:/connect/twitter";
+	}
+
+	private String buildCallbackUrl(boolean tweetIt, ServletWebRequest request) {
+		HttpServletRequest servletRequest = request.getRequest();
+		int port = servletRequest.getLocalPort();
+		String portPart = (port == 80 || port == 443) ? "" : ":" + port;
+		String urlBase = servletRequest.getScheme() + "://" + servletRequest.getServerName() + portPart
+				+ servletRequest.getContextPath();
+		return urlBase + "/connect/twitter" + (tweetIt ? "?tweetIt=on" : "");
 	}
 }
