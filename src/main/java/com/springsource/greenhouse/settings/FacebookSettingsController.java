@@ -53,7 +53,7 @@ public class FacebookSettingsController {
 			postToWall(account);
 		}
 		if (request.getParameter("useFBPic") != null) {
-			useFacebookProfilePicture(account, accessToken);
+			useFacebookProfilePicture(account, facebookUserId);
 		}
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 		return "redirect:/settings/facebook";			
@@ -71,10 +71,10 @@ public class FacebookSettingsController {
 					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 	}
 	
-	private void useFacebookProfilePicture(Account account, String accessToken) {
+	private void useFacebookProfilePicture(Account account, String facebookUserId) {
 		try {
 			FacebookOperations facebookApi = accountProvider.getFacebookApi(account.getId());			
-	        byte[] imageBytes = facebookApi.getProfilePicture(accessToken);	        
+			byte[] imageBytes = facebookApi.getProfilePicture(facebookUserId);
 	        profilePictureService.saveProfilePicture(account.getId(), imageBytes);
 		} catch (IOException e) {
 			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
