@@ -1,0 +1,2 @@
+insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('twitter', 'whatev', 'secret', 'http://www.twitter.com/request', 'http://www.twitter.com/authorize', 'http://www.twitter.com/access');
+insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('facebook', 'apiKey', 'shhhhh', 'http://www.facebook.com/request', 'http://www.facebook.com/authorize', 'http://www.facebook.com/access');

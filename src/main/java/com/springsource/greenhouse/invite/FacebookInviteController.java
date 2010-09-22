@@ -1,5 +1,6 @@
 package com.springsource.greenhouse.invite;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,9 +29,13 @@ public class FacebookInviteController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
-		FacebookOperations facebookApi = accountProvider.getFacebookApi(account.getId());
-		List<String> providerAccountIds = facebookApi.getFriendIds();
-		model.addAttribute("friendAccounts", accountProvider.findAccountsWithProviderAccountIds(providerAccountIds));
+		if (accountProvider.isConnected(account.getId())) {
+			FacebookOperations facebookApi = accountProvider.getFacebookApi(account.getId());
+			List<String> providerAccountIds = facebookApi.getFriendIds();
+			model.addAttribute("friendAccounts", accountProvider.findAccountsWithProviderAccountIds(providerAccountIds));
+		} else {
+			model.addAttribute("friendAccounts", Collections.emptySet());
+		}
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, params="skip=1")

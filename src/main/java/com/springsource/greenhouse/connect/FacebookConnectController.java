@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
@@ -50,13 +51,14 @@ public class FacebookConnectController {
 	
 	@RequestMapping(method=RequestMethod.POST) 
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken,
-			@FacebookUserId String facebookUserId, HttpServletRequest request) {
+			@FacebookUserId String facebookUserId, @RequestParam(value = "postIt", required = false) boolean postIt,
+			@RequestParam(value = "useFBPic", required = false) boolean useFBPic) {
 		if (facebookUserId != null && accessToken != null) {
 			accountProvider.connect(account.getId(), new ConnectionDetails(accessToken, "", facebookUserId));
-			if (request.getParameter("postIt") != null) {
+			if (postIt) {
 				postToWall(account);
 			}
-			if (request.getParameter("useFBPic") != null) {
+			if (useFBPic) {
 				useFacebookProfilePicture(account, facebookUserId);
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
