@@ -23,7 +23,7 @@ public interface AccountProvider {
 	
 	String getAuthorizeUrl();
 	
-	Token fetchAccessToken(Token requestToken, String verifier, String callbackUrl);
+	Token fetchAccessToken(Token requestToken, String verifier);
 	
 	/**
 	 * Connect an account with this provider.

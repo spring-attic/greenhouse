@@ -50,7 +50,7 @@ public class ConnectController {
 		}
 
 		request.removeAttribute("requestToken", WebRequest.SCOPE_SESSION);
-		Token accessToken = twitterProvider.fetchAccessToken(requestToken, verifier, getCallbackUrl(tweetIt));
+		Token accessToken = twitterProvider.fetchAccessToken(requestToken, verifier);
 
 		if (accessToken != null) {
 			twitterProvider.connect(account.getId(),

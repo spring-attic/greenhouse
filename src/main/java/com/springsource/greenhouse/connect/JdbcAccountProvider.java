@@ -66,21 +66,6 @@ class JdbcAccountProvider implements AccountProvider {
 		this.accountMapper = accountMapper;
 	}
 
-	private OAuthService getOAuthService(String callbackUrl) {
-		OAuthConfig config = new OAuthConfig();
-		config.setRequestTokenEndpoint(requestTokenUrl);
-		config.setAccessTokenEndpoint(accessTokenUrl);
-		config.setAccessTokenVerb(Verb.POST);
-		config.setRequestTokenVerb(Verb.POST);
-		config.setApiKey(apiKey);
-		config.setApiSecret(secret);
-		config.setCallback(callbackUrl);
-
-		return new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(),
-				new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(),
-				new TokenExtractorImpl(), config);
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -98,11 +83,11 @@ class JdbcAccountProvider implements AccountProvider {
 		return authorizeUrl;
 	}
 
-	public Token fetchAccessToken(Token requestToken, String verifier, String callbackUrl) {
+	public Token fetchAccessToken(Token requestToken, String verifier) {
 		try {
 			org.scribe.model.Token scribeRequestToken = new org.scribe.model.Token(requestToken.getValue(),
 					requestToken.getSecret());
-			org.scribe.model.Token accessToken = getOAuthService(callbackUrl).getAccessToken(scribeRequestToken,
+			org.scribe.model.Token accessToken = getOAuthService(null).getAccessToken(scribeRequestToken,
 					new Verifier(verifier));
 			return new Token(accessToken.getToken(), accessToken.getSecret());
 		} catch (OAuthException e) {
@@ -179,6 +164,23 @@ class JdbcAccountProvider implements AccountProvider {
 			return rest;
 		}
 	};
+
+	private OAuthService getOAuthService(String callbackUrl) {
+		OAuthConfig config = new OAuthConfig();
+		config.setRequestTokenEndpoint(requestTokenUrl);
+		config.setAccessTokenEndpoint(accessTokenUrl);
+		config.setAccessTokenVerb(Verb.POST);
+		config.setRequestTokenVerb(Verb.POST);
+		config.setApiKey(apiKey);
+		config.setApiSecret(secret);
+		if (callbackUrl != null) {
+			config.setCallback(callbackUrl);
+		}
+
+		return new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(),
+				new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(),
+				new TokenExtractorImpl(), config);
+	}
 
 	protected OAuthClientRequestSigner getRequestSigner(String accessToken, String accessTokenSecret) {
 		return new ScribeOAuth1RequestSigner(apiKey, secret, accessToken, accessTokenSecret);
