@@ -51,14 +51,17 @@ public class FacebookConnectController {
 	@RequestMapping(method=RequestMethod.POST) 
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken,
 			@FacebookUserId String facebookUserId, HttpServletRequest request) {
-		accountProvider.connect(account.getId(), new ConnectionDetails(accessToken, "", facebookUserId));
-		if (request.getParameter("postIt") != null) {
-			postToWall(account);
+		if (facebookUserId != null && accessToken != null) {
+			accountProvider.connect(account.getId(), new ConnectionDetails(accessToken, "", facebookUserId));
+			if (request.getParameter("postIt") != null) {
+				postToWall(account);
+			}
+			if (request.getParameter("useFBPic") != null) {
+				useFacebookProfilePicture(account, facebookUserId);
+			}
+			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 		}
-		if (request.getParameter("useFBPic") != null) {
-			useFacebookProfilePicture(account, facebookUserId);
-		}
-		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
+
 		return "redirect:/connect/facebook";
 	}
 	
