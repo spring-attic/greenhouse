@@ -1,12 +1,9 @@
-package com.springsource.greenhouse.oauth.provider;
+package com.springsource.greenhouse.develop.oauth;
 
-import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth.provider.token.InvalidOAuthTokenException;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
@@ -14,19 +11,24 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenServi
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.AppConnection;
 import com.springsource.greenhouse.account.InvalidAccessTokenException;
+import com.springsource.greenhouse.develop.AppConnection;
+import com.springsource.greenhouse.develop.AppRepository;
 
 public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTokenServices {
 	
 	private OAuthSessionManager sessionManager;
-	
+
 	private AccountRepository accountRepository;
 	
+	private AppRepository appRepository;
+	
 	@Inject
-	public OAuthSessionManagerProviderTokenServices(OAuthSessionManager sessionManager, AccountRepository accountRepository) {
+	public OAuthSessionManagerProviderTokenServices(OAuthSessionManager sessionManager,
+			AccountRepository accountRepository, AppRepository appRepository) {
 		this.sessionManager = sessionManager;
 		this.accountRepository = accountRepository;
+		this.appRepository = appRepository;
 	}
 	
 	public OAuthProviderToken createUnauthorizedRequestToken(String consumerKey, String callbackUrl) {
@@ -58,7 +60,7 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 			return providerTokenFor(sessionManager.getSession(tokenValue));
 		} catch (InvalidRequestTokenException e) {
 			try {
-				return providerTokenFor(accountRepository.findAppConnection(tokenValue));
+				return providerTokenFor(appRepository.findAppConnection(tokenValue));
 			} catch (InvalidAccessTokenException ex) {
 				throw new InvalidOAuthTokenException("Could not find OAuthSession or AppConnection for provided OAuth request token " + tokenValue);
 			}
@@ -73,88 +75,6 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 	
 	private OAuthAccessProviderToken providerTokenFor(AppConnection connection) {
 		return new AppConnectionProviderToken(connection, accountRepository);
-	}	
-
-	@SuppressWarnings("serial")
-	private static class OAuthSessionProviderToken implements OAuthProviderToken {
-
-		private OAuthSession session;
-
-		public OAuthSessionProviderToken(OAuthSession session) {
-			this.session = session;
-		}
-
-		public String getConsumerKey() {
-			return session.getApiKey();
-		}
-		
-		public String getValue() {
-			return session.getRequestToken();
-		}
-		
-		public String getSecret() {
-			return session.getSecret();
-		}
-		
-		public String getCallbackUrl() {
-			return session.getCallbackUrl();
-		}
-
-		public String getVerifier() {
-			return session.getVerifier();
-		}
-
-		public boolean isAccessToken() {
-			return false;
-		}			
-	}
-	
-	@SuppressWarnings("serial")
-	private static class AppConnectionProviderToken implements OAuthAccessProviderToken {
-
-		private AppConnection connection;
-
-		private AccountRepository accountRepository;
-		
-		private Authentication userAuthentication;
-		
-		public AppConnectionProviderToken(AppConnection connection, AccountRepository accountRepository) {
-			this.connection = connection;
-			this.accountRepository = accountRepository;
-		}
-
-		public String getConsumerKey() {
-			return connection.getApiKey();
-		}
-		
-		public String getValue() {
-			return connection.getAccessToken();
-		}
-		
-		public String getSecret() {
-			return connection.getSecret();
-		}
-		
-		public String getCallbackUrl() {
-			return null;
-		}
-
-		public String getVerifier() {
-			return null;
-		}
-
-		public boolean isAccessToken() {
-			return true;
-		}
-		
-		public Authentication getUserAuthentication() {
-			if (userAuthentication == null) {
-				Account account = accountRepository.findById(connection.getAccountId());
-				userAuthentication = new UsernamePasswordAuthenticationToken(account, null, (Collection<GrantedAuthority>)null);		
-			}
-			return userAuthentication;
-		}
-			
 	}
 
 }

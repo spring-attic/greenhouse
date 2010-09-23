@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth.provider;
+package com.springsource.greenhouse.develop.oauth;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +14,7 @@ import org.springframework.security.oauth.provider.ConsumerDetails;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
-import com.springsource.greenhouse.oauth.provider.AppConsumerDetailsService;
+import com.springsource.greenhouse.develop.oauth.AppConsumerDetailsService;
 
 public class AppConsumerDetailsServiceTest {
 

@@ -1,6 +1,8 @@
 package com.springsource.greenhouse.develop;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springsource.greenhouse.account.InvalidAccessTokenException;
 import com.springsource.greenhouse.account.InvalidApiKeyException;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -111,6 +114,48 @@ public class JdbcAppRepositoryTest {
 	public void deleteApp() {
 		appRepository.deleteApp(2L, "greenhouse-for-facebook");
 		assertEquals(0, appRepository.findAppSummaries(2L).size());
+	}
+
+	@Test
+	@Transactional
+	public void connectApp() throws InvalidApiKeyException, InvalidAccessTokenException {
+		AppConnection connection = appRepository.connectApp(1L, "123456789");
+		assertEquals((Long) 1L, connection.getAccountId());
+		assertEquals("123456789", connection.getApiKey());
+		assertNotNull(connection.getAccessToken());
+		assertNotNull(connection.getSecret());
+
+		AppConnection connection2 = appRepository.findAppConnection(connection.getAccessToken());
+		assertEquals(connection.getAccountId(), connection2.getAccountId());
+		assertEquals(connection.getApiKey(), connection2.getApiKey());
+		assertEquals(connection.getAccessToken(), connection2.getAccessToken());
+		assertEquals(connection.getSecret(), connection2.getSecret());
+
+	}
+
+	@Test(expected = InvalidApiKeyException.class)
+	public void connectAppInvalidApiKey() throws InvalidApiKeyException {
+		appRepository.connectApp(1L, "invalidApiKey");
+	}
+
+	@Test
+	public void findAppConnection() throws InvalidAccessTokenException {
+		AppConnection connection = appRepository.findAppConnection("234567890");
+		assertEquals((Long) 1L, connection.getAccountId());
+		assertEquals("123456789", connection.getApiKey());
+		assertEquals("234567890", connection.getAccessToken());
+		assertEquals("345678901", connection.getSecret());
+	}
+
+	@Test
+	public void disconnectApp() throws InvalidApiKeyException {
+		AppConnection app = appRepository.connectApp(1L, "123456789");
+		appRepository.disconnectApp(1L, app.getAccessToken());
+		try {
+			appRepository.findAppConnection("123456789");
+			fail("Should have failed");
+		} catch (InvalidAccessTokenException e) {
+		}
 	}
 
 	private void assertExpectedApp(App app) {

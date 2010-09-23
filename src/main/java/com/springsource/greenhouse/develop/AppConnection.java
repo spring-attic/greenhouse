@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.account;
+package com.springsource.greenhouse.develop;
 
 public final class AppConnection {
 

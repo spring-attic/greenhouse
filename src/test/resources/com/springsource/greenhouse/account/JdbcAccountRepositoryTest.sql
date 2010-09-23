@@ -8,6 +8,3 @@ insert into AccountConnection (member, provider, accessToken, accountId) values 
 insert into AccountConnection (member, provider, accessToken) values (1, 'twitter', 'accesstoken');
 insert into AccountConnection (member, provider, accessToken) values (1, 'linkedin', 'accesstoken');
 insert into AccountConnection (member, provider, accessToken, accountId) values (2, 'facebook', 'accesstoken2', 2);
-insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for the iPhone', 'greenhouse-for-the-iphone', 'Awesome', 'SpringSource', 'http://www.springsource.com', '76926d574e7ff5dabb94b5df23b6add6', '017c9bdbb1c08c870e4c0697ddc04abe', 'x-com-springsource-greenhouse://oauth-response');
-insert into AppDeveloper (app, member) values (1, 1);
-insert into AppConnection (app, member, accessToken, secret) values (1, 1, 'ea448a2cc81b84da29b3eeaf1e0242a1', '8d4c8b1930b25c4ea1a923fb9c213f4d');

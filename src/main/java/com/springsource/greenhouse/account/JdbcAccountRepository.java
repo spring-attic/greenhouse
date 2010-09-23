@@ -10,8 +10,6 @@ import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.PasswordEncoder;
-import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
-import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriTemplate;
@@ -23,8 +21,6 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	private final StringEncryptor encryptor;
-
 	private final PasswordEncoder passwordEncoder;
 
 	private final PictureUrlFactory pictureUrlFactory;
@@ -33,12 +29,9 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	private final AccountMapper accountMapper;
 
-	private final SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator();
-
 	@Autowired
-	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, StringEncryptor encryptor, PasswordEncoder passwordEncoder, FileStorage pictureStorage, String profileUrlTemplate) {
+	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, FileStorage pictureStorage, String profileUrlTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.encryptor = encryptor;
 		this.passwordEncoder = passwordEncoder;
 		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
 		this.profileUrlTemplate = new UriTemplate(profileUrlTemplate);
@@ -94,40 +87,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		} catch (EmptyResultDataAccessException e) {
 			throw new InvalidAccessTokenException(accessToken);
 		}
-	}
-
-	@Transactional
-	public AppConnection connectApp(Long accountId, String apiKey) throws InvalidApiKeyException {
-		String accessToken = keyGenerator.generateKey();
-		String secret = keyGenerator.generateKey();
-		Long appId;
-		try {
-			appId = jdbcTemplate.queryForLong("select id from App where apiKey = ?", encryptor.encrypt(apiKey));
-		} catch (EmptyResultDataAccessException e) {
-			throw new InvalidApiKeyException(apiKey);
-		}
-		jdbcTemplate.update("delete from AppConnection where app = ? and member = ?", appId, accountId);
-		jdbcTemplate.update("insert into AppConnection (app, member, accessToken, secret) values (?, ?, ?, ?)",
-				appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
-		return new AppConnection(accountId, apiKey, accessToken, secret);
-	}
-
-	public AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException {
-		try {
-			return jdbcTemplate.queryForObject("select c.member, a.apiKey, c.accessToken, c.secret from AppConnection c inner join App a on c.app = a.id where c.accessToken = ?",
-				new RowMapper<AppConnection>() {
-					public AppConnection mapRow(ResultSet rs, int rowNum) throws SQLException {
-						return new AppConnection(rs.getLong("member"), encryptor.decrypt(rs.getString("apiKey")),
-								encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
-					}
-				}, encryptor.encrypt(accessToken));
-		} catch (EmptyResultDataAccessException e) {
-			throw new InvalidAccessTokenException(accessToken);
-		}
-	}
-
-	public void disconnectApp(Long accountId, String accessToken) {
-		jdbcTemplate.update("delete from AppConnection where accessToken = ? and member = ?", accessToken, accountId);
 	}
 
 	// internal helpers

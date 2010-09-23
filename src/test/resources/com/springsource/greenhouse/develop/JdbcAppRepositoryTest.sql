@@ -9,3 +9,5 @@ insert into App (name, slug, description, organization, website, apiKey, secret,
 insert into AppDeveloper (app, member) values (2, 3);
 insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for the Android', 'greenhouse-for-the-android', 'Awesome', 'SpringSource', 'http://www.springsource.com', 'apikey2', 'secret2', null);
 insert into AppDeveloper (app, member) values (3, 3);
+
+insert into AppConnection (app, member, accessToken, secret) values (2, 1, 'ea448a2cc81b84da29b3eeaf1e0242a1', '8d4c8b1930b25c4ea1a923fb9c213f4d');

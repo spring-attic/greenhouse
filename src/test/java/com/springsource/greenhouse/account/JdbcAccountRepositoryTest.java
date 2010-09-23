@@ -1,6 +1,7 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -10,7 +11,6 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.NoOpPasswordEncoder;
-import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +26,9 @@ public class JdbcAccountRepositoryTest {
 
 	@Before
 	public void setup() {
-		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().connectedApp().testData(getClass()).getDatabase();
+		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		accountRepository = new JdbcAccountRepository(jdbcTemplate, new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"),
-				NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+		accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 	}
 
 	@After
@@ -103,47 +102,6 @@ public class JdbcAccountRepositoryTest {
 	@Test(expected = InvalidAccessTokenException.class)
 	public void connectedAccountNotFound() throws Exception {
 		accountRepository.findByAccountConnection("badtoken", "facebook");
-	}
-
-	@Test
-	public void connectApp() throws InvalidApiKeyException, InvalidAccessTokenException {
-		AppConnection connection = accountRepository.connectApp(1L, "123456789");
-		assertEquals((Long) 1L, connection.getAccountId());
-		assertEquals("123456789", connection.getApiKey());
-		assertNotNull(connection.getAccessToken());
-		assertNotNull(connection.getSecret());
-
-		AppConnection connection2 = accountRepository.findAppConnection(connection.getAccessToken());
-		assertEquals(connection.getAccountId(), connection2.getAccountId());
-		assertEquals(connection.getApiKey(), connection2.getApiKey());
-		assertEquals(connection.getAccessToken(), connection2.getAccessToken());
-		assertEquals(connection.getSecret(), connection2.getSecret());
-
-	}
-
-	@Test(expected = InvalidApiKeyException.class)
-	public void connectAppInvalidApiKey() throws InvalidApiKeyException {
-		accountRepository.connectApp(1L, "invalidApiKey");
-	}
-
-	@Test
-	public void findAppConnection() throws InvalidAccessTokenException {
-		AppConnection connection = accountRepository.findAppConnection("234567890");
-		assertEquals((Long) 1L, connection.getAccountId());
-		assertEquals("123456789", connection.getApiKey());
-		assertEquals("234567890", connection.getAccessToken());
-		assertEquals("345678901", connection.getSecret());
-	}
-
-	@Test
-	public void disconnectApp() throws InvalidApiKeyException {
-		AppConnection app = accountRepository.connectApp(1L, "123456789");
-		accountRepository.disconnectApp(1L, app.getAccessToken());
-		try {
-			accountRepository.findAppConnection("123456789");
-			fail("Should have failed");
-		} catch (InvalidAccessTokenException e) {
-		}
 	}
 
 	private void assertExpectedAccount(Account account) {

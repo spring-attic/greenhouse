@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth.provider;
+package com.springsource.greenhouse.develop.oauth;
 
 import java.util.Collections;
 import java.util.List;

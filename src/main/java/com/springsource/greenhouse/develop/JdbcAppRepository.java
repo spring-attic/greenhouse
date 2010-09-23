@@ -14,6 +14,7 @@ import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springsource.greenhouse.account.InvalidAccessTokenException;
 import com.springsource.greenhouse.account.InvalidApiKeyException;
 import com.springsource.greenhouse.utils.SlugUtils;
 
@@ -78,8 +79,47 @@ public class JdbcAppRepository implements AppRepository {
 		return slug;
 	}
 
+	@Transactional
+	public AppConnection connectApp(Long accountId, String apiKey) throws InvalidApiKeyException {
+		String accessToken = keyGenerator.generateKey();
+		String secret = keyGenerator.generateKey();
+		Long appId = findAppIdByApiKey(apiKey);
+		jdbcTemplate.update("delete from AppConnection where app = ? and member = ?", appId, accountId);
+		jdbcTemplate.update("insert into AppConnection (app, member, accessToken, secret) values (?, ?, ?, ?)",
+				appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
+		return new AppConnection(accountId, apiKey, accessToken, secret);
+	}
+
+	public AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException {
+		try {
+			return jdbcTemplate.queryForObject("select c.member, a.apiKey, c.accessToken, c.secret from AppConnection c inner join App a on c.app = a.id where c.accessToken = ?",
+				new RowMapper<AppConnection>() {
+					public AppConnection mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return new AppConnection(rs.getLong("member"), encryptor.decrypt(rs.getString("apiKey")),
+								encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
+					}
+				}, encryptor.encrypt(accessToken));
+		} catch (EmptyResultDataAccessException e) {
+			throw new InvalidAccessTokenException(accessToken);
+		}
+	}
+
+	public void disconnectApp(Long accountId, String accessToken) {
+		jdbcTemplate.update("delete from AppConnection where accessToken = ? and member = ?", accessToken, accountId);
+	}
+
+	// internal helpers
+	
 	private String createSlug(String appName) {
 		return SlugUtils.toSlug(appName);
+	}
+	
+	private Long findAppIdByApiKey(String apiKey) throws InvalidApiKeyException {
+		try {
+			return jdbcTemplate.queryForLong("select id from App where apiKey = ?", encryptor.encrypt(apiKey));
+		} catch (EmptyResultDataAccessException e) {
+			throw new InvalidApiKeyException(apiKey);
+		}		
 	}
 	
 	private static final String SELECT_APPS = "select a.name, a.slug, a.description from App a inner join AppDeveloper d on a.id = d.app where d.member = ?";

@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth.provider;
+package com.springsource.greenhouse.develop.oauth;
 
 @SuppressWarnings("serial")
 public class InvalidRequestTokenException extends Exception {

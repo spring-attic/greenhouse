@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth.provider;
+package com.springsource.greenhouse.develop.oauth;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -8,21 +8,21 @@ import javax.inject.Inject;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 
 import com.google.common.collect.MapMaker;
-import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.AppConnection;
 import com.springsource.greenhouse.account.InvalidApiKeyException;
+import com.springsource.greenhouse.develop.AppConnection;
+import com.springsource.greenhouse.develop.AppRepository;
 
 public class ConcurrentMapOAuthSessionManager implements OAuthSessionManager {
 
 	private final ConcurrentMap<String, StandardOAuthSession> sessions;
 
-	private final AccountRepository accountRepository;
+	private final AppRepository appRepository;
 	
 	private final SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator();
 
 	@Inject
-	public ConcurrentMapOAuthSessionManager(AccountRepository accountRepository) {
-		this.accountRepository = accountRepository;
+	public ConcurrentMapOAuthSessionManager(AppRepository appRepository) {
+		this.appRepository = appRepository;
 		sessions = new MapMaker().softValues().expiration(2, TimeUnit.MINUTES).makeMap();
 	}
 	
@@ -55,7 +55,7 @@ public class ConcurrentMapOAuthSessionManager implements OAuthSessionManager {
 			throw new IllegalStateException("OAuthSession is not yet authorized");
 		}
 		try {
-			AppConnection connection = accountRepository.connectApp(session.getAuthorizingAccountId(), session.getApiKey());
+			AppConnection connection = appRepository.connectApp(session.getAuthorizingAccountId(), session.getApiKey());
 			sessions.remove(requestToken);
 			return connection;
 		} catch (InvalidApiKeyException e) {

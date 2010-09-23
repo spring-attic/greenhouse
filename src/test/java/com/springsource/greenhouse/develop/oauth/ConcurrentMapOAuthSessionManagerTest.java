@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.oauth.provider;
+package com.springsource.greenhouse.develop.oauth;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,17 +12,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.security.encrypt.NoOpPasswordEncoder;
 import org.springframework.security.encrypt.SearchableStringEncryptor;
 
-import com.springsource.greenhouse.account.AppConnection;
 import com.springsource.greenhouse.account.InvalidAccessTokenException;
-import com.springsource.greenhouse.account.JdbcAccountRepository;
-import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
-import com.springsource.greenhouse.oauth.provider.ConcurrentMapOAuthSessionManager;
-import com.springsource.greenhouse.oauth.provider.InvalidRequestTokenException;
-import com.springsource.greenhouse.oauth.provider.OAuthSession;
+import com.springsource.greenhouse.develop.AppConnection;
+import com.springsource.greenhouse.develop.AppRepository;
+import com.springsource.greenhouse.develop.JdbcAppRepository;
+import com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager;
+import com.springsource.greenhouse.develop.oauth.InvalidRequestTokenException;
+import com.springsource.greenhouse.develop.oauth.OAuthSession;
 
 public class ConcurrentMapOAuthSessionManagerTest {
 
@@ -30,14 +29,13 @@ public class ConcurrentMapOAuthSessionManagerTest {
 
 	private ConcurrentMapOAuthSessionManager sessionManager;
 
-	private JdbcAccountRepository accountRepository;
+	private AppRepository appRepository;
 
 	@Before
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
-		accountRepository = new JdbcAccountRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"),
-				NoOpPasswordEncoder.getInstance(), new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		sessionManager = new ConcurrentMapOAuthSessionManager(accountRepository);
+		appRepository = new JdbcAppRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"));		
+		sessionManager = new ConcurrentMapOAuthSessionManager(appRepository);
 	}
 
 	@After
@@ -97,7 +95,7 @@ public class ConcurrentMapOAuthSessionManagerTest {
 
 			}
 
-			connection = accountRepository.findAppConnection(connection.getAccessToken());
+			connection = appRepository.findAppConnection(connection.getAccessToken());
 			assertEquals((Long) 1L, connection.getAccountId());
 			assertEquals("123456789", connection.getApiKey());
 			assertNotNull(connection.getAccessToken());

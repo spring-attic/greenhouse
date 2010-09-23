@@ -1,6 +1,5 @@
 package com.springsource.greenhouse.account;
 
-
 public interface AccountRepository {
 
 	Account createAccount(Person person) throws EmailAlreadyOnFileException;
@@ -20,11 +19,4 @@ public interface AccountRepository {
 	// TODO should we allow the user to connect again and overwrite previous connection details? this would be consistent with connectApp but does it make sense?
 	Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException;
 	
-	// app connection operations
-	
-	AppConnection connectApp(Long accountId, String apiKey) throws InvalidApiKeyException;
-
-	AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException;
-	
-	void disconnectApp(Long accountId, String accessToken);
 }

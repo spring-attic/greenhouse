@@ -1,6 +1,6 @@
-package com.springsource.greenhouse.oauth.provider;
+package com.springsource.greenhouse.develop.oauth;
 
-import com.springsource.greenhouse.account.AppConnection;
+import com.springsource.greenhouse.develop.AppConnection;
 
 public interface OAuthSessionManager {
 	
