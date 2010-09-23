@@ -11,15 +11,12 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
-import com.springsource.greenhouse.account.PictureSize;
-import com.springsource.greenhouse.account.PictureUrlFactory;
-import com.springsource.greenhouse.account.PictureUrlMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -37,7 +34,7 @@ public class JdbcAccountProviderTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		AccountMapper accountMapper = new AccountMapper(new PictureUrlMapper(new PictureUrlFactory(new StubFileStorage()), PictureSize.small), new UriTemplate("http://localhost:8080/members/{profileKey}"));
+		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");;
 		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, accountMapper);
 		accountProvider = providerRepository.findAccountProviderByName("twitter");
 	}
@@ -56,11 +53,9 @@ public class JdbcAccountProviderTest {
 		assertTrue(accountProvider.isConnected(2L));
 	}
 
-	@Test
+	@Test(expected=DuplicateKeyException.class)
 	public void connect_alreadyConnected() {
-		assertFalse(accountProvider.isConnected(2L));
 		accountProvider.connect(1L, new ConnectionDetails("ACCESS_TOKEN", "SECRET", "Twitter"));
-		// TODO: What should be the outcome here?
 	}
 
 	@Test

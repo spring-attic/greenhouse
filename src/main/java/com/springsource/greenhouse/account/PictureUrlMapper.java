@@ -20,4 +20,8 @@ public class PictureUrlMapper implements RowMapper<String> {
 		Gender gender = Gender.valueOf(rs.getString("gender").charAt(0));
 		return urlFactory.pictureUrl(rs.getLong("id"), pictureSize, rs.getBoolean("pictureSet"), gender);
 	}
+
+	public String defaultPictureUrl(Gender gender) {
+		return urlFactory.defaultPictureUrl(gender, pictureSize);
+	}
 }

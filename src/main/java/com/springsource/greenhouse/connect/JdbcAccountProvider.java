@@ -18,7 +18,6 @@ import org.scribe.oauth.OAuth10aServiceImpl;
 import org.scribe.oauth.OAuthService;
 import org.scribe.services.HMACSha1SignatureService;
 import org.scribe.services.TimestampServiceImpl;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
@@ -87,12 +86,7 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public void connect(Long accountId, ConnectionDetails details) {
-		try {
-			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, name, details.getAccessToken(), details.getSecret(), accountId);
-		} catch (DuplicateKeyException e) {
-			// TODO: What to do here? Previously it was:
-			// throw new AccountConnectionAlreadyExists(name, accountId);
-		}
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, name, details.getAccessToken(), details.getSecret(), accountId);
 	}
 
 	public boolean isConnected(Long accountId) {
@@ -121,7 +115,7 @@ class JdbcAccountProvider implements AccountProvider {
 
 	public Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException {
 		try {
-			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)", accountMapper, name, accessToken);
+			return jdbcTemplate.queryForObject(AccountMapper.SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)", accountMapper, name, accessToken);
 		} catch (EmptyResultDataAccessException e) {
 			throw new NoSuchAccountConnectionException(accessToken);
 		}
@@ -190,9 +184,7 @@ class JdbcAccountProvider implements AccountProvider {
 
 	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, secret, accountId) values (?, ?, ?, ?, ?)";
 
-	private static final String SELECT_ACCOUNT = "select id, firstName, lastName, email, username, gender, pictureSet from Member";
-
-	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :providerAccountIds ))";
+	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = AccountMapper.SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :providerAccountIds ))";
 
 	private static final String DELETE_ACCOUNT_CONNECTION = "delete from AccountConnection where member = ? and provider = ?";
 }

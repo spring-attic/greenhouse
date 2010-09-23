@@ -6,13 +6,11 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
@@ -23,19 +21,13 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	private final PasswordEncoder passwordEncoder;
 
-	private final PictureUrlFactory pictureUrlFactory;
-
-	private final UriTemplate profileUrlTemplate;
-
 	private final AccountMapper accountMapper;
 
 	@Autowired
-	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, FileStorage pictureStorage, String profileUrlTemplate) {
+	public JdbcAccountRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, AccountMapper accountMapper) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.passwordEncoder = passwordEncoder;
-		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
-		this.profileUrlTemplate = new UriTemplate(profileUrlTemplate);
-		this.accountMapper = new AccountMapper(new PictureUrlMapper(pictureUrlFactory, PictureSize.small), this.profileUrlTemplate);
+		this.accountMapper = accountMapper;
 	}
 
 	@Transactional
@@ -44,8 +36,7 @@ public class JdbcAccountRepository implements AccountRepository {
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password, gender, birthdate) values (?, ?, ?, ?, ?, ?)",
 				person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()), person.getGender().code(), person.getBirthdate().toString());
 			Long accountId = jdbcTemplate.queryForLong("call identity()");
-			String pictureUrl = pictureUrlFactory.defaultPictureUrl(person.getGender(), PictureSize.small);
-			return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail(), null, pictureUrl, profileUrlTemplate);
+			return accountMapper.newAccount(accountId, person);
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
 		}
@@ -65,7 +56,7 @@ public class JdbcAccountRepository implements AccountRepository {
 	}
 
 	public Account findById(Long id) {
-		return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = ?", accountMapper, id);
+		return jdbcTemplate.queryForObject(AccountMapper.SELECT_ACCOUNT + " where id = ?", accountMapper, id);
 	}
 
 	public Account findByUsername(String username) throws UsernameNotFoundException {
@@ -83,7 +74,7 @@ public class JdbcAccountRepository implements AccountRepository {
 	// internal helpers
 
 	private String accountQuery(String username) {
-		return EmailUtils.isEmail(username) ? SELECT_ACCOUNT + " where email = ?" : SELECT_ACCOUNT + " where username = ?";
+		return EmailUtils.isEmail(username) ? AccountMapper.SELECT_ACCOUNT + " where email = ?" : AccountMapper.SELECT_ACCOUNT + " where username = ?";
 	}
 
 	private String passwordProtectedAccountQuery(String username) {
@@ -117,8 +108,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		}
 
 	}
-
-	private static final String SELECT_ACCOUNT = "select id, firstName, lastName, email, username, gender, pictureSet from Member";
 
 	private static final String SELECT_PASSWORD_PROTECTED_ACCOUNT = "select id, firstName, lastName, email, password, username, gender, pictureSet from Member";
 }

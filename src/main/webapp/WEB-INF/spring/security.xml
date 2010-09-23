@@ -33,9 +33,11 @@
 
 	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
 
-	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository">
+	<beans:bean class="com.springsource.greenhouse.account.AccountMapper">
 		<beans:constructor-arg value="${application.url}/members/{profileKey}" />		
 	</beans:bean>
+	
+	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
 	
 	<greenhouse:environment-bean id="passwordEncoder">
 		<greenhouse:when environment="embedded">

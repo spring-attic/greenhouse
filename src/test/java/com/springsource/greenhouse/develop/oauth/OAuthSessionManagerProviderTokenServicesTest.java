@@ -24,6 +24,7 @@ import org.springframework.security.oauth.provider.token.OAuthAccessProviderToke
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
 import com.springsource.greenhouse.account.StubFileStorage;
@@ -31,10 +32,6 @@ import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
-import com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager;
-import com.springsource.greenhouse.develop.oauth.InvalidRequestTokenException;
-import com.springsource.greenhouse.develop.oauth.OAuthSessionManager;
-import com.springsource.greenhouse.develop.oauth.OAuthSessionManagerProviderTokenServices;
 
 public class OAuthSessionManagerProviderTokenServicesTest {
 
@@ -48,8 +45,8 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
 		AppRepository appRepository = new JdbcAppRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"));				
 		OAuthSessionManager sessionManager = new ConcurrentMapOAuthSessionManager(appRepository);
-		AccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(),
-				new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+		AccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), accountMapper);
 		tokenServices = new OAuthSessionManagerProviderTokenServices(sessionManager, accountRepository, appRepository);
 	}
 
