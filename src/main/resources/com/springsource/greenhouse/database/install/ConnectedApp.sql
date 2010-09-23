@@ -22,3 +22,4 @@ create table AppConnection (app varchar,
 					primary key (app, member),
 					foreign key (member) references Member(id),
 					foreign key (app) references App(id) on delete cascade);
+					

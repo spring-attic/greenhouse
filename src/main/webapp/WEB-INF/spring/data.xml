@@ -26,10 +26,10 @@
 	
 	<greenhouse:environment-bean id="dataSource">
 		<greenhouse:when environment="embedded">
-			<bean class="com.springsource.greenhouse.database.GreenhouseEmbeddedDatabaseFactoryBean" />
+			<bean class="com.springsource.greenhouse.database.EmbeddedDatabaseFactoryBean" />
 		</greenhouse:when>
 		<greenhouse:otherwise>
-			<bean class="com.springsource.greenhouse.database.GreenhouseConnectionPoolFactoryBean" />
+			<bean class="com.springsource.greenhouse.database.ConnectionPoolFactoryBean" />
 		</greenhouse:otherwise>
 	</greenhouse:environment-bean>
 

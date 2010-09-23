@@ -24,6 +24,7 @@ import org.springframework.http.converter.json.MappingJacksonHttpMessageConverte
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.oauth.OAuthClientRequestSigner;
 import org.springframework.social.oauth.OAuthSigningClientHttpRequestFactory;
 import org.springframework.social.oauth1.ScribeOAuth1RequestSigner;
@@ -50,9 +51,11 @@ class JdbcAccountProvider implements AccountProvider {
 
 	private final JdbcTemplate jdbcTemplate;
 
+	private final StringEncryptor encryptor;
+	
 	private final AccountMapper accountMapper;
 
-	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl, String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
+	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl, String accessTokenUrl, JdbcTemplate jdbcTemplate, StringEncryptor encryptor, AccountMapper accountMapper) {
 		this.name = name;
 		this.apiKey = apiKey;
 		this.secret = secret;
@@ -60,6 +63,7 @@ class JdbcAccountProvider implements AccountProvider {
 		this.authorizeUrl = authorizeUrl;
 		this.accessTokenUrl = accessTokenUrl;
 		this.jdbcTemplate = jdbcTemplate;
+		this.encryptor = encryptor;
 		this.accountMapper = accountMapper;
 	}
 
@@ -106,21 +110,16 @@ class JdbcAccountProvider implements AccountProvider {
 	}
 
 	public String getProviderAccountId(Long accountId) {
-		try {
-			return jdbcTemplate.queryForObject(SELECT_PROVIDER_ACCOUNT_ID, String.class, name, accountId);
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
+		return jdbcTemplate.queryForObject(SELECT_PROVIDER_ACCOUNT_ID, String.class, name, accountId);
 	}
 
 	public Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException {
 		try {
-			return jdbcTemplate.queryForObject(AccountMapper.SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)", accountMapper, name, accessToken);
+			return jdbcTemplate.queryForObject(AccountMapper.SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)", accountMapper, name, encryptor.encrypt(accessToken));
 		} catch (EmptyResultDataAccessException e) {
 			throw new NoSuchAccountConnectionException(accessToken);
 		}
 	}
-
 
 	public List<Account> findAccountsWithProviderAccountIds(List<String> providerAccountIds) {
 		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);

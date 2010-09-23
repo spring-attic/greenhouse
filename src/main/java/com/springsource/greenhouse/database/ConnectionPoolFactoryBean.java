@@ -6,13 +6,24 @@ import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 
-public class GreenhouseConnectionPoolFactoryBean implements FactoryBean<DataSource>, InitializingBean, DisposableBean {
+public class ConnectionPoolFactoryBean implements FactoryBean<DataSource>, InitializingBean, DisposableBean {
 
+	@Value("${database.url}")
+	private String url;
+
+	@Value("${database.username}")
+	private String username;
+
+	@Value("${database.password}")
+	private String password;
+	
 	private JdbcConnectionPool connectionPool;
 	
 	public void afterPropertiesSet() throws Exception {
-		connectionPool = JdbcConnectionPool.create("jdbc:h2:~/greenhouse", "sa", "sa");
+		connectionPool = JdbcConnectionPool.create(url, username, password);
 		populateDatabase();
 	}
 	
@@ -33,7 +44,11 @@ public class GreenhouseConnectionPoolFactoryBean implements FactoryBean<DataSour
 	}
 	
 	private void populateDatabase() {
-		new GreenhouseDatabaseInstaller(connectionPool).run();
+		new BaseDatabaseInstaller(connectionPool) {
+			protected void addCustomChanges(DatabaseChangeSetBuilder builder) {
+				builder.addChange(databaseResource("install/data/AccountProviders.sql"));
+			}
+		}.run();
 	}
 	
 }

@@ -22,9 +22,6 @@ public class MembersController {
 	
 	private ProfileRepository profileRepository;
 
-	@Value("${facebook.applicationId}")
-	private String facebookAppId; 
-
 	@Inject
 	public MembersController(ProfileRepository profileRepository) {
 		this.profileRepository = profileRepository;
@@ -57,4 +54,8 @@ public class MembersController {
 		metadata.put("fb:app_id", facebookAppId);
 		return metadata;		
 	}
+	
+	@Value("#{facebookAccountProvider.appId}")
+	private String facebookAppId; 
+
 }

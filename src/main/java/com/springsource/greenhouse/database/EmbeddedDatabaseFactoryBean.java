@@ -10,7 +10,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 
-public class GreenhouseEmbeddedDatabaseFactoryBean implements FactoryBean<DataSource>, InitializingBean, DisposableBean {
+public class EmbeddedDatabaseFactoryBean implements FactoryBean<DataSource>, InitializingBean, DisposableBean {
 
 	private EmbeddedDatabase database;
 	
@@ -39,7 +39,7 @@ public class GreenhouseEmbeddedDatabaseFactoryBean implements FactoryBean<DataSo
 	}
 
 	private void populateDatabase() {
-		new GreenhouseDatabaseInstaller(database) {
+		new BaseDatabaseInstaller(database) {
 			protected void addCustomChanges(DatabaseChangeSetBuilder builder) {
 				builder.addChange(databaseResource("install/embedded/test-data.sql"));
 			}

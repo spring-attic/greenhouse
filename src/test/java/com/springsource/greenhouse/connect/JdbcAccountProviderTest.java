@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.security.encrypt.SearchableStringEncryptor;
+import org.springframework.security.encrypt.StringEncryptor;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
@@ -34,8 +36,9 @@ public class JdbcAccountProviderTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");;
-		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, accountMapper);
+		StringEncryptor encryptor = new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed");
+		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
+		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, encryptor, accountMapper);
 		accountProvider = providerRepository.findAccountProviderByName("twitter");
 	}
 
@@ -59,17 +62,17 @@ public class JdbcAccountProviderTest {
 	}
 
 	@Test
-	public void isConnected() {
+	public void connected() {
 		assertTrue(accountProvider.isConnected(1L));
 	}
 
 	@Test
-	public void isConnected_noAccountConnection() {
+	public void notConnected() {
 		assertFalse(accountProvider.isConnected(2L));
 	}
 
 	@Test
-	public void saveProviderAccountId() {
+	public void updateProviderAccountId() {
 		assertEquals("habuma", accountProvider.getProviderAccountId(1L));
 		accountProvider.updateProviderAccountId(1L, "springdude");
 		assertEquals("springdude", accountProvider.getProviderAccountId(1L));
@@ -81,13 +84,8 @@ public class JdbcAccountProviderTest {
 	}
 
 	@Test
-	public void getProviderAccountId_noAccountConnection() {
-		assertEquals(null, accountProvider.getProviderAccountId(2L));
-	}
-
-	@Test
 	public void findConnectedAccount() throws Exception {
-		assertNotNull(accountProvider.findAccountByConnection("accesstoken"));
+		assertNotNull(accountProvider.findAccountByConnection("345678901"));
 	}
 
 	@Test(expected = NoSuchAccountConnectionException.class)

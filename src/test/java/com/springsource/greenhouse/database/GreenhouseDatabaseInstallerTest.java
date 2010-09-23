@@ -5,7 +5,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-import com.springsource.greenhouse.database.GreenhouseDatabaseInstaller;
+import com.springsource.greenhouse.database.BaseDatabaseInstaller;
 
 public class GreenhouseDatabaseInstallerTest {
 
@@ -14,10 +14,10 @@ public class GreenhouseDatabaseInstallerTest {
 		EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
 		factory.setDatabaseType(EmbeddedDatabaseType.H2);
 		EmbeddedDatabase db = factory.getDatabase();
-		GreenhouseDatabaseInstaller installer = new GreenhouseDatabaseInstaller(db);
+		BaseDatabaseInstaller installer = new BaseDatabaseInstaller(db);
 		installer.run();
 		installer.run();
-		GreenhouseDatabaseInstaller installer2 = new GreenhouseDatabaseInstaller(db);
+		BaseDatabaseInstaller installer2 = new BaseDatabaseInstaller(db);
 		installer2.run();
 	}
 }

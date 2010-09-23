@@ -11,32 +11,32 @@ public class GreenhouseTestDatabaseBuilder {
 	private ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 
 	public GreenhouseTestDatabaseBuilder member() {
-		populator.addScript(new ClassPathResource("install/Member.sql", GreenhouseEmbeddedDatabaseFactoryBean.class));
+		populator.addScript(new ClassPathResource("install/Member.sql", EmbeddedDatabaseFactoryBean.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder group() {
-		populator.addScript(new ClassPathResource("install/Group.sql", GreenhouseEmbeddedDatabaseFactoryBean.class));
+		populator.addScript(new ClassPathResource("install/Group.sql", EmbeddedDatabaseFactoryBean.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder activity() {
-		populator.addScript(new ClassPathResource("install/Activity.sql", GreenhouseEmbeddedDatabaseFactoryBean.class));
+		populator.addScript(new ClassPathResource("install/Activity.sql", EmbeddedDatabaseFactoryBean.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder event() {
-		populator.addScript(new ClassPathResource("install/Event.sql", GreenhouseEmbeddedDatabaseFactoryBean.class));
+		populator.addScript(new ClassPathResource("install/Event.sql", EmbeddedDatabaseFactoryBean.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder connectedAccount() {
-		populator.addScript(new ClassPathResource("install/ConnectedAccount.sql", GreenhouseEmbeddedDatabaseFactoryBean.class));
+		populator.addScript(new ClassPathResource("install/ConnectedAccount.sql", EmbeddedDatabaseFactoryBean.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder connectedApp() {
-		populator.addScript(new ClassPathResource("install/ConnectedApp.sql", GreenhouseEmbeddedDatabaseFactoryBean.class));
+		populator.addScript(new ClassPathResource("install/ConnectedApp.sql", EmbeddedDatabaseFactoryBean.class));
 		return this;
 	}
 

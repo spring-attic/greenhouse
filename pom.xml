@@ -354,6 +354,13 @@
 			<url>http://maven.springframework.org/release</url>
 			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
+		<!-- For resolving Scribe dependency; temporary awaiting its arrival in central -->
+		<repository>
+			<id>org.springframework.maven.external</id>
+			<name>Spring Maven External Libraries Repository</name>
+			<url>http://maven.springframework.org/external</url>
+			<snapshots><enabled>false</enabled></snapshots>		
+		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
 			<id>org.springframework.maven.milestone</id>

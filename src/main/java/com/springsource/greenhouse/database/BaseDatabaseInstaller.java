@@ -11,14 +11,14 @@ import org.springframework.jdbc.versioned.DatabaseUpgrader;
 import org.springframework.jdbc.versioned.DatabaseVersion;
 import org.springframework.jdbc.versioned.GenericDatabaseUpgrader;
 
-public class GreenhouseDatabaseInstaller {
+public class BaseDatabaseInstaller {
 	
 	private DatabaseUpgrader upgrader;
 
 	private DatabaseVersion installVersion = DatabaseVersion.valueOf("1");
 	
 	@Autowired
-	public GreenhouseDatabaseInstaller(DataSource dataSource) {		
+	public BaseDatabaseInstaller(DataSource dataSource) {		
 		this.upgrader = initUpgrader(dataSource);
 	}
 	
@@ -28,8 +28,7 @@ public class GreenhouseDatabaseInstaller {
 	}
 	
 	private DatabaseUpgrader initUpgrader(DataSource dataSource) {
-		GenericDatabaseUpgrader database = new GenericDatabaseUpgrader(dataSource);
-		
+		GenericDatabaseUpgrader upgrader = new GenericDatabaseUpgrader(dataSource);
 		DatabaseChangeSetBuilder builder = new DatabaseChangeSetBuilder(installVersion);
 		builder.addChange(databaseResource("install/Member.sql"));
 		builder.addChange(databaseResource("install/Group.sql"));
@@ -39,9 +38,8 @@ public class GreenhouseDatabaseInstaller {
 		builder.addChange(databaseResource("install/ConnectedAccount.sql"));
 		builder.addChange(databaseResource("install/Reset.sql"));
 		addCustomChanges(builder);
-		database.addChangeSet(builder.getChangeSet());
-		
-		return database;
+		upgrader.addChangeSet(builder.getChangeSet());
+		return upgrader;
 	}
 
 	protected void addCustomChanges(DatabaseChangeSetBuilder builder) {}
