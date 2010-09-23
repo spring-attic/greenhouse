@@ -56,11 +56,6 @@ public class JdbcAccountProviderTest {
 		assertTrue(accountProvider.isConnected(2L));
 	}
 
-	@Test(expected=DuplicateKeyException.class)
-	public void connect_alreadyConnected() {
-		accountProvider.connect(1L, new ConnectionDetails("ACCESS_TOKEN", "SECRET", "Twitter"));
-	}
-
 	@Test
 	public void connected() {
 		assertTrue(accountProvider.isConnected(1L));
