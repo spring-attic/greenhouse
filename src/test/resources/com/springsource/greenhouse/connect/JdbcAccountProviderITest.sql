@@ -1,2 +1,0 @@
-insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('test', 'key', 'secret', 'http://term.ie/oauth/example/request_token.php', 'http://term.ie/oauth/example/authorize.php', 'http://term.ie/oauth/example/access_token.php');
-insert into AccountProvider (name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl) values ('bad', 'badkey', 'badsecret', 'http://term.ie/oauth/example/request_token.php', 'http://term.ie/oauth/example/authorize.php', 'http://term.ie/oauth/example/access_token.php');
