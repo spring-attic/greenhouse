@@ -3,17 +3,15 @@ package com.springsource.greenhouse.connect;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.scribe.exceptions.OAuthException;
 import org.scribe.extractors.BaseStringExtractorImpl;
 import org.scribe.extractors.HeaderExtractorImpl;
 import org.scribe.extractors.TokenExtractorImpl;
 import org.scribe.model.OAuthConfig;
+import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuth10aServiceImpl;
@@ -38,24 +36,24 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
 
 class JdbcAccountProvider implements AccountProvider {
+	
 	private final String name;
 	
 	private final String apiKey;
 	
 	private final String secret;
-	
+
+	private final String requestTokenUrl;
+
 	private final String authorizeUrl;
 	
+	private final String accessTokenUrl;
+
 	private final JdbcTemplate jdbcTemplate;
 
 	private final AccountMapper accountMapper;
 
-	private final String requestTokenUrl;
-
-	private final String accessTokenUrl;
-
-	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl,
-			String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
+	public JdbcAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl, String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
 		this.name = name;
 		this.apiKey = apiKey;
 		this.secret = secret;
@@ -74,35 +72,23 @@ class JdbcAccountProvider implements AccountProvider {
 		return apiKey;
 	}
 
-	public Token fetchNewRequestToken(String callbackUrl) {
-		try {
-			org.scribe.model.Token requestToken = getOAuthService(callbackUrl).getRequestToken();
-			return new Token(requestToken.getToken(), requestToken.getSecret());
-		} catch (OAuthException e) {
-			throw new UnableToFetchRequestTokenException(e);
-		}
+	public OAuthToken getRequestToken(String callbackUrl) {
+		Token requestToken = getOAuthService(callbackUrl).getRequestToken();
+		return new OAuthToken(requestToken.getToken(), requestToken.getSecret());
 	}
 
 	public String getAuthorizeUrl() {
 		return authorizeUrl;
 	}
 
-	public Token fetchAccessToken(Token requestToken, String verifier) {
-		try {
-			org.scribe.model.Token scribeRequestToken = new org.scribe.model.Token(requestToken.getValue(),
-					requestToken.getSecret());
-			org.scribe.model.Token accessToken = getOAuthService(null).getAccessToken(scribeRequestToken,
-					new Verifier(verifier));
-			return new Token(accessToken.getToken(), accessToken.getSecret());
-		} catch (OAuthException e) {
-			return null;
-		}
+	public OAuthToken getAccessToken(OAuthToken requestToken, String verifier) {
+		Token accessToken = getOAuthService().getAccessToken(new Token(requestToken.getValue(), requestToken.getSecret()), new Verifier(verifier));
+		return new OAuthToken(accessToken.getToken(), accessToken.getSecret());
 	}
 
 	public void connect(Long accountId, ConnectionDetails details) {
 		try {
-			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, name, details.getAccessToken(),
-					details.getAccessTokenSecret(), accountId);
+			jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, name, details.getAccessToken(), details.getSecret(), accountId);
 		} catch (DuplicateKeyException e) {
 			// TODO: What to do here? Previously it was:
 			// throw new AccountConnectionAlreadyExists(name, accountId);
@@ -117,23 +103,12 @@ class JdbcAccountProvider implements AccountProvider {
 		if (isConnected(accountId)) {
 			return jdbcTemplate.queryForObject(SELECT_ACCOUNT_CONNECTION, apiMapper, name, accountId);
 		} else {
-			return buildRestTemplate();
+			return createOAuthRestTemplate();
 		}
 	}
 
-	private RestTemplate buildRestTemplate() {
-		RestTemplate rest = new RestTemplate();
-		rest.setErrorHandler(new TwitterErrorHandler());
-		// Facebook uses "text/javascript" as the JSON content type
-		MappingJacksonHttpMessageConverter json = new MappingJacksonHttpMessageConverter();
-		json.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "javascript")));
-		rest.getMessageConverters().add(json);
-		return rest;
-	}
-
-	public void saveProviderAccountId(Long accountId, String providerAccountId) {
-		jdbcTemplate.update("update AccountConnection set accountId = ? where provider = ? and member = ?",
-				providerAccountId, name, accountId);
+	public void updateProviderAccountId(Long accountId, String providerAccountId) {
+		jdbcTemplate.update("update AccountConnection set accountId = ? where provider = ? and member = ?", providerAccountId, name, accountId);
 	}
 
 	public String getProviderAccountId(Long accountId) {
@@ -144,13 +119,21 @@ class JdbcAccountProvider implements AccountProvider {
 		}
 	}
 
-	public Set<Account> findAccountsWithProviderAccountIds(Collection<String> providerAccountIds) {
+	public Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException {
+		try {
+			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)", accountMapper, name, accessToken);
+		} catch (EmptyResultDataAccessException e) {
+			throw new NoSuchAccountConnectionException(accessToken);
+		}
+	}
+
+
+	public List<Account> findAccountsWithProviderAccountIds(List<String> providerAccountIds) {
 		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", name);
-		params.put("friendIds", providerAccountIds);
-		return new HashSet<Account>(namedTemplate.query(SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS, params,
-				accountMapper));
+		params.put("providerAccountIds", providerAccountIds);
+		return namedTemplate.query(SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS, params, accountMapper);
 	}
 
 	public void disconnect(Long accountId) {
@@ -161,13 +144,26 @@ class JdbcAccountProvider implements AccountProvider {
 	
 	private final RowMapper<RestOperations> apiMapper = new RowMapper<RestOperations>() {
 		public RestOperations mapRow(ResultSet rs, int row) throws SQLException {
-			RestTemplate rest = buildRestTemplate();
-			rest.setRequestFactory(new OAuthSigningClientHttpRequestFactory(
-					getRequestSigner(rs.getString("accessToken"), rs.getString("secret"))));
+			RestTemplate rest = createOAuthRestTemplate();
+			rest.setRequestFactory(new OAuthSigningClientHttpRequestFactory(getRequestSigner(rs.getString("accessToken"), rs.getString("secret"))));
 			return rest;
 		}
 	};
 
+	private RestTemplate createOAuthRestTemplate() {
+		RestTemplate rest = new RestTemplate();
+		rest.setErrorHandler(new TwitterErrorHandler());
+		// Facebook uses "text/javascript" as the JSON content type
+		MappingJacksonHttpMessageConverter json = new MappingJacksonHttpMessageConverter();
+		json.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "javascript")));
+		rest.getMessageConverters().add(json);
+		return rest;
+	}
+
+	private OAuthService getOAuthService() {
+		return getOAuthService(null);
+	}
+	
 	private OAuthService getOAuthService(String callbackUrl) {
 		OAuthConfig config = new OAuthConfig();
 		config.setRequestTokenEndpoint(requestTokenUrl);
@@ -179,10 +175,7 @@ class JdbcAccountProvider implements AccountProvider {
 		if (callbackUrl != null) {
 			config.setCallback(callbackUrl);
 		}
-
-		return new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(),
-				new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(),
-				new TokenExtractorImpl(), config);
+		return new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(), new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(), new TokenExtractorImpl(), config);
 	}
 
 	protected OAuthClientRequestSigner getRequestSigner(String accessToken, String accessTokenSecret) {
@@ -197,8 +190,9 @@ class JdbcAccountProvider implements AccountProvider {
 
 	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, secret, accountId) values (?, ?, ?, ?, ?)";
 
-	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = "select id, firstName, lastName, email, username, gender, pictureSet "
-			+ "from Member where id in (select member from AccountConnection where provider = :provider and accountId in ( :friendIds )) ";
+	private static final String SELECT_ACCOUNT = "select id, firstName, lastName, email, username, gender, pictureSet from Member";
+
+	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :providerAccountIds ))";
 
 	private static final String DELETE_ACCOUNT_CONNECTION = "delete from AccountConnection where member = ? and provider = ?";
 }

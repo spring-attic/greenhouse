@@ -92,18 +92,6 @@ public class JdbcAccountRepositoryTest {
 		assertTrue(jdbcTemplate.queryForObject("select pictureSet from Member where id = ?", Boolean.class, 1L));
 	}
 
-	// connected account tests
-
-	@Test
-	public void findConnectedAccount() throws Exception {
-		assertExpectedAccount(accountRepository.findByAccountConnection("facebook", "accesstoken"));
-	}
-
-	@Test(expected = InvalidAccessTokenException.class)
-	public void connectedAccountNotFound() throws Exception {
-		accountRepository.findByAccountConnection("badtoken", "facebook");
-	}
-
 	private void assertExpectedAccount(Account account) {
 		assertEquals("Craig", account.getFirstName());
 		assertEquals("Walls", account.getLastName());

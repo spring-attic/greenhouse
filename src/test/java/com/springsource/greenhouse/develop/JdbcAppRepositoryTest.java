@@ -16,8 +16,7 @@ import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.account.InvalidAccessTokenException;
-import com.springsource.greenhouse.account.InvalidApiKeyException;
+import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAppRepositoryTest {
@@ -118,7 +117,7 @@ public class JdbcAppRepositoryTest {
 
 	@Test
 	@Transactional
-	public void connectApp() throws InvalidApiKeyException, InvalidAccessTokenException {
+	public void connectApp() throws InvalidApiKeyException, NoSuchAccountConnectionException {
 		AppConnection connection = appRepository.connectApp(1L, "123456789");
 		assertEquals((Long) 1L, connection.getAccountId());
 		assertEquals("123456789", connection.getApiKey());
@@ -139,7 +138,7 @@ public class JdbcAppRepositoryTest {
 	}
 
 	@Test
-	public void findAppConnection() throws InvalidAccessTokenException {
+	public void findAppConnection() throws NoSuchAccountConnectionException {
 		AppConnection connection = appRepository.findAppConnection("234567890");
 		assertEquals((Long) 1L, connection.getAccountId());
 		assertEquals("123456789", connection.getApiKey());
@@ -154,7 +153,7 @@ public class JdbcAppRepositoryTest {
 		try {
 			appRepository.findAppConnection("123456789");
 			fail("Should have failed");
-		} catch (InvalidAccessTokenException e) {
+		} catch (NoSuchAccountConnectionException e) {
 		}
 	}
 

@@ -4,13 +4,13 @@ public class ConnectionDetails {
 	
 	private final String accessToken;
 	
-	private final String accessTokenSecret;
+	private final String secret;
 
 	private final String providerAccountId;
 
-	public ConnectionDetails(String accessToken, String accessTokenSecret, String providerAccountId) {
+	public ConnectionDetails(String accessToken, String secret, String providerAccountId) {
 		this.accessToken = accessToken;
-		this.accessTokenSecret = accessTokenSecret;
+		this.secret = secret;
 		this.providerAccountId = providerAccountId;
 	}
 
@@ -18,8 +18,8 @@ public class ConnectionDetails {
 		return accessToken;
 	}
 
-	public String getAccessTokenSecret() {
-		return accessTokenSecret;
+	public String getSecret() {
+		return secret;
 	}
 
 	public String getProviderAccountId() {

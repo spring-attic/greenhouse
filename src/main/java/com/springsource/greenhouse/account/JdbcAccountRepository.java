@@ -80,15 +80,6 @@ public class JdbcAccountRepository implements AccountRepository {
 		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
 	}
 
-	public Account findByAccountConnection(String provider, String accessToken) throws InvalidAccessTokenException {
-		try {
-			return jdbcTemplate.queryForObject(SELECT_ACCOUNT + " where id = (select member from AccountConnection where provider = ? and accessToken = ?)",
-					accountMapper, provider, accessToken);
-		} catch (EmptyResultDataAccessException e) {
-			throw new InvalidAccessTokenException(accessToken);
-		}
-	}
-
 	// internal helpers
 
 	private String accountQuery(String username) {

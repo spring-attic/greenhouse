@@ -8,8 +8,7 @@ import com.springsource.greenhouse.account.AccountMapper;
 
 class JdbcTwitterAccountProvider extends JdbcAccountProvider implements TwitterAccountProvider {
 
-	public JdbcTwitterAccountProvider(String name, String apiKey, String secret, String requestTokenUrl,
-			String authorizeUrl, String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
+	public JdbcTwitterAccountProvider(String name, String apiKey, String secret, String requestTokenUrl, String authorizeUrl, String accessTokenUrl, JdbcTemplate jdbcTemplate, AccountMapper accountMapper) {
 		super(name, apiKey, secret, requestTokenUrl, authorizeUrl, accessTokenUrl, jdbcTemplate, accountMapper);
 	}
 

@@ -2,8 +2,7 @@ package com.springsource.greenhouse.develop;
 
 import java.util.List;
 
-import com.springsource.greenhouse.account.InvalidAccessTokenException;
-import com.springsource.greenhouse.account.InvalidApiKeyException;
+import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 
 public interface AppRepository {
 
@@ -25,7 +24,7 @@ public interface AppRepository {
 	
 	AppConnection connectApp(Long accountId, String apiKey) throws InvalidApiKeyException;
 
-	AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException;
+	AppConnection findAppConnection(String accessToken) throws NoSuchAccountConnectionException;
 	
 	void disconnectApp(Long accountId, String accessToken);
 	

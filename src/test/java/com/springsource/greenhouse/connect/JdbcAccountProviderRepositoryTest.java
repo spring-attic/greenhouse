@@ -1,13 +1,18 @@
 package com.springsource.greenhouse.connect;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.web.util.UriTemplate;
 
+import com.springsource.greenhouse.account.AccountMapper;
+import com.springsource.greenhouse.account.PictureSize;
+import com.springsource.greenhouse.account.PictureUrlFactory;
+import com.springsource.greenhouse.account.PictureUrlMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -22,8 +27,8 @@ public class JdbcAccountProviderRepositoryTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, new StubFileStorage(),
-				"http://localhost:8080/members/{profileKey}");
+		AccountMapper accountMapper = new AccountMapper(new PictureUrlMapper(new PictureUrlFactory(new StubFileStorage()), PictureSize.small), new UriTemplate("http://localhost:8080/members/{profileKey}"));		
+		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, accountMapper);
 	}
 
 	@After

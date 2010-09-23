@@ -32,8 +32,7 @@ public class FacebookConnectController {
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookConnectController(AccountRepository accountRepository, FacebookAccountProvider accountProvider,
-			ProfilePictureService profilePictureService) {
+	public FacebookConnectController(AccountRepository accountRepository, FacebookAccountProvider accountProvider, ProfilePictureService profilePictureService) {
 		this.accountRepository = accountRepository;
 		this.accountProvider = accountProvider;
 		this.profilePictureService = profilePictureService;
@@ -63,7 +62,6 @@ public class FacebookConnectController {
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 		}
-
 		return "redirect:/connect/facebook";
 	}
 	

@@ -1,23 +1,30 @@
 package com.springsource.greenhouse.connect;
 
-import static java.util.Arrays.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountMapper;
+import com.springsource.greenhouse.account.PictureSize;
+import com.springsource.greenhouse.account.PictureUrlFactory;
+import com.springsource.greenhouse.account.PictureUrlMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountProviderTest {
+	
 	private EmbeddedDatabase db;
 
 	private JdbcTemplate jdbcTemplate;
@@ -30,8 +37,8 @@ public class JdbcAccountProviderTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, new StubFileStorage(),
-				"http://localhost:8080/members/{profileKey}");
+		AccountMapper accountMapper = new AccountMapper(new PictureUrlMapper(new PictureUrlFactory(new StubFileStorage()), PictureSize.small), new UriTemplate("http://localhost:8080/members/{profileKey}"));
+		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, accountMapper);
 		accountProvider = providerRepository.findAccountProviderByName("twitter");
 	}
 
@@ -69,7 +76,7 @@ public class JdbcAccountProviderTest {
 	@Test
 	public void saveProviderAccountId() {
 		assertEquals("habuma", accountProvider.getProviderAccountId(1L));
-		accountProvider.saveProviderAccountId(1L, "springdude");
+		accountProvider.updateProviderAccountId(1L, "springdude");
 		assertEquals("springdude", accountProvider.getProviderAccountId(1L));
 	}
 
@@ -84,14 +91,19 @@ public class JdbcAccountProviderTest {
 	}
 
 	@Test
+	public void findConnectedAccount() throws Exception {
+		assertNotNull(accountProvider.findAccountByConnection("accesstoken"));
+	}
+
+	@Test(expected = NoSuchAccountConnectionException.class)
+	public void connectedAccountNotFound() throws Exception {
+		accountProvider.findAccountByConnection("badtoken");
+	}
+	
+	@Test
 	public void findFriendAccounts() throws Exception {
-		Set<Account> accounts = accountProvider.findAccountsWithProviderAccountIds(asList("habuma", "rclarkson",
-				"nobody"));
+		List<Account> accounts = accountProvider.findAccountsWithProviderAccountIds(asList("habuma", "rclarkson", "BarakObama"));
 		assertEquals(2, accounts.size());
-		ArrayList<Account> accountList = new ArrayList<Account>(accounts);
-		assertThat(accountList.get(0).getId(), anyOf(is(1L), is(3L)));
-		assertThat(accountList.get(1).getId(), anyOf(is(1L), is(3L)));
-		assertThat(accountList.get(0).getId(), not(equalTo(accountList.get(1).getId())));
 	}
 
 	@Test
@@ -100,4 +112,5 @@ public class JdbcAccountProviderTest {
 		accountProvider.disconnect(1L);
 		assertFalse(accountProvider.isConnected(1L));
 	}
+	
 }

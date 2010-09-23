@@ -25,9 +25,9 @@ import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.InvalidAccessTokenException;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
 import com.springsource.greenhouse.account.StubFileStorage;
+import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
@@ -61,12 +61,12 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 	}
 
 	@Test
-	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, InvalidAccessTokenException {
+	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, NoSuchAccountConnectionException {
 		executeOAuthSessionLifecycle(2);
 	}
 
 	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException,
-			InvalidAccessTokenException {
+			NoSuchAccountConnectionException {
 		for (int i = 0; i < numberOfTimes; i++) {
 			OAuthProviderToken token = tokenServices.createUnauthorizedRequestToken("123456789",
 					"x-com-springsource-greenhouse://oauth-response");

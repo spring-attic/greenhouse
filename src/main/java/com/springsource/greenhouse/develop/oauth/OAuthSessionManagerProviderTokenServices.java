@@ -10,7 +10,7 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenServi
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.InvalidAccessTokenException;
+import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.develop.AppConnection;
 import com.springsource.greenhouse.develop.AppRepository;
 
@@ -60,7 +60,7 @@ public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTo
 		} catch (InvalidRequestTokenException e) {
 			try {
 				return providerTokenFor(appRepository.findAppConnection(tokenValue));
-			} catch (InvalidAccessTokenException ex) {
+			} catch (NoSuchAccountConnectionException ex) {
 				throw new InvalidOAuthTokenException("Could not find OAuthSession or AppConnection for provided OAuth request token " + tokenValue);
 			}
 		}

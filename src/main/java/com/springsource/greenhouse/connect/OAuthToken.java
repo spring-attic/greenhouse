@@ -1,12 +1,12 @@
 package com.springsource.greenhouse.connect;
 
-public final class Token {
+public final class OAuthToken {
 	
 	private final String value;
 	
 	private final String secret;
 
-	public Token(String value, String secret) {
+	public OAuthToken(String value, String secret) {
 		this.value = value;
 		this.secret = secret;
 	}

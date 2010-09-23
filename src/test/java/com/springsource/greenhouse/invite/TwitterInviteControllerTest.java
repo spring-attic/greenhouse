@@ -12,6 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountMapper;
+import com.springsource.greenhouse.account.PictureSize;
+import com.springsource.greenhouse.account.PictureUrlFactory;
+import com.springsource.greenhouse.account.PictureUrlMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.connect.JdbcAccountProviderRepository;
 import com.springsource.greenhouse.connect.TwitterAccountProvider;
@@ -29,10 +33,9 @@ public class TwitterInviteControllerTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		JdbcAccountProviderRepository providerRepository = new JdbcAccountProviderRepository(jdbcTemplate,
-				new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		TwitterAccountProvider twitterProvider = (TwitterAccountProvider) providerRepository
-				.findAccountProviderByName("twitter");
+		AccountMapper accountMapper = new AccountMapper(new PictureUrlMapper(new PictureUrlFactory(new StubFileStorage()), PictureSize.small), new UriTemplate("http://localhost:8080/members/{profileKey}"));	
+		JdbcAccountProviderRepository providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, accountMapper);
+		TwitterAccountProvider twitterProvider = (TwitterAccountProvider) providerRepository.findAccountProviderByName("twitter");
 		controller = new TwitterInviteController(twitterProvider);
 	}
 

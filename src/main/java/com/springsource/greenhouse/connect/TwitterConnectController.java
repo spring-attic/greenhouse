@@ -38,7 +38,7 @@ public class TwitterConnectController {
 	@RequestMapping(value="/twitter", method=RequestMethod.POST)
 	public String connectToTwitter(boolean tweetIt, ServletWebRequest request) {
 		String callbackUrl = buildCallbackUrl(tweetIt, request);
-		Token requestToken = twitterProvider.fetchNewRequestToken(callbackUrl);
+		OAuthToken requestToken = twitterProvider.getRequestToken(callbackUrl);
 		request.setAttribute("requestToken", requestToken, WebRequest.SCOPE_SESSION);
 		return "redirect:" + twitterProvider.getAuthorizeUrl() + "?oauth_token=" + requestToken.getValue();
 	}
@@ -46,20 +46,20 @@ public class TwitterConnectController {
 	@RequestMapping(value = "/twitter", method = RequestMethod.GET, params = "oauth_token")
 	public String twitterCallback(@RequestParam("oauth_token") String token,
 			@RequestParam("oauth_verifier") String verifier, Account account, boolean tweetIt, WebRequest request) {
-		Token requestToken = (Token) request.getAttribute("requestToken", WebRequest.SCOPE_SESSION);
+		OAuthToken requestToken = (OAuthToken) request.getAttribute("requestToken", WebRequest.SCOPE_SESSION);
 		if (requestToken == null) {
 			return "connect/twitterConnect";
 		}
 
 		request.removeAttribute("requestToken", WebRequest.SCOPE_SESSION);
-		Token accessToken = twitterProvider.fetchAccessToken(requestToken, verifier);
+		OAuthToken accessToken = twitterProvider.getAccessToken(requestToken, verifier);
 
 		if (accessToken != null) {
 			twitterProvider.connect(account.getId(),
 					new ConnectionDetails(accessToken.getValue(), accessToken.getSecret(), ""));
 
 			TwitterOperations twitter = twitterProvider.getTwitterApi(account.getId());
-			twitterProvider.saveProviderAccountId(account.getId(), twitter.getScreenName());
+			twitterProvider.updateProviderAccountId(account.getId(), twitter.getScreenName());
 
 			if (tweetIt) {
 				try {

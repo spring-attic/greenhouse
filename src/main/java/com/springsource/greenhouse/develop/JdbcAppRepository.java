@@ -13,8 +13,7 @@ import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.account.InvalidAccessTokenException;
-import com.springsource.greenhouse.account.InvalidApiKeyException;
+import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.utils.SlugUtils;
 
 // TODO this is disabled because it's needed in root-context yet scanned by app-servlet-context. not very clean: revisit this.
@@ -90,7 +89,7 @@ public class JdbcAppRepository implements AppRepository {
 		return new AppConnection(accountId, apiKey, accessToken, secret);
 	}
 
-	public AppConnection findAppConnection(String accessToken) throws InvalidAccessTokenException {
+	public AppConnection findAppConnection(String accessToken) throws NoSuchAccountConnectionException {
 		try {
 			return jdbcTemplate.queryForObject("select c.member, a.apiKey, c.accessToken, c.secret from AppConnection c inner join App a on c.app = a.id where c.accessToken = ?",
 				new RowMapper<AppConnection>() {
@@ -100,7 +99,7 @@ public class JdbcAppRepository implements AppRepository {
 					}
 				}, encryptor.encrypt(accessToken));
 		} catch (EmptyResultDataAccessException e) {
-			throw new InvalidAccessTokenException(accessToken);
+			throw new NoSuchAccountConnectionException(accessToken);
 		}
 	}
 

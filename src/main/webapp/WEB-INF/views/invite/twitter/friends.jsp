@@ -3,16 +3,16 @@
 
 <h2>Find Results</h2>
 <c:choose>
-	<c:when test="${not empty friends}">
+	<c:when test="${not empty friendAccounts}">
 		<ul>
-			<c:forEach var="friend" items="${friends}">
+			<c:forEach var="friendAccount" items="${friendAccounts}">
 				<li>
-					<a href="<s:url value="/members/${friend.username}" />">${friend.name}</a>
+					<a href="<s:url value="/members/${friendAccount.username}" />">${friendAccount.fullName}</a>
 				</li>
 			</c:forEach>
 		</ul>
 	</c:when>
-	<c:when test="${empty friends}">
+	<c:when test="${empty friendAccounts}">
 		<p>No friends found</p>
 	</c:when>
 </c:choose>

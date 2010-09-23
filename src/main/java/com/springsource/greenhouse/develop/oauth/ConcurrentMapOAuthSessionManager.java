@@ -8,9 +8,9 @@ import javax.inject.Inject;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 
 import com.google.common.collect.MapMaker;
-import com.springsource.greenhouse.account.InvalidApiKeyException;
 import com.springsource.greenhouse.develop.AppConnection;
 import com.springsource.greenhouse.develop.AppRepository;
+import com.springsource.greenhouse.develop.InvalidApiKeyException;
 
 public class ConcurrentMapOAuthSessionManager implements OAuthSessionManager {
 

@@ -12,9 +12,9 @@ import org.springframework.security.oauth.common.signature.SignatureSecret;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 
-import com.springsource.greenhouse.account.InvalidApiKeyException;
 import com.springsource.greenhouse.develop.App;
 import com.springsource.greenhouse.develop.AppRepository;
+import com.springsource.greenhouse.develop.InvalidApiKeyException;
 
 public class AppConsumerDetailsService implements ConsumerDetailsService {
 
