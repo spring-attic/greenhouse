@@ -3,6 +3,7 @@ package com.springsource.greenhouse.signin;
 import javax.inject.Inject;
 
 import org.springframework.social.facebook.FacebookAccessToken;
+import org.springframework.social.facebook.FacebookTemplate;
 import org.springframework.social.facebook.FacebookUserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class FacebookSigninController {
 			AccountUtils.signin(account);
 			return "redirect:/";
 		} catch (NoSuchAccountConnectionException e) {
-			return handleNoFacebookConnection(null);
+			return handleNoFacebookConnection(new FacebookTemplate(accessToken).getUserInfo());
 		}
 	}
 	
