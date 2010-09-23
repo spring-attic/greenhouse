@@ -1,6 +1,5 @@
 package com.springsource.greenhouse.develop.oauth;
 
-
 import javax.inject.Inject;
 
 import org.springframework.security.core.Authentication;

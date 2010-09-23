@@ -26,17 +26,16 @@
 	</bean>
 
 	<!-- Adapter that loads ConsumerDetails using an AppRepository -->			
-	<bean id="consumerDetails" class="com.springsource.greenhouse.oauth.provider.AppConsumerDetailsService">
-		<constructor-arg>
-			<bean class="com.springsource.greenhouse.develop.JdbcAppRepository" />
-		</constructor-arg>
-	</bean>
+	<bean id="consumerDetails" class="com.springsource.greenhouse.develop.oauth.AppConsumerDetailsService" />
+
+	<!-- Loads registered client Apps and OAuth-based AppConnections -->
+	<bean id="appRepository" class="com.springsource.greenhouse.develop.JdbcAppRepository" />
 	
 	<!-- Adapter that uses a OAuthSessionManager to manage OAuthSession storage -->
-	<bean id="tokenServices" class="com.springsource.greenhouse.oauth.provider.OAuthSessionManagerProviderTokenServices">
+	<bean id="tokenServices" class="com.springsource.greenhouse.develop.oauth.OAuthSessionManagerProviderTokenServices">
 		<constructor-arg>
 			<!-- Stores OAuthSessions in a ConcurrentMap with soft values and 2 minutes time idle -->
-			<bean class="com.springsource.greenhouse.oauth.provider.ConcurrentMapOAuthSessionManager" />
+			<bean class="com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager" />
 		</constructor-arg>
 	</bean>
     	

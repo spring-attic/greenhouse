@@ -11,14 +11,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 import org.springframework.security.encrypt.StringEncryptor;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.InvalidAccessTokenException;
 import com.springsource.greenhouse.account.InvalidApiKeyException;
 import com.springsource.greenhouse.utils.SlugUtils;
 
-@Repository
+// TODO this is disabled because it's needed in root-context yet scanned by app-servlet-context. not very clean: revisit this.
+//@Repository
 public class JdbcAppRepository implements AppRepository {
 
 	private JdbcTemplate jdbcTemplate;

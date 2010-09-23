@@ -14,6 +14,7 @@ import com.springsource.greenhouse.account.PictureSize;
 import com.springsource.greenhouse.account.PictureUrlFactory;
 import com.springsource.greenhouse.account.PictureUrlMapper;
 
+//TODO this is disabled because it's needed in root-context yet scanned by app-servlet-context. not very clean: revisit this.
 //@Repository
 public class JdbcAccountProviderRepository implements AccountProviderRepository {
 	
