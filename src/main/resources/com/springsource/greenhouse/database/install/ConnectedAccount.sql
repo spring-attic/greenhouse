@@ -13,5 +13,3 @@ create table AccountConnection (member bigint,
 					secret varchar, 
 					primary key (member, provider),
 					foreign key (member) references Member(id));
-create unique index AccessTokenKey on AccountConnection(provider, accessToken);
-create unique index ProviderAccountKey on AccountConnection(provider, accountId);
