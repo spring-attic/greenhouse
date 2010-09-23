@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.flash.FlashMap;
 
@@ -17,11 +18,11 @@ import com.springsource.greenhouse.account.Account;
 
 @Controller
 @RequestMapping("/connect")
-public class ConnectController {
+public class TwitterConnectController {
 	private final TwitterAccountProvider twitterProvider;
 
 	@Inject
-	public ConnectController(TwitterAccountProvider twitterProvider) {
+	public TwitterConnectController(TwitterAccountProvider twitterProvider) {
 		this.twitterProvider = twitterProvider;
 	}
 
@@ -35,8 +36,9 @@ public class ConnectController {
 	}
 
 	@RequestMapping(value="/twitter", method=RequestMethod.POST)
-	public String connectToTwitter(boolean tweetIt, WebRequest request) {
-		Token requestToken = twitterProvider.fetchNewRequestToken(getCallbackUrl(tweetIt));
+	public String connectToTwitter(boolean tweetIt, ServletWebRequest request) {
+		String callbackUrl = buildCallbackUrl(tweetIt, request);
+		Token requestToken = twitterProvider.fetchNewRequestToken(callbackUrl);
 		request.setAttribute("requestToken", requestToken, WebRequest.SCOPE_SESSION);
 		return "redirect:" + twitterProvider.getAuthorizeUrl() + "?oauth_token=" + requestToken.getValue();
 	}
@@ -79,8 +81,12 @@ public class ConnectController {
 		return "redirect:/connect/twitter";
 	}
 
-	private String getCallbackUrl(boolean tweetIt) {
-		// TODO : Replace the hard-coded localhost URL
-		return "http://localhost:8080/greenhouse/connect/twitter" + (tweetIt ? "?tweetIt=on" : "");
+	private String buildCallbackUrl(boolean tweetIt, ServletWebRequest request) {
+		HttpServletRequest servletRequest = request.getRequest();
+		int port = servletRequest.getLocalPort();
+		String portPart = (port == 80 || port == 443) ? "" : ":" + port;
+		String urlBase = servletRequest.getScheme() + "://" + servletRequest.getServerName() + portPart
+				+ servletRequest.getContextPath();
+		return urlBase + "/connect/twitter" + (tweetIt ? "?tweetIt=on" : "");
 	}
 }
