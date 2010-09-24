@@ -11,11 +11,11 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.security.encrypt.StringEncryptor;
+import org.springframework.social.twitter.TwitterOperations;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
@@ -28,9 +28,9 @@ public class JdbcAccountProviderTest {
 
 	private JdbcTemplate jdbcTemplate;
 
-	private AccountProvider accountProvider;
+	private AccountProvider<TwitterOperations> accountProvider;
 
-	private JdbcAccountProviderFactory providerRepository;
+	private JdbcAccountProviderFactory providerFactory;
 
 	@Before
 	public void setup() {
@@ -38,8 +38,8 @@ public class JdbcAccountProviderTest {
 		jdbcTemplate = new JdbcTemplate(db);
 		StringEncryptor encryptor = new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed");
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		providerRepository = new JdbcAccountProviderFactory(jdbcTemplate, encryptor, accountMapper);
-		accountProvider = providerRepository.findAccountProviderByName("twitter");
+		providerFactory = new JdbcAccountProviderFactory(jdbcTemplate, encryptor, accountMapper);
+		accountProvider = providerFactory.getAccountProvider(TwitterOperations.class);
 	}
 
 	@After
@@ -52,7 +52,7 @@ public class JdbcAccountProviderTest {
 	@Test
 	public void connect() {
 		assertFalse(accountProvider.isConnected(2L));
-		accountProvider.connect(2L, new ConnectionDetails("ACCESS_TOKEN", "SECRET", "Twitter"));
+		accountProvider.addConnection(2L, "accessToken", "kdonald");
 		assertTrue(accountProvider.isConnected(2L));
 	}
 

@@ -109,8 +109,14 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		jdbcTemplate.update(DELETE_ACCOUNT_CONNECTION, accountId, getName());
 	}
 
-	public abstract A createApi(OAuthToken accessToken);
+	// subclassing hooks
+	
+	protected abstract A createApi(OAuthToken accessToken);
 
+	protected String getSecret() {
+		return parameters.getSecret();
+	}
+	
 	// internal helpers
 	
 	private OAuthService getOAuthService() {

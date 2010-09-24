@@ -26,7 +26,7 @@ class AccountProviderParameters {
 		this.secret = secret;
 		this.appId = appId;
 		this.requestTokenUrl = requestTokenUrl;
-		this.authorizeUrl = new UriTemplate(authorizeUrl);
+		this.authorizeUrl = authorizeUrl != null ? new UriTemplate(authorizeUrl) : null;
 		this.callbackUrl = callbackUrl;
 		this.accessTokenUrl = accessTokenUrl;
 	}

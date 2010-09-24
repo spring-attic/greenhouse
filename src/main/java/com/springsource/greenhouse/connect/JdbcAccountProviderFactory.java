@@ -42,8 +42,7 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 		} else if (TwitterOperations.class.equals(apiType)) {
 			return (AccountProvider<A>) new JdbcAccountProvider<TwitterOperations>(getParameters("twitter"), jdbcTemplate, encryptor, accountMapper) {
 				public TwitterOperations createApi(OAuthToken accessToken) {
-					// TODO use the proper TwitterTemplate constructor once it exists
-					return new TwitterTemplate(null);
+					return new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
 				}
 			};			
 		} else {
