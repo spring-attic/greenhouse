@@ -13,11 +13,21 @@
 	<bean id="twitterAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
 		<constructor-arg value="org.springframework.social.twitter.TwitterOperations" />
 	</bean>
+	
+	<bean id="twitterApi" class="com.springsource.greenhouse.connect.AccountProviderApiFactory" factory-method="getTwitterApi" scope="request">
+		<constructor-arg ref="twitterAccountProvider" />
+		<constructor-arg value="#{request.getAttribute('account')}" />
+	</bean>
 
 	<!-- Facebook Account Connections -->
 	
 	<bean id="facebookAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
 		<constructor-arg value="org.springframework.social.facebook.FacebookOperations" />
+	</bean>
+
+	<bean id="facebookApi" class="com.springsource.greenhouse.connect.AccountProviderApiFactory" factory-method="getFacebookApi" scope="request">
+		<constructor-arg ref="facebookAccountProvider" />
+		<constructor-arg value="#{request.getAttribute('account')}" />
 	</bean>
 
 </beans>

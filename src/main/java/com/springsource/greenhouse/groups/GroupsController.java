@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.TwitterOperations;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.AccountProvider;
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventRepository;
 
@@ -27,13 +26,13 @@ public class GroupsController {
 
 	private EventRepository eventRepository;	
 	
-	private AccountProvider<TwitterOperations> accountProvider;
+	private Provider<TwitterOperations> twitterApi;
 
 	@Inject
-	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, @Named("twitterAccountProvider") AccountProvider<TwitterOperations> accountProvider) {
+	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, Provider<TwitterOperations> twitterApi) {
 		this.groupRepository = groupRepository;
 		this.eventRepository = eventRepository;
-		this.accountProvider = accountProvider;
+		this.twitterApi = twitterApi;
 	}
 	
 	@RequestMapping(value="/{groupKey}")
@@ -48,14 +47,15 @@ public class GroupsController {
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String name, Account account, Model model) {
 		Event event = eventRepository.findEventByName(group, year, month, name);
 		model.addAttribute(event);
-		model.addAttribute(accountProvider.getApi(account.getId()).search(event.getHashtag(), 1, 10));
+		model.addAttribute(twitterApi.get().search(event.getHashtag(), 1, 10));
 		return "groups/event";
 	}	
 	
 	private Map<String, String> buildOpenGraphMetadata(Group group) {
 		Map<String, String> metadata = new HashMap<String, String>();
 		metadata.put("og:title", group.getName());
-		metadata.put("og:type", "non_profit"); // TODO: Not sure if this applies to all groups.
+		 // TODO: Not sure if this applies to all groups		
+		metadata.put("og:type", "non_profit");
 		metadata.put("og:site_name", "Greenhouse");
 		metadata.put("fb:app_id", facebookAppId);
 		return metadata;		
