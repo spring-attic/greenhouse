@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class JdbcAccountProviderTest {
 		accountProvider.addConnection(2L, "accessToken", "kdonald");
 		assertTrue(accountProvider.isConnected(2L));
 	}
-
+	
 	@Test
 	public void connected() {
 		assertTrue(accountProvider.isConnected(1L));
@@ -64,6 +65,18 @@ public class JdbcAccountProviderTest {
 	@Test
 	public void notConnected() {
 		assertFalse(accountProvider.isConnected(2L));
+	}
+
+	@Test
+	public void getApi() {
+		TwitterOperations api = accountProvider.getApi(1L);
+		assertNotNull(api);
+	}
+
+	@Test
+	public void getApiNotConnected() {
+		TwitterOperations api = accountProvider.getApi(2L);
+		assertNotNull(api);
 	}
 
 	@Test
@@ -78,6 +91,11 @@ public class JdbcAccountProviderTest {
 		assertEquals("habuma", accountProvider.getProviderAccountId(1L));
 	}
 
+	@Test
+	public void getProviderAccountIdNotConnected() {
+		assertNull(accountProvider.getProviderAccountId(2L));
+	}
+	
 	@Test
 	public void findConnectedAccount() throws Exception {
 		assertNotNull(accountProvider.findAccountByConnection("345678901"));

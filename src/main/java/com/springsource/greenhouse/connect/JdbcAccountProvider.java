@@ -1,5 +1,7 @@
 package com.springsource.greenhouse.connect;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,10 @@ import org.scribe.services.HMACSha1SignatureService;
 import org.scribe.services.TimestampServiceImpl;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.encrypt.StringEncryptor;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
@@ -76,8 +80,17 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return jdbcTemplate.queryForInt(SELECT_ACCOUNT_CONNECTION_COUNT, accountId, getName()) == 1;
 	}
 	
+	@Transactional
 	public A getApi(Long accountId) {
-		OAuthToken accessToken = null;
+		if (accountId == null || !isConnected(accountId)) {
+			return createApi(null);
+		}
+		OAuthToken accessToken = jdbcTemplate.queryForObject(SELECT_ACCESS_TOKEN, new RowMapper<OAuthToken>() {
+			public OAuthToken mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
+			}
+			
+		}, getName(), accountId);
 		return createApi(accessToken);
 	}
 
@@ -86,7 +99,11 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 	}
 
 	public String getProviderAccountId(Long accountId) {
-		return jdbcTemplate.queryForObject(SELECT_PROVIDER_ACCOUNT_ID, String.class, getName(), accountId);
+		try {
+			return jdbcTemplate.queryForObject(SELECT_PROVIDER_ACCOUNT_ID, String.class, getName(), accountId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	public Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException {
@@ -143,6 +160,8 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
 
 	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, secret, accountId) values (?, ?, ?, ?, ?)";
+
+	private static final String SELECT_ACCESS_TOKEN = "select accessToken, secret from AccountConnection where provider = ? and member = ?";
 
 	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = AccountMapper.SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :providerAccountIds ))";
 

@@ -10,6 +10,8 @@ import org.springframework.templating.StringTemplate;
 import org.springframework.templating.StringTemplateFactory;
 import org.springframework.web.util.UriTemplate;
 
+//TODO this is disabled we need to manually inject a resetUriTemplate. not very clean: revisit this.
+//@Component
 public class StringTemplateResetPasswordMailConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
 	
 	private StringTemplateFactory templateFactory;

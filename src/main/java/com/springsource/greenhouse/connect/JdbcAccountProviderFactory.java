@@ -36,13 +36,16 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 		if (FacebookOperations.class.equals(apiType)) {
 			return (AccountProvider<A>) new JdbcAccountProvider<FacebookOperations>(getParameters("facebook"), jdbcTemplate, encryptor, accountMapper) {
 				public FacebookOperations createApi(OAuthToken accessToken) {
+					if (accessToken == null) {
+						throw new IllegalStateException("Cannot access Facebook without an access token");
+					}
 					return new FacebookTemplate(accessToken.getValue());
 				}
 			};
 		} else if (TwitterOperations.class.equals(apiType)) {
 			return (AccountProvider<A>) new JdbcAccountProvider<TwitterOperations>(getParameters("twitter"), jdbcTemplate, encryptor, accountMapper) {
 				public TwitterOperations createApi(OAuthToken accessToken) {
-					return new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
+					return accessToken != null ? new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret()) : new TwitterTemplate();
 				}
 			};			
 		} else {
