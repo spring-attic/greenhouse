@@ -45,7 +45,7 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 	public void changePassword(String token, String password) throws InvalidResetTokenException {
 		Long accountId = findAccountIdByToken(token);
 		accountRepository.changePassword(accountId, password);
-		jdbcTemplate.update("delete from ResetPassword where token = ?", password);
+		jdbcTemplate.update("delete from ResetPassword where token = ?", token);
 	}
 
 	// internal helpers

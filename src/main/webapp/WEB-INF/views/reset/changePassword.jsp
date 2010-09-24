@@ -7,7 +7,7 @@
 	</div>
   	<fieldset>
   		<form:label path="password">
-  			Password (at least 6 characters) <form:errors path="passwordConfirmed" cssClass="error" />
+  			Password (at least 6 characters) <form:errors path="password" cssClass="error" />
   		</form:label>
   		<form:password path="password" />
   		<form:label path="confirmPassword">Confirm Password</form:label>

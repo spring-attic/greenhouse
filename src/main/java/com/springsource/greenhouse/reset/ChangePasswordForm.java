@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ChangePasswordForm {
 	
 	@NotEmpty
-	@Size(min=6)
+	@Size(min=6, message="must be at least 6 characters")
 	// TODO confirmation constraint
 	private String password;
 

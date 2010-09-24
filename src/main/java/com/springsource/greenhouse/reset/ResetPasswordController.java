@@ -37,7 +37,7 @@ public class ResetPasswordController {
 			FlashMap.setInfoMessage("An email has been sent to you.  Follow its instructions to reset your password.");
 			return "redirect:/reset";
 		} catch (UsernameNotFoundException e) {
-			model.addAttribute("username", FieldModel.error("not a valid username", username));
+			model.addAttribute("username", FieldModel.error("not on file", username));
 			return null;
 		}
 	}
