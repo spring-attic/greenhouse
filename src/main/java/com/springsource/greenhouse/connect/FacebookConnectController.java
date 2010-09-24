@@ -50,13 +50,13 @@ public class FacebookConnectController {
 	
 	@RequestMapping(method=RequestMethod.POST) 
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId,
-			@RequestParam(value = "postIt", required = false) boolean postIt, @RequestParam(value = "useFBPic", required = false) boolean useFBPic) {
+			@RequestParam boolean postToWall, @RequestParam boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
 			FacebookOperations api = accountProvider.addConnection(account.getId(), accessToken, facebookUserId);
-			if (postIt) {
+			if (postToWall) {
 				postToWall(api, account);
 			}
-			if (useFBPic) {
+			if (useProfilePicture) {
 				useFacebookProfilePicture(api, account, facebookUserId);
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");

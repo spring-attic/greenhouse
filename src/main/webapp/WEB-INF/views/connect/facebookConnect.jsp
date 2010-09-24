@@ -13,10 +13,10 @@
 	</div>
 	<div id="fb-root"></div>	
 	<fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Connect to Facebook</fb:login-button><br/><br/>
-	<label for="postIt">Post a link to my Greenhouse profile on my wall after connecting</label>
-	<input id="postIt" type="checkbox" name="postIt" />
-	<label for="useFBPic">Use my Facebook profile picture as my Greenhouse profile picture</label>
-	<input id="useFBPic" type="checkbox" name="useFBPic" />
+	<label for="postToWall">Post a link to my Greenhouse profile on my wall after connecting</label>
+	<input id="postToWall" type="checkbox" name="postToWall" />
+	<label for="useProfilePicture">Use my Facebook profile picture as my Greenhouse profile picture</label>
+	<input id="useProfilePicture" type="checkbox" name="useProfilePicture" />
 </form>
 
 <s:eval expression="@facebookAccountProvider.apiKey" var="apiKey" />

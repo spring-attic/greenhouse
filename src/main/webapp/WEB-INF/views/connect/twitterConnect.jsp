@@ -9,6 +9,6 @@
 		</p>
 	</div>
 	<input id="signin" type="image" src="<c:url value="/resources/social/twitter/signin.png" />" />
-	<label for="tweetIt">Tweet a link to my Greenhouse profile after connecting</label>
-	<input id="tweetIt" type="checkbox" name="tweetIt" />
+	<label for="postTweet">Tweet a link to my Greenhouse profile after connecting</label>
+	<input id="postTweet" type="checkbox" name="postTweet" />
 </form>
