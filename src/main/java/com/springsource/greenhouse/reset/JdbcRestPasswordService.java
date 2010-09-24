@@ -32,6 +32,7 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 	@Transactional
 	public void sendResetMail(String username) throws UsernameNotFoundException {
 		Account account = accountRepository.findByUsername(username);
+		// TODO use SecureRandom instead
 		String token = UUID.randomUUID().toString();
  		jdbcTemplate.update("insert into ResetPassword (token, member) values (?, ?)", token, account.getId());
  		mailer.send(new ResetPasswordRequest(token, account));

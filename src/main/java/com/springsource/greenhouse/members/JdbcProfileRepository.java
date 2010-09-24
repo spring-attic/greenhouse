@@ -84,9 +84,10 @@ public class JdbcProfileRepository implements ProfileRepository {
 	}
 	
 	private String getProfileUrl(String accountId, String provider) {
-		if ("Twitter".equals(provider)) {
+		// TODO use of AccountProvider UriTemplate would be better here
+		if ("twitter".equals(provider)) {
 			return "http://www.twitter.com/" + accountId;
-		} else if ("Facebook".equals(provider)) {
+		} else if ("facebook".equals(provider)) {
 			return "http://www.facebook.com/profile.php?id=" + accountId;
 		} else {
 			return null;

@@ -2,7 +2,6 @@ package com.springsource.greenhouse.reset;
 
 import com.springsource.greenhouse.account.Account;
 
-
 public class ResetPasswordRequest {
 	
 	private String token;
