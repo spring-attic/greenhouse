@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 						
 	<!-- For loading AccountProviders -->	
 	<bean id="accountProviderFactory" class="com.springsource.greenhouse.connect.JdbcAccountProviderFactory" />
@@ -13,18 +14,10 @@
 		<constructor-arg value="org.springframework.social.twitter.TwitterOperations" />
 	</bean>
 
-  	<bean id="twitterApi" factory-bean="twitterAccountProvider" factory-method="getApi" scope="request">
-  		<constructor-arg value="#{request.getAttribute('account').id}" />
-  	</bean>
-
 	<!-- Facebook Account Connections -->
 	
 	<bean id="facebookAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
 		<constructor-arg value="org.springframework.social.facebook.FacebookOperations" />
 	</bean>
 
-  	<bean id="facebookApi" factory-bean="facebookAccountProvider" factory-method="getFacebookApi" scope="request">
-  		<constructor-arg value="#{request.getAttribute('account').id}" />
-  	</bean>
-	
 </beans>

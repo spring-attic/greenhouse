@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
+import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.TwitterOperations;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.connect.AccountProvider;
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventRepository;
 
@@ -25,13 +27,13 @@ public class GroupsController {
 
 	private EventRepository eventRepository;	
 	
-	private Provider<TwitterOperations> twitterApi;
+	private AccountProvider<TwitterOperations> accountProvider;
 
 	@Inject
-	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, Provider<TwitterOperations> twitterApi) {
+	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, @Named("twitterAccountProvider") AccountProvider<TwitterOperations> accountProvider) {
 		this.groupRepository = groupRepository;
 		this.eventRepository = eventRepository;
-		this.twitterApi = twitterApi;
+		this.accountProvider = accountProvider;
 	}
 	
 	@RequestMapping(value="/{groupKey}")
@@ -43,10 +45,10 @@ public class GroupsController {
 	}
 	
 	@RequestMapping(value="/{group}/events/{year}/{month}/{name}", method=RequestMethod.GET, headers="Accept=text/html")
-	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String name, Model model) {
+	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String name, Account account, Model model) {
 		Event event = eventRepository.findEventByName(group, year, month, name);
 		model.addAttribute(event);
-		model.addAttribute(twitterApi.get().search(event.getHashtag(), 1, 10));
+		model.addAttribute(accountProvider.getApi(account.getId()).search(event.getHashtag(), 1, 10));
 		return "groups/event";
 	}	
 	
