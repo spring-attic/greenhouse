@@ -19,5 +19,4 @@
 	<input id="useProfilePicture" type="checkbox" name="useProfilePicture" />
 </form>
 
-<s:eval expression="@facebookAccountProvider.apiKey" var="apiKey" />
-<facebook:init apiKey="${apiKey}" />
+<facebook:init />

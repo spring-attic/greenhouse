@@ -3,15 +3,12 @@
 <%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
 <div id="memberProfile">
-
 	<p>
 		<c:out value="${profile.displayName}" />
 	</p>
-	
 	<div id="picture">
 		<img src="${profile.pictureUrl}" alt="Profile Picture" />
 	</div>	
-	
 	<div id="connectedProfiles">
 		<ul>
 			<c:forEach var="connectedProfile" items="${connectedProfiles}">
@@ -21,11 +18,8 @@
 			</c:forEach>
 		</ul>
 	</div>
-	
 	<div id="fb-root"></div>	
 	<fb:like></fb:like>
-	
 </div>
 
-<s:eval expression="@facebookAccountProvider.apiKey" var="apiKey" />
-<facebook:init apiKey="${apiKey}" />
+<facebook:init />

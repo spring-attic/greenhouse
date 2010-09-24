@@ -3,6 +3,7 @@ package com.springsource.greenhouse.invite;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class TwitterInviteController {
 	private AccountProvider<TwitterOperations> accountProvider;
 	
 	@Inject
-	public TwitterInviteController(AccountProvider<TwitterOperations> accountProvider) {
+	public TwitterInviteController(@Named("twitterAccountProvider") AccountProvider<TwitterOperations> accountProvider) {
 		this.accountProvider = accountProvider;
 	}
 	

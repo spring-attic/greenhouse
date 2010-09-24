@@ -3,6 +3,7 @@ package com.springsource.greenhouse.connect;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
@@ -32,10 +33,10 @@ public class FacebookConnectController {
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookConnectController(AccountRepository accountRepository, AccountProvider<FacebookOperations> accountProvider, ProfilePictureService profilePictureService) {
-		this.accountRepository = accountRepository;
+	public FacebookConnectController(@Named("facebookAccountProvider") AccountProvider<FacebookOperations> accountProvider, ProfilePictureService profilePictureService, AccountRepository accountRepository) {
 		this.accountProvider = accountProvider;
 		this.profilePictureService = profilePictureService;
+		this.accountRepository = accountRepository;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
@@ -50,7 +51,7 @@ public class FacebookConnectController {
 	
 	@RequestMapping(method=RequestMethod.POST) 
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId,
-			@RequestParam boolean postToWall, @RequestParam boolean useProfilePicture) {
+			@RequestParam(required=false, defaultValue="false") boolean postToWall, @RequestParam(required=false, defaultValue="false") boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
 			FacebookOperations api = accountProvider.addConnection(account.getId(), accessToken, facebookUserId);
 			if (postToWall) {

@@ -39,5 +39,4 @@
 </form>
 </c:if>
 
-<s:eval expression="@facebookAccountProvider.apiKey" var="apiKey" />
-<facebook:init apiKey="${apiKey}" />
+<facebook:init />

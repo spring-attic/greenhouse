@@ -6,7 +6,7 @@
 		<a href="<c:url value="/signin" />">Sign In</a>
 	</c:if>
 	<c:if test="${account != null}">
-		<c:url value="${account.profileUrl}"><c:out value="${account.firstName}" /></c:url> | <a href="<c:url value="/invite" />">Invite</a> | <a href="<c:url value="/events" />">Events</a> | <a href="<c:url value="/develop/apps" />">Develop</a> | <a href="<c:url value="/settings" />">Settings</a> | <a href="<c:url value="/signout" />">Sign Out</a>
+		<a href="<c:url value="/members/${account.profileId}" />"><c:out value="${account.firstName}" /></a> | <a href="<c:url value="/invite" />">Invite</a> | <a href="<c:url value="/events" />">Events</a> | <a href="<c:url value="/develop/apps" />">Develop</a> | <a href="<c:url value="/settings" />">Settings</a> | <a href="<c:url value="/signout" />">Sign Out</a>
 	</c:if>
 </div>
 <h1>

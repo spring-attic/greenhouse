@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class FacebookInviteController {
 	private final AccountProvider<FacebookOperations> accountProvider;
 	
 	@Inject
-	public FacebookInviteController(AccountProvider<FacebookOperations> accountProvider) {
+	public FacebookInviteController(@Named("facebookAccountProvider") AccountProvider<FacebookOperations> accountProvider) {
 		this.accountProvider = accountProvider;
 	}
 	

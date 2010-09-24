@@ -1,10 +1,13 @@
 package com.springsource.greenhouse.connect;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +27,7 @@ public class TwitterConnectController {
 	private AccountProvider<TwitterOperations> accountProvider;
 
 	@Inject
-	public TwitterConnectController(AccountProvider<TwitterOperations> accountProvider) {
+	public TwitterConnectController(@Named("twitterAccountProvider") AccountProvider<TwitterOperations> accountProvider) {
 		this.accountProvider = accountProvider;
 	}
 
@@ -38,26 +41,25 @@ public class TwitterConnectController {
 	}
 
 	@RequestMapping(method=RequestMethod.POST)
-	public String connect(@RequestParam boolean tweetIt, WebRequest request) {
+	public String connect(@RequestParam(required=false, defaultValue="false") boolean postTweet, WebRequest request) {
 		OAuthToken requestToken = accountProvider.getRequestToken();
-		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestToken, WebRequest.SCOPE_SESSION);
+		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestTokenHolder(requestToken, postTweet), WebRequest.SCOPE_SESSION);
 		return "redirect:" + accountProvider.getAuthorizeUrl(requestToken.getValue());
 	}
 
 	@RequestMapping(method=RequestMethod.GET, params="oauth_token")
-	public String authorizeCallback(@RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier, @RequestParam boolean postTweet, Account account, WebRequest request) {
-		OAuthToken requestToken = (OAuthToken) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
-		if (requestToken == null) {
+	public String authorizeCallback(@RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier, Account account, WebRequest request) {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> requestTokenHolder = (Map<String, Object>) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
+		if (requestTokenHolder == null) {
 			return "connect/twitterConnect";
 		}
 		request.removeAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
+		OAuthToken requestToken = (OAuthToken) requestTokenHolder.get("value");		
 		TwitterOperations twitter = accountProvider.connect(account.getId(), requestToken, verifier);
 		accountProvider.updateProviderAccountId(account.getId(), twitter.getScreenName());
-		if (postTweet) {
-			try {
-				twitter.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
-			} catch (DuplicateTweetException e) {
-			}
+		if (requestTokenHolder.containsKey("postTweet")) {
+			twitter.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
 		}
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
 		return "redirect:/connect/twitter";
@@ -67,6 +69,17 @@ public class TwitterConnectController {
 	public String disconnectTwitter(Account account, HttpServletRequest request, Authentication authentication) {
 		accountProvider.disconnect(account.getId());
 		return "redirect:/connect/twitter";
+	}
+	
+	// internal helpers
+	
+	private Map<String, Object> requestTokenHolder(OAuthToken requestToken, boolean postTweet) {
+		Map<String, Object> holder = new HashMap<String, Object>(2, 1);
+		holder.put("value", requestToken);
+		if (postTweet) {
+			holder.put("postTweet", Boolean.TRUE);
+		}
+		return holder;
 	}
 
 }

@@ -21,6 +21,7 @@ public class AsyncResetPasswordMailer implements ResetPasswordMailer {
 		this.mailSender = mailSender;
 	}
 
+	// TODO @Async at class level with AspectJ not presently supported by Spring
 	@Async
 	public void send(ResetPasswordRequest request) {
 		SimpleMailMessage mail = converter.convert(request);

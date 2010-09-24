@@ -6,12 +6,10 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Component;
 import org.springframework.templating.StringTemplate;
 import org.springframework.templating.StringTemplateFactory;
 import org.springframework.web.util.UriTemplate;
 
-@Component
 public class StringTemplateResetPasswordMailConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
 	
 	private StringTemplateFactory templateFactory;

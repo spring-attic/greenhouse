@@ -1,11 +1,11 @@
 package com.springsource.greenhouse.reset;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
+import org.springframework.security.encrypt.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +22,8 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 	
 	private ResetPasswordMailer mailer;
 	
+	private StringKeyGenerator tokenGenerator = new SecureRandomStringKeyGenerator();
+	
 	@Inject
 	public JdbcRestPasswordService(JdbcTemplate jdbcTemplate, AccountRepository accountRepository, ResetPasswordMailer mailer) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -32,8 +34,7 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 	@Transactional
 	public void sendResetMail(String username) throws UsernameNotFoundException {
 		Account account = accountRepository.findByUsername(username);
-		// TODO use SecureRandom instead
-		String token = UUID.randomUUID().toString();
+		String token = tokenGenerator.generateKey();
  		jdbcTemplate.update("insert into ResetPassword (token, member) values (?, ?)", token, account.getId());
  		mailer.send(new ResetPasswordRequest(token, account));
 	}

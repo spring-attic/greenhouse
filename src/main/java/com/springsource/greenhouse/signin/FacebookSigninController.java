@@ -1,6 +1,7 @@
 package com.springsource.greenhouse.signin;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookOperations;
@@ -27,7 +28,7 @@ public class FacebookSigninController {
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookSigninController(AccountProvider<FacebookOperations> accountProvider, AccountRepository accountRepository) {
+	public FacebookSigninController(@Named("facebookAccountProvider") AccountProvider<FacebookOperations> accountProvider, AccountRepository accountRepository) {
 		this.accountProvider = accountProvider;
 		this.accountRepository = accountRepository;
 	}

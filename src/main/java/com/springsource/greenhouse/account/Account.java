@@ -60,15 +60,15 @@ public class Account implements Serializable {
 	}
 
 	public String getProfileUrl() {
-		return profileUrlTemplate.expand(profileId()).toString();
+		return profileUrlTemplate.expand(getProfileId()).toString();
+	}
+
+	public String getProfileId() {
+		return username != null ? username : id.toString(); 
 	}
 	
 	public Account makeUsername(String username) {
 		return new Account(id, firstName, lastName, email, username, pictureUrl, profileUrlTemplate);
-	}
-
-	private String profileId() {
-		return username != null ? username : id.toString(); 
 	}
 	
 }
