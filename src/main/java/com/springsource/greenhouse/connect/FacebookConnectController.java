@@ -25,14 +25,14 @@ import com.springsource.greenhouse.members.ProfilePictureService;
 @RequestMapping("/connect/facebook")
 public class FacebookConnectController {
 
-	private final FacebookAccountProvider accountProvider;
+	private final AccountProvider<FacebookOperations> accountProvider;
 	
 	private final ProfilePictureService profilePictureService;
 
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookConnectController(AccountRepository accountRepository, FacebookAccountProvider accountProvider, ProfilePictureService profilePictureService) {
+	public FacebookConnectController(AccountRepository accountRepository, AccountProvider<FacebookOperations> accountProvider, ProfilePictureService profilePictureService) {
 		this.accountRepository = accountRepository;
 		this.accountProvider = accountProvider;
 		this.profilePictureService = profilePictureService;
@@ -49,16 +49,15 @@ public class FacebookConnectController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST) 
-	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken,
-			@FacebookUserId String facebookUserId, @RequestParam(value = "postIt", required = false) boolean postIt,
-			@RequestParam(value = "useFBPic", required = false) boolean useFBPic) {
+	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId,
+			@RequestParam(value = "postIt", required = false) boolean postIt, @RequestParam(value = "useFBPic", required = false) boolean useFBPic) {
 		if (facebookUserId != null && accessToken != null) {
-			accountProvider.connect(account.getId(), new ConnectionDetails(accessToken, "", facebookUserId));
+			FacebookOperations api = accountProvider.addConnection(account.getId(), accessToken, facebookUserId);
 			if (postIt) {
-				postToWall(account);
+				postToWall(api, account);
 			}
 			if (useFBPic) {
-				useFacebookProfilePicture(account, facebookUserId);
+				useFacebookProfilePicture(api, account, facebookUserId);
 			}
 			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Facebook account!");
 		}
@@ -71,16 +70,14 @@ public class FacebookConnectController {
 		return "redirect:/connect/facebook";
 	}
 	
-	private void postToWall(Account account) {
-		accountProvider.getFacebookApi(account.getId()).postToWall("Join me at the Greenhouse!",
-			new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.", 
-					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
+	private void postToWall(FacebookOperations api, Account account) {
+		api.postToWall("Join me at the Greenhouse!", new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.", 
+			"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 	}
 	
-	private void useFacebookProfilePicture(Account account, String facebookUserId) {
+	private void useFacebookProfilePicture(FacebookOperations api, Account account, String facebookUserId) {
 		try {
-			FacebookOperations facebookApi = accountProvider.getFacebookApi(account.getId());			
-			byte[] imageBytes = facebookApi.getProfilePicture(facebookUserId);
+			byte[] imageBytes = api.getProfilePicture(facebookUserId);
 	        profilePictureService.saveProfilePicture(account.getId(), imageBytes);
 			accountRepository.markProfilePictureSet(account.getId());
 		} catch (IOException e) {

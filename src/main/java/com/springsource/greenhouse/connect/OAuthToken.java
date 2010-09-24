@@ -6,6 +6,10 @@ public final class OAuthToken {
 	
 	private final String secret;
 
+	public OAuthToken(String value) {
+		this(value, null);
+	}
+
 	public OAuthToken(String value, String secret) {
 		this.value = value;
 		this.secret = secret;

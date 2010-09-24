@@ -10,83 +10,63 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 
 @Controller
-@RequestMapping("/connect")
+@RequestMapping("/connect/twitter")
 public class TwitterConnectController {
-	private final TwitterAccountProvider twitterProvider;
+	
+	private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
+	
+	private AccountProvider<TwitterOperations> accountProvider;
 
 	@Inject
-	public TwitterConnectController(TwitterAccountProvider twitterProvider) {
-		this.twitterProvider = twitterProvider;
+	public TwitterConnectController(AccountProvider<TwitterOperations> accountProvider) {
+		this.accountProvider = accountProvider;
 	}
 
-	@RequestMapping(value = "/twitter", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public String twitterConnect(Account account) {
-		if (twitterProvider.isConnected(account.getId())) {
+		if (accountProvider.isConnected(account.getId())) {
 			return "connect/twitterConnected";
 		} else {
 			return "connect/twitterConnect";
 		}
 	}
 
-	@RequestMapping(value="/twitter", method=RequestMethod.POST)
-	public String connectToTwitter(boolean tweetIt, ServletWebRequest request) {
-		String callbackUrl = buildCallbackUrl(tweetIt, request);
-		OAuthToken requestToken = twitterProvider.getRequestToken(callbackUrl);
-		request.setAttribute("requestToken", requestToken, WebRequest.SCOPE_SESSION);
-		return "redirect:" + twitterProvider.getAuthorizeUrl() + "?oauth_token=" + requestToken.getValue();
+	@RequestMapping(method=RequestMethod.POST)
+	public String connect(@RequestParam boolean tweetIt, WebRequest request) {
+		OAuthToken requestToken = accountProvider.getRequestToken();
+		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestToken, WebRequest.SCOPE_SESSION);
+		return "redirect:" + accountProvider.getAuthorizeUrl(requestToken.getValue());
 	}
 
-	@RequestMapping(value = "/twitter", method = RequestMethod.GET, params = "oauth_token")
-	public String twitterCallback(@RequestParam("oauth_token") String token,
-			@RequestParam("oauth_verifier") String verifier, Account account, boolean tweetIt, WebRequest request) {
-		OAuthToken requestToken = (OAuthToken) request.getAttribute("requestToken", WebRequest.SCOPE_SESSION);
+	@RequestMapping(method=RequestMethod.GET, params="oauth_token")
+	public String authorizeCallback(@RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier, @RequestParam boolean postTweet, Account account, WebRequest request) {
+		OAuthToken requestToken = (OAuthToken) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		if (requestToken == null) {
 			return "connect/twitterConnect";
 		}
-
-		request.removeAttribute("requestToken", WebRequest.SCOPE_SESSION);
-		OAuthToken accessToken = twitterProvider.getAccessToken(requestToken, verifier);
-
-		if (accessToken != null) {
-			twitterProvider.connect(account.getId(),
-					new ConnectionDetails(accessToken.getValue(), accessToken.getSecret(), ""));
-
-			TwitterOperations twitter = twitterProvider.getTwitterApi(account.getId());
-			twitterProvider.updateProviderAccountId(account.getId(), twitter.getScreenName());
-
-			if (tweetIt) {
-				try {
-					twitter.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
-				} catch (DuplicateTweetException noWorries) {
-				}
+		request.removeAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
+		TwitterOperations twitter = accountProvider.connect(account.getId(), requestToken, verifier);
+		accountProvider.updateProviderAccountId(account.getId(), twitter.getScreenName());
+		if (postTweet) {
+			try {
+				twitter.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
+			} catch (DuplicateTweetException e) {
 			}
-
-			FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
-			return "redirect:/connect/twitter";
 		}
-
-		return "connect/twitterConnect";
+		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
+		return "redirect:/connect/twitter";
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE)
 	public String disconnectTwitter(Account account, HttpServletRequest request, Authentication authentication) {
-		twitterProvider.disconnect(account.getId());
+		accountProvider.disconnect(account.getId());
 		return "redirect:/connect/twitter";
 	}
 
-	private String buildCallbackUrl(boolean tweetIt, ServletWebRequest request) {
-		HttpServletRequest servletRequest = request.getRequest();
-		int port = servletRequest.getLocalPort();
-		String portPart = (port == 80 || port == 443) ? "" : ":" + port;
-		String urlBase = servletRequest.getScheme() + "://" + servletRequest.getServerName() + portPart
-				+ servletRequest.getContextPath();
-		return urlBase + "/connect/twitter" + (tweetIt ? "?tweetIt=on" : "");
-	}
 }

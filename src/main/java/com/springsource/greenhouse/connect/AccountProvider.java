@@ -2,24 +2,24 @@ package com.springsource.greenhouse.connect;
 
 import java.util.List;
 
-import org.springframework.web.client.RestOperations;
-
 import com.springsource.greenhouse.account.Account;
 
-public interface AccountProvider {
+public interface AccountProvider<A> {
 
 	String getName();
 	
 	String getApiKey();
+	
+	Long getAppId();
 
-	OAuthToken getRequestToken(String callbackUrl);
+	OAuthToken getRequestToken();
 	
-	String getAuthorizeUrl();
+	String getAuthorizeUrl(String requestToken);
 	
-	OAuthToken getAccessToken(OAuthToken requestToken, String verifier);
+	A connect(Long accountId, OAuthToken requestToken, String verifier);
 	
-	void connect(Long accountId, ConnectionDetails details);
-	
+	A addConnection(Long accountId, String accessToken, String providerAccountId);
+
 	boolean isConnected(Long accountId);
 
 	void updateProviderAccountId(Long accountId, String providerAccountId);
@@ -30,7 +30,7 @@ public interface AccountProvider {
 	
 	List<Account> findAccountsWithProviderAccountIds(List<String> providerAccountIds);
 
-	RestOperations getApi(Long accountId);
+	A getApi(Long accountId);
 
 	void disconnect(Long accountId);
 	

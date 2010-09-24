@@ -5,7 +5,7 @@
 	<div class="${message.type}">${message.text}</div>
 </c:if>
 
-<form id="disconnect" method="post">
+<form id="disconnect" action="<c:url value="/connect/twitter"/>" method="post">
 	<div class="formInfo">
 		<p>
 			Your Greenhouse account is connected to your Twitter account.

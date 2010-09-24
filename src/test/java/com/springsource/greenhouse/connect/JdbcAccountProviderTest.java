@@ -30,7 +30,7 @@ public class JdbcAccountProviderTest {
 
 	private AccountProvider accountProvider;
 
-	private JdbcAccountProviderRepository providerRepository;
+	private JdbcAccountProviderFactory providerRepository;
 
 	@Before
 	public void setup() {
@@ -38,7 +38,7 @@ public class JdbcAccountProviderTest {
 		jdbcTemplate = new JdbcTemplate(db);
 		StringEncryptor encryptor = new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed");
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		providerRepository = new JdbcAccountProviderRepository(jdbcTemplate, encryptor, accountMapper);
+		providerRepository = new JdbcAccountProviderFactory(jdbcTemplate, encryptor, accountMapper);
 		accountProvider = providerRepository.findAccountProviderByName("twitter");
 	}
 

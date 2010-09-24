@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.TwitterAccountProvider;
+import com.springsource.greenhouse.connect.AccountProvider;
 
 @Controller
 @RequestMapping("/invite/twitter")
 public class TwitterInviteController {
 	
-	private TwitterAccountProvider accountProvider;
+	private AccountProvider<TwitterOperations> accountProvider;
 	
 	@Inject
-	public TwitterInviteController(TwitterAccountProvider accountProvider) {
+	public TwitterInviteController(AccountProvider<TwitterOperations> accountProvider) {
 		this.accountProvider = accountProvider;
 	}
 	
@@ -37,8 +37,7 @@ public class TwitterInviteController {
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
-			TwitterOperations twitterApi = accountProvider.getTwitterApi(account.getId());			
-			List<String> screenNames = twitterApi.getFollowed(username);
+			List<String> screenNames = accountProvider.getApi(account.getId()).getFollowed(username);
 			model.addAttribute("friendAccounts", accountProvider.findAccountsWithProviderAccountIds(screenNames));
 		}
 		return "invite/twitterFriends";

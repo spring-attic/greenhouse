@@ -14,24 +14,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.FacebookAccountProvider;
+import com.springsource.greenhouse.connect.AccountProvider;
 
 @Controller
 @RequestMapping("/invite/facebook")
 public class FacebookInviteController {
 
-	private final FacebookAccountProvider accountProvider;
+	private final AccountProvider<FacebookOperations> accountProvider;
 	
 	@Inject
-	public FacebookInviteController(FacebookAccountProvider accountProvider) {
+	public FacebookInviteController(AccountProvider<FacebookOperations> accountProvider) {
 		this.accountProvider = accountProvider;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
 		if (accountProvider.isConnected(account.getId())) {
-			FacebookOperations facebookApi = accountProvider.getFacebookApi(account.getId());
-			List<String> providerAccountIds = facebookApi.getFriendIds();
+			List<String> providerAccountIds = accountProvider.getApi(account.getId()).getFriendIds();
 			model.addAttribute("friendAccounts", accountProvider.findAccountsWithProviderAccountIds(providerAccountIds));
 		} else {
 			model.addAttribute("friendAccounts", Collections.emptySet());

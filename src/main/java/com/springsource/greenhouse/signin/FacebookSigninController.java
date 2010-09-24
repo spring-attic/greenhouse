@@ -3,6 +3,7 @@ package com.springsource.greenhouse.signin;
 import javax.inject.Inject;
 
 import org.springframework.social.facebook.FacebookAccessToken;
+import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookTemplate;
 import org.springframework.social.facebook.FacebookUserInfo;
 import org.springframework.stereotype.Controller;
@@ -14,19 +15,19 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
 import com.springsource.greenhouse.account.UsernameNotFoundException;
-import com.springsource.greenhouse.connect.FacebookAccountProvider;
+import com.springsource.greenhouse.connect.AccountProvider;
 import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 
 @Controller
 @RequestMapping("/signin/facebook")
 public class FacebookSigninController {
 
-	private final FacebookAccountProvider accountProvider;
+	private final AccountProvider<FacebookOperations> accountProvider;
 
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookSigninController(FacebookAccountProvider accountProvider, AccountRepository accountRepository) {
+	public FacebookSigninController(AccountProvider<FacebookOperations> accountProvider, AccountRepository accountRepository) {
 		this.accountProvider = accountProvider;
 		this.accountRepository = accountRepository;
 	}
