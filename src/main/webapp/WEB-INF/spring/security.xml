@@ -10,17 +10,17 @@
 	<http use-expressions="true">
 		<!-- Authentication policy -->
 		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="authenticationFailureHandler" />
-		<logout logout-url="/signout" />
+		<logout logout-url="/signout" /> <!--3.1.0 ONLY delete-cookies="JSESSIONID" -->
 		<!-- Authorization policy -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/signup" access="permitAll" />
-		<intercept-url pattern="/signin" filters="none" method="GET" />
+		<intercept-url pattern="/signin" access="permitAll" method="GET" />
 		<intercept-url pattern="/signin/facebook" access="permitAll" method="POST" />
 		<intercept-url pattern="/reset" access="permitAll" />
-		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/members/**" access="permitAll" />
 		<intercept-url pattern="/groups/**" access="permitAll" />
 		<intercept-url pattern="/pubsub/**" access="permitAll" />
+		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 	</http>
 

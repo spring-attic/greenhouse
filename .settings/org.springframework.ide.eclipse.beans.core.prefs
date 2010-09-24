@@ -1,4 +1,4 @@
-#Fri Sep 24 10:00:15 EDT 2010
+#Fri Sep 24 15:30:33 EDT 2010
 //org.springframework.ide.eclipse.beans.core.default.version.http\://spring-security-oauth.codehaus.org/2.0=
 //org.springframework.ide.eclipse.beans.core.default.version.http\://spring-security-oauth.codehaus.org/3.0=
 //org.springframework.ide.eclipse.beans.core.default.version.http\://spring-security-oauth.codehaus.org/oauth2/1.0=
@@ -80,7 +80,7 @@
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springframework.org/schema/webflow-config=flow
 //org.springframework.ide.eclipse.beans.core.prefix.http\://www.springsource.com/schema/greenhouse=greenhouse
 eclipse.preferences.version=1
-org.springframework.ide.eclipse.beans.core.default.version.check.classpath=false
+org.springframework.ide.eclipse.beans.core.default.version.check.classpath=true
 org.springframework.ide.eclipse.beans.core.enable.project.preferences=true
 org.springframework.ide.eclipse.beans.core.ignoreMissingNamespaceHandler=false
 org.springframework.ide.eclipse.beans.core.loadNamespaceHandlerFromClasspath=true
