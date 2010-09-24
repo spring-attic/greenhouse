@@ -1,3 +1,4 @@
+<%@ page session="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <form id="friendFinder" action="<c:url value="/invite/twitter" />" method="post">
