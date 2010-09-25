@@ -15,5 +15,7 @@
   		</label>
   		<input id="username" type="text" name="username" value="${username.value}" />
 	</fieldset>
-	<input type="submit" value="Submit">
+	<p>
+		<button type="submit">Submit</button>
+	</p>
 </form>

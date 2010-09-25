@@ -10,7 +10,9 @@
 		<label for="username">Twitter Username</label>
 		<input id="username" name="username" type="text" size="25" value="${username}" />
 	</fieldset>
-	<input type="submit" value="Find"/>
+	<p>
+		<button type="submit">Find</button>
+	</p>
 </form>
 
 <!-- TODO consider using load here; apply a spinner effect; make progressive -->

@@ -15,5 +15,7 @@
   		<form:password path="confirmPassword" />
   		<input type="hidden" value="${token}" />
 	</fieldset>
-	<input type="submit" value="Submit">
+	<p>
+		<button type="submit">Reset</button>
+	</p>
 </form:form>

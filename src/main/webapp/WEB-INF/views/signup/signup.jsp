@@ -10,7 +10,7 @@
 <c:url value="/signup" var="signupUrl" />
 <form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm" enctype="multipart/form-data">
 	<div class="formInfo">
-  		<h2>Sign up</h2>
+  		<h2>Sign Up at the Greenhouse</h2>
   		<s:bind path="*">
   		    <c:choose>
 	  			<c:when test="${status.error}">
@@ -18,7 +18,7 @@
 	  			</c:when>
   			</c:choose>			
   		</s:bind>
-  		<p>Please complete the following form to create a Greenhouse account</p>  		
+  		<p>Join Greenhouse to connect with other application developers using Spring.</p>  		
 	</div>
   	<fieldset>
   		<form:label path="firstName">
@@ -44,5 +44,7 @@
   		<form:label path="confirmPassword">Confirm Password</form:label>
   		<form:password path="confirmPassword" />  		
 	</fieldset>
-	<input type="submit" value="Sign up">
+	<p>
+		<button type="submit">Sign Up</button>
+	</p>
 </form:form>

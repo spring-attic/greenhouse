@@ -9,7 +9,7 @@
 
 <form id="signin" action="<c:url value="/signin/authenticate" />" method="post">
 	<div class="formInfo">
-  		<h2>Sign in</h2>
+  		<h2>Greenhouse Sign In</h2>
   		<c:if test="${signinError}">
   		<div class="error">
   			Your sign in information was incorrect.
@@ -23,8 +23,12 @@
 		<label for="password">Password</label>
 		<input id="password" name="j_password" type="password" size="25" />
 	</fieldset>
-	<p><a href="<c:url value="/reset" />">Forgot your password?</a></p>
-	<input type="submit" value="Sign In"/>
+	<p>
+		<button type="submit">Sign In</button>
+	</p>
+	<p>
+		<a href="<c:url value="/reset" />">Forgot your password?</a>
+	</p>
 </form>
 
 <c:if test="${!currentDevice.mobileBrowser}">

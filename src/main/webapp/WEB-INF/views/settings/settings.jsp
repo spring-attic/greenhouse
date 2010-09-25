@@ -11,7 +11,9 @@
 		<li>
 			${app.name}
 			<form action="settings/apps/${app.accessToken}" method="post">
-				<input type="submit" value="Disconnect" />
+				<p>
+					<button type="submit">Disconnect</button>
+				</p>
 				<input type="hidden" name="_method" value="DELETE" />
 			</form>
 		</li>

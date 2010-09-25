@@ -10,7 +10,6 @@
 	<p>
 		<c:out value="${group.description}" escapeXml="true" />
 	</p>
-
 	<div id="fb-root"></div>
 	<fb:like></fb:like>
 </div>

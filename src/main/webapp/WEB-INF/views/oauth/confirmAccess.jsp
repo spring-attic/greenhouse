@@ -11,5 +11,7 @@
 	<c:if test="${!empty oauth_callback}">
 		<input name="callbackURL" value="${oauth_callback}" type="hidden" />
 	</c:if>
-	<input name="authorize" value="Authorize" type="submit" />
+	<p>
+		<button type="submit">Authorize</button>
+	</p>
 </form>
