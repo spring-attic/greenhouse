@@ -20,12 +20,20 @@ public class SignupForm {
 	@Size(max=320)
 	private String email;
 
+	private Gender gender;
+
+	@NotNull
+	private Integer month;
+	
+	@NotNull
+	private Integer day;
+	
+	@NotNull
+	private Integer year;
+	
 	@NotNull
 	@Size(min=6)
-	// TODO confirmation constraint	
 	private String password;
-
-	private String confirmPassword;
 
 	public String getFirstName() {
 		return firstName;
@@ -59,16 +67,39 @@ public class SignupForm {
 		this.password = password;
 	}
 
-	public String getConfirmPassword() {
-		return confirmPassword;
+	public Gender getGender() {
+		return gender;
 	}
 
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
-	
+		
+	public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
+	public Integer getDay() {
+		return day;
+	}
+
+	public void setDay(Integer day) {
+		this.day = day;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
 	public Person createPerson() {
-		// TODO add gender and birthdate
-		return new Person(firstName, lastName, email, password, Gender.Male, new LocalDate(1977, 12, 1));
+		return new Person(firstName, lastName, email, password, gender, new LocalDate(year, month, day));
 	}
 }

@@ -6,13 +6,5 @@
 	<definition name="oauth/confirmAccess" extends="standard">
 		<put-attribute name="content" value="/WEB-INF/views/oauth/confirmAccess.jsp" />
 	</definition>
-	
-	<definition name="oauth/confirmAccess-iphone" extends="page-iphone">
-		<put-attribute name="content" value="/WEB-INF/views/oauth/confirmAccess.jsp" /> 	
-	</definition>
-    
-	<definition name="oauth/error" extends="standard">
-		<put-attribute name="content" value="/WEB-INF/views/oauth/error.jsp" />
-	</definition>
-
+ 
 </tiles-definitions>

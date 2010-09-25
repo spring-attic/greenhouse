@@ -2,7 +2,6 @@ package com.springsource.greenhouse.develop.oauth;
 
 import javax.inject.Inject;
 
-import org.springframework.mobile.Device;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
@@ -27,16 +26,11 @@ public class ConfirmAccessController {
 	}
 
 	@RequestMapping(value="/oauth/confirm_access", method=RequestMethod.GET)
-	protected String confirmAccessForm(@RequestParam(value="oauth_token", required=true) String oauthToken,
-			@RequestParam(value="oauth_callback", required = false) String callback, Device device, Model model)  {
+	protected String confirmAccessForm(@RequestParam("oauth_token") String oauthToken, Model model)  {
 		ConsumerDetails consumer = consumerDetailsService.loadConsumerByConsumerKey(tokenServices.getToken(oauthToken).getConsumerKey());
 		model.addAttribute("oauth_token", oauthToken);
-		// TODO this doesn't seem to be used in UserAuthorizationProcessingFilter
-		if (callback != null) {
-			model.addAttribute("oauth_callback", callback);
-		}
 		model.addAttribute("consumer", consumer);
-		return device.isApple() ? "oauth/confirmAccess-iphone" : "oauth/confirmAccess";
+		return "oauth/confirmAccess";
 	}
 
 }

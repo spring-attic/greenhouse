@@ -1,5 +1,5 @@
 @import url("messages/messages.css");
-@import url("form-iphone.css");
+@import url("form-mobile.css");
 
 body 
 {
@@ -28,4 +28,3 @@ h2
 	font-weight: bold;
 	text-transform: uppercase;
 }
-
