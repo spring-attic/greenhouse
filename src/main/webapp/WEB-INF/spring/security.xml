@@ -21,6 +21,7 @@
 		<intercept-url pattern="/groups/**" access="permitAll" />
 		<intercept-url pattern="/pubsub/**" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
+		<intercept-url pattern="/admin/**" access="isAuthenticated()" requires-channel="${application.secureChannel}" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 	</http>
 
