@@ -31,4 +31,9 @@
 		<h4>Facebook</h4>
 		<a href="<s:url value="/connect/facebook" />">Connect to Facebook</a>	
 	</div>
+	<div id="linkedIn">
+		<h4>LinkedIn</h4>
+		<a href="<s:url value="/connect/linkedin" />">Connect to LinkedIn</a>	
+	</div>
+	
 </div>

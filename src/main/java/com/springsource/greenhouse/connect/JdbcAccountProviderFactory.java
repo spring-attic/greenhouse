@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookTemplate;
+import org.springframework.social.linkedin.LinkedInOperations;
+import org.springframework.social.linkedin.LinkedInTemplate;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.social.twitter.TwitterTemplate;
 
@@ -48,6 +50,17 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 					return accessToken != null ? new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret()) : new TwitterTemplate();
 				}
 			};			
+		} else if (LinkedInOperations.class.equals(apiType)) {
+			return (AccountProvider<A>) new JdbcAccountProvider<LinkedInOperations>(getParameters("linkedin"),
+					jdbcTemplate, encryptor, accountMapper) {
+				public LinkedInOperations createApi(OAuthToken accessToken) {
+					if (accessToken == null) {
+						throw new IllegalStateException("Cannot access LinkedIn without an access token");
+					}
+					return new LinkedInTemplate(getApiKey(), getSecret(), accessToken.getValue(),
+							accessToken.getSecret());
+				}
+			};
 		} else {
 			throw new IllegalArgumentException("Not a supported apiType " + apiType);
 		}
