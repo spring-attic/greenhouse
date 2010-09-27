@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.social.linkedin.LinkedInOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,20 +15,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.PictureSize;
-import com.springsource.greenhouse.connect.AccountProvider;
 
 @Controller
 @RequestMapping("/members/*")
 public class MembersController {
 	
 	private ProfileRepository profileRepository;
-	private AccountProvider<LinkedInOperations> linkedInAccountProvider;
 
 	@Inject
-	public MembersController(ProfileRepository profileRepository,
-			@Named("linkedInAccountProvider") AccountProvider<LinkedInOperations> linkedInAccountProvider) {
+	public MembersController(ProfileRepository profileRepository) {
 		this.profileRepository = profileRepository;
-		this.linkedInAccountProvider = linkedInAccountProvider;
 	}
 
 	@RequestMapping(value = "/@self", headers = "Accept=application/json")
@@ -44,11 +38,6 @@ public class MembersController {
 		model.addAttribute(profile);
 		model.addAttribute("connectedProfiles", profileRepository.findConnectedProfiles(profile.getAccountId()));
 		model.addAttribute("metadata", buildFacebookOpenGraphMetadata(profile));
-		try {
-			LinkedInOperations linkedIn = linkedInAccountProvider.getApi(profile.getAccountId());
-			model.addAttribute("linkedInProfileUrl", linkedIn.getUserInfo().getPublicProfileUrl());
-		} catch (IllegalStateException notConnectedToLinkedIn_noProblem) {
-		}
 		return "members/view";
 	}
 	
