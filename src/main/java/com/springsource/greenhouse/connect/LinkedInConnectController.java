@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.social.linkedin.LinkedInOperations;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +17,8 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 
-@Controller
-@RequestMapping("/connect/linkedin")
+//@Controller
+//@RequestMapping("/connect/linkedin")
 public class LinkedInConnectController {
 	private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
 
