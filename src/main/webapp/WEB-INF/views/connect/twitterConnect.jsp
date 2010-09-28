@@ -9,7 +9,7 @@
 			You will be taken to Twitter for authorization and then will be brought back here.
 		</p>
 	</div>
-	<input id="signin" type="image" src="<c:url value="/resources/social/twitter/signin.png" />" />
+	<input id="signin" type="image" src="<c:url value="/resources/social/twitter/signin.png" />"/>
 	<label for="postTweet">Tweet a link to my Greenhouse profile after connecting</label>
 	<input id="postTweet" type="checkbox" name="postTweet" />
 </form>

@@ -52,6 +52,10 @@ form .radio input, form .checkbox input {
 	margin: 0 0.3em 0 0
 }
 
+form input[type='submit'], form input[type='image'] {
+	width: auto;
+}
+
 form .multiple label {
 	float: left;
 	width: 29%;

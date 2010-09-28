@@ -1,6 +1,7 @@
 package com.springsource.greenhouse.connect;
 
 import org.springframework.social.facebook.FacebookOperations;
+import org.springframework.social.linkedin.LinkedInOperations;
 import org.springframework.social.twitter.TwitterOperations;
 
 import com.springsource.greenhouse.account.Account;
@@ -10,6 +11,11 @@ public class AccountProviderApiFactory {
 	
 	public static TwitterOperations getTwitterApi(AccountProvider<TwitterOperations> twitterProvider, Account account) {
 		return twitterProvider.getApi(account != null ? account.getId() : null);
+	}
+
+	public static LinkedInOperations getLinkedInApi(AccountProvider<LinkedInOperations> linkedInProvider,
+			Account account) {
+		return linkedInProvider.getApi(account != null ? account.getId() : null);
 	}
 
 	public static FacebookOperations getFacebookApi(AccountProvider<FacebookOperations> facebookProvider, Account account) {

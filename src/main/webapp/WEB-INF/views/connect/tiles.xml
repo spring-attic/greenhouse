@@ -10,6 +10,14 @@
     <definition name="connect/twitterConnected" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/connect/twitterConnected.jsp" />
     </definition>
+
+    <definition name="connect/linkedInConnect" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnect.jsp" />
+    </definition>
+
+    <definition name="connect/linkedInConnected" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnected.jsp" />
+    </definition>
    
     <definition name="connect/facebookConnect" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/connect/facebookConnect.jsp" />

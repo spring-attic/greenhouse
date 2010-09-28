@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.members;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class JdbcProfileRepositoryTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage());
+		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage(), null);
     }
 	
 	@After
