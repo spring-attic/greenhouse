@@ -1,7 +1,7 @@
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Keith' , 'Donald', 'kdonald@vmware.com', 'melbourne', 'kdonald', 'M', '1977-12-29');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Craig' , 'Walls', 'craig@habuma.com', 'plano', 'habuma', 'M', '1975-3-4');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'atlanta', 'rclarkson', 'M', '1977-11-15');
-insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', 'churchkeys', 'jgrelle', 'M', '1977-11-28');
+insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', 'churchkey', 'jgrelle', 'M', '1977-11-28');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Mark', 'Fisher', 'mfisher@vmware.com', 'boston', 'mfisher', 'M', '1976-10-12');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Keri', 'Donald', 'keridonald@gmail.com', 'barn', 'kkdonald', 'F', '1976-7-4');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('David', 'Winterfeldt', 'dwinterfeldt@vmware.com', 'sanfran', 'dwinterfeldt', 'M', '1973-11-4');
@@ -17,8 +17,8 @@ insert into AccountProvider (name, apiKey, secret, appId) values ('facebook', '2
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('SpringOne2gx', 'The premier conference series for Spring technologies', 'springone2gx', '#springone2gx', 1);
 insert into MemberGroup (name, description, profileKey, hashtag, leader) values ('Atlanta Spring Users Group', 'The Spring developers in the Greater Atlanta area', 'atl', '#atlspring', 1);
 
-insert into Event (title, startTime, endTime, location, description, name, memberGroup) values ('SpringOne/2GX', '2010-10-19 21:00:00Z', '2010-10-22 21:00:00Z', 'Chicago, IL', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 'chicago', 1);
-insert into Event (title, startTime, endTime, location, description, name, memberGroup) values ('Spring Integration 2', '2010-09-21 22:30:00Z', '2010-09-22 00:00:00Z', 'Atlanta, GA', 'Come learn the latest the Spring Integration project has to offer', 'int', 2);
+insert into Event (title, startTime, endTime, slug, description, memberGroup) values ('SpringOne/2GX', '2010-10-19 21:00:00Z', '2010-10-22 21:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
+insert into Event (title, startTime, endTime, slug, description, slug, memberGroup) values ('Spring Integration 2', '2010-09-21 22:30:00Z', '2010-09-22 00:00:00Z', 'int', 'Come learn the latest the Spring Integration project has to offer', 2);
 
 -- SpringOne Chicago 2010
 

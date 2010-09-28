@@ -1,14 +1,29 @@
+create table MemberSession (member bigint not null,
+					number smallint not null,
+					title varchar not null unique,
+					slug varchar not null unique,
+					description varchar,
+					hashtag varchar,
+					primary key (member, number),
+					foreign key (member) references Member(id));
+
 create table Event (id identity,
 					title varchar not null,
 					startTime timestamp not null,
 					endTime timestamp not null,
+					slug varchar not null,
 					location varchar not null,
 					description varchar,
-					name varchar not null,
 					memberGroup bigint not null,
 					primary key (id),
 					foreign key (memberGroup) references MemberGroup(id));
 
+create table EventVenue (event bigint,
+					venue bigint,
+					primary key (event, venue),
+					foreign key (event) references Event(id),
+					foreign key (venue) references Venue(id));
+					
 create table EventTrack (event bigint,
 					code varchar,
 					name varchar not null,
@@ -19,18 +34,19 @@ create table EventTrack (event bigint,
 					foreign key (chair) references Member(id));
 
 create table EventSession (event bigint,
+					member bigint,
 					number smallint,
-					title varchar not null,
+					delivery smallint, 
 					startTime timestamp not null,
 					endTime timestamp not null,
-					description varchar,
-					hashtag varchar,
 					track varchar,
+					venue bigint,
+					room varchar,
 					rating real,
-					primary key (event, number),
-					foreign key (event) references Event(id),
-					foreign key (event, track) references EventTrack(event, code));
-
+					primary key (event, member, number, delivery),
+					foreign key (event) references Event(event),
+					foreign key (member, number) references MemberSession(member, number));
+				
 create table EventSessionLeader (event bigint,
 					session bigint,
 					leader bigint,
