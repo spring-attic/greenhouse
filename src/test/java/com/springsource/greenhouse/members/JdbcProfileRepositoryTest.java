@@ -25,7 +25,7 @@ public class JdbcProfileRepositoryTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage(), null);
+		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage());
     }
 	
 	@After
