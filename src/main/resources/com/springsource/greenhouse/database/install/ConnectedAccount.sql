@@ -1,4 +1,5 @@
 create table AccountProvider (name varchar,
+                    displayName varchar,
 					apiKey varchar not null,					
 					secret varchar,
 					appId bigint,
