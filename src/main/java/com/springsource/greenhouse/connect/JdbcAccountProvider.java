@@ -68,13 +68,13 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 	public A connect(Long accountId, OAuthToken requestToken, String verifier) {
 		OAuthToken accessToken = getAccessToken(requestToken, verifier);
 		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()),
-				encryptor.encrypt(accessToken.getSecret()), accountId);
+				encryptor.encrypt(accessToken.getSecret()), null);
 		return createApi(accessToken);
 	}
 
 	public A addConnection(Long accountId, String accessToken, String providerAccountId) {
 		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken), null,
-				accountId);
+				providerAccountId);
 		return createApi(new OAuthToken(accessToken));
 	}
 
