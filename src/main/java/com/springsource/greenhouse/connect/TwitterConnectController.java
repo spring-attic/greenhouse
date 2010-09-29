@@ -8,6 +8,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,14 @@ public class TwitterConnectController {
 		TwitterOperations twitter = accountProvider.connect(account.getId(), requestToken, verifier);
 		accountProvider.updateProviderAccountId(account.getId(), twitter.getScreenName());
 		if (requestTokenHolder.containsKey("postTweet")) {
-			twitter.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
+			try {
+				twitter.tweet("Join me at the Greenhouse! " + account.getProfileUrl());
+			} catch (DuplicateTweetException doesntMatter) {
+				// In this case, it doesn't matter if there's a duplicate tweet.
+				// It's unlikely to happen unless the user repeatedly
+				// connects/disconnects to/from Twitter. And even then, it's no
+				// big deal.
+			}
 		}
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your Twitter account!");
 		return "redirect:/connect/twitter";
