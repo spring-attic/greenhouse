@@ -21,6 +21,7 @@
 	<context:component-scan base-package="com.springsource.greenhouse.recent" />	
 	<context:component-scan base-package="com.springsource.greenhouse.develop" />
 	<context:component-scan base-package="com.springsource.greenhouse.connect" />
+	<context:component-scan base-package="com.springsource.greenhouse.errors" />
 
 	<bean class="com.springsource.greenhouse.reset.StringTemplateResetPasswordMailConverter">
 		<constructor-arg value="${application.secureUrl}/reset?token={token}" />
