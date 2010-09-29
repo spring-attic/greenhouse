@@ -1,18 +1,23 @@
-create table MemberSession (member bigint not null,
-					number smallint not null,
-					title varchar not null unique,
-					slug varchar not null unique,
+create table Session (id identity,
+					title varchar not null,
+					slug varchar not null,
 					description varchar,
 					hashtag varchar,
-					primary key (member, number),
-					foreign key (member) references Member(id));
+					public boolean default false,
+					primary key (id));
 
+create table SessionDeveloper (session bigint,
+					developer bigint,
+					primary key (session, developer),
+					foreign key (session) references Session(id) on delete cascade,
+					foreign key (developer) references Member(id));
+					
 create table Event (id identity,
 					title varchar not null,
 					startTime timestamp not null,
 					endTime timestamp not null,
+					timezone varchar not null,
 					slug varchar not null,
-					location varchar not null,
 					description varchar,
 					memberGroup bigint not null,
 					primary key (id),
@@ -34,18 +39,21 @@ create table EventTrack (event bigint,
 					foreign key (chair) references Member(id));
 
 create table EventSession (event bigint,
-					member bigint,
 					number smallint,
-					delivery smallint, 
+					title varchar not null unique,
 					startTime timestamp not null,
 					endTime timestamp not null,
+					description varchar,
+					hashtag varchar,
 					track varchar,
 					venue bigint,
 					room varchar,
 					rating real,
-					primary key (event, member, number, delivery),
+					master bigint,
+					primary key (event, number),
 					foreign key (event) references Event(event),
-					foreign key (member, number) references MemberSession(member, number));
+					foreign key (event, track) references Track(event, code),
+					foreign key (sessionccefer1) references Session(id));
 				
 create table EventSessionLeader (event bigint,
 					session bigint,

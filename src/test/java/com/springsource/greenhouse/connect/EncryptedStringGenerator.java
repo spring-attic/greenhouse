@@ -16,5 +16,15 @@ public class EncryptedStringGenerator {
 		System.out.println(encryptor.encrypt(facebookApiKey));
 		System.out.println(encryptor.encrypt(facebookSecret));
 
+		String linkedInApiKey = "nHN6KGWzfCoZktbGo2pwszK1jAvBjoGpWO-K2ZUFnaAGG95mvybkVlhqGeAF0mdG";
+		String linkedInSecret = "iQFU_2C1I5nvXkVmZpfSTDITpOnHdert1M7q0NGjgvHsb6_l9xuPoXCDMpuBeDmA";
+		System.out.println(encryptor.encrypt(linkedInApiKey));
+		System.out.println(encryptor.encrypt(linkedInSecret));
+
+		String tripItApiKey = "91ef8572c06f8ba8bdb7a4b112d872fa775f9ead";
+		String tripItSecret = "04c5b2eac08531cc238008fbb61e5de09eb6d906";
+		System.out.println(encryptor.encrypt(tripItApiKey));
+		System.out.println(encryptor.encrypt(tripItSecret));
+
 	}
 }
