@@ -18,7 +18,7 @@ public class JdbcGroupRepository implements GroupRepository {
 	public JdbcGroupRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;}
 	
-	public Group findGroupByProfileKey(String profileKey) {
+	public Group findGroupBySlug(String profileKey) {
 		return jdbcTemplate.queryForObject(FIND_GROUP_QUERY, groupMapper, profileKey);
 	}
 	
@@ -32,5 +32,5 @@ public class JdbcGroupRepository implements GroupRepository {
 		}
 	};
 	
-	private static final String FIND_GROUP_QUERY = "select name, description, hashtag from MemberGroup where profileKey = ?";
+	private static final String FIND_GROUP_QUERY = "select name, description, hashtag from MemberGroup where slug = ?";
 }

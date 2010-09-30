@@ -14,9 +14,9 @@ create table SessionDeveloper (session bigint,
 					
 create table Event (id identity,
 					title varchar not null,
+					timezone varchar not null,
 					startTime timestamp not null,
 					endTime timestamp not null,
-					timezone varchar not null,
 					slug varchar not null,
 					description varchar,
 					memberGroup bigint not null,
@@ -39,10 +39,10 @@ create table EventTrack (event bigint,
 					foreign key (chair) references Member(id));
 
 create table EventSession (event bigint,
-					number smallint,
-					title varchar not null unique,
+					id smallint auto_increment,
 					startTime timestamp not null,
 					endTime timestamp not null,
+					title varchar not null unique,
 					description varchar,
 					hashtag varchar,
 					track varchar,
@@ -50,32 +50,37 @@ create table EventSession (event bigint,
 					room varchar,
 					rating real,
 					master bigint,
-					primary key (event, number),
-					foreign key (event) references Event(event),
-					foreign key (event, track) references Track(event, code),
-					foreign key (sessionccefer1) references Session(id));
+					primary key (event, id),
+					foreign key (event) references Event(id),
+					foreign key (event, track) references EventTrack(event, code),
+					foreign key (venue, room) references VenueRoom(venue, id),					
+					foreign key (master) references Session(id));
 				
 create table EventSessionLeader (event bigint,
-					session bigint,
+					session smallint,
 					leader bigint,
+					rank tinyint,
 					primary key (event, session, leader),
-					foreign key (event, session) references EventSession(event, number),
-					foreign key (leader) references Member(id));
+					foreign key (event, session) references EventSession(event, id),
+					foreign key (leader) references Member(id),
+					constraint UniqueEventSessionLeaderRank unique(event, session, rank));
 
 create table EventSessionFavorite (event bigint,
-					session bigint,
+					session smallint,
 					attendee bigint,
+					rank smallint,
 					primary key (event, session, attendee),
-					foreign key (event, session) references EventSession(event, number),
-					foreign key (attendee) references Member(id));
+					foreign key (event, session) references EventSession(event, id),
+					foreign key (attendee) references Member(id),
+					constraint UniqueEventSessionFavoriteRank unique(event, attendee, rank));
 
 create table EventSessionRating (event bigint,
-					session bigint,
+					session smallint,
 					attendee bigint,
 					rating tinyint not null check (rating in (1, 2, 3, 4, 5)),
 					comment varchar,
 					primary key (event, session, attendee),
-					foreign key (event, session) references EventSession(event, number),
+					foreign key (event, session) references EventSession(event, id),
 					foreign key (attendee) references Member(id));
 					
 create table EventTweetAction (memberAction bigint, 
@@ -85,4 +90,4 @@ create table EventTweetAction (memberAction bigint,
 					primary key (memberAction),
 					foreign key (memberAction) references MemberAction(id),
 					foreign key (event) references Event(id),
-					foreign key (event, session) references EventSession(event, number));
+					foreign key (event, session) references EventSession(event, id));

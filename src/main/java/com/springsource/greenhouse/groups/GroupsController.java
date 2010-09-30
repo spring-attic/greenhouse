@@ -37,15 +37,15 @@ public class GroupsController {
 	
 	@RequestMapping(value="/{groupKey}")
 	public String groupView(@PathVariable String groupKey, Model model) {
-		Group group = groupRepository.findGroupByProfileKey(groupKey);
+		Group group = groupRepository.findGroupBySlug(groupKey);
 		model.addAttribute(group);		
 		model.addAttribute("metadata", buildOpenGraphMetadata(group));		
 		return "groups/view";
 	}
 	
-	@RequestMapping(value="/{group}/events/{year}/{month}/{name}", method=RequestMethod.GET, headers="Accept=text/html")
-	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String name, Account account, Model model) {
-		Event event = eventRepository.findEventByName(group, year, month, name);
+	@RequestMapping(value="/{group}/events/{year}/{month}/{slug}", method=RequestMethod.GET, headers="Accept=text/html")
+	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
+		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(event);
 		model.addAttribute(twitterApi.get().search(event.getHashtag(), 1, 10));
 		return "groups/event";

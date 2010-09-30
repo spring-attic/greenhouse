@@ -12,29 +12,23 @@ public class Event {
 
 	private DateTime endTime;
 
-	private String location;
-
 	private String description;
 
-	private String name;
-	
 	private String hashtag;
 
 	private String groupName;
 	
-	private String groupProfileKey;
+	private String groupSlug;
 	
-	public Event(Long id, String title, DateTime startTime, DateTime endTime, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
+	public Event(Long id, String title, DateTime startTime, DateTime endTime, String description, String hashtag, String groupName, String groupSlug) {
 		this.id = id;
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.location = location;
 		this.description = description;
-		this.name = name;
 		this.hashtag = hashtag;
 		this.groupName = groupName;
-		this.groupProfileKey = groupProfileKey;
+		this.groupSlug = groupSlug;
 	}
 
 	public Long getId() {
@@ -53,18 +47,10 @@ public class Event {
 		return endTime;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
 	public String getDescription() {
 		return description;
 	}
 
-	public String getName() {
-		return name;
-	}
-	
 	public String getHashtag() {
 		return hashtag;
 	}
@@ -73,8 +59,13 @@ public class Event {
 		return groupName;
 	}
 
-	public String getGroupProfileKey() {
-		return groupProfileKey;
+	public String getGroupSlug() {
+		return groupSlug;
+	}
+
+	// TODO here for compatibility reasons; remove when iphone app is upgraded
+	public String getLocation() {
+		return "Chicago, IL";
 	}
 
 }

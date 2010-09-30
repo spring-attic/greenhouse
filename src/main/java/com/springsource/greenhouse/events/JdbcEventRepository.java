@@ -32,8 +32,8 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.query(SELECT_UPCOMING_EVENTS, eventMapper, new Date());
 	}
 	
-	public Event findEventByName(String group, Integer year, Integer month, String name) {
-		return jdbcTemplate.queryForObject(SELECT_EVENT_BY_NAME, eventMapper, group, year, month, name);
+	public Event findEventBySlug(String groupSlug, Integer year, Integer month, String slug) {
+		return jdbcTemplate.queryForObject(SELECT_EVENT_BY_SLUG, eventMapper, groupSlug, year, month, slug);
 	}
 
 	public String findEventSearchString(Long eventId) {
@@ -41,21 +41,17 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public String findSessionSearchString(Long eventId, Short sessionNumber) {
-		return jdbcTemplate.queryForObject("select (select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id) || ' ' || hashtag from EventSession where event = ? and number = ?", String.class, eventId, eventId, sessionNumber);
+		return jdbcTemplate.queryForObject("select (select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id) || ' ' || hashtag from EventSession where event = ? and id = ?", String.class, eventId, eventId, sessionNumber);
 	}
 
-	public List<EventSession> findTodaysSessions(Long eventId, Long attendeeId) {
-		return findSessionsOnDay(eventId, new LocalDate(DateTimeZone.UTC), attendeeId);
-	}
-	
 	public List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long attendeeId) {
 		DateTime dayStart = day.toDateTimeAtStartOfDay(DateTimeZone.UTC);
 		DateTime dayEnd = dayStart.plusDays(1);
 		return jdbcTemplate.query(SELECT_SESSIONS_ON_DAY, eventSessionsExtractor, attendeeId, eventId, dayStart.toDate(), dayEnd.toDate());
 	}
 
-	public List<EventSession> findFavorites(Long eventId, Long attendeeId) {
-		return jdbcTemplate.query(SELECT_FAVORITES, eventSessionsExtractor, attendeeId, eventId);
+	public List<EventSession> findEventFavorites(Long eventId, Long attendeeId) {
+		return jdbcTemplate.query(SELECT_EVENT_FAVORITES, eventSessionsExtractor, attendeeId, eventId);
 	}
 
 	public List<EventSession> findAttendeeFavorites(Long eventId, Long attendeeId) {
@@ -63,26 +59,26 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	@Transactional
-	public boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId) {
-		boolean favorite = jdbcTemplate.queryForObject("select exists(select 1 from EventSessionFavorite where event = ? and session = ? and attendee = ?)", Boolean.class, eventId, sessionNumber, attendeeId);
+	public boolean toggleFavorite(Long eventId, Short sessionId, Long attendeeId) {
+		boolean favorite = jdbcTemplate.queryForObject("select exists(select 1 from EventSessionFavorite where event = ? and session = ? and attendee = ?)", Boolean.class, eventId, sessionId, attendeeId);
 		if (favorite) {
-			jdbcTemplate.update("delete from EventSessionFavorite where event = ? and session = ? and attendee = ?", eventId, sessionNumber, attendeeId);
+			jdbcTemplate.update("delete from EventSessionFavorite where event = ? and session = ? and attendee = ?", eventId, sessionId, attendeeId);
 		} else {
-			jdbcTemplate.update("insert into EventSessionFavorite (event, session, attendee) values (?, ?, ?)", eventId, sessionNumber, attendeeId);
+			jdbcTemplate.update("insert into EventSessionFavorite (event, session, attendee) values (?, ?, ?)", eventId, sessionId, attendeeId);
 		}
 		return !favorite;
 	}
 
 	@Transactional
-	public void rate(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment) {
-		boolean rated = jdbcTemplate.queryForObject("select exists(select 1 from EventSessionRating where event = ? and session = ? and attendee = ?)", Boolean.class, eventId, sessionNumber, attendeeId);
+	public void rate(Long eventId, Short sessionId, Long attendeeId, Short value, String comment) {
+		boolean rated = jdbcTemplate.queryForObject("select exists(select 1 from EventSessionRating where event = ? and session = ? and attendee = ?)", Boolean.class, eventId, sessionId, attendeeId);
 		if (rated) {
-			jdbcTemplate.update("update EventSessionRating set rating = ?, comment = ? where event = ? and session = ? and attendee = ?", value, comment, eventId, sessionNumber, attendeeId);			
+			jdbcTemplate.update("update EventSessionRating set rating = ?, comment = ? where event = ? and session = ? and attendee = ?", value, comment, eventId, sessionId, attendeeId);			
 		} else {
-			jdbcTemplate.update("insert into EventSessionRating (event, session, attendee, rating, comment) values (?, ?, ?, ?, ?)", eventId, sessionNumber, attendeeId, value, comment);			
+			jdbcTemplate.update("insert into EventSessionRating (event, session, attendee, rating, comment) values (?, ?, ?, ?, ?)", eventId, sessionId, attendeeId, value, comment);			
 		}
-		Float rating = jdbcTemplate.queryForObject("select round(avg(cast(rating as double)) * 2, 0) / 2 from EventSessionRating where event = ? and session = ? group by event, session", Float.class, eventId, sessionNumber);
-		jdbcTemplate.update("update EventSession set rating = ? where event = ? and number = ?", rating, eventId, sessionNumber);
+		Float rating = jdbcTemplate.queryForObject("select round(avg(cast(rating as double)) * 2, 0) / 2 from EventSessionRating where event = ? and session = ? group by event, session", Float.class, eventId, sessionId);
+		jdbcTemplate.update("update EventSession set rating = ? where event = ? and id = ?", rating, eventId, sessionId);
 	}
 	
 	// internal helpers
@@ -90,7 +86,7 @@ public class JdbcEventRepository implements EventRepository {
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
 			return new Event(rs.getLong("id"), rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
-					rs.getString("location"), rs.getString("description"), rs.getString("name"), rs.getString("hashtag"), rs.getString("groupName"), rs.getString("groupProfileKey"));
+					rs.getString("description"), rs.getString("hashtag"), rs.getString("groupName"), rs.getString("groupSlug"));
 		}
 	};
 
@@ -98,46 +94,44 @@ public class JdbcEventRepository implements EventRepository {
 		public List<EventSession> extractData(ResultSet rs) throws SQLException, DataAccessException {
 			List<EventSession> sessions = new ArrayList<EventSession>();
 			EventSession session = null;
-			Short previousNumber = null;
+			Short previousId = null;
 			while (rs.next()) {
-				Short number = rs.getShort("number");
-				if (!number.equals(previousNumber)) {
-					session = new EventSession(number, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
-							rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), rs.getBoolean("favorite"));
+				Short id = rs.getShort("id");
+				if (!id.equals(previousId)) {
+					session = new EventSession(id, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC), rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), rs.getBoolean("favorite"));
 					sessions.add(session);
 				}
 				session.addLeader(new EventSessionLeader(rs.getString("firstName"), rs.getString("lastName")));				
-				previousNumber = number;
+				previousId = id;
 			}
 			return sessions;			
 		}
 	};
 	
-	private static final String SELECT_UPCOMING_EVENTS = "select e.id, e.title, e.startTime, e.endTime, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e " + 
+	private static final String SELECT_UPCOMING_EVENTS = "select e.id, e.title, e.startTime, e.endTime, e.description, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e " + 
 		"inner join MemberGroup g on e.memberGroup = g.id where e.endTime > ? order by e.startTime";
 
-	private static final String SELECT_EVENT_BY_NAME = "select e.id, e.title, e.startTime, e.endTime, e.location, e.description, e.name, g.hashtag, g.name as groupName, g.profileKey as groupProfileKey from Event e " + 
-		"inner join MemberGroup g on e.memberGroup = g.id where g.profileKey = ? and extract(year from e.startTime) = ? and extract(month from e.startTime) = ? and e.name = ?";
+	private static final String SELECT_EVENT_BY_SLUG = "select e.id, e.title, e.startTime, e.endTime, e.description, g.hashtag, g.name as groupName, g.slug as groupSlug from Event e " + 
+		"inner join MemberGroup g on e.memberGroup = g.id where g.slug = ? and extract(year from e.startTime) = ? and extract(month from e.startTime) = ? and e.slug = ?";
 
 	private static final String SELECT_SESSIONS_ON_DAY =
-		"select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName from EventSession s " +
-		"left outer join EventSessionFavorite f on s.event = f.event and s.number = f.session and f.attendee = ? " +	
-		"inner join EventSessionLeader l on s.event = l.event and s.number = l.session " +
+		"select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName from EventSession s " +
+		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +	
+		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
 		"inner join Member m on l.leader = m.id where s.event = ? and s.startTime >= ? and s.endTime <= ? " +
-		"order by s.number";
+		"order by s.startTime";
 
-	private static final String SELECT_FAVORITES = "select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName, top.favoriteCount from EventSession s " + 
-		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.number = top.session " +
-		"left outer join EventSessionFavorite f on s.event = f.event and s.number = f.session and f.attendee = ? " +
-		"inner join EventSessionLeader l on s.event = l.event and s.number = l.session " +
+	private static final String SELECT_EVENT_FAVORITES = "select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName, top.favoriteCount from EventSession s " + 
+		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.id = top.session " +
+		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
+		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
 		"inner join Member m on l.leader = m.id where s.event = ? " +
-		"order by top.favoriteCount desc, s.number";
+		"order by top.favoriteCount desc, l.rank";
 
 	private static final String SELECT_ATTENDEE_FAVORITES =
-		"select s.number, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (true) as favorite, m.firstName, m.lastName from EventSession s " +
-		"inner join EventSessionFavorite f on s.event = f.event and s.number = f.session and f.attendee = ? " +	
-		"inner join EventSessionLeader l on s.event = l.event and s.number = l.session " +
-		"inner join Member m on l.leader = m.id where s.event = ? " + 
-		"order by s.number";
-	
+		"select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (true) as favorite, m.firstName, m.lastName from EventSession s " +
+		"inner join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +	
+		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
+		"inner join Member m on l.leader = m.id where s.event = ? " +
+		"order by f.rank, l.rank";
 }

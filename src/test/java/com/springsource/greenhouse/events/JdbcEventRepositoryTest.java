@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -27,7 +26,7 @@ public class JdbcEventRepositoryTest {
 
 	@Before
 	public void setup() {
-		db = new GreenhouseTestDatabaseBuilder().member().group().activity().event().testData(getClass()).getDatabase();
+		db = new GreenhouseTestDatabaseBuilder().member().group().activity().venue().event().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
 		eventRepository = new JdbcEventRepository(jdbcTemplate);
 	}
@@ -40,86 +39,69 @@ public class JdbcEventRepositoryTest {
 	}
 
 	@Test
-	@Ignore("These tests are time sensitive and are breaking the build. Need to resurrect with a strategy to decouple from realtime.")
-	public void findUpcomingEvents() {
-		List<Event> events = eventRepository.findUpcomingEvents();
-		assertEquals(2, events.size());
-		assertEquals((Long)1L, events.get(0).getId());
-		assertEquals((Long)2L, events.get(1).getId());
-	}
-	
-	@Test
-	public void findEventByName() {
-		Event event = eventRepository.findEventByName("springone2gx", 2010, 8, "chitown");
+	public void findEventBySlug() {
+		Event event = eventRepository.findEventBySlug("springone2gx", 2010, 10, "chicago");
 		assertNotNull(event);
-		assertEquals("Soon_Event", event.getTitle());
+		assertEquals("SpringOne2gx", event.getTitle());
 	}
 	
 	@Test
 	public void findEventSearchString() {
-		assertEquals("#springone2gx", eventRepository.findEventSearchString(1L));
+		assertEquals("#s2gx", eventRepository.findEventSearchString(1L));
 	}
 	
 	@Test
 	public void findEventSessionSearchString() {
-		assertEquals("#springone2gx #spr101", eventRepository.findSessionSearchString(1L, (short)1));
+		assertEquals("#s2gx #mvc", eventRepository.findSessionSearchString(1L, (short)1));
 	}
 
 	@Test
-	@Ignore("These tests are time sensitive and are breaking the build. Need to resurrect with a strategy to decouple from realtime.")
-	public void findTodaysSessions() {
-		List<EventSession> todaysSessions = eventRepository.findTodaysSessions(1L, 2L);
-		assertEquals(2, todaysSessions.size());
-		assertMasteringMvc(todaysSessions.get(0));
-		assertSocialWebapps(todaysSessions.get(1));
-	}
-
-	@Test
-	public void findFavorites() {
-		List<EventSession> favorites = eventRepository.findFavorites(1L, 2L);
-		assertEquals("Mastering MVC 3", favorites.get(0).getTitle());
-		assertEquals("Developing Social-Ready Web Applications", favorites.get(1).getTitle());
+	public void findEventFavorites() {
+		List<EventSession> favorites = eventRepository.findEventFavorites(1L, 2L);
 		assertEquals(2, favorites.size());
+		assertSocial(favorites.get(0), false);
+		assertMobile(favorites.get(1), false);
 	}
 
 	@Test
 	public void findAttendeeFavorites() {
-		List<EventSession> favorites = eventRepository.findAttendeeFavorites(1L, 2L);
-		assertEquals(1, favorites.size());
-		assertMasteringMvc(favorites.get(0));
+		List<EventSession> favorites = eventRepository.findAttendeeFavorites(1L, 1L);
+		assertEquals(2, favorites.size());
+		assertSocial(favorites.get(0), true);
+		assertMobile(favorites.get(1), true);
 	}
 	
 	@Test
 	public void toggleFavorite() {
-		assertFalse(eventRepository.toggleFavorite(1L, (short)1, 2L));
-		assertTrue(eventRepository.toggleFavorite(1L, (short)1, 2L));
+		assertFalse(eventRepository.toggleFavorite(1L, (short)3, 1L));
+		assertTrue(eventRepository.toggleFavorite(1L, (short)3, 1L));
 	}
 	
 	@Test
 	public void rate() {
-		eventRepository.rate(1L, (short)1, 2L, (short)5, "Rocked");
-		eventRepository.rate(1L, (short)1, 3L, (short)4, "Rocked");
-		eventRepository.rate(1L, (short)1, 1L, (short)2, "Rocked");
-		assertEquals(new Float(3.5), eventRepository.findAttendeeFavorites(1L, 1L).get(0).getRating());
+		eventRepository.rate(1L, (short)3, 1L, (short)5, "Rocked");
+		eventRepository.rate(1L, (short)3, 2L, (short)4, "Rocked");
+		eventRepository.rate(1L, (short)3, 3L, (short)2, "Rocked");
+		assertEquals(new Float(3.5), eventRepository.findEventFavorites(1L, 1L).get(0).getRating());
 	}
 
 	// internal helpers
 	
-	private void assertMasteringMvc(EventSession s1) {
-		assertEquals("Mastering MVC 3", s1.getTitle());
-		assertEquals(2, s1.getLeaders().size());
-		Iterator<EventSessionLeader> it = s1.getLeaders().iterator();
+	private void assertMobile(EventSession session, boolean favorite) {
+		assertEquals("Choices in Mobile Application Development", session.getTitle());
+		assertEquals(2, session.getLeaders().size());
+		Iterator<EventSessionLeader> it = session.getLeaders().iterator();
 		EventSessionLeader leader = it.next();
-		assertEquals("Keith", leader.getFirstName());
+		assertEquals("Roy", leader.getFirstName());
 		leader = it.next();
-		assertEquals("Craig", leader.getFirstName());
-		assertEquals(true, s1.isFavorite());
+		assertEquals("Keith", leader.getFirstName());
+		assertEquals(favorite, session.isFavorite());
 	}
 
-	private void assertSocialWebapps(EventSession s2) {
-		assertEquals("Developing Social-Ready Web Applications", s2.getTitle());
-		assertEquals(1, s2.getLeaders().size());
-		assertEquals("Craig", s2.getLeaders().iterator().next().getFirstName());
-		assertEquals(false, s2.isFavorite());	
+	private void assertSocial(EventSession session, boolean favorite) {
+		assertEquals("Developing Social-Ready Web Applications", session.getTitle());
+		assertEquals(1, session.getLeaders().size());
+		assertEquals("Craig", session.getLeaders().iterator().next().getFirstName());
+		assertEquals(favorite, session.isFavorite());	
 	}
 }

@@ -46,7 +46,7 @@ public class EventsController {
 
 	@RequestMapping(value="/{id}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> favorites(@PathVariable Long id, Account account) {
-		return eventRepository.findFavorites(id, account.getId());
+		return eventRepository.findEventFavorites(id, account.getId());
 	}
 	
 	@RequestMapping(value="/{id}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
@@ -70,11 +70,6 @@ public class EventsController {
 	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long id, Account account) {
 		return eventRepository.findAttendeeFavorites(id, account.getId());
-	}
-
-	@RequestMapping(value="/{id}/sessions/today", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventSession> sessionsToday(@PathVariable Long id, Account account) {
-		return eventRepository.findTodaysSessions(id, account.getId());
 	}
 
 	@RequestMapping(value="/{id}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")

@@ -33,10 +33,11 @@ public class BaseDatabaseInstaller {
 		builder.addChange(databaseResource("install/Member.sql"));
 		builder.addChange(databaseResource("install/Group.sql"));
 		builder.addChange(databaseResource("install/Activity.sql"));
-		builder.addChange(databaseResource("install/Event.sql"));
 		builder.addChange(databaseResource("install/ConnectedApp.sql"));
 		builder.addChange(databaseResource("install/ConnectedAccount.sql"));
 		builder.addChange(databaseResource("install/Reset.sql"));
+		builder.addChange(databaseResource("install/Venue.sql"));
+		builder.addChange(databaseResource("install/Event.sql"));
 		addCustomChanges(builder);
 		upgrader.addChangeSet(builder.getChangeSet());
 		return upgrader;

@@ -9,8 +9,9 @@ create table Venue (id identity,
 					foreign key (createdBy) references Member(id));
 					
 create table VenueRoom (venue bigint,
+					id smallint auto_increment,
 					name varchar not null,
 					capacity int not null,
 					locationHint varchar not null,
-					primary key (venue, name),
-					foreign key (venue) references Venue(id)); 
+					primary key (venue, id),
+					foreign key (venue) references Venue(id) on delete cascade); 
