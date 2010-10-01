@@ -8,6 +8,8 @@ public interface AccountProvider<A> {
 
 	String getName();
 	
+	String getDisplayName();
+
 	String getApiKey();
 	
 	Long getAppId();

@@ -48,6 +48,10 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return parameters.getName();
 	}
 	
+	public String getDisplayName() {
+		return parameters.getDisplayName();
+	}
+
 	public String getApiKey() {
 		return parameters.getApiKey();
 	}

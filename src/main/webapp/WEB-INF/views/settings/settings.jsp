@@ -35,5 +35,9 @@
 		<h4>LinkedIn</h4>
 		<a href="<s:url value="/connect/linkedin" />">Connect to LinkedIn</a>	
 	</div>
+	<div id="tripIt">
+		<h4>TripIt</h4>
+		<a href="<s:url value="/connect/tripit" />">Connect to TripIt</a>	
+	</div>
 	
 </div>

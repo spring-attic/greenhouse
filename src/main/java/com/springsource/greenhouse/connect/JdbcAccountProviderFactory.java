@@ -11,6 +11,8 @@ import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookTemplate;
 import org.springframework.social.linkedin.LinkedInOperations;
 import org.springframework.social.linkedin.LinkedInTemplate;
+import org.springframework.social.tripit.TripItOperations;
+import org.springframework.social.tripit.TripItTemplate;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.social.twitter.TwitterTemplate;
 
@@ -61,19 +63,47 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 							accessToken.getSecret());
 				}
 			};
+		} else if (TripItOperations.class.equals(apiType)) {
+			return (AccountProvider<A>) new JdbcAccountProvider<TripItOperations>(getParameters("tripit"),
+					jdbcTemplate, encryptor, accountMapper) {
+				public TripItOperations createApi(OAuthToken accessToken) {
+					if (accessToken == null) {
+						throw new IllegalStateException("Cannot access TripIt without an access token");
+					}
+					return new TripItTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
+				}
+			};
 		} else {
 			throw new IllegalArgumentException("Not a supported apiType " + apiType);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <A> AccountProvider<A> getAccountProviderByName(String name) {
+		if (name.equals("facebook")) {
+			return (AccountProvider<A>) getAccountProvider(FacebookOperations.class);
+		} else if (name.equals("twitter")) {
+			return (AccountProvider<A>) getAccountProvider(TwitterOperations.class);
+		} else if (name.equals("linkedin")) {
+			return (AccountProvider<A>) getAccountProvider(LinkedInOperations.class);
+		} else if (name.equals("tripit")) {
+			return (AccountProvider<A>) getAccountProvider(TripItOperations.class);
+		} else {
+			throw new IllegalArgumentException("Not a known provider: " + name);
 		}
 	}
 	
 	private AccountProviderParameters getParameters(final String provider) {
 		return jdbcTemplate.queryForObject(SELECT_ACCOUNT_PROVIDER_BY_NAME, new RowMapper<AccountProviderParameters>() {
 			public AccountProviderParameters mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new AccountProviderParameters(provider, encryptor.decrypt(rs.getString("apiKey")), encryptor.decrypt(rs.getString("secret")), rs.getLong("appId"), rs.getString("requestTokenUrl"), rs.getString("authorizeUrl"), rs.getString("callbackUrl"), rs.getString("accessTokenUrl"));
+				return new AccountProviderParameters(provider, rs.getString("displayName"), encryptor.decrypt(rs
+						.getString("apiKey")), encryptor.decrypt(rs.getString("secret")), rs.getLong("appId"), rs
+						.getString("requestTokenUrl"), rs.getString("authorizeUrl"), rs.getString("callbackUrl"), rs
+						.getString("accessTokenUrl"));
 			}
 		}, provider);
 	}
 
-	private static final String SELECT_ACCOUNT_PROVIDER_BY_NAME = "select apiKey, secret, appId, requestTokenUrl, authorizeUrl, callbackUrl, accessTokenUrl from AccountProvider where name = ?";
+	private static final String SELECT_ACCOUNT_PROVIDER_BY_NAME = "select displayName, apiKey, secret, appId, requestTokenUrl, authorizeUrl, callbackUrl, accessTokenUrl from AccountProvider where name = ?";
 
 }

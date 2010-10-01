@@ -11,13 +11,22 @@
         <put-attribute name="content" value="/WEB-INF/views/connect/twitterConnected.jsp" />
     </definition>
 
-    <definition name="connect/linkedInConnect" extends="standard">
+    <definition name="connect/linkedinConnect" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnect.jsp" />
     </definition>
 
-    <definition name="connect/linkedInConnected" extends="standard">
+    <definition name="connect/linkedinConnected" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnected.jsp" />
     </definition>
+
+    <definition name="connect/tripitConnect" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/connect/tripItConnect.jsp" />
+    </definition>
+
+    <definition name="connect/tripitConnected" extends="standard">
+        <put-attribute name="content" value="/WEB-INF/views/connect/tripItConnected.jsp" />
+    </definition>
+
    
     <definition name="connect/facebookConnect" extends="standard">
         <put-attribute name="content" value="/WEB-INF/views/connect/facebookConnect.jsp" />
