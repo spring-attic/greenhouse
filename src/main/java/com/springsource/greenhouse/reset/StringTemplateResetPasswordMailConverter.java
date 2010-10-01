@@ -2,16 +2,17 @@ package com.springsource.greenhouse.reset;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Component;
 import org.springframework.templating.StringTemplate;
 import org.springframework.templating.StringTemplateFactory;
 import org.springframework.web.util.UriTemplate;
 
-//TODO this is disabled we need to manually inject a resetUriTemplate. not very clean: revisit this.
-//@Component
+@Component
 public class StringTemplateResetPasswordMailConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
 	
 	private StringTemplateFactory templateFactory;
@@ -21,7 +22,8 @@ public class StringTemplateResetPasswordMailConverter implements Converter<Reset
 	private UriTemplate resetUriTemplate;
 	
 	@Inject
-	public StringTemplateResetPasswordMailConverter(StringTemplateFactory templateFactory, String resetUriTemplate) {
+	public StringTemplateResetPasswordMailConverter(StringTemplateFactory templateFactory, 
+			@Value("${application.secureUrl}/reset?token={token}") String resetUriTemplate) {
 		this.templateFactory = templateFactory;
 		this.resetUriTemplate = new UriTemplate(resetUriTemplate);
 	}
