@@ -19,7 +19,7 @@
 	</c:forEach>
 	<script>
 		var greenhouse = greenhouse || {};
-		greenhouse.contextPath = "${request.contextPath}";
+		greenhouse.contextPath = "${pageContext.request.contextPath}";
 	</script>
 	<script type="text/javascript" src="<c:url value="/resources/jquery/1.4/jquery.js" />"></script>	
 	<script type="text/javascript" src="<c:url value="/resources/jquery-cookie/1.0/jquery-cookie.js" />"></script>
