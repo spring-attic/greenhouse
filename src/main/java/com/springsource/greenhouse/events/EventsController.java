@@ -5,6 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -40,68 +42,69 @@ public class EventsController {
 	// for web service (JSON) clients
 	
 	@RequestMapping(method=RequestMethod.GET, headers="Accept=application/json") 
-	public @ResponseBody List<Event> upcomingEvents() {
-		return eventRepository.findUpcomingEvents();
+	public @ResponseBody List<Event> upcomingEvents(@RequestParam(value="after", required=false) @DateTimeFormat(iso=ISO.DATE_TIME) DateTime dateTime, DateTimeZone currentTimeZone) {
+		return eventRepository.findUpcomingEvents(dateTime!= null ? dateTime : new DateTime(currentTimeZone));
 	}
 
-	@RequestMapping(value="/{id}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventSession> favorites(@PathVariable Long id, Account account) {
-		return eventRepository.findEventFavorites(id, account.getId());
+	@RequestMapping(value="/{eventId}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody List<EventSession> favorites(@PathVariable Long eventId, Account account) {
+		return eventRepository.findEventFavorites(eventId, account.getId());
 	}
 	
-	@RequestMapping(value="/{id}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody SearchResults tweets(@PathVariable Long id,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
-		return twitterApi.get().search(eventRepository.findEventSearchString(id), page, pageSize);
+	@RequestMapping(value="/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody SearchResults tweets(@PathVariable Long eventId,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
+		String searchString = eventRepository.findEventSearchString(eventId);
+		return searchString != null && searchString.length() > 0 ? twitterApi.get().search(searchString, page, pageSize) : null;
 	}
 
-	@RequestMapping(value = "/{id}/tweets", method = RequestMethod.POST)
-	public ResponseEntity<String> postTweet(@PathVariable Long id, @RequestParam String status, Location currentLocation) {
+	@RequestMapping(value = "/{eventId}/tweets", method = RequestMethod.POST)
+	public ResponseEntity<String> postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation) {
 		twitterApi.get().tweet(status);
 		return new ResponseEntity<String>(HttpStatus.OK);		
 	}
 	
-	@RequestMapping(value="/{id}/retweet", method=RequestMethod.POST)
+	@RequestMapping(value="/{eventId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> postRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
+	public ResponseEntity<String> postRetweet(@PathVariable Long eventId, @RequestParam Long tweetId) {
 		twitterApi.get().retweet(tweetId);
 		return new ResponseEntity<String>(HttpStatus.OK);		
 	}
 
-	@RequestMapping(value="/{id}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long id, Account account) {
-		return eventRepository.findAttendeeFavorites(id, account.getId());
+	@RequestMapping(value="/{eventId}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long eventId, Account account) {
+		return eventRepository.findAttendeeFavorites(eventId, account.getId());
 	}
 
-	@RequestMapping(value="/{id}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody List<EventSession> sessionsOnDay(@PathVariable Long id, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day, Account account) {
-		return eventRepository.findSessionsOnDay(id, day, account.getId());
+	@RequestMapping(value="/{eventId}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody List<EventSession> sessionsOnDay(@PathVariable Long eventId, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day, Account account) {
+		return eventRepository.findSessionsOnDay(eventId, day, account.getId());
 	}
 
-	@RequestMapping(value="/{id}/sessions/{number}/favorite", method=RequestMethod.PUT)
-	public @ResponseBody Boolean toggleFavorite(@PathVariable Long id, @PathVariable Short number, Account account) {
-		return eventRepository.toggleFavorite(id, number, account.getId());
+	@RequestMapping(value="/{eventId}/sessions/{sessionId}/favorite", method=RequestMethod.PUT)
+	public @ResponseBody Boolean toggleFavorite(@PathVariable Long eventId, @PathVariable Integer sessionId, Account account) {
+		return eventRepository.toggleFavorite(eventId, sessionId, account.getId());
 	}
 
-	@RequestMapping(value="/{id}/sessions/{number}/rating", method=RequestMethod.POST)
-	public @ResponseBody void updateRating(@PathVariable Long id, @PathVariable Short number, Account account, @RequestParam Short value, @RequestParam String comment) {
-		eventRepository.rate(id, number, account.getId(), value, comment);
+	@RequestMapping(value="/{eventId}/sessions/{sessionId}/rating", method=RequestMethod.POST)
+	public @ResponseBody void updateRating(@PathVariable Long eventId, @PathVariable Integer sessionId, Account account, @RequestParam Short value, @RequestParam String comment) {
+		eventRepository.rate(eventId, sessionId, account.getId(), value, comment);
 	}
 
-	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
-	public @ResponseBody SearchResults sessionTweets(@PathVariable Long id, @PathVariable Short number, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
-		return twitterApi.get().search(eventRepository.findSessionSearchString(id, number), page, pageSize);
+	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	public @ResponseBody SearchResults sessionTweets(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
+		String searchString = eventRepository.findSessionSearchString(eventId, sessionId);
+		return searchString != null && searchString.length() > 0 ? twitterApi.get().search(searchString, page, pageSize) : null;
 	}
 
-	@RequestMapping(value="/{id}/sessions/{number}/tweets", method=RequestMethod.POST)
-	public ResponseEntity<String> postSessionTweet(@PathVariable Long id, @PathVariable Short number,
-			@RequestParam String status, Location currentLocation) {
+	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.POST)
+	public ResponseEntity<String> postSessionTweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam String status, Location currentLocation) {
 		twitterApi.get().tweet(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/{id}/sessions/{number}/retweet", method=RequestMethod.POST)
+	@RequestMapping(value="/{eventId}/sessions/{sessionId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> postSessionRetweet(@PathVariable Long id, @RequestParam Long tweetId) {
+	public ResponseEntity<String> postSessionRetweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam Long tweetId) {
 		twitterApi.get().retweet(tweetId);
 		return new ResponseEntity<String>(HttpStatus.OK);		
 	}
@@ -109,8 +112,8 @@ public class EventsController {
 	// for web browser (HTML) clients
 	
 	@RequestMapping(method=RequestMethod.GET, headers="Accept=text/html")
-	public String upcomingEventsView(Model model) {
-		model.addAttribute(eventRepository.findUpcomingEvents());
+	public String upcomingEventsView(Model model, DateTimeZone timeZone) {
+		model.addAttribute(eventRepository.findUpcomingEvents(new DateTime(timeZone)));
 		return "events/list";
 	}
 	

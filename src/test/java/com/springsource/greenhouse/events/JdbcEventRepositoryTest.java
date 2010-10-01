@@ -52,7 +52,7 @@ public class JdbcEventRepositoryTest {
 	
 	@Test
 	public void findEventSessionSearchString() {
-		assertEquals("#s2gx #mvc", eventRepository.findSessionSearchString(1L, (short)1));
+		assertEquals("#s2gx #mvc", eventRepository.findSessionSearchString(1L, 1));
 	}
 
 	@Test
@@ -73,15 +73,15 @@ public class JdbcEventRepositoryTest {
 	
 	@Test
 	public void toggleFavorite() {
-		assertFalse(eventRepository.toggleFavorite(1L, (short)3, 1L));
-		assertTrue(eventRepository.toggleFavorite(1L, (short)3, 1L));
+		assertFalse(eventRepository.toggleFavorite(1L, 3, 1L));
+		assertTrue(eventRepository.toggleFavorite(1L, 3, 1L));
 	}
 	
 	@Test
 	public void rate() {
-		eventRepository.rate(1L, (short)3, 1L, (short)5, "Rocked");
-		eventRepository.rate(1L, (short)3, 2L, (short)4, "Rocked");
-		eventRepository.rate(1L, (short)3, 3L, (short)2, "Rocked");
+		eventRepository.rate(1L, 3, 1L, (short)5, "Rocked");
+		eventRepository.rate(1L, 3, 2L, (short)4, "Rocked");
+		eventRepository.rate(1L, 3, 3L, (short)2, "Rocked");
 		assertEquals(new Float(3.5), eventRepository.findEventFavorites(1L, 1L).get(0).getRating());
 	}
 

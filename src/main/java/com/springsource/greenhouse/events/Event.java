@@ -12,6 +12,8 @@ public class Event {
 
 	private DateTime endTime;
 
+	private String slug;
+	
 	private String description;
 
 	private String hashtag;
@@ -20,11 +22,12 @@ public class Event {
 	
 	private String groupSlug;
 	
-	public Event(Long id, String title, DateTime startTime, DateTime endTime, String description, String hashtag, String groupName, String groupSlug) {
+	public Event(Long id, String title, DateTime startTime, DateTime endTime, String slug, String description, String hashtag, String groupName, String groupSlug) {
 		this.id = id;
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.slug = slug;
 		this.description = description;
 		this.hashtag = hashtag;
 		this.groupName = groupName;
@@ -47,6 +50,10 @@ public class Event {
 		return endTime;
 	}
 
+	public String getSlug() {
+		return slug;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -63,6 +70,8 @@ public class Event {
 		return groupSlug;
 	}
 
+	// iphone 1.0.0 compatibility
+	
 	// TODO here for compatibility reasons; remove when iphone app is upgraded
 	public String getLocation() {
 		return "Chicago, IL";

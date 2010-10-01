@@ -2,17 +2,18 @@ package com.springsource.greenhouse.events;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 public interface EventRepository {
 
-	List<Event> findUpcomingEvents();
+	List<Event> findUpcomingEvents(DateTime clientTime);
 
 	Event findEventBySlug(String group, Integer year, Integer month, String slug);
 
 	String findEventSearchString(Long eventId);
 
-	String findSessionSearchString(Long eventId, Short sessionId);
+	String findSessionSearchString(Long eventId, Integer sessionId);
 
 	List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long attendeeId);
 
@@ -20,8 +21,8 @@ public interface EventRepository {
 	
 	List<EventSession> findAttendeeFavorites(Long eventId, Long attendeeId);
 
-	boolean toggleFavorite(Long eventId, Short sessionId, Long attendeeId);
+	boolean toggleFavorite(Long eventId, Integer sessionId, Long attendeeId);
 
-	void rate(Long eventId, Short sessionId, Long attendeeId, Short value, String comment);
+	void rate(Long eventId, Integer sessionId, Long attendeeId, Short value, String comment);
 	
 }

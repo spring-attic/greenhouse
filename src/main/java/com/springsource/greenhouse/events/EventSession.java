@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 
 public class EventSession {
 	
-	private Short number;
+	private Integer id;
 	
 	private String title;
 	
@@ -25,8 +25,8 @@ public class EventSession {
 
 	private Boolean favorite;
 	
-	public EventSession(Short number, String title, DateTime startTime, DateTime endTime, String description, String hashtag, Float rating, Boolean favorite) {
-		this.number = number;
+	public EventSession(Integer id, String title, DateTime startTime, DateTime endTime, String description, String hashtag, Float rating, Boolean favorite) {
+		this.id = id;
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -36,8 +36,8 @@ public class EventSession {
 		this.favorite = favorite;
 	}
 
-	public Short getNumber() {
-		return number;
+	public Integer getId() {
+		return id;
 	}
 
 	public String getTitle() {
@@ -77,6 +77,13 @@ public class EventSession {
 			leaders = new LinkedHashSet<EventSessionLeader>();
 		}
 		leaders.add(leader);
+	}
+	
+	// iphone 1.0.0 compatibility
+
+	// TODO here for compatibility reasons; remove when iphone app is upgraded
+	public Short getNumber() {
+		return getId().shortValue();
 	}
 
 }

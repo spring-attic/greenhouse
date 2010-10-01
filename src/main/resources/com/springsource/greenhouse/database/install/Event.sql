@@ -39,7 +39,7 @@ create table EventTrack (event bigint,
 					foreign key (chair) references Member(id));
 
 create table EventSession (event bigint,
-					id smallint auto_increment,
+					id int not null,
 					startTime timestamp not null,
 					endTime timestamp not null,
 					title varchar not null unique,
