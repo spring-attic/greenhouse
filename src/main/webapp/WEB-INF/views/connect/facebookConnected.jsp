@@ -8,7 +8,7 @@
 </c:if>
 
 <form id="disconnect" method="post">
-	<div class="header">
+	<div class="formInfo">
 		<p>
 			Your Greenhouse account is connected to your Facebook account.
 			Click the button if you wish to disconnect.
