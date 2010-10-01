@@ -17,7 +17,5 @@
 	<jsp:include page="appFormFragment.jsp" />
 	
 	<input type="hidden" name="_method" value="PUT" />
-	<p>
-		<button type="submit">Save</button>
-	</p>
+	<p><button type="submit">Save</button></p>
 </form:form>
