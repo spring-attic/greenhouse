@@ -2,7 +2,7 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:greenhouse="http://www.springsource.com/schema/greenhouse"	
+	xmlns:gh="http://www.springsource.com/schema/greenhouse"	
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springsource.com/schema/greenhouse http://www.springsource.com/schema/greenhouse/greenhouse-1.0.xsd">
@@ -40,28 +40,28 @@
 	
 	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
 	
-	<greenhouse:environment-bean id="passwordEncoder">
-		<greenhouse:when environment="embedded">
+	<gh:environment-bean id="passwordEncoder">
+		<gh:when environment="embedded">
 			<beans:bean class="org.springframework.security.encrypt.NoOpPasswordEncoder" factory-method="getInstance" />
-		</greenhouse:when>
-		<greenhouse:otherwise>
+		</gh:when>
+		<gh:otherwise>
 			<beans:bean class="org.springframework.security.encrypt.StandardPasswordEncoder">
 				<beans:constructor-arg value="${security.encryptPassword}" />
 			</beans:bean>
-		</greenhouse:otherwise>
-	</greenhouse:environment-bean>
+		</gh:otherwise>
+	</gh:environment-bean>
 
-	<greenhouse:environment-bean id="stringEncryptor">
-		<greenhouse:when environment="embedded">
+	<gh:environment-bean id="stringEncryptor">
+		<gh:when environment="embedded">
 			<beans:bean class="org.springframework.security.encrypt.NoOpStringEncryptor" factory-method="getInstance" />
-		</greenhouse:when>
-		<greenhouse:otherwise>
+		</gh:when>
+		<gh:otherwise>
 			<beans:bean class="org.springframework.security.encrypt.SearchableStringEncryptor">
 				<beans:constructor-arg value="${security.encryptPassword}" />
 				<beans:constructor-arg value="${security.encryptSalt}" />
 			</beans:bean>
-		</greenhouse:otherwise>
-	</greenhouse:environment-bean>
+		</gh:otherwise>
+	</gh:environment-bean>
 		
 	<beans:import resource="security-oauth-provider.xml" />
 	
