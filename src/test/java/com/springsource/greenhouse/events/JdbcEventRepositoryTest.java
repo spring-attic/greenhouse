@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +68,14 @@ public class JdbcEventRepositoryTest {
 	}
 
 	@Test
+	public void findSessionsOnDay() {
+		List<EventSession> sessions = eventRepository.findSessionsOnDay(1L, new LocalDate(2010, 10, 21), 1L);
+		assertEquals(2, sessions.size());
+		assertSocial(sessions.get(0), true);
+		assertMobile(sessions.get(1), true);
+	}
+	
+	@Test
 	public void findEventFavorites() {
 		List<EventSession> favorites = eventRepository.findEventFavorites(1L, 2L);
 		assertEquals(2, favorites.size());
@@ -100,16 +109,25 @@ public class JdbcEventRepositoryTest {
 	
 	private void assertMobile(EventSession session, boolean favorite) {
 		assertEquals("Choices in Mobile Application Development", session.getTitle());
+		assertEquals(new DateTime(2010, 10, 21, 19, 45, 0, 0, DateTimeZone.UTC), session.getStartTime());
+		assertEquals(new DateTime(2010, 10, 21, 21, 15, 0, 0, DateTimeZone.UTC), session.getEndTime());
 		assertEquals(2, session.getLeaders().size());
 		assertEquals("Roy", session.getLeaders().get(0).getFirstName());
-		assertEquals("Keith", session.getLeaders().get(1).getFirstName());
+		assertEquals("Keith", session.getLeaders().get(1).getFirstName());		
+		assertEquals(new Float(0), session.getRating());
 		assertEquals(favorite, session.isFavorite());
+		assertEquals("Junior Ballroom B", session.getRoom().getLabel());
 	}
 
 	private void assertSocial(EventSession session, boolean favorite) {
 		assertEquals("Developing Social-Ready Web Applications", session.getTitle());
+		assertEquals(new DateTime(2010, 10, 21, 17, 45, 0, 0, DateTimeZone.UTC), session.getStartTime());
+		assertEquals(new DateTime(2010, 10, 21, 19, 15, 0, 0, DateTimeZone.UTC), session.getEndTime());		
 		assertEquals(1, session.getLeaders().size());
 		assertEquals("Craig", session.getLeaders().get(0).getFirstName());
-		assertEquals(favorite, session.isFavorite());	
+		assertEquals(favorite, session.isFavorite());
+		assertEquals(new Float(0), session.getRating());
+		assertEquals(favorite, session.isFavorite());
+		assertEquals("Junior Ballroom B", session.getRoom().getLabel());
 	}
 }

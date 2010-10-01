@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.springsource.greenhouse.database.MultipleRowMapper;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
+import com.springsource.greenhouse.utils.SubResourceReference;
 
 @Repository
 public class JdbcEventRepository implements EventRepository {
@@ -112,7 +113,7 @@ public class JdbcEventRepository implements EventRepository {
 				}
 				protected EventSession mapRoot(Integer id, ResultSet rs) throws SQLException {
 					return new EventSession(id, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
-							rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), rs.getBoolean("favorite"));
+							rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), new SubResourceReference<Long, Integer>(rs.getLong("venue"), rs.getInt("room"), rs.getString("roomName")), rs.getBoolean("favorite"));
 				}
 				protected void addChild(EventSession session, ResultSet rs) throws SQLException {
 					session.addLeader(new EventSessionLeader(rs.getString("firstName"), rs.getString("lastName")));					
@@ -131,22 +132,25 @@ public class JdbcEventRepository implements EventRepository {
 
 	private static final String SELECT_EVENT_BY_SLUG = SELECT_EVENT + " where g.slug = ? and extract(year from e.startTime) = ? and extract(month from e.startTime) = ? and e.slug = ?";
 
-	private static final String SELECT_SESSIONS_ON_DAY =
-		"select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName from EventSession s " +
-		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +	
+	private static final String SELECT_FROM_EVENT_SESSION = "select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, s.venue, s.room, r.name as roomName, (f.attendee is not null) as favorite, m.firstName, m.lastName from EventSession s ";
+	
+	private static final String SELECT_SESSIONS_ON_DAY = SELECT_FROM_EVENT_SESSION +
+		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
 		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
 		"inner join Member m on l.leader = m.id where s.event = ? and s.startTime >= ? and s.endTime <= ? " +
-		"order by s.startTime";
+		"order by s.startTime, l.rank";
 
-	private static final String SELECT_EVENT_FAVORITES = "select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (f.attendee is not null) as favorite, m.firstName, m.lastName, top.favoriteCount from EventSession s " + 
+	private static final String SELECT_EVENT_FAVORITES = SELECT_FROM_EVENT_SESSION +
 		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.id = top.session " +
+		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
 		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
 		"inner join Member m on l.leader = m.id where s.event = ? " +
 		"order by top.favoriteCount desc, l.rank";
 
-	private static final String SELECT_ATTENDEE_FAVORITES =
-		"select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, (true) as favorite, m.firstName, m.lastName from EventSession s " +
+	private static final String SELECT_ATTENDEE_FAVORITES = SELECT_FROM_EVENT_SESSION +
+		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"inner join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +	
 		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
 		"inner join Member m on l.leader = m.id where s.event = ? " +

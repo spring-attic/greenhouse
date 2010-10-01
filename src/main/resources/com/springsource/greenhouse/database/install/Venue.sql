@@ -9,7 +9,7 @@ create table Venue (id identity,
 					foreign key (createdBy) references Member(id));
 					
 create table VenueRoom (venue bigint,
-					id smallint auto_increment,
+					id smallint not null,
 					name varchar not null,
 					capacity int not null,
 					locationHint varchar not null,

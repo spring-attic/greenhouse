@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var basePath = location.protocol + "//" + location.host + greenhouse.contextPath;
+	var basePath = location.protocol + "//" + location.host + application.contextPath;
 	
 	function activityNotificationHandler(response) {
 		var activityItems = $.parseJSON(response.responseBody);

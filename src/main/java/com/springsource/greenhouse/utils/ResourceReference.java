@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.utils;
 
-public final class ResourceReference<T> {
+public class ResourceReference<T> {
 	
 	private final T id;
 	
