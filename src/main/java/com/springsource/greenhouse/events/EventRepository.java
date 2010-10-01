@@ -2,12 +2,11 @@ package com.springsource.greenhouse.events;
 
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 public interface EventRepository {
 
-	List<Event> findUpcomingEvents(DateTime clientTime);
+	List<Event> findUpcomingEvents(Long clientTime);
 
 	Event findEventBySlug(String group, Integer year, Integer month, String slug);
 

@@ -5,9 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Iterator;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.utils.Location;
 
 public class JdbcEventRepositoryTest {
 
@@ -40,9 +42,18 @@ public class JdbcEventRepositoryTest {
 
 	@Test
 	public void findEventBySlug() {
-		Event event = eventRepository.findEventBySlug("springone2gx", 2010, 10, "chicago");
+		Event event = eventRepository.findEventBySlug("s2gx", 2010, 10, "chicago");
 		assertNotNull(event);
 		assertEquals("SpringOne2gx", event.getTitle());
+		assertEquals("SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.", event.getDescription());
+		assertEquals(new DateTime(2010, 10, 19, 17, 0, 0, 0, event.getTimeZone()), event.getStartTime().withZone(event.getTimeZone()));
+		assertEquals(new DateTime(2010, 10, 22, 17, 0, 0, 0, event.getTimeZone()), event.getEndTime().withZone(event.getTimeZone()));	
+		assertEquals("s2gx", event.getGroup().getId());
+		assertEquals("SpringOne2gx", event.getGroup().getLabel());
+		assertEquals("Westin Lombard Yorktown Center", event.getVenues().iterator().next().getName());
+		assertEquals("70 Yorktown Center Lombard, IL 60148", event.getVenues().iterator().next().getPostalAddress());
+		assertEquals(new Location(41.8751108905486, -88.0184300761646), event.getVenues().iterator().next().getLocation());
+		assertEquals("adjacent to Shopping Center", event.getVenues().iterator().next().getLocationHint());
 	}
 	
 	@Test
@@ -90,18 +101,15 @@ public class JdbcEventRepositoryTest {
 	private void assertMobile(EventSession session, boolean favorite) {
 		assertEquals("Choices in Mobile Application Development", session.getTitle());
 		assertEquals(2, session.getLeaders().size());
-		Iterator<EventSessionLeader> it = session.getLeaders().iterator();
-		EventSessionLeader leader = it.next();
-		assertEquals("Roy", leader.getFirstName());
-		leader = it.next();
-		assertEquals("Keith", leader.getFirstName());
+		assertEquals("Roy", session.getLeaders().get(0).getFirstName());
+		assertEquals("Keith", session.getLeaders().get(1).getFirstName());
 		assertEquals(favorite, session.isFavorite());
 	}
 
 	private void assertSocial(EventSession session, boolean favorite) {
 		assertEquals("Developing Social-Ready Web Applications", session.getTitle());
 		assertEquals(1, session.getLeaders().size());
-		assertEquals("Craig", session.getLeaders().iterator().next().getFirstName());
+		assertEquals("Craig", session.getLeaders().get(0).getFirstName());
 		assertEquals(favorite, session.isFavorite());	
 	}
 }

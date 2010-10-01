@@ -18,10 +18,12 @@ insert into AccountProvider (name, displayName, apiKey, secret, requestTokenUrl,
 insert into MemberGroup (name, slug, description,hashtag, leader) values ('SpringOne2gx', 's2gx', 'The premier conference series for Spring technologies', '#s2gx', 1);
 insert into MemberGroup (name, slug, description, hashtag, leader) values ('Atlanta Spring Users', 'atl', 'The Spring developers in the Greater Atlanta area', '#atlspring', 1);
 
-insert into Event (title, timezone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2010-10-19 22:00:00Z', '2010-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
-insert into Event (title, timezone, startTime, endTime, slug, description, memberGroup) values ('Spring Integration 2', 'America/New York', '2010-11-23 22:30:00Z', '2010-11-23 00:00:00Z', 'int', 'Come learn the latest the Spring Integration project has to offer', 2);
+insert into Venue (name, postalAddress, latitude, longitude, locationHint, createdBy) values ('Westin Lombard Yorktown Center', '70 Yorktown Center Lombard, IL 60148', 41.8751108905486, -88.0184300761646, 'adjacent to Shopping Center', 1);
 
 -- SpringOne Chicago 2010
+
+insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2010-10-19 22:00:00Z', '2010-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
+insert into EventVenue (event, venue) values (1, 1);
 
 insert into EventTrack (event, code, name, description, chair) values (1, 'spr', 'Essential Spring', 'Spring techniques and technologies applicable to most classes of applications', 2);
 insert into EventTrack (event, code, name, description, chair) values (1, 'web', 'Web Application Development', 'What you need to know to build rich web applications', 1);
@@ -44,8 +46,3 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 	'#mobile', 'web');
 insert into EventSessionLeader (event, session, leader, rank) values (1, 4, 3, 1);
 insert into EventSessionLeader (event, session, leader, rank) values (1, 4, 4, 2);
-
--- Atlanta Spring Users Group September 2010
-
-insert into EventSession (event, id, title, startTime, endTime, description) values (2, 1, 'Spring Integration 2', '2010-09-21 22:30:00Z', '2010-09-22 00:00:00Z', 'Spring Integration 2 inside and out.');
-insert into EventSessionLeader (event, session, leader) values (2, 1, 5);

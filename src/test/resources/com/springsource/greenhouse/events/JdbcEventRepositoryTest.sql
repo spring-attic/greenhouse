@@ -2,9 +2,12 @@ insert into Member (firstName, lastName, email, password, username, gender, birt
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Craig' , 'Walls', 'cwalls@vmware.com', 'plano', 'habuma', 'M', '1977-12-01');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'atlanta', 'rclarkson', 'M', '1977-12-01');
 
-insert into MemberGroup (name, slug, description, hashtag, leader) values ('SpringOne2gx', 'springone2gx', 'The premier Spring Framework event', '#s2gx', 1);
+insert into MemberGroup (name, slug, description, hashtag, leader) values ('SpringOne2gx', 's2gx', 'The premier Spring Framework event', '#s2gx', 1);
 
-insert into Event (title, timezone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2010-10-19 22:00:00Z', '2010-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
+insert into Venue (name, postalAddress, latitude, longitude, locationHint, createdBy) values ('Westin Lombard Yorktown Center', '70 Yorktown Center Lombard, IL 60148', 41.8751108905486, -88.0184300761646, 'adjacent to Shopping Center', 1);
+
+insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2010-10-19 22:00:00Z', '2010-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
+insert into EventVenue (event, venue) values (1, 1);
 
 -- SpringOne Chicago 2010
 

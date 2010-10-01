@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.action.Location;
+import com.springsource.greenhouse.utils.Location;
 
 @Controller
 @RequestMapping("/events")
@@ -42,8 +42,8 @@ public class EventsController {
 	// for web service (JSON) clients
 	
 	@RequestMapping(method=RequestMethod.GET, headers="Accept=application/json") 
-	public @ResponseBody List<Event> upcomingEvents(@RequestParam(value="after", required=false) @DateTimeFormat(iso=ISO.DATE_TIME) DateTime dateTime, DateTimeZone currentTimeZone) {
-		return eventRepository.findUpcomingEvents(dateTime!= null ? dateTime : new DateTime(currentTimeZone));
+	public @ResponseBody List<Event> upcomingEvents(@RequestParam(value="after", required=false) @DateTimeFormat(iso=ISO.DATE_TIME) Long afterMillis) {
+		return eventRepository.findUpcomingEvents(afterMillis);
 	}
 
 	@RequestMapping(value="/{eventId}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -113,7 +113,7 @@ public class EventsController {
 	
 	@RequestMapping(method=RequestMethod.GET, headers="Accept=text/html")
 	public String upcomingEventsView(Model model, DateTimeZone timeZone) {
-		model.addAttribute(eventRepository.findUpcomingEvents(new DateTime(timeZone)));
+		model.addAttribute(eventRepository.findUpcomingEvents(new DateTime(timeZone).getMillis()));
 		return "events/list";
 	}
 	

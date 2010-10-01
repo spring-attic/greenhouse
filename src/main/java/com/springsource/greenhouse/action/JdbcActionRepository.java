@@ -7,11 +7,11 @@ import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
+import com.springsource.greenhouse.utils.Location;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-
 
 public class JdbcActionRepository implements ActionRepository {
 
@@ -26,8 +26,8 @@ public class JdbcActionRepository implements ActionRepository {
 	public SimpleAction createSimpleAction(String type, Account account) {
 		Location location = resolveUserLocation(account.getId());
 		DateTime performTime = new DateTime(DateTimeZone.UTC);
-		Float latitude = location != null ? location.getLatitude() : null;
-		Float longitude = location != null ? location.getLongitude() : null;
+		Double latitude = location != null ? location.getLatitude() : null;
+		Double longitude = location != null ? location.getLongitude() : null;
 		jdbcTemplate.update("insert into MemberAction (actionType, performTime, latitude, longitude, member) values (?, ?, ?, ?, ?)", type, performTime.toDate(), latitude, longitude, account.getId());
 		Long id = jdbcTemplate.queryForLong("call identity()");
 		return new SimpleAction(type, id, performTime, account, location);

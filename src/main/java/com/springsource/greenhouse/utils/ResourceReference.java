@@ -1,10 +1,10 @@
 package com.springsource.greenhouse.utils;
 
-public class ResourceReference<T> {
+public final class ResourceReference<T> {
 	
-	private T id;
+	private final T id;
 	
-	private String label;
+	private final String label;
 
 	public ResourceReference(T id, String label) {
 		this.id = id;

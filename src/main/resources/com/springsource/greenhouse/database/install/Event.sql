@@ -14,7 +14,7 @@ create table SessionDeveloper (session bigint,
 					
 create table Event (id identity,
 					title varchar not null,
-					timezone varchar not null,
+					timeZone varchar not null,
 					startTime timestamp not null,
 					endTime timestamp not null,
 					slug varchar not null,

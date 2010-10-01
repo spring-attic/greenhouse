@@ -4,9 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
 <div id="groupInfo">
-	<p>
-		<c:out value="${group.name}" />
-	</p>
+	<p><c:out value="${group.name}" /></p>
 	<p>
 		<c:out value="${group.description}" escapeXml="true" />
 	</p>

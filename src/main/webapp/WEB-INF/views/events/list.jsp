@@ -15,10 +15,9 @@
 			<s:param name="slug" value="${event.slug}" />
 		</s:url>
 		<dt class="event">
-			<a href="${eventUrl}"><c:out value="${event.title}" escapeXml="true"/></a> <br/>
+			<a href="${eventUrl}"><c:out value="${event.title}" /></a> <br/>
 			<span class="locationAndDate">
-				<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" /> - 
-				<c:out value="${event.location}" escapeXml="true"/>
+				<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /> at <c:out value="${event.location}" />
 			</span>
 		</dt>
 		<dd class="event">

@@ -1,7 +1,8 @@
 package com.springsource.greenhouse.events;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
@@ -19,7 +20,7 @@ public class EventSession {
 
 	private String hashtag;
 	
-	private Set<EventSessionLeader> leaders;
+	private List<EventSessionLeader> leaders;
 	
 	private Float rating;
 
@@ -68,13 +69,13 @@ public class EventSession {
 		return favorite;
 	}
 	
-	public Set<EventSessionLeader> getLeaders() {
-		return leaders;
+	public List<EventSessionLeader> getLeaders() {
+		return Collections.unmodifiableList(leaders);
 	}
 	
 	public void addLeader(EventSessionLeader leader) {
 		if (leaders == null) {
-			leaders = new LinkedHashSet<EventSessionLeader>();
+			leaders = new LinkedList<EventSessionLeader>();
 		}
 		leaders.add(leader);
 	}

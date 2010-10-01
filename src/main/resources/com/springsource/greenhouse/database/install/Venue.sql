@@ -1,9 +1,9 @@
 create table Venue (id identity,
 					name varchar not null,
 					postalAddress varchar not null,
+					latitude double not null,
+					longitude double not null,
 					locationHint varchar not null,
-					latitude real not null,
-					longitude real not null,					
 					createdBy bigint not null,
 					primary key (id),
 					foreign key (createdBy) references Member(id));
