@@ -25,6 +25,10 @@ public class EncryptedStringGenerator {
 		String tripItSecret = "04c5b2eac08531cc238008fbb61e5de09eb6d906";
 		System.out.println(encryptor.encrypt(tripItApiKey));
 		System.out.println(encryptor.encrypt(tripItSecret));
-
+		
+		String iphoneAppApiKey = "786d1ba0d9f044f6";
+		String iphoneAppSecret = "0db3516827a4a925";
+		System.out.println(encryptor.encrypt(iphoneAppApiKey));
+		System.out.println(encryptor.encrypt(iphoneAppSecret));
 	}
 }
