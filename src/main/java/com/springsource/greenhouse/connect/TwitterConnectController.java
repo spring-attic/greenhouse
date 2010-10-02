@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.social.twitter.TwitterOperations;
@@ -25,11 +26,14 @@ public class TwitterConnectController {
 	
 	private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
 	
-	private AccountProvider<TwitterOperations> accountProvider;
+	private final AccountProvider<TwitterOperations> accountProvider;
 
+	private final String callbackUrl;
+	
 	@Inject
-	public TwitterConnectController(@Named("twitterAccountProvider") AccountProvider<TwitterOperations> accountProvider) {
+	public TwitterConnectController(@Named("twitterAccountProvider") AccountProvider<TwitterOperations> accountProvider, @Value("${application.secureUrl}") String applicationUrl) {
 		this.accountProvider = accountProvider;
+		this.callbackUrl = applicationUrl + "/connect/twitter";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -43,7 +47,7 @@ public class TwitterConnectController {
 
 	@RequestMapping(method=RequestMethod.POST)
 	public String connect(@RequestParam(required=false, defaultValue="false") boolean postTweet, WebRequest request) {
-		OAuthToken requestToken = accountProvider.getRequestToken();
+		OAuthToken requestToken = accountProvider.getRequestToken(callbackUrl);
 		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestTokenHolder(requestToken, postTweet), WebRequest.SCOPE_SESSION);
 		return "redirect:" + accountProvider.getAuthorizeUrl(requestToken.getValue());
 	}

@@ -16,18 +16,15 @@ class AccountProviderParameters {
 	
 	private final UriTemplate authorizeUrl;
 	
-	private final String callbackUrl;
-	
 	private final String accessTokenUrl;
 
-	public AccountProviderParameters(String name, String apiKey, String secret, Long appId, String requestTokenUrl, String authorizeUrl, String callbackUrl, String accessTokenUrl) {
+	public AccountProviderParameters(String name, String apiKey, String secret, Long appId, String requestTokenUrl, String authorizeUrl, String accessTokenUrl) {
 		this.name = name;
 		this.apiKey = apiKey;
 		this.secret = secret;
 		this.appId = appId;
 		this.requestTokenUrl = requestTokenUrl;
 		this.authorizeUrl = authorizeUrl != null ? new UriTemplate(authorizeUrl) : null;
-		this.callbackUrl = callbackUrl;
 		this.accessTokenUrl = accessTokenUrl;
 	}
 
@@ -53,10 +50,6 @@ class AccountProviderParameters {
 
 	public UriTemplate getAuthorizeUrl() {
 		return authorizeUrl;
-	}
-
-	public String getCallbackUrl() {
-		return callbackUrl;
 	}
 
 	public String getAccessTokenUrl() {

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.linkedin.LinkedInOperations;
 import org.springframework.stereotype.Controller;
@@ -21,14 +22,17 @@ import com.springsource.greenhouse.account.Account;
 @Controller
 @RequestMapping("/connect/linkedin")
 public class LinkedInConnectController {
+	
 	private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
 
-	private AccountProvider<LinkedInOperations> accountProvider;
+	private final AccountProvider<LinkedInOperations> accountProvider;
 
+	private final String callbackUrl;
+	
 	@Inject
-	public LinkedInConnectController(
-			@Named("linkedInAccountProvider") AccountProvider<LinkedInOperations> accountProvider) {
+	public LinkedInConnectController(@Named("linkedInAccountProvider") AccountProvider<LinkedInOperations> accountProvider, @Value("${application.secureUrl}") String applicationUrl) {
 		this.accountProvider = accountProvider;
+		this.callbackUrl = applicationUrl + "/connect/linkedin";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -42,18 +46,15 @@ public class LinkedInConnectController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String connect(WebRequest request) {
-		OAuthToken requestToken = accountProvider.getRequestToken();
-		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestTokenHolder(requestToken),
-				WebRequest.SCOPE_SESSION);
+		OAuthToken requestToken = accountProvider.getRequestToken(callbackUrl);		
+		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestTokenHolder(requestToken), WebRequest.SCOPE_SESSION);
 		return "redirect:" + accountProvider.getAuthorizeUrl(requestToken.getValue());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, params = "oauth_token")
-	public String authorizeCallback(@RequestParam("oauth_token") String token,
-			@RequestParam("oauth_verifier") String verifier, Account account, WebRequest request) {
+	public String authorizeCallback(@RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier, Account account, WebRequest request) {
 		@SuppressWarnings("unchecked")
-		Map<String, Object> requestTokenHolder = (Map<String, Object>) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE,
-				WebRequest.SCOPE_SESSION);
+		Map<String, Object> requestTokenHolder = (Map<String, Object>) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		if (requestTokenHolder == null) {
 			return "connect/linkedInConnect";
 		}
