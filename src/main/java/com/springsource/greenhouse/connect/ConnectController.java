@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.core.SocialOperations;
 import org.springframework.stereotype.Controller;
@@ -23,10 +24,14 @@ import com.springsource.greenhouse.account.Account;
 public class ConnectController {
 	private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
 	private final AccountProviderFactory providerFactory;
+	private final String baseCallbackUrl;
 
+	
 	@Inject
-	public ConnectController(AccountProviderFactory providerFactory) {
+	public ConnectController(AccountProviderFactory providerFactory,
+			@Value("${application.secureUrl}") String applicationUrl) {
 		this.providerFactory = providerFactory;
+		this.baseCallbackUrl = applicationUrl + "/connect/";
 	}
 
 	@RequestMapping(value = "/{provider}", method = RequestMethod.GET)
@@ -41,7 +46,7 @@ public class ConnectController {
 	@RequestMapping(value = "/{provider}", method = RequestMethod.POST)
 	public String connect(@PathVariable("provider") String provider, WebRequest request) {
 		AccountProvider<?> accountProvider = getAccountProvider(provider);
-		OAuthToken requestToken = accountProvider.getRequestToken();
+		OAuthToken requestToken = accountProvider.getRequestToken(baseCallbackUrl + provider);
 		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestTokenHolder(requestToken),
 				WebRequest.SCOPE_SESSION);
 		return "redirect:" + accountProvider.getAuthorizeUrl(requestToken.getValue());

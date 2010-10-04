@@ -29,8 +29,6 @@ insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 6, '
 insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 7, 'Hary Cary Balroom D', 200, 'first floor');
 insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 8, 'Magnolia', 50, 'first floor');
 insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 9, 'Cypress', 50, 'first floor');
->>>>>>> 228af53d8db4ea1b58282f203bd404a3d011b7a8
-
 -- SpringOne Chicago 2010
 
 insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2010-10-19 22:00:00Z', '2010-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
