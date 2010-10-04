@@ -17,16 +17,14 @@
   		</div>
  	 	</c:if>
 	</div>
-	<label for="login">Username or Email</label>
-	<input id="login" name="j_username" type="text" size="25" <c:if test="${currentDevice.apple}">autocorrect="off" autocapitalize="off"</c:if> <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />
-	<label for="password">Password</label>
-	<input id="password" name="j_password" type="password" size="25" />
-	<p>
-		<button type="submit">Sign In</button>
-	</p>
-	<p>
-		<a href="<c:url value="/reset" />">Forgot your password?</a>
-	</p>
+	<fieldset>
+		<label for="login">Username or Email</label>
+		<input id="login" name="j_username" type="text" size="25" <c:if test="${currentDevice.apple}">autocorrect="off" autocapitalize="off"</c:if> <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />
+		<label for="password">Password</label>
+		<input id="password" name="j_password" type="password" size="25" />	
+	</fieldset>
+	<p><button type="submit">Sign In</button></p>
+	<p><a href="<c:url value="/reset" />">Forgot your password?</a></p>
 </form>
 
 <c:if test="${!currentDevice.mobileBrowser}">

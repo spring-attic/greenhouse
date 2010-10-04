@@ -6,24 +6,22 @@ import org.joda.time.LocalDate;
 
 public interface EventRepository {
 
-	List<Event> findUpcomingEvents();
+	List<Event> findUpcomingEvents(Long clientTime);
 
-	Event findEventByName(String group, Integer year, Integer month, String name);
+	Event findEventBySlug(String group, Integer year, Integer month, String slug);
 
 	String findEventSearchString(Long eventId);
 
-	String findSessionSearchString(Long eventId, Short sessionNumber);
+	String findSessionSearchString(Long eventId, Integer sessionId);
 
-	List<EventSession> findTodaysSessions(Long eventId, Long attendeeId);
-	
 	List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long attendeeId);
 
-	List<EventSession> findFavorites(Long eventId, Long attendeeId);
+	List<EventSession> findEventFavorites(Long eventId, Long attendeeId);
 	
 	List<EventSession> findAttendeeFavorites(Long eventId, Long attendeeId);
 
-	boolean toggleFavorite(Long eventId, Short sessionNumber, Long attendeeId);
+	boolean toggleFavorite(Long eventId, Integer sessionId, Long attendeeId);
 
-	void rate(Long eventId, Short sessionNumber, Long attendeeId, Short value, String comment);
+	void rate(Long eventId, Integer sessionId, Long attendeeId, Short value, String comment);
 	
 }

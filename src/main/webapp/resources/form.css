@@ -19,6 +19,11 @@ form fieldset {
 	margin: 0 0 0.5em 0;
 }
 
+div .checkbox {
+	padding: 0.7em;
+	margin: 0 0 0.5em 0;
+}
+
 form label {
 	font-weight: bold;
 }

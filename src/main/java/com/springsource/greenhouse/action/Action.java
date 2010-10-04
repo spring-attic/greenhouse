@@ -3,6 +3,7 @@ package com.springsource.greenhouse.action;
 import org.joda.time.DateTime;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.utils.Location;
 
 public abstract class Action {
 	

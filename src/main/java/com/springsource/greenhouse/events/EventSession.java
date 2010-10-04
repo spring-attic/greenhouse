@@ -1,43 +1,49 @@
 package com.springsource.greenhouse.events;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
+import com.springsource.greenhouse.utils.SubResourceReference;
+
 public class EventSession {
 	
-	private Short number;
+	private final Integer id;
 	
-	private String title;
+	private final String title;
 	
-	private DateTime startTime;
+	private final DateTime startTime;
 	
-	private DateTime endTime;
+	private final DateTime endTime;
 
-	private String description;
+	private final String description;
 
-	private String hashtag;
+	private final String hashtag;
 	
-	private Set<EventSessionLeader> leaders;
-	
-	private Float rating;
+	private final Float rating;
 
-	private Boolean favorite;
+	private final SubResourceReference<Long, Integer> room;
 	
-	public EventSession(Short number, String title, DateTime startTime, DateTime endTime, String description, String hashtag, Float rating, Boolean favorite) {
-		this.number = number;
+	private final Boolean favorite;
+
+	private List<EventSessionLeader> leaders;
+	
+	public EventSession(Integer id, String title, DateTime startTime, DateTime endTime, String description, String hashtag, Float rating, SubResourceReference<Long, Integer> room, Boolean favorite) {
+		this.id = id;
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
 		this.hashtag = hashtag;
 		this.rating = rating;
-		this.favorite = favorite;
+		this.room = room;
+		this.favorite = favorite;		
 	}
 
-	public Short getNumber() {
-		return number;
+	public Integer getId() {
+		return id;
 	}
 
 	public String getTitle() {
@@ -64,19 +70,30 @@ public class EventSession {
 		return rating;
 	}
 
+	public SubResourceReference<Long, Integer> getRoom() {
+		return room;
+	}
+
 	public boolean isFavorite() {
 		return favorite;
 	}
 	
-	public Set<EventSessionLeader> getLeaders() {
-		return leaders;
+	public List<EventSessionLeader> getLeaders() {
+		return Collections.unmodifiableList(leaders);
 	}
 	
 	public void addLeader(EventSessionLeader leader) {
 		if (leaders == null) {
-			leaders = new LinkedHashSet<EventSessionLeader>();
+			leaders = new LinkedList<EventSessionLeader>();
 		}
 		leaders.add(leader);
+	}
+	
+	// iphone 1.0.0 compatibility
+
+	// TODO here for compatibility reasons; remove when iphone app is upgraded
+	public Short getNumber() {
+		return getId().shortValue();
 	}
 
 }

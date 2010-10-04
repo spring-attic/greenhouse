@@ -1,40 +1,46 @@
 package com.springsource.greenhouse.events;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
+import com.springsource.greenhouse.utils.ResourceReference;
 
 public class Event {
 
-	private Long id;
+	private final Long id;
 
-	private String title;
+	private final String title;
 
-	private DateTime startTime;
-
-	private DateTime endTime;
-
-	private String location;
-
-	private String description;
-
-	private String name;
+	private final DateTimeZone timeZone;
 	
-	private String hashtag;
+	private final DateTime startTime;
 
-	private String groupName;
+	private final DateTime endTime;
+
+	private final String slug;
 	
-	private String groupProfileKey;
+	private final String description;
+
+	private final String hashtag;
+
+	private final ResourceReference<String> group;
 	
-	public Event(Long id, String title, DateTime startTime, DateTime endTime, String location, String description, String name, String hashtag, String groupName, String groupProfileKey) {
+	private Set<Venue> venues;
+	
+	public Event(Long id, String title, DateTimeZone timeZone, DateTime startTime, DateTime endTime, String slug, String description, String hashtag, ResourceReference<String> group) {
 		this.id = id;
 		this.title = title;
+		this.timeZone = timeZone;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.location = location;
+		this.slug = slug;
 		this.description = description;
-		this.name = name;
 		this.hashtag = hashtag;
-		this.groupName = groupName;
-		this.groupProfileKey = groupProfileKey;
+		this.group = group;
 	}
 
 	public Long getId() {
@@ -45,6 +51,10 @@ public class Event {
 		return this.title;
 	}
 
+	public DateTimeZone getTimeZone() {
+		return timeZone;
+	}
+	
 	public DateTime getStartTime() {
 		return startTime;
 	}
@@ -53,28 +63,46 @@ public class Event {
 		return endTime;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getSlug() {
+		return slug;
 	}
-
+	
 	public String getDescription() {
 		return description;
 	}
 
-	public String getName() {
-		return name;
-	}
-	
 	public String getHashtag() {
 		return hashtag;
 	}
 
-	public String getGroupName() {
-		return groupName;
+	public ResourceReference<String> getGroup() {
+		return group;
+	}
+	
+	public Set<Venue> getVenues() {
+		return Collections.unmodifiableSet(venues);
 	}
 
-	public String getGroupProfileKey() {
-		return groupProfileKey;
+	public void addVenue(Venue venue) {
+		if (venues == null) {
+			venues = new LinkedHashSet<Venue>();
+		}
+		venues.add(venue);
+	}
+	
+	// iphone 1.0.0 compatibility
+	
+	// TODO here for compatibility reasons; remove when iphone app is upgraded
+	public String getLocation() {
+		return venues.iterator().next().getName();
+	}
+
+	public String getGroupName() {
+		return group.getLabel();
+	}
+
+	public String getGroupSlug() {
+		return group.getId();
 	}
 
 }

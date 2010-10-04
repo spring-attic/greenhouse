@@ -8,13 +8,13 @@
 </c:if>
 
 <form id="disconnect" method="post">
-	<div class="header">
+	<div class="formInfo">
 		<p>
 			Your Greenhouse account is connected to your Facebook account.
 			Click the button if you wish to disconnect.
 		</p>
 	</div>
-	<input type="submit" value="Disconnect" onclick="FB.logout(function(response) { return true; } );" />
+	<button type="submit" onclick="FB.logout(function(response) { return true; } );">Disconnect</button>	
 	<input type="hidden" name="_method" value="DELETE" />
 </form>
 

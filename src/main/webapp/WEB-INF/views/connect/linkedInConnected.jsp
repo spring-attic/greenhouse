@@ -13,6 +13,6 @@
 			Click the button if you wish to disconnect.
 		</p>
 	</div>
-	<input type="submit" value="Disconnect" />
+	<button type="submit">Disconnect</button>
 	<input type="hidden" name="_method" value="DELETE" />
 </form>

@@ -14,7 +14,7 @@ public interface AccountProvider<A> {
 	
 	Long getAppId();
 
-	OAuthToken getRequestToken();
+	OAuthToken getRequestToken(String callbackUrl);
 	
 	String getAuthorizeUrl(String requestToken);
 	

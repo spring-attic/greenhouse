@@ -5,7 +5,6 @@ create table AccountProvider (name varchar,
 					appId bigint,
 					requestTokenUrl varchar,
 					authorizeUrl varchar,
-					callbackUrl varchar,
 					accessTokenUrl varchar,
 					primary key (name));
 

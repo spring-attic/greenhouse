@@ -1,6 +1,5 @@
 package com.springsource.greenhouse.events;
 
-// TODO - consider factoring out a MemberReferencce or AccountReference class with firstName/lastName and profileKey
 public class EventSessionLeader {
 
 	private String firstName;

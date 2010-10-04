@@ -60,8 +60,8 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return parameters.getAppId();
 	}
 	
-	public OAuthToken getRequestToken() {
-		Token requestToken = getOAuthService().getRequestToken();
+	public OAuthToken getRequestToken(String callbackUrl) {
+		Token requestToken = getOAuthService(callbackUrl).getRequestToken();
 		return new OAuthToken(requestToken.getToken(), requestToken.getSecret());
 	}
 
@@ -71,14 +71,12 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 
 	public A connect(Long accountId, OAuthToken requestToken, String verifier) {
 		OAuthToken accessToken = getAccessToken(requestToken, verifier);
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()),
-				encryptor.encrypt(accessToken.getSecret()), null);
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()), encryptor.encrypt(accessToken.getSecret()), null);
 		return createApi(accessToken);
 	}
 
 	public A addConnection(Long accountId, String accessToken, String providerAccountId) {
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken), null,
-				providerAccountId);
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken), null, providerAccountId);
 		return createApi(new OAuthToken(accessToken));
 	}
 
@@ -95,7 +93,6 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 			public OAuthToken mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
 			}
-			
 		}, getName(), accountId);
 		return createApi(accessToken);
 	}
@@ -143,6 +140,10 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 	// internal helpers
 	
 	private OAuthService getOAuthService() {
+		return getOAuthService(null);
+	}
+	
+	private OAuthService getOAuthService(String callbackUrl) {
 		OAuthConfig config = new OAuthConfig();
 		config.setRequestTokenEndpoint(parameters.getRequestTokenUrl());
 		config.setAccessTokenEndpoint(parameters.getAccessTokenUrl());
@@ -150,8 +151,8 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		config.setRequestTokenVerb(Verb.POST);
 		config.setApiKey(parameters.getApiKey());
 		config.setApiSecret(parameters.getSecret());
-		if (parameters.getCallbackUrl() != null) {
-			config.setCallback(parameters.getCallbackUrl());
+		if (callbackUrl != null) {
+			config.setCallback(callbackUrl);
 		}
 		return new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(), new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(), new TokenExtractorImpl(), config);
 	}

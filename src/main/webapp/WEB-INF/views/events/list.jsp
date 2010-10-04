@@ -8,17 +8,16 @@
 <c:if test="${not empty eventList}">
 	<dl>
 	<c:forEach items="${eventList}" var="event">
-		<s:url value="/groups/{group}/events/{year}/{month}/{name}" var="eventUrl">
-			<s:param name="group" value="${event.groupProfileKey}" />
+		<s:url value="/groups/{group}/events/{year}/{month}/{slug}" var="eventUrl">
+			<s:param name="group" value="${event.groupSlug}" />
 			<s:param name="year" value="${event.startTime.year}" />
 			<s:param name="month" value="${event.startTime.monthOfYear}" />
-			<s:param name="name" value="${event.name}" />
+			<s:param name="slug" value="${event.slug}" />
 		</s:url>
 		<dt class="event">
-			<a href="${eventUrl}"><c:out value="${event.title}" escapeXml="true"/></a> <br/>
+			<a href="${eventUrl}"><c:out value="${event.title}" /></a> <br/>
 			<span class="locationAndDate">
-				<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" /> - 
-				<c:out value="${event.location}" escapeXml="true"/>
+				<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /> at <c:out value="${event.location}" />
 			</span>
 		</dt>
 		<dd class="event">

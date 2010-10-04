@@ -53,14 +53,12 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 				}
 			};			
 		} else if (LinkedInOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new JdbcAccountProvider<LinkedInOperations>(getParameters("linkedin"),
-					jdbcTemplate, encryptor, accountMapper) {
+			return (AccountProvider<A>) new JdbcAccountProvider<LinkedInOperations>(getParameters("linkedin"), jdbcTemplate, encryptor, accountMapper) {
 				public LinkedInOperations createApi(OAuthToken accessToken) {
 					if (accessToken == null) {
 						throw new IllegalStateException("Cannot access LinkedIn without an access token");
 					}
-					return new LinkedInTemplate(getApiKey(), getSecret(), accessToken.getValue(),
-							accessToken.getSecret());
+					return new LinkedInTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
 				}
 			};
 		} else if (TripItOperations.class.equals(apiType)) {
@@ -98,12 +96,11 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 			public AccountProviderParameters mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return new AccountProviderParameters(provider, rs.getString("displayName"), encryptor.decrypt(rs
 						.getString("apiKey")), encryptor.decrypt(rs.getString("secret")), rs.getLong("appId"), rs
-						.getString("requestTokenUrl"), rs.getString("authorizeUrl"), rs.getString("callbackUrl"), rs
+						.getString("requestTokenUrl"), rs.getString("authorizeUrl"), rs
 						.getString("accessTokenUrl"));
 			}
 		}, provider);
 	}
 
-	private static final String SELECT_ACCOUNT_PROVIDER_BY_NAME = "select displayName, apiKey, secret, appId, requestTokenUrl, authorizeUrl, callbackUrl, accessTokenUrl from AccountProvider where name = ?";
-
+	private static final String SELECT_ACCOUNT_PROVIDER_BY_NAME = "select displayName, apiKey, secret, appId, requestTokenUrl, authorizeUrl, accessTokenUrl from AccountProvider where name = ?";
 }

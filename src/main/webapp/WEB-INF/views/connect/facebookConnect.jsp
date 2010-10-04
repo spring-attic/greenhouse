@@ -13,11 +13,13 @@
 		<p>Click the button to connect your Greenhouse account with your Facebook account.</p>
 	</div>
 	<div id="fb-root"></div>	
-	<fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Connect to Facebook</fb:login-button><br/><br/>
-	<label for="postToWall">Post a link to my Greenhouse profile on my wall after connecting</label>
-	<input id="postToWall" type="checkbox" name="postToWall" />
-	<label for="useProfilePicture">Use my Facebook profile picture as my Greenhouse profile picture</label>
-	<input id="useProfilePicture" type="checkbox" name="useProfilePicture" />
+	<p><fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Connect to Facebook</fb:login-button></p>
+	<fieldset class="checkbox">
+		<label for="postToWall"><input id="postToWall" type="checkbox" name="postToWall" /> Post a link to my Greenhouse profile on my wall after connecting</label>
+	</fieldset>
+	<fieldset class="checkbox">
+		<label for="useProfilePicture"><input id="useProfilePicture" type="checkbox" name="useProfilePicture" /> Use my Facebook profile picture as my Greenhouse profile picture</label>
+	</fieldset>
 </form>
 
 <facebook:init />

@@ -34,7 +34,7 @@ public class JdbcGroupRepositoryTest {
 	
 	@Test
 	public void shouldFindGroupByProfileKey() {
-		Group group = groupRepository.findGroupByProfileKey("test");
+		Group group = groupRepository.findGroupBySlug("test-group");
 		assertEquals("Test Group", group.getName());
 		assertEquals("This is a test group", group.getDescription());
 		assertEquals("#test", group.getHashtag());

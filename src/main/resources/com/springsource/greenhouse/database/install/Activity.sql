@@ -1,8 +1,8 @@
 create table MemberAction (id identity,
 					actionType varchar not null,
 					performTime timestamp not null,
-					latitude real,
-					longitude real,
+					latitude double,
+					longitude double,
 					member bigint,
 					primary key (id),					
 					foreign key (member) references Member(id));
@@ -23,4 +23,3 @@ create table AwardedBadge(id identity,
 					foreign key (memberAction) references MemberAction(id));
 					
 insert into Badge (name, description, level) values ('Newbie', 'You joined!', 1);
-
