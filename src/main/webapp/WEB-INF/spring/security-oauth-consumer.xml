@@ -41,4 +41,14 @@
 		<constructor-arg value="#{request.getAttribute('account')}" />
 	</bean>
 
+	<!-- TripIt Account Connections -->
+	
+	<bean id="tripItAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
+		<constructor-arg value="org.springframework.social.tripit.TripItOperations" />
+	</bean>
+	
+	<bean id="tripItApi" class="com.springsource.greenhouse.connect.AccountProviderApiFactory" factory-method="getTripItApi" scope="request">
+		<constructor-arg ref="tripItAccountProvider" />
+		<constructor-arg value="#{request.getAttribute('account')}" />
+	</bean>
 </beans>

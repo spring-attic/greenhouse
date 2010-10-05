@@ -2,14 +2,16 @@ package com.springsource.greenhouse.members;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.social.linkedin.LinkedInOperations;
+import org.springframework.social.core.SocialOperations;
 import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.account.PictureSize;
@@ -26,15 +28,19 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private final RowMapper<Profile> profileMapper;
 
-	private final AccountProvider<LinkedInOperations> linkedInAccountProvider;
+	private final Map<String, AccountProvider<SocialOperations>> accountProviders;
 
 	@Inject
 	public JdbcProfileRepository(JdbcTemplate jdbcTemplate, FileStorage pictureStorage,
-			AccountProvider<LinkedInOperations> linkedInAccountProvider) {
+			List<AccountProvider<SocialOperations>> accountProviders) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.linkedInAccountProvider = linkedInAccountProvider;
 		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
 		this.profileMapper = new ProfileMapper();
+
+		this.accountProviders = new HashMap<String, AccountProvider<SocialOperations>>();
+		for (AccountProvider<SocialOperations> accountProvider : accountProviders) {
+			this.accountProviders.put(accountProvider.getName(), accountProvider);
+		}
 	}
 	
 	public Profile findByKey(String profileKey) {
@@ -51,8 +57,8 @@ public class JdbcProfileRepository implements ProfileRepository {
 			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
 				String provider = rs.getString("name");
 				String providerDisplayName = rs.getString("displayName");
-				String providerAccountId = rs.getString("accountId");
-				return new ConnectedProfile(providerDisplayName, getProfileUrl(accountId, providerAccountId, provider));
+				return new ConnectedProfile(providerDisplayName, accountProviders.get(provider).getApi(accountId)
+						.getProfileUrl());
 			}
 		}, accountId);
 	}
@@ -88,19 +94,6 @@ public class JdbcProfileRepository implements ProfileRepository {
 		} catch (NumberFormatException e) {
 			return null;
 		}		
-	}
-	
-	private String getProfileUrl(Long accountId, String providerAccountId, String provider) {
-		// TODO use of AccountProvider UriTemplate would be better here
-		if ("twitter".equals(provider)) {
-			return "http://www.twitter.com/" + providerAccountId;
-		} else if ("facebook".equals(provider)) {
-			return "http://www.facebook.com/profile.php?id=" + providerAccountId;
-		} else if ("linkedin".equals(provider)) {
-			return linkedInAccountProvider.getApi(accountId).getUserInfo().getPublicProfileUrl();
-		} else {
-			return null;
-		}
 	}
 
 	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, gender, pictureSet from Member";
