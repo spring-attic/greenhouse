@@ -1,11 +1,13 @@
 package com.springsource.greenhouse.connect;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.core.SocialOperations;
@@ -25,13 +27,18 @@ public class ConnectController {
 	private static final String OAUTH_TOKEN_ATTRIBUTE = "oauthToken";
 	private final AccountProviderFactory providerFactory;
 	private final String baseCallbackUrl;
+	private List<ConnectInterceptor> interceptors;
 
-	
 	@Inject
 	public ConnectController(AccountProviderFactory providerFactory,
 			@Value("${application.secureUrl}") String applicationUrl) {
 		this.providerFactory = providerFactory;
 		this.baseCallbackUrl = applicationUrl + "/connect/";
+	}
+
+	@Autowired(required = false)
+	public void setInterceptors(List<ConnectInterceptor> interceptors) {
+		this.interceptors = interceptors;
 	}
 
 	@RequestMapping(value = "/{provider}", method = RequestMethod.GET)
@@ -45,6 +52,9 @@ public class ConnectController {
 
 	@RequestMapping(value = "/{provider}", method = RequestMethod.POST)
 	public String connect(@PathVariable("provider") String provider, WebRequest request) {
+
+		preConnect(provider, request);
+
 		AccountProvider<?> accountProvider = getAccountProvider(provider);
 		OAuthToken requestToken = accountProvider.getRequestToken(baseCallbackUrl + provider);
 		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestTokenHolder(requestToken),
@@ -69,6 +79,9 @@ public class ConnectController {
 
 		SocialOperations api = (SocialOperations) accountProvider.connect(account.getId(), requestToken, verifier);
 		accountProvider.updateProviderAccountId(account.getId(), api.getProfileId());
+
+		postConnect(provider, request, api, account);
+
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your "
 				+ accountProvider.getDisplayName() + " account!");
 		return "redirect:/connect/" + provider;
@@ -91,5 +104,27 @@ public class ConnectController {
 		Map<String, Object> holder = new HashMap<String, Object>(2, 1);
 		holder.put("value", requestToken);
 		return holder;
+	}
+
+	private void preConnect(String providerName, WebRequest request) {
+		if (interceptors == null)
+			return;
+
+		for (ConnectInterceptor interceptor : interceptors) {
+			if (interceptor.supportsProvider(providerName)) {
+				interceptor.preConnect(request);
+			}
+		}
+	}
+
+	private void postConnect(String providerName, WebRequest request, SocialOperations socialOperations, Account account) {
+		if (interceptors == null)
+			return;
+
+		for (ConnectInterceptor interceptor : interceptors) {
+			if (interceptor.supportsProvider(providerName)) {
+				interceptor.postConnect(request, socialOperations, account);
+			}
+		}
 	}
 }
