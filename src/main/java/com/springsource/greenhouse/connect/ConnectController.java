@@ -80,6 +80,11 @@ public class ConnectController {
 		// Twitter4J
 		SocialProviderOperations api = (SocialProviderOperations) accountProvider.connect(account.getId(),
 				requestToken, verifier);
+
+		// TODO: It seems weird to pass in the profileId obtained from the API
+		// which itself was obtained from the account provider. Seems that
+		// parameter could be internalized. Doing so could be a step toward a
+		// more generic account provider API that would work with Twitter4J
 		accountProvider.updateProviderAccountId(account.getId(), api.getProfileId());
 		postConnect(provider, request, api, account);
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your "
