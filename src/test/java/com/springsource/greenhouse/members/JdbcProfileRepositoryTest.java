@@ -2,6 +2,7 @@ package com.springsource.greenhouse.members;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import com.springsource.greenhouse.account.StubFileStorage;
+import com.springsource.greenhouse.connect.AccountProvider;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcProfileRepositoryTest {
@@ -25,7 +27,12 @@ public class JdbcProfileRepositoryTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage(), null);
+
+		ArrayList<AccountProvider<?>> accountProviders = new ArrayList<AccountProvider<?>>();
+		accountProviders.add(new StubAccountProvider("twitter"));
+		accountProviders.add(new StubAccountProvider("facebook"));
+
+		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage(), accountProviders);
     }
 	
 	@After
@@ -66,7 +73,9 @@ public class JdbcProfileRepositoryTest {
 	private void assertExpectedConnectedProfiles(List<ConnectedProfile> connectedProfiles) {
 	    assertEquals(2, connectedProfiles.size());
 		assertEquals("Facebook", connectedProfiles.get(0).getName());
+		assertEquals("http://facebook.com/profile/accountId", connectedProfiles.get(0).getUrl());
 		assertEquals("Twitter", connectedProfiles.get(1).getName());
+		assertEquals("http://twitter.com/profile/accountId", connectedProfiles.get(1).getUrl());
 	}	
 
 }

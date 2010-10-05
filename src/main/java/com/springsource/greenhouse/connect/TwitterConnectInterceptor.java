@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.connect;
 
-import org.springframework.social.core.SocialOperations;
+import org.springframework.social.core.SocialProviderOperations;
 import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -24,10 +24,10 @@ public class TwitterConnectInterceptor implements ConnectInterceptor {
 		}
 	}
 
-	public void postConnect(WebRequest request, SocialOperations socialOperations, Account account) {
+	public void postConnect(WebRequest request, SocialProviderOperations api, Account account) {
 		if (request.getAttribute(POST_TWEET_PARAM, WebRequest.SCOPE_SESSION) != null) {
 			try {
-				socialOperations.setStatus("Join me at the Greenhouse! " + account.getProfileUrl());
+				api.setStatus("Join me at the Greenhouse! " + account.getProfileUrl());
 			} catch (DuplicateTweetException doesntMatter) {
 			}
 			request.removeAttribute(POST_TWEET_PARAM, WebRequest.SCOPE_SESSION);

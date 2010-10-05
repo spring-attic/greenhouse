@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.social.core.SocialOperations;
+import org.springframework.social.core.SocialProviderOperations;
 import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.account.PictureSize;
@@ -28,17 +28,17 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private final RowMapper<Profile> profileMapper;
 
-	private final Map<String, AccountProvider<SocialOperations>> accountProviders;
+	private final Map<String, AccountProvider<?>> accountProviders;
 
 	@Inject
 	public JdbcProfileRepository(JdbcTemplate jdbcTemplate, FileStorage pictureStorage,
-			List<AccountProvider<SocialOperations>> accountProviders) {
+			List<AccountProvider<?>> accountProviders) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
 		this.profileMapper = new ProfileMapper();
 
-		this.accountProviders = new HashMap<String, AccountProvider<SocialOperations>>();
-		for (AccountProvider<SocialOperations> accountProvider : accountProviders) {
+		this.accountProviders = new HashMap<String, AccountProvider<?>>();
+		for (AccountProvider<?> accountProvider : accountProviders) {
 			this.accountProviders.put(accountProvider.getName(), accountProvider);
 		}
 	}
@@ -57,8 +57,7 @@ public class JdbcProfileRepository implements ProfileRepository {
 			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
 				String provider = rs.getString("name");
 				String providerDisplayName = rs.getString("displayName");
-				return new ConnectedProfile(providerDisplayName, accountProviders.get(provider).getApi(accountId)
-						.getProfileUrl());
+				return new ConnectedProfile(providerDisplayName, getProfileUrl(provider, accountId));
 			}
 		}, accountId);
 	}
@@ -94,6 +93,14 @@ public class JdbcProfileRepository implements ProfileRepository {
 		} catch (NumberFormatException e) {
 			return null;
 		}		
+	}
+
+	private String getProfileUrl(String provider, Long accountId) {
+		Object api = accountProviders.get(provider).getApi(accountId);
+		if (api instanceof SocialProviderOperations) {
+			return ((SocialProviderOperations) api).getProfileUrl();
+		}
+		return null;
 	}
 
 	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, gender, pictureSet from Member";

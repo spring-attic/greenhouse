@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.social.core.SocialOperations;
+import org.springframework.social.core.SocialProviderOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,9 +52,7 @@ public class ConnectController {
 
 	@RequestMapping(value = "/{provider}", method = RequestMethod.POST)
 	public String connect(@PathVariable("provider") String provider, WebRequest request) {
-
 		preConnect(provider, request);
-
 		AccountProvider<?> accountProvider = getAccountProvider(provider);
 		OAuthToken requestToken = accountProvider.getRequestToken(baseCallbackUrl + provider);
 		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestTokenHolder(requestToken),
@@ -77,11 +75,13 @@ public class ConnectController {
 		OAuthToken requestToken = (OAuthToken) requestTokenHolder.get("value");
 		AccountProvider<?> accountProvider = getAccountProvider(provider);
 
-		SocialOperations api = (SocialOperations) accountProvider.connect(account.getId(), requestToken, verifier);
+		// TODO: Leaning on SocialProviderOperations like this will make it
+		// tricky to make an account provider that is based on something like
+		// Twitter4J
+		SocialProviderOperations api = (SocialProviderOperations) accountProvider.connect(account.getId(),
+				requestToken, verifier);
 		accountProvider.updateProviderAccountId(account.getId(), api.getProfileId());
-
 		postConnect(provider, request, api, account);
-
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your "
 				+ accountProvider.getDisplayName() + " account!");
 		return "redirect:/connect/" + provider;
@@ -117,13 +117,13 @@ public class ConnectController {
 		}
 	}
 
-	private void postConnect(String providerName, WebRequest request, SocialOperations socialOperations, Account account) {
+	private void postConnect(String providerName, WebRequest request, SocialProviderOperations api, Account account) {
 		if (interceptors == null)
 			return;
 
 		for (ConnectInterceptor interceptor : interceptors) {
 			if (interceptor.supportsProvider(providerName)) {
-				interceptor.postConnect(request, socialOperations, account);
+				interceptor.postConnect(request, api, account);
 			}
 		}
 	}
