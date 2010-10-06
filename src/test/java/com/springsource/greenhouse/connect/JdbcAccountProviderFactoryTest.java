@@ -55,6 +55,7 @@ public class JdbcAccountProviderFactoryTest {
  	}
 	
 	@Test
+	@SuppressWarnings("unchecked")
 	public void getAccountProviderByName() {
 		AccountProvider<TwitterOperations> twitterProvider = (AccountProvider<TwitterOperations>) providerFactory.getAccountProviderByName("twitter");
 		assertEquals("twitter", twitterProvider.getName());

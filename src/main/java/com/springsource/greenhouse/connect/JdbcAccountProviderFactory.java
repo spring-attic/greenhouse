@@ -2,6 +2,7 @@ package com.springsource.greenhouse.connect;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,12 +46,24 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 					}
 					return new FacebookTemplate(accessToken.getValue());
 				}
+				public String getProviderAccountId(FacebookOperations api) {
+					return api.getProfileId();
+				}
+				public String getProviderProfileUrl(String providerAccountId) {
+					return "http://www.facebook.com/profile.php?id=" + providerAccountId;
+				}
 			};
 		} else if (TwitterOperations.class.equals(apiType)) {
 			return (AccountProvider<A>) new JdbcAccountProvider<TwitterOperations>(getParameters("twitter"), jdbcTemplate, encryptor, accountMapper) {
 				public TwitterOperations createApi(OAuthToken accessToken) {
 					return accessToken != null ? new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret()) : new TwitterTemplate();
 				}
+				public String getProviderAccountId(TwitterOperations api) {
+					return api.getProfileId();
+				}
+				public String getProviderProfileUrl(String providerAccountId) {
+					return "http://www.twitter.com/" + providerAccountId;					
+				}				
 			};			
 		} else if (LinkedInOperations.class.equals(apiType)) {
 			return (AccountProvider<A>) new JdbcAccountProvider<LinkedInOperations>(getParameters("linkedin"), jdbcTemplate, encryptor, accountMapper) {
@@ -60,16 +73,27 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 					}
 					return new LinkedInTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
 				}
+				public String getProviderAccountId(LinkedInOperations api) {
+					return api.getProfileId();
+				}
+				public String getProviderProfileUrl(String providerAccountId) {
+					return "http://www.linkedin.com/in/" + providerAccountId;
+				}				
 			};
 		} else if (TripItOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new JdbcAccountProvider<TripItOperations>(getParameters("tripit"),
-					jdbcTemplate, encryptor, accountMapper) {
+			return (AccountProvider<A>) new JdbcAccountProvider<TripItOperations>(getParameters("tripit"), jdbcTemplate, encryptor, accountMapper) {
 				public TripItOperations createApi(OAuthToken accessToken) {
 					if (accessToken == null) {
 						throw new IllegalStateException("Cannot access TripIt without an access token");
 					}
 					return new TripItTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
 				}
+				public String getProviderAccountId(TripItOperations api) {
+					return api.getProfileId();
+				}
+				public String getProviderProfileUrl(String providerAccountId) {
+					return "http://www.tripit.com/people/" + providerAccountId;
+				}				
 			};
 		} else {
 			throw new IllegalArgumentException("Not a supported apiType " + apiType);
@@ -90,16 +114,30 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 		}
 	}
 	
+	public List<ConnectedProfile> findConnectedProfiles(Long accountId) {
+		return jdbcTemplate.query(SELECT_ACCOUNT_CONNECTIONS, new RowMapper<ConnectedProfile>() {
+			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
+				AccountProvider<?> provider = getAccountProviderByName(rs.getString("name"));
+				String profileUrl = provider.getProviderProfileUrl(rs.getString("accountId"));
+				return new ConnectedProfile(rs.getString("displayName"), profileUrl);
+			}
+		}, accountId);
+	}
+	
+	// internal helpers
+	
 	private AccountProviderParameters getParameters(final String provider) {
 		return jdbcTemplate.queryForObject(SELECT_ACCOUNT_PROVIDER_BY_NAME, new RowMapper<AccountProviderParameters>() {
 			public AccountProviderParameters mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new AccountProviderParameters(provider, rs.getString("displayName"), encryptor.decrypt(rs
-						.getString("apiKey")), encryptor.decrypt(rs.getString("secret")), rs.getLong("appId"), rs
-						.getString("requestTokenUrl"), rs.getString("authorizeUrl"), rs
-						.getString("accessTokenUrl"));
+				return new AccountProviderParameters(provider, rs.getString("displayName"),
+					encryptor.decrypt(rs.getString("apiKey")), encryptor.decrypt(rs.getString("secret")), rs.getLong("appId"),
+					rs.getString("requestTokenUrl"), rs.getString("authorizeUrl"), rs.getString("accessTokenUrl"));
 			}
 		}, provider);
 	}
 
 	private static final String SELECT_ACCOUNT_PROVIDER_BY_NAME = "select displayName, apiKey, secret, appId, requestTokenUrl, authorizeUrl, accessTokenUrl from AccountProvider where name = ?";
+
+	private static final String SELECT_ACCOUNT_CONNECTIONS = "select p.name, p.displayName, c.accountId from AccountConnection c inner join AccountProvider p on c.provider = p.name where member = ? order by displayName";
+	
 }

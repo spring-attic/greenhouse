@@ -10,6 +10,7 @@ import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.connect.OAuthToken;
 
 public class StubAccountProvider implements AccountProvider<SocialProviderOperations> {
+	
 	private String name;
 
 	public StubAccountProvider(String name) {
@@ -40,12 +41,12 @@ public class StubAccountProvider implements AccountProvider<SocialProviderOperat
 		return null;
 	}
 
-	public SocialProviderOperations connect(Long accountId, OAuthToken requestToken, String verifier) {
-		return null;
+	public void connect(Long accountId, OAuthToken requestToken, String verifier) {
+		
 	}
 
-	public SocialProviderOperations addConnection(Long accountId, String accessToken, String providerAccountId) {
-		return null;
+	public void addConnection(Long accountId, String accessToken, String providerAccountId) {
+		
 	}
 
 	public boolean isConnected(Long accountId) {

@@ -53,7 +53,8 @@ public class FacebookConnectController {
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId,
 			@RequestParam(required=false, defaultValue="false") boolean postToWall, @RequestParam(required=false, defaultValue="false") boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
-			FacebookOperations api = accountProvider.addConnection(account.getId(), accessToken, facebookUserId);
+			accountProvider.addConnection(account.getId(), accessToken, facebookUserId);
+			FacebookOperations api = accountProvider.getApi(account.getId());
 			if (postToWall) {
 				postToWall(api, account);
 			}

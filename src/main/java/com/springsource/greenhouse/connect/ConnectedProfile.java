@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.members;
+package com.springsource.greenhouse.connect;
 
 public class ConnectedProfile {
 	

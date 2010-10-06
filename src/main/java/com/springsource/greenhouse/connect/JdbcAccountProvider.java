@@ -22,7 +22,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.encrypt.StringEncryptor;
-import org.springframework.social.core.SocialProviderOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
@@ -45,6 +44,8 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		this.accountMapper = accountMapper;
 	}
 
+	// provider meta-data
+	
 	public String getName() {
 		return parameters.getName();
 	}
@@ -61,6 +62,8 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return parameters.getAppId();
 	}
 	
+	// connection management
+	
 	public OAuthToken fetchNewRequestToken(String callbackUrl) {
 		Token requestToken = getOAuthService(callbackUrl).getRequestToken();
 		return new OAuthToken(requestToken.getToken(), requestToken.getSecret());
@@ -70,25 +73,22 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return parameters.getAuthorizeUrl().expand(requestToken).toString();
 	}
 
-	public A connect(Long accountId, OAuthToken requestToken, String verifier) {
+	public void connect(Long accountId, OAuthToken requestToken, String verifier) {
 		OAuthToken accessToken = getAccessToken(requestToken, verifier);
-		A api = createApi(accessToken);
-
-		// TODO: Remove dependence on SocialProviderOperations
-		String profileId = ((SocialProviderOperations) api).getProfileId();
-
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()),
-				encryptor.encrypt(accessToken.getSecret()), profileId);
-		return api;
+		String providerAccountId = getProviderAccountId(createApi(accessToken));
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()), encryptor.encrypt(accessToken.getSecret()), providerAccountId);
 	}
 
-	public A addConnection(Long accountId, String accessToken, String providerAccountId) {
+	public void addConnection(Long accountId, String accessToken, String providerAccountId) {
 		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken), null, providerAccountId);
-		return createApi(new OAuthToken(accessToken));
 	}
 
 	public boolean isConnected(Long accountId) {
 		return jdbcTemplate.queryForInt(SELECT_ACCOUNT_CONNECTION_COUNT, accountId, getName()) == 1;
+	}
+
+	public void disconnect(Long accountId) {
+		jdbcTemplate.update(DELETE_ACCOUNT_CONNECTION, accountId, getName());
 	}
 	
 	@Transactional
@@ -104,10 +104,8 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return createApi(accessToken);
 	}
 
-	public void updateProviderAccountId(Long accountId, String providerAccountId) {
-		jdbcTemplate.update("update AccountConnection set accountId = ? where provider = ? and member = ?", providerAccountId, getName(), accountId);
-	}
-
+	// additional finders
+	
 	public String getProviderAccountId(Long accountId) {
 		try {
 			return jdbcTemplate.queryForObject(SELECT_PROVIDER_ACCOUNT_ID, String.class, getName(), accountId);
@@ -132,14 +130,12 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return namedTemplate.query(SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS, params, accountMapper);
 	}
 
-	public void disconnect(Long accountId) {
-		jdbcTemplate.update(DELETE_ACCOUNT_CONNECTION, accountId, getName());
-	}
-
 	// subclassing hooks
 	
 	protected abstract A createApi(OAuthToken accessToken);
 
+	protected abstract String getProviderAccountId(A api);
+	
 	protected String getSecret() {
 		return parameters.getSecret();
 	}

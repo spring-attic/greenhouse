@@ -22,9 +22,9 @@ public interface AccountProvider<A> {
 	
 	String buildAuthorizeUrl(String requestToken);
 	
-	A connect(Long accountId, OAuthToken requestToken, String verifier);
+	void connect(Long accountId, OAuthToken requestToken, String verifier);
 	
-	A addConnection(Long accountId, String accessToken, String providerAccountId);
+	void addConnection(Long accountId, String accessToken, String providerAccountId);
 
 	boolean isConnected(Long accountId);
 
@@ -35,6 +35,8 @@ public interface AccountProvider<A> {
 	// additional finders
 	
 	String getProviderAccountId(Long accountId);
+
+	String getProviderProfileUrl(String providerAccountId);
 
 	Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException;
 	
