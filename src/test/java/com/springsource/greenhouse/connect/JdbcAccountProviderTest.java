@@ -1,11 +1,7 @@
 package com.springsource.greenhouse.connect;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 

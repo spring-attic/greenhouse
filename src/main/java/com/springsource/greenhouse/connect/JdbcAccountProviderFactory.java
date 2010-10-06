@@ -49,8 +49,9 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 				public String getProviderAccountId(FacebookOperations api) {
 					return api.getProfileId();
 				}
-				public String getProviderProfileUrl(String providerAccountId) {
-					return "http://www.facebook.com/profile.php?id=" + providerAccountId;
+
+				public String getProviderProfileUrl(FacebookOperations api) {
+					return "http://www.facebook.com/profile.php?id=" + api.getProfileId();
 				}
 			};
 		} else if (TwitterOperations.class.equals(apiType)) {
@@ -61,8 +62,9 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 				public String getProviderAccountId(TwitterOperations api) {
 					return api.getProfileId();
 				}
-				public String getProviderProfileUrl(String providerAccountId) {
-					return "http://www.twitter.com/" + providerAccountId;					
+
+				public String getProviderProfileUrl(TwitterOperations api) {
+					return "http://www.twitter.com/" + api.getProfileId();
 				}				
 			};			
 		} else if (LinkedInOperations.class.equals(apiType)) {
@@ -76,8 +78,9 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 				public String getProviderAccountId(LinkedInOperations api) {
 					return api.getProfileId();
 				}
-				public String getProviderProfileUrl(String providerAccountId) {
-					return "http://www.linkedin.com/in/" + providerAccountId;
+
+				public String getProviderProfileUrl(LinkedInOperations api) {
+					return api.getProfileUrl();
 				}				
 			};
 		} else if (TripItOperations.class.equals(apiType)) {
@@ -91,9 +94,10 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 				public String getProviderAccountId(TripItOperations api) {
 					return api.getProfileId();
 				}
-				public String getProviderProfileUrl(String providerAccountId) {
-					return "http://www.tripit.com/people/" + providerAccountId;
-				}				
+
+				public String getProviderProfileUrl(TripItOperations api) {
+					return api.getProfileUrl();
+				}
 			};
 		} else {
 			throw new IllegalArgumentException("Not a supported apiType " + apiType);
@@ -117,9 +121,7 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 	public List<ConnectedProfile> findConnectedProfiles(Long accountId) {
 		return jdbcTemplate.query(SELECT_ACCOUNT_CONNECTIONS, new RowMapper<ConnectedProfile>() {
 			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
-				AccountProvider<?> provider = getAccountProviderByName(rs.getString("name"));
-				String profileUrl = provider.getProviderProfileUrl(rs.getString("accountId"));
-				return new ConnectedProfile(rs.getString("displayName"), profileUrl);
+				return new ConnectedProfile(rs.getString("displayName"), rs.getString("profileUrl"));
 			}
 		}, accountId);
 	}
@@ -138,6 +140,6 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 
 	private static final String SELECT_ACCOUNT_PROVIDER_BY_NAME = "select displayName, apiKey, secret, appId, requestTokenUrl, authorizeUrl, accessTokenUrl from AccountProvider where name = ?";
 
-	private static final String SELECT_ACCOUNT_CONNECTIONS = "select p.name, p.displayName, c.accountId from AccountConnection c inner join AccountProvider p on c.provider = p.name where member = ? order by displayName";
+	private static final String SELECT_ACCOUNT_CONNECTIONS = "select p.name, p.displayName, c.accountId, c.profileUrl from AccountConnection c inner join AccountProvider p on c.provider = p.name where member = ? order by displayName";
 	
 }

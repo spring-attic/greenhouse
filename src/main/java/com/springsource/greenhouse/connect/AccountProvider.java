@@ -36,7 +36,7 @@ public interface AccountProvider<A> {
 	
 	String getProviderAccountId(Long accountId);
 
-	String getProviderProfileUrl(String providerAccountId);
+	String getProviderProfileUrl(A api);
 
 	Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException;
 	

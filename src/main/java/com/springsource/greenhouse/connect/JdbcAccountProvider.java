@@ -75,12 +75,15 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 
 	public void connect(Long accountId, OAuthToken requestToken, String verifier) {
 		OAuthToken accessToken = getAccessToken(requestToken, verifier);
-		String providerAccountId = getProviderAccountId(createApi(accessToken));
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()), encryptor.encrypt(accessToken.getSecret()), providerAccountId);
+		A api = createApi(accessToken);
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()),
+				encryptor.encrypt(accessToken.getSecret()), getProviderAccountId(api), getProviderProfileUrl(api));
 	}
 
 	public void addConnection(Long accountId, String accessToken, String providerAccountId) {
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken), null, providerAccountId);
+		A api = createApi(new OAuthToken(accessToken));
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken), null,
+				providerAccountId, getProviderProfileUrl(api));
 	}
 
 	public boolean isConnected(Long accountId) {
@@ -169,7 +172,7 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 
 	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
 
-	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, secret, accountId) values (?, ?, ?, ?, ?)";
+	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, secret, accountId, profileUrl) values (?, ?, ?, ?, ?, ?)";
 
 	private static final String SELECT_ACCESS_TOKEN = "select accessToken, secret from AccountConnection where provider = ? and member = ?";
 
