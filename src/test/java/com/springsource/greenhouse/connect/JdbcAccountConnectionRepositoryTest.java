@@ -1,7 +1,11 @@
 package com.springsource.greenhouse.connect;
 
-import static java.util.Arrays.*;
-import static org.junit.Assert.*;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -19,7 +23,7 @@ import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
-public class JdbcAccountProviderTest {
+public class JdbcAccountConnectionRepositoryTest {
 	
 	private EmbeddedDatabase db;
 
