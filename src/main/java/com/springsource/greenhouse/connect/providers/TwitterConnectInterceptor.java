@@ -2,7 +2,6 @@ package com.springsource.greenhouse.connect.providers;
 
 import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.social.twitter.TwitterOperations;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
@@ -10,7 +9,6 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.connect.AccountProvider;
 import com.springsource.greenhouse.connect.ConnectInterceptor;
 
-@Component
 public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterOperations> {
 
 	public void preConnect(AccountProvider<TwitterOperations> provider, WebRequest request) {
