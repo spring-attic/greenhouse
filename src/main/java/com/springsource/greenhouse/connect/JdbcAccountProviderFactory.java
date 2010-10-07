@@ -9,13 +9,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.facebook.FacebookOperations;
-import org.springframework.social.facebook.FacebookTemplate;
 import org.springframework.social.linkedin.LinkedInOperations;
-import org.springframework.social.linkedin.LinkedInTemplate;
 import org.springframework.social.tripit.TripItOperations;
-import org.springframework.social.tripit.TripItTemplate;
 import org.springframework.social.twitter.TwitterOperations;
-import org.springframework.social.twitter.TwitterTemplate;
 
 import com.springsource.greenhouse.account.AccountMapper;
 
@@ -39,66 +35,13 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 	@SuppressWarnings("unchecked")
 	public <A> AccountProvider<A> getAccountProvider(Class<A> apiType) {
 		if (FacebookOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new JdbcAccountProvider<FacebookOperations>(getParameters("facebook"), jdbcTemplate, encryptor, accountMapper) {
-				public FacebookOperations createApi(OAuthToken accessToken) {
-					if (accessToken == null) {
-						throw new IllegalStateException("Cannot access Facebook without an access token");
-					}
-					return new FacebookTemplate(accessToken.getValue());
-				}
-				public String getProviderAccountId(FacebookOperations api) {
-					return api.getProfileId();
-				}
-
-				public String getProviderProfileUrl(FacebookOperations api) {
-					return "http://www.facebook.com/profile.php?id=" + api.getProfileId();
-				}
-			};
+			return (AccountProvider<A>) new FacebookAccountProvider(getParameters("facebook"), jdbcTemplate, encryptor, accountMapper);
 		} else if (TwitterOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new JdbcAccountProvider<TwitterOperations>(getParameters("twitter"), jdbcTemplate, encryptor, accountMapper) {
-				public TwitterOperations createApi(OAuthToken accessToken) {
-					return accessToken != null ? new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret()) : new TwitterTemplate();
-				}
-				public String getProviderAccountId(TwitterOperations api) {
-					return api.getProfileId();
-				}
-
-				public String getProviderProfileUrl(TwitterOperations api) {
-					return "http://www.twitter.com/" + api.getProfileId();
-				}				
-			};			
+			return (AccountProvider<A>) new TwitterAccountProvider(getParameters("twitter"), jdbcTemplate, encryptor, accountMapper);			
 		} else if (LinkedInOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new JdbcAccountProvider<LinkedInOperations>(getParameters("linkedin"), jdbcTemplate, encryptor, accountMapper) {
-				public LinkedInOperations createApi(OAuthToken accessToken) {
-					if (accessToken == null) {
-						throw new IllegalStateException("Cannot access LinkedIn without an access token");
-					}
-					return new LinkedInTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
-				}
-				public String getProviderAccountId(LinkedInOperations api) {
-					return api.getProfileId();
-				}
-
-				public String getProviderProfileUrl(LinkedInOperations api) {
-					return api.getProfileUrl();
-				}				
-			};
+			return (AccountProvider<A>) new LinkedInAccountProvider(getParameters("linkedin"), jdbcTemplate, encryptor, accountMapper);
 		} else if (TripItOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new JdbcAccountProvider<TripItOperations>(getParameters("tripit"), jdbcTemplate, encryptor, accountMapper) {
-				public TripItOperations createApi(OAuthToken accessToken) {
-					if (accessToken == null) {
-						throw new IllegalStateException("Cannot access TripIt without an access token");
-					}
-					return new TripItTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
-				}
-				public String getProviderAccountId(TripItOperations api) {
-					return api.getProfileId();
-				}
-
-				public String getProviderProfileUrl(TripItOperations api) {
-					return api.getProfileUrl();
-				}
-			};
+			return (AccountProvider<A>) new TripItAccountProvider(getParameters("tripit"), jdbcTemplate, encryptor, accountMapper);
 		} else {
 			throw new IllegalArgumentException("Not a supported apiType " + apiType);
 		}
@@ -141,5 +84,5 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 	private static final String SELECT_ACCOUNT_PROVIDER_BY_NAME = "select displayName, apiKey, secret, appId, requestTokenUrl, authorizeUrl, accessTokenUrl from AccountProvider where name = ?";
 
 	private static final String SELECT_ACCOUNT_CONNECTIONS = "select p.name, p.displayName, c.accountId, c.profileUrl from AccountConnection c inner join AccountProvider p on c.provider = p.name where member = ? order by displayName";
-	
+
 }
