@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 
+@Controller
 @RequestMapping("/connect")
 public class ConnectController {
 	
