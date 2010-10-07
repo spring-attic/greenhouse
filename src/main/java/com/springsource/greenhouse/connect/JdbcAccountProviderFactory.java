@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.encrypt.StringEncryptor;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.ClassUtils;
 
 import com.springsource.greenhouse.account.AccountMapper;
 
-//TODO this is disabled because it's needed in root-context yet scanned by app-servlet-context. not very clean: revisit this.
-//@Repository
+@Repository
 public class JdbcAccountProviderFactory implements AccountProviderFactory {
 	
 	private final JdbcTemplate jdbcTemplate;

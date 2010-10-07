@@ -11,10 +11,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.encrypt.StringEncryptor;
+import org.springframework.stereotype.Repository;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
 
+@Repository
 public class JdbcAccountConnectionRepository implements AccountConnectionRepository {
 
 	private final JdbcTemplate jdbcTemplate;
