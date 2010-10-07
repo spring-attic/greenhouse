@@ -21,7 +21,6 @@ import org.springframework.social.twitter.TwitterOperations;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
-import com.springsource.greenhouse.connect.providers.JdbcAccountProviderFactory;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountConnectionRepositoryTest {
@@ -41,7 +40,7 @@ public class JdbcAccountConnectionRepositoryTest {
 		StringEncryptor encryptor = new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed");
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		providerFactory = new JdbcAccountProviderFactory(jdbcTemplate, encryptor, accountMapper);
-		accountProvider = providerFactory.getAccountProvider(TwitterOperations.class);
+		accountProvider = providerFactory.getAccountProvider("twitter", TwitterOperations.class);
 	}
 
 	@After

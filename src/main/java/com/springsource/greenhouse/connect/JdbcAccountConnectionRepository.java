@@ -79,7 +79,7 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 
 	private static final String SELECT_PROVIDER_ACCOUNT_ID = "select accountId from AccountConnection where member = ? and provider = ?";
 
-	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select count(*) from AccountConnection where member = ? and provider = ?";
+	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select exists(select 1 from AccountConnection where member = ? and provider = ?)";
 
 	private static final String INSERT_ACCOUNT_CONNECTION = "insert into AccountConnection (member, provider, accessToken, secret, accountId, profileUrl) values (?, ?, ?, ?, ?, ?)";
 

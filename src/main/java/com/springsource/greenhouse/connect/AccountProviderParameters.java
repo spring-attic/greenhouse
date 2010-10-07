@@ -7,7 +7,7 @@ public class AccountProviderParameters {
 	private final String name;
 	
 	private final String displayName;
-
+	
 	private final String apiKey;
 	
 	private final String secret;
@@ -20,8 +20,7 @@ public class AccountProviderParameters {
 	
 	private final String accessTokenUrl;
 
-	public AccountProviderParameters(String name, String displayName, String apiKey, String secret, Long appId,
-			String requestTokenUrl, String authorizeUrl, String accessTokenUrl) {
+	public AccountProviderParameters(String name, String displayName, String apiKey, String secret, Long appId, String requestTokenUrl, String authorizeUrl, String accessTokenUrl) {
 		this.name = name;
 		this.displayName = displayName;
 		this.apiKey = apiKey;
@@ -39,7 +38,7 @@ public class AccountProviderParameters {
 	public String getDisplayName() {
 		return displayName;
 	}
-
+	
 	public String getApiKey() {
 		return apiKey;
 	}
@@ -63,5 +62,5 @@ public class AccountProviderParameters {
 	public String getAccessTokenUrl() {
 		return accessTokenUrl;
 	}
-	
+
 }

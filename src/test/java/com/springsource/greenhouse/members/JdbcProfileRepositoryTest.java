@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.members;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -9,13 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.security.encrypt.NoOpStringEncryptor;
-import org.springframework.security.encrypt.StringEncryptor;
 
-import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.connect.ConnectedProfile;
-import com.springsource.greenhouse.connect.providers.JdbcAccountProviderFactory;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcProfileRepositoryTest {
@@ -30,10 +26,7 @@ public class JdbcProfileRepositoryTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		StringEncryptor encryptor = NoOpStringEncryptor.getInstance();
-		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		JdbcAccountProviderFactory providerFactory = new JdbcAccountProviderFactory(jdbcTemplate, encryptor, accountMapper);
-		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage(), providerFactory);
+		profileRepository = new JdbcProfileRepository(jdbcTemplate, new StubFileStorage());
     }
 	
 	@After

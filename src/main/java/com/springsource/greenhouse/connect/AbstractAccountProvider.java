@@ -37,7 +37,7 @@ public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 	public String getDisplayName() {
 		return parameters.getDisplayName();
 	}
-
+	
 	public String getApiKey() {
 		return parameters.getApiKey();
 	}

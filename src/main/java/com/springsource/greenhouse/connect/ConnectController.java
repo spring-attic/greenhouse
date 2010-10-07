@@ -87,15 +87,17 @@ public class ConnectController {
 	// internal helpers
 
 	private AccountProvider<?> getAccountProvider(String name) {
-		return providerFactory.getAccountProviderByName(name);
+		return providerFactory.getAccountProvider(name);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void preConnect(AccountProvider<?> provider, WebRequest request) {
 		for (ConnectInterceptor interceptor : interceptingConnectionsTo(provider)) {
 			interceptor.preConnect(provider, request);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void postConnect(AccountProvider<?> provider, Account account, WebRequest request) {
 		for (ConnectInterceptor interceptor : interceptingConnectionsTo(provider)) {
 			interceptor.postConnect(provider, account, request);

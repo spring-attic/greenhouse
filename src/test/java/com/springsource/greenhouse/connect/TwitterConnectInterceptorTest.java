@@ -16,8 +16,11 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.connect.providers.TwitterConnectInterceptor;
 
 public class TwitterConnectInterceptorTest {
+	
 	private MockHttpServletRequest httpServletRequest;
+	
 	private TwitterConnectInterceptor interceptor;
+	
 	private ServletWebRequest request;
 
 	@Before

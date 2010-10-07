@@ -1,12 +1,9 @@
 package com.springsource.greenhouse.connect;
 
-import java.util.List;
-
 public interface AccountProviderFactory {
 	
-	<A> AccountProvider<A> getAccountProvider(Class<A> apiType);
-	
-	AccountProvider<?> getAccountProviderByName(String name);
+	AccountProvider<?> getAccountProvider(String name);
 
-	List<ConnectedProfile> findConnectedProfiles(Long accountId);
+	<A> AccountProvider<A> getAccountProvider(String name, Class<A> apiType);
+
 }

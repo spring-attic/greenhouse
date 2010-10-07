@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.springsource.greenhouse.account.PictureSize;
 import com.springsource.greenhouse.account.PictureUrlFactory;
 import com.springsource.greenhouse.account.PictureUrlMapper;
-import com.springsource.greenhouse.connect.AccountProviderFactory;
 import com.springsource.greenhouse.connect.ConnectedProfile;
 
 @Service
@@ -24,15 +23,12 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private final PictureUrlFactory pictureUrlFactory;
 
-	private final AccountProviderFactory accountProviderFactory;
-
 	private final RowMapper<Profile> profileMapper;
 
 	@Inject
-	public JdbcProfileRepository(JdbcTemplate jdbcTemplate, FileStorage pictureStorage, AccountProviderFactory accountProviderFactory) {
+	public JdbcProfileRepository(JdbcTemplate jdbcTemplate, FileStorage pictureStorage) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.pictureUrlFactory = new PictureUrlFactory(pictureStorage);
-		this.accountProviderFactory = accountProviderFactory;
 		profileMapper = new ProfileMapper();
 	}
 	
@@ -46,7 +42,11 @@ public class JdbcProfileRepository implements ProfileRepository {
 	}
 
 	public List<ConnectedProfile> findConnectedProfiles(Long accountId) {
-		return accountProviderFactory.findConnectedProfiles(accountId);
+		return jdbcTemplate.query(SELECT_CONNECTED_PROFILES, new RowMapper<ConnectedProfile>() {
+			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
+				return new ConnectedProfile(rs.getString("displayName"), rs.getString("profileUrl"));
+			}
+		}, accountId);
 	}
 
 	public String findProfilePictureUrl(String profileKey, PictureSize size) {
@@ -85,5 +85,7 @@ public class JdbcProfileRepository implements ProfileRepository {
 	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, gender, pictureSet from Member";
 
 	private static final String SELECT_PROFILE_PIC = "select id, gender, pictureSet from Member";
+	
+	private static final String SELECT_CONNECTED_PROFILES = "select p.displayName, c.profileUrl from AccountConnection c inner join AccountProvider p on c.provider = p.name where member = ? order by displayName";
 
 }
