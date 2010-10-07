@@ -1,49 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- For loading AccountProviders -->	
 	<bean id="accountProviderFactory" class="com.springsource.greenhouse.connect.JdbcAccountProviderFactory" />
 
-	<!-- Twitter Account Connections -->
-	
-	<bean id="twitterAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
+	<bean id="twitterAccountProvider" parent="accountProvider">
 		<constructor-arg value="twitter" />
 	</bean>
 
-	<bean id="twitterApi" parent="providerApi" factory-bean="twitterAccountProvider" />
-
-	<!-- Facebook Account Connections -->
-	
-	<bean id="facebookAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
+	<bean id="facebookAccountProvider" parent="accountProvider">
 		<constructor-arg value="facebook" />
 	</bean>
 
-	<bean id="facebookApi" parent="providerApi" factory-bean="facebookAccountProvider" />
-
-	<!-- LinkedIn Account Connections -->
-	
-	<bean id="linkedInAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
+	<bean id="linkedInAccountProvider" parent="accountProvider">
 		<constructor-arg value="linkedin" />
 	</bean>
 	
-	<bean id="linkedInApi" parent="providerApi" factory-bean="linkedInAccountProvider" />
-
-	<!-- TripIt Account Connections -->
-	
-	<bean id="tripItAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
+	<bean id="tripItAccountProvider" parent="accountProvider">
 		<constructor-arg value="tripit" />
 	</bean>
 	
-	<bean id="tripItApi" parent="providerApi" factory-bean="tripItAccountProvider" />
+	<bean class="com.springsource.greenhouse.config.AccountProvidersApiConfiguration" />
+
+	<!-- Common parents -->
 	
-	<!-- Helpers -->
-	
-	<bean id="providerApi" abstract="true" factory-method="getApi" scope="request">
-		<constructor-arg value="#{request.getAttribute('account') != null ? account.getId() : null}" />
-	</bean>
-	
+	<bean abstract="true" id="accountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider" />
+				
 </beans>

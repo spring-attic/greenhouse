@@ -28,4 +28,9 @@ public final class LinkedInAccountProvider extends AbstractAccountProvider<Linke
 	public String getProviderProfileUrl(LinkedInOperations api) {
 		return api.getProfileUrl();
 	}
+	
+	public static LinkedInOperations apiForAccount(LinkedInAccountProvider instance, Long accountId) {
+		return instance.getApi(accountId);
+	}
+
 }

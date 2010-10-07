@@ -28,4 +28,9 @@ public final class FacebookAccountProvider extends AbstractAccountProvider<Faceb
 	public String getProviderProfileUrl(FacebookOperations api) {
 		return "http://www.facebook.com/profile.php?id=" + api.getProfileId();
 	}
+	
+	public static FacebookOperations apiForAccount(FacebookAccountProvider instance, Long accountId) {
+		return instance.getApi(accountId);
+	}
+
 }

@@ -3,7 +3,6 @@ package com.springsource.greenhouse.invite;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
@@ -20,16 +19,16 @@ import com.springsource.greenhouse.connect.AccountProvider;
 @RequestMapping("/invite/twitter")
 public class TwitterInviteController {
 	
-	private AccountProvider<TwitterOperations> accountProvider;
+	private AccountProvider<TwitterOperations> twitterAccountProvider;
 	
 	@Inject
-	public TwitterInviteController(@Named("twitterAccountProvider") AccountProvider<TwitterOperations> accountProvider) {
-		this.accountProvider = accountProvider;
+	public TwitterInviteController(AccountProvider<TwitterOperations> twitterAccountProvider) {
+		this.twitterAccountProvider = twitterAccountProvider;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		String twitterId = accountProvider.getProviderAccountId(account.getId());	
+		String twitterId = twitterAccountProvider.getProviderAccountId(account.getId());	
 		if (twitterId != null) {			
 			model.addAttribute("username", twitterId);
 		}
@@ -38,8 +37,8 @@ public class TwitterInviteController {
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> screenNames = accountProvider.getApi(account.getId()).getFollowed(username);
-			model.addAttribute("friendAccounts", accountProvider.findAccountsWithProviderAccountIds(screenNames));
+			List<String> screenNames = twitterAccountProvider.getApi(account.getId()).getFollowed(username);
+			model.addAttribute("friendAccounts", twitterAccountProvider.findAccountsWithProviderAccountIds(screenNames));
 		}
 		return "invite/twitterFriends";
 	}

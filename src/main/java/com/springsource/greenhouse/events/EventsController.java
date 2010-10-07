@@ -3,7 +3,6 @@ package com.springsource.greenhouse.events;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -31,10 +30,10 @@ public class EventsController {
 	
 	private EventRepository eventRepository;
 	
-	private Provider<TwitterOperations> twitterApi;
+	private TwitterOperations twitterApi;
 		
 	@Inject
-	public EventsController(EventRepository eventRepository, Provider<TwitterOperations> twitterApi) {
+	public EventsController(EventRepository eventRepository, TwitterOperations twitterApi) {
 		this.eventRepository = eventRepository;
 		this.twitterApi = twitterApi;
 	}
@@ -54,19 +53,19 @@ public class EventsController {
 	@RequestMapping(value="/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults tweets(@PathVariable Long eventId,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findEventSearchString(eventId);
-		return searchString != null && searchString.length() > 0 ? twitterApi.get().search(searchString, page, pageSize) : null;
+		return searchString != null && searchString.length() > 0 ? twitterApi.search(searchString, page, pageSize) : null;
 	}
 
 	@RequestMapping(value = "/{eventId}/tweets", method = RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation) {
-		twitterApi.get().tweet(status);
+		twitterApi.tweet(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{eventId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postRetweet(@PathVariable Long eventId, @RequestParam Long tweetId) {
-		twitterApi.get().retweet(tweetId);
+		twitterApi.retweet(tweetId);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
@@ -93,19 +92,19 @@ public class EventsController {
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findSessionSearchString(eventId, sessionId);
-		return searchString != null && searchString.length() > 0 ? twitterApi.get().search(searchString, page, pageSize) : null;
+		return searchString != null && searchString.length() > 0 ? twitterApi.search(searchString, page, pageSize) : null;
 	}
 
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam String status, Location currentLocation) {
-		twitterApi.get().tweet(status);
+		twitterApi.tweet(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam Long tweetId) {
-		twitterApi.get().retweet(tweetId);
+		twitterApi.retweet(tweetId);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	

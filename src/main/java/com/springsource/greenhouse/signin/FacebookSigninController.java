@@ -1,7 +1,6 @@
 package com.springsource.greenhouse.signin;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookOperations;
@@ -23,20 +22,20 @@ import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 @RequestMapping("/signin/facebook")
 public class FacebookSigninController {
 
-	private final AccountProvider<FacebookOperations> accountProvider;
+	private final AccountProvider<FacebookOperations> facebookAccountProvider;
 
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookSigninController(@Named("facebookAccountProvider") AccountProvider<FacebookOperations> accountProvider, AccountRepository accountRepository) {
-		this.accountProvider = accountProvider;
+	public FacebookSigninController(AccountProvider<FacebookOperations> facebookAccountProvider, AccountRepository accountRepository) {
+		this.facebookAccountProvider = facebookAccountProvider;
 		this.accountRepository = accountRepository;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String signin(@FacebookAccessToken String accessToken) {
 		try {
-			Account account = accountProvider.findAccountByConnection(accessToken);
+			Account account = facebookAccountProvider.findAccountByConnection(accessToken);
 			AccountUtils.signin(account);
 			return "redirect:/";
 		} catch (NoSuchAccountConnectionException e) {

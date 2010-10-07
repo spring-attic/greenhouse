@@ -25,4 +25,9 @@ public final class TwitterAccountProvider extends AbstractAccountProvider<Twitte
 	public String getProviderProfileUrl(TwitterOperations api) {
 		return "http://www.twitter.com/" + api.getProfileId();
 	}
+	
+	public static TwitterOperations apiForAccount(TwitterAccountProvider instance, Long accountId) {
+		return instance.getApi(accountId);
+	}
+	
 }

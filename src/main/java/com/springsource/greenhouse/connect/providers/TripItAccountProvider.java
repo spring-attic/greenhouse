@@ -28,4 +28,5 @@ public final class TripItAccountProvider extends AbstractAccountProvider<TripItO
 	public String getProviderProfileUrl(TripItOperations api) {
 		return api.getProfileUrl();
 	}
+	
 }

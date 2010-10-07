@@ -26,10 +26,10 @@ public class GroupsController {
 
 	private EventRepository eventRepository;	
 	
-	private Provider<TwitterOperations> twitterApi;
+	private TwitterOperations twitterApi;
 
 	@Inject
-	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, Provider<TwitterOperations> twitterApi) {
+	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, TwitterOperations twitterApi) {
 		this.groupRepository = groupRepository;
 		this.eventRepository = eventRepository;
 		this.twitterApi = twitterApi;
@@ -47,7 +47,7 @@ public class GroupsController {
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(event);
-		model.addAttribute(twitterApi.get().search(event.getHashtag(), 1, 10));
+		model.addAttribute(twitterApi.search(event.getHashtag(), 1, 10));
 		return "groups/event";
 	}	
 	

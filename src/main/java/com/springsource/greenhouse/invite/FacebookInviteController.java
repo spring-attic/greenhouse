@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.stereotype.Controller;
@@ -24,8 +23,8 @@ public class FacebookInviteController {
 	private final AccountProvider<FacebookOperations> accountProvider;
 	
 	@Inject
-	public FacebookInviteController(@Named("facebookAccountProvider") AccountProvider<FacebookOperations> accountProvider) {
-		this.accountProvider = accountProvider;
+	public FacebookInviteController(AccountProvider<FacebookOperations> facebookAccountProvider) {
+		this.accountProvider = facebookAccountProvider;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
