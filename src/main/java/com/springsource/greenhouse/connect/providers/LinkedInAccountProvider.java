@@ -1,7 +1,12 @@
-package com.springsource.greenhouse.connect;
+package com.springsource.greenhouse.connect.providers;
 
 import org.springframework.social.linkedin.LinkedInOperations;
 import org.springframework.social.linkedin.LinkedInTemplate;
+
+import com.springsource.greenhouse.connect.AbstractAccountProvider;
+import com.springsource.greenhouse.connect.AccountConnectionRepository;
+import com.springsource.greenhouse.connect.AccountProviderParameters;
+import com.springsource.greenhouse.connect.OAuthToken;
 
 public final class LinkedInAccountProvider extends AbstractAccountProvider<LinkedInOperations> {
 	

@@ -15,7 +15,7 @@ import org.springframework.security.encrypt.StringEncryptor;
 import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.connect.ConnectedProfile;
-import com.springsource.greenhouse.connect.JdbcAccountProviderFactory;
+import com.springsource.greenhouse.connect.providers.JdbcAccountProviderFactory;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcProfileRepositoryTest {

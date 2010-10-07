@@ -2,7 +2,7 @@ package com.springsource.greenhouse.connect;
 
 import org.springframework.web.util.UriTemplate;
 
-class AccountProviderParameters {
+public class AccountProviderParameters {
 	
 	private final String name;
 	

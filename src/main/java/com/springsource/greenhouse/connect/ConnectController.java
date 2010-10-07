@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Controller;
@@ -45,7 +44,7 @@ public class ConnectController {
 	}
 
 	@RequestMapping(value="/{provider}", method=RequestMethod.GET)
-	public String connect(@PathVariable String provider, Account account) {
+	public String connect(Account account, @PathVariable String provider) {
 		String baseViewPath = "connect/" + provider;
 		if (getAccountProvider(provider).isConnected(account.getId())) {
 			return baseViewPath + "Connected";
@@ -80,7 +79,7 @@ public class ConnectController {
 	}
 
 	@RequestMapping(method=RequestMethod.DELETE)
-	public String disconnect(@PathVariable String provider, Account account) {
+	public String disconnect(Account account, @PathVariable String provider) {
 		getAccountProvider(provider).disconnect(account.getId());
 		return "redirect:/connect/" + provider;
 	}
@@ -91,14 +90,12 @@ public class ConnectController {
 		return providerFactory.getAccountProviderByName(name);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void preConnect(AccountProvider<?> provider, WebRequest request) {
 		for (ConnectInterceptor interceptor : interceptingConnectionsTo(provider)) {
 			interceptor.preConnect(provider, request);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void postConnect(AccountProvider<?> provider, Account account, WebRequest request) {
 		for (ConnectInterceptor interceptor : interceptingConnectionsTo(provider)) {
 			interceptor.postConnect(provider, account, request);

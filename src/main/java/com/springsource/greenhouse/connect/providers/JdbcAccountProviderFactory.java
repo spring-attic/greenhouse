@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.connect;
+package com.springsource.greenhouse.connect.providers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +14,11 @@ import org.springframework.social.tripit.TripItOperations;
 import org.springframework.social.twitter.TwitterOperations;
 
 import com.springsource.greenhouse.account.AccountMapper;
+import com.springsource.greenhouse.connect.AccountProvider;
+import com.springsource.greenhouse.connect.AccountProviderFactory;
+import com.springsource.greenhouse.connect.AccountProviderParameters;
+import com.springsource.greenhouse.connect.ConnectedProfile;
+import com.springsource.greenhouse.connect.JdbcAccountConnectionRepository;
 
 //TODO this is disabled because it's needed in root-context yet scanned by app-servlet-context. not very clean: revisit this.
 //@Repository

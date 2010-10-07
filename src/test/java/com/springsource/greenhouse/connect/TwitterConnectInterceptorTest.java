@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.connect.providers.TwitterConnectInterceptor;
 
 public class TwitterConnectInterceptorTest {
 	private MockHttpServletRequest httpServletRequest;

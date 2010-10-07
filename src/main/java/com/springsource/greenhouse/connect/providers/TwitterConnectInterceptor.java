@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.connect;
+package com.springsource.greenhouse.connect.providers;
 
 import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.social.twitter.TwitterOperations;
@@ -7,12 +7,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.connect.AccountProvider;
+import com.springsource.greenhouse.connect.ConnectInterceptor;
 
 @Component
 public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterOperations> {
-
-	private static final String POST_TWEET_PARAMETER = "postTweet";
-	private static final String POST_TWEET_ATTRIBUTE = "twitterConnect." + POST_TWEET_PARAMETER;
 
 	public void preConnect(AccountProvider<TwitterOperations> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAMETER))) {
@@ -29,4 +28,9 @@ public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterOper
 			request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		}
 	}
+	
+	private static final String POST_TWEET_PARAMETER = "postTweet";
+	
+	private static final String POST_TWEET_ATTRIBUTE = "twitterConnect." + POST_TWEET_PARAMETER;
+
 }

@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
 
-abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
+public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 	
 	private final AccountProviderParameters parameters;
 

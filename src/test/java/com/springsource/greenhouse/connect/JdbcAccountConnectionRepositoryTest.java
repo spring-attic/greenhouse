@@ -21,6 +21,7 @@ import org.springframework.social.twitter.TwitterOperations;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
+import com.springsource.greenhouse.connect.providers.JdbcAccountProviderFactory;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountConnectionRepositoryTest {
