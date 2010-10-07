@@ -37,7 +37,6 @@ public class ConnectController {
 		this.interceptors = new LinkedMultiValueMap<Class<?>, ConnectInterceptor<?>>();
 	}
 
-	@Autowired(required = false)
 	public void setInterceptors(List<ConnectInterceptor<?>> interceptors) {
 		for (ConnectInterceptor<?> interceptor : interceptors) {
 			Class<?> providerType = GenericTypeResolver.resolveTypeArgument(interceptor.getClass(),  ConnectInterceptor.class);
@@ -107,7 +106,6 @@ public class ConnectController {
 	}
 
 	private List<ConnectInterceptor<?>> interceptingConnectionsTo(AccountProvider<?> provider) {
-		// TODO not sure this will work reliably due to type erasure
 		Class<?> providerApiType = GenericTypeResolver.resolveTypeArgument(provider.getClass(), AccountProvider.class);
 		List<ConnectInterceptor<?>> typedInterceptors = interceptors.get(providerApiType);
 		if (typedInterceptors == null) {
