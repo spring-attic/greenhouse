@@ -1,8 +1,13 @@
 package com.springsource.greenhouse.connect;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +39,7 @@ public class TwitterConnectInterceptorTest {
 	public void preConnect() {
 		httpServletRequest.setParameter("postTweet", "true");
 		interceptor.preConnect(null, request);
-		Boolean postTweetAttributeValue = (Boolean) request.getAttribute("twitterConnect.postTweet",
-				WebRequest.SCOPE_SESSION);
+		Boolean postTweetAttributeValue = (Boolean) request.getAttribute("twitterConnect.postTweet", WebRequest.SCOPE_SESSION);
 		assertNotNull(postTweetAttributeValue);
 		assertTrue(postTweetAttributeValue);
 	}
@@ -43,14 +47,14 @@ public class TwitterConnectInterceptorTest {
 	@Test
 	public void preConnect_noPostTweetParameter() {
 		interceptor.preConnect(null, request);
-		Boolean postTweetAttributeValue = (Boolean) request.getAttribute("twitterConnect.postTweet",
-				WebRequest.SCOPE_SESSION);
+		Boolean postTweetAttributeValue = (Boolean) request.getAttribute("twitterConnect.postTweet", WebRequest.SCOPE_SESSION);
 		assertNull(postTweetAttributeValue);
 	}
 
 	@Test
 	public void postConnect() {
 		request.setAttribute("twitterConnect.postTweet", Boolean.TRUE, WebRequest.SCOPE_SESSION);
+		@SuppressWarnings("unchecked")
 		AccountProvider<TwitterOperations> provider = mock(AccountProvider.class);
 		TwitterOperations twitterOperations = mock(TwitterOperations.class);
 		when(provider.getApi(2L)).thenReturn(twitterOperations);
@@ -63,8 +67,10 @@ public class TwitterConnectInterceptorTest {
 
 	@Test
 	public void postConnect_noPostTweetAttribute() {
+		@SuppressWarnings("unchecked")
 		AccountProvider<TwitterOperations> provider = mock(AccountProvider.class);
 		interceptor.postConnect(provider, null, request);
 		verify(provider, never()).getApi(anyLong());
 	}
+	
 }

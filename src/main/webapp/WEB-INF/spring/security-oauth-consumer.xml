@@ -4,7 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-						
+
 	<!-- For loading AccountProviders -->	
 	<bean id="accountProviderFactory" class="com.springsource.greenhouse.connect.JdbcAccountProviderFactory" />
 
@@ -13,11 +13,8 @@
 	<bean id="twitterAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
 		<constructor-arg value="twitter" />
 	</bean>
-	
-	<bean id="twitterApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getTwitterApi" scope="request">
-		<constructor-arg ref="twitterAccountProvider" />
-		<constructor-arg value="#{request.getAttribute('account')}" />
-	</bean>
+
+	<bean id="twitterApi" parent="providerApi" factory-bean="twitterAccountProvider" />
 
 	<!-- Facebook Account Connections -->
 	
@@ -25,10 +22,7 @@
 		<constructor-arg value="facebook" />
 	</bean>
 
-	<bean id="facebookApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getFacebookApi" scope="request">
-		<constructor-arg ref="facebookAccountProvider" />
-		<constructor-arg value="#{request.getAttribute('account')}" />
-	</bean>
+	<bean id="facebookApi" parent="providerApi" factory-bean="facebookAccountProvider" />
 
 	<!-- LinkedIn Account Connections -->
 	
@@ -36,10 +30,7 @@
 		<constructor-arg value="linkedin" />
 	</bean>
 	
-	<bean id="linkedInApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getLinkedInApi" scope="request">
-		<constructor-arg ref="linkedInAccountProvider" />
-		<constructor-arg value="#{request.getAttribute('account')}" />
-	</bean>
+	<bean id="linkedInApi" parent="providerApi" factory-bean="linkedInAccountProvider" />
 
 	<!-- TripIt Account Connections -->
 	
@@ -47,9 +38,12 @@
 		<constructor-arg value="tripit" />
 	</bean>
 	
-	<bean id="tripItApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getTripItApi" scope="request">
-		<constructor-arg ref="tripItAccountProvider" />
-		<constructor-arg value="#{request.getAttribute('account')}" />
+	<bean id="tripItApi" parent="providerApi" factory-bean="tripItAccountProvider" />
+	
+	<!-- Helpers -->
+	
+	<bean id="providerApi" abstract="true" factory-method="getApi" scope="request">
+		<constructor-arg value="#{request.getAttribute('account') != null ? account.getId() : null}" />
 	</bean>
 	
 </beans>
