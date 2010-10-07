@@ -35,13 +35,13 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 	@SuppressWarnings("unchecked")
 	public <A> AccountProvider<A> getAccountProvider(Class<A> apiType) {
 		if (FacebookOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new FacebookAccountProvider(getParameters("facebook"), jdbcTemplate, encryptor, accountMapper);
+			return (AccountProvider<A>) new FacebookAccountProvider(getParameters("facebook"), new JdbcAccountConnectionRepository(jdbcTemplate, encryptor, accountMapper));
 		} else if (TwitterOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new TwitterAccountProvider(getParameters("twitter"), jdbcTemplate, encryptor, accountMapper);			
+			return (AccountProvider<A>) new TwitterAccountProvider(getParameters("twitter"), new JdbcAccountConnectionRepository(jdbcTemplate, encryptor, accountMapper));			
 		} else if (LinkedInOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new LinkedInAccountProvider(getParameters("linkedin"), jdbcTemplate, encryptor, accountMapper);
+			return (AccountProvider<A>) new LinkedInAccountProvider(getParameters("linkedin"), new JdbcAccountConnectionRepository(jdbcTemplate, encryptor, accountMapper));
 		} else if (TripItOperations.class.equals(apiType)) {
-			return (AccountProvider<A>) new TripItAccountProvider(getParameters("tripit"), jdbcTemplate, encryptor, accountMapper);
+			return (AccountProvider<A>) new TripItAccountProvider(getParameters("tripit"), new JdbcAccountConnectionRepository(jdbcTemplate, encryptor, accountMapper));
 		} else {
 			throw new IllegalArgumentException("Not a supported apiType " + apiType);
 		}

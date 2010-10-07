@@ -1,15 +1,12 @@
 package com.springsource.greenhouse.connect;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.linkedin.LinkedInOperations;
 import org.springframework.social.linkedin.LinkedInTemplate;
 
-import com.springsource.greenhouse.account.AccountMapper;
-
-public final class LinkedInAccountProvider extends JdbcAccountProvider<LinkedInOperations> {
-	LinkedInAccountProvider(AccountProviderParameters parameters, JdbcTemplate jdbcTemplate, StringEncryptor encryptor, AccountMapper accountMapper) {
-		super(parameters, jdbcTemplate, encryptor, accountMapper);
+public final class LinkedInAccountProvider extends AbstractAccountProvider<LinkedInOperations> {
+	
+	public LinkedInAccountProvider(AccountProviderParameters parameters, AccountConnectionRepository connectionRepository) {
+		super(parameters, connectionRepository);
 	}
 
 	public LinkedInOperations createApi(OAuthToken accessToken) {

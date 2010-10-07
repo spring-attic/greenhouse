@@ -1,15 +1,12 @@
 package com.springsource.greenhouse.connect;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookTemplate;
 
-import com.springsource.greenhouse.account.AccountMapper;
-
-public final class FacebookAccountProvider extends JdbcAccountProvider<FacebookOperations> {
-	FacebookAccountProvider(AccountProviderParameters parameters, JdbcTemplate jdbcTemplate, StringEncryptor encryptor, AccountMapper accountMapper) {
-		super(parameters, jdbcTemplate, encryptor, accountMapper);
+public final class FacebookAccountProvider extends AbstractAccountProvider<FacebookOperations> {
+	
+	public FacebookAccountProvider(AccountProviderParameters parameters, AccountConnectionRepository connectionRepository) {
+		super(parameters, connectionRepository);
 	}
 
 	public FacebookOperations createApi(OAuthToken accessToken) {

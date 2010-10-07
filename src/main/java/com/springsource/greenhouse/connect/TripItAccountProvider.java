@@ -1,15 +1,12 @@
 package com.springsource.greenhouse.connect;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.tripit.TripItOperations;
 import org.springframework.social.tripit.TripItTemplate;
 
-import com.springsource.greenhouse.account.AccountMapper;
-
-public final class TripItAccountProvider extends JdbcAccountProvider<TripItOperations> {
-	TripItAccountProvider(AccountProviderParameters parameters, JdbcTemplate jdbcTemplate, StringEncryptor encryptor, AccountMapper accountMapper) {
-		super(parameters, jdbcTemplate, encryptor, accountMapper);
+public final class TripItAccountProvider extends AbstractAccountProvider<TripItOperations> {
+	
+	public TripItAccountProvider(AccountProviderParameters parameters, AccountConnectionRepository connectionRepository) {
+		super(parameters, connectionRepository);
 	}
 
 	public TripItOperations createApi(OAuthToken accessToken) {

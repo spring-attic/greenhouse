@@ -1,15 +1,12 @@
 package com.springsource.greenhouse.connect;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.social.twitter.TwitterTemplate;
 
-import com.springsource.greenhouse.account.AccountMapper;
-
-public final class TwitterAccountProvider extends JdbcAccountProvider<TwitterOperations> {
-	TwitterAccountProvider(AccountProviderParameters parameters, JdbcTemplate jdbcTemplate, StringEncryptor encryptor, AccountMapper accountMapper) {
-		super(parameters, jdbcTemplate, encryptor, accountMapper);
+public final class TwitterAccountProvider extends AbstractAccountProvider<TwitterOperations> {
+	
+	public TwitterAccountProvider(AccountProviderParameters parameters, AccountConnectionRepository connectionRepository) {
+		super(parameters, connectionRepository);
 	}
 
 	public TwitterOperations createApi(OAuthToken accessToken) {
