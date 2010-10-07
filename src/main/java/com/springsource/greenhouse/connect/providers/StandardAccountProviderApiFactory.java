@@ -9,14 +9,17 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.connect.AccountProvider;
 
 // TODO - this can go away once Spring can autowire using parameterized types as qualifiers
-public class AccountProviderApiFactory {
+public class StandardAccountProviderApiFactory {
 	
 	public static TwitterOperations getTwitterApi(AccountProvider<TwitterOperations> twitterProvider, Account account) {
 		return twitterProvider.getApi(account != null ? account.getId() : null);
 	}
 
-	public static LinkedInOperations getLinkedInApi(AccountProvider<LinkedInOperations> linkedInProvider,
-			Account account) {
+	public static FacebookOperations getFacebookApi(AccountProvider<FacebookOperations> facebookProvider, Account account) {
+		return facebookProvider.getApi(account != null ? account.getId() : null);
+	}
+
+	public static LinkedInOperations getLinkedInApi(AccountProvider<LinkedInOperations> linkedInProvider, Account account) {
 		return linkedInProvider.getApi(account != null ? account.getId() : null);
 	}
 
@@ -24,10 +27,6 @@ public class AccountProviderApiFactory {
 		return tripItProvider.getApi(account != null ? account.getId() : null);
 	}
 
-	public static FacebookOperations getFacebookApi(AccountProvider<FacebookOperations> facebookProvider, Account account) {
-		return facebookProvider.getApi(account != null ? account.getId() : null);
-	}
-
-	private AccountProviderApiFactory() {}
+	private StandardAccountProviderApiFactory() {}
 	
 }

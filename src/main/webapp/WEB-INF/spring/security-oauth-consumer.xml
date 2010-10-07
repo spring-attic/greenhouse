@@ -6,49 +6,50 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 						
 	<!-- For loading AccountProviders -->	
-	<bean id="accountProviderFactory" class="com.springsource.greenhouse.connect.providers.JdbcAccountProviderFactory" />
+	<bean id="accountProviderFactory" class="com.springsource.greenhouse.connect.JdbcAccountProviderFactory" />
 
 	<!-- Twitter Account Connections -->
 	
 	<bean id="twitterAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
-		<constructor-arg value="org.springframework.social.twitter.TwitterOperations" />
+		<constructor-arg value="twitter" />
 	</bean>
 	
-	<bean id="twitterApi" class="com.springsource.greenhouse.connect.providers.AccountProviderApiFactory" factory-method="getTwitterApi" scope="request">
+	<bean id="twitterApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getTwitterApi" scope="request">
 		<constructor-arg ref="twitterAccountProvider" />
-		<constructor-arg value="#{request.getAttribute('account')}" />
-	</bean>
-
-	<!-- LinkedIn Account Connections -->
-	
-	<bean id="linkedInAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
-		<constructor-arg value="org.springframework.social.linkedin.LinkedInOperations" />
-	</bean>
-	
-	<bean id="linkedInApi" class="com.springsource.greenhouse.connect.providers.AccountProviderApiFactory" factory-method="getLinkedInApi" scope="request">
-		<constructor-arg ref="linkedInAccountProvider" />
 		<constructor-arg value="#{request.getAttribute('account')}" />
 	</bean>
 
 	<!-- Facebook Account Connections -->
 	
 	<bean id="facebookAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
-		<constructor-arg value="org.springframework.social.facebook.FacebookOperations" />
+		<constructor-arg value="facebook" />
 	</bean>
 
-	<bean id="facebookApi" class="com.springsource.greenhouse.connect.providers.AccountProviderApiFactory" factory-method="getFacebookApi" scope="request">
+	<bean id="facebookApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getFacebookApi" scope="request">
 		<constructor-arg ref="facebookAccountProvider" />
+		<constructor-arg value="#{request.getAttribute('account')}" />
+	</bean>
+
+	<!-- LinkedIn Account Connections -->
+	
+	<bean id="linkedInAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
+		<constructor-arg value="linkedIn" />
+	</bean>
+	
+	<bean id="linkedInApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getLinkedInApi" scope="request">
+		<constructor-arg ref="linkedInAccountProvider" />
 		<constructor-arg value="#{request.getAttribute('account')}" />
 	</bean>
 
 	<!-- TripIt Account Connections -->
 	
 	<bean id="tripItAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
-		<constructor-arg value="org.springframework.social.tripit.TripItOperations" />
+		<constructor-arg value="tripit" />
 	</bean>
 	
-	<bean id="tripItApi" class="com.springsource.greenhouse.connect.providers.AccountProviderApiFactory" factory-method="getTripItApi" scope="request">
+	<bean id="tripItApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getTripItApi" scope="request">
 		<constructor-arg ref="tripItAccountProvider" />
 		<constructor-arg value="#{request.getAttribute('account')}" />
 	</bean>
+	
 </beans>
