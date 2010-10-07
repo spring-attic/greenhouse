@@ -3,7 +3,6 @@ package com.springsource.greenhouse.members;
 import java.util.List;
 
 import com.springsource.greenhouse.account.PictureSize;
-import com.springsource.greenhouse.connect.ConnectedProfile;
 
 public interface ProfileRepository {
 

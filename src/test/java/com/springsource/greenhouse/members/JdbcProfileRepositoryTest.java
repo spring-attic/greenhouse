@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import com.springsource.greenhouse.account.StubFileStorage;
-import com.springsource.greenhouse.connect.ConnectedProfile;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcProfileRepositoryTest {

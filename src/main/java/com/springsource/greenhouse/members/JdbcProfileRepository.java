@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.springsource.greenhouse.account.PictureSize;
 import com.springsource.greenhouse.account.PictureUrlFactory;
 import com.springsource.greenhouse.account.PictureUrlMapper;
-import com.springsource.greenhouse.connect.ConnectedProfile;
 
 @Service
 public class JdbcProfileRepository implements ProfileRepository {
