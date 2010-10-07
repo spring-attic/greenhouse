@@ -33,7 +33,7 @@
 	<!-- LinkedIn Account Connections -->
 	
 	<bean id="linkedInAccountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider">
-		<constructor-arg value="linkedIn" />
+		<constructor-arg value="linkedin" />
 	</bean>
 	
 	<bean id="linkedInApi" class="com.springsource.greenhouse.connect.providers.StandardAccountProviderApiFactory" factory-method="getLinkedInApi" scope="request">
