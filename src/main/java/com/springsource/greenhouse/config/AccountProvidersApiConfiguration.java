@@ -19,28 +19,28 @@ public class AccountProvidersApiConfiguration {
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
 	@Inject
-	public static TwitterOperations twitterApi(AccountProvider<TwitterOperations> twitterAccountProvider, @Value("request.getAttribute('account')") Account account) {
+	public TwitterOperations twitterApi(AccountProvider<TwitterOperations> twitterAccountProvider, @Value("request.getAttribute('account')") Account account) {
 		return twitterAccountProvider.getApi(accountId(account));
 	}
 
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
 	@Inject
-	public static FacebookOperations facebookApi(AccountProvider<FacebookOperations> facebookAccountProvider, @Value("request.getAttribute('account')") Account account) {
+	public FacebookOperations facebookApi(AccountProvider<FacebookOperations> facebookAccountProvider, @Value("request.getAttribute('account')") Account account) {
 		return facebookAccountProvider.getApi(accountId(account));
 	}
 
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
 	@Inject
-	public static LinkedInOperations apiForAccount(AccountProvider<LinkedInOperations> linkedInAccountProvider, @Value("request.getAttribute('account')") Account account) {
+	public LinkedInOperations apiForAccount(AccountProvider<LinkedInOperations> linkedInAccountProvider, @Value("request.getAttribute('account')") Account account) {
 		return linkedInAccountProvider.getApi(accountId(account));
 	}
 
 	@Bean
-	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
+	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	@Inject
-	public static TripItOperations tripItApi(AccountProvider<TripItOperations> tripItAccountProvider, @Value("request.getAttribute('account')") Account account) {
+	public TripItOperations tripItApi(AccountProvider<TripItOperations> tripItAccountProvider, @Value("request.getAttribute('account')") Account account) {
 		return tripItAccountProvider.getApi(accountId(account));
 	}
 
