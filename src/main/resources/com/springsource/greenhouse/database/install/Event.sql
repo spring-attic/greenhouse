@@ -4,7 +4,6 @@ create table Session (id identity,
 					description varchar,
 					hashtag varchar,
 					public boolean default false,
-					lastUpdateTime timestamp default now(),
 					primary key (id));
 
 create table SessionDeveloper (session bigint,
