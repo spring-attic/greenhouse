@@ -8,4 +8,6 @@ create table Member (id identity,
 					birthdate date not null,
 					reputation int default 0,
 					pictureSet boolean default false,
+					signedUpTime timestamp not null default now(),
+					lastSignInTime timestamp,
 					primary key (id));
