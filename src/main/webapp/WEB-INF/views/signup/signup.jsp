@@ -8,7 +8,7 @@
 </c:if>
 
 <c:url value="/signup" var="signupUrl" />
-<form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm" enctype="multipart/form-data">
+<form:form id="signup" action="${signupUrl}" method="post" modelAttribute="signupForm">
 	<div class="formInfo">
   		<h2>Sign Up at the Greenhouse</h2>
   		<s:bind path="*">
