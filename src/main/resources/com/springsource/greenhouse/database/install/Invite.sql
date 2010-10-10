@@ -8,7 +8,7 @@ create table Invite (token varchar,
 					primary key (token),
 					foreign key (sentBy) references Member(id));
 
-create table AcceptInviteAction (memberAction bigint, 
+create table InviteAcceptAction (memberAction bigint, 
 					sentBy bigint not null,
 					primary key (memberAction),
 					foreign key (memberAction) references MemberAction(id),
