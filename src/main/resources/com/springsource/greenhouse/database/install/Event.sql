@@ -78,7 +78,7 @@ create table EventSessionLeader (event bigint,
 					foreign key (leader) references Leader(id),
 					constraint UniqueEventSessionLeaderRank unique(event, session, rank));
 
-create table InvitedLeaderSession (invite varchar,
+create table InviteeSession (invite varchar,
 					event bigint,
 					session smallint,
 					leader bigint not null,
