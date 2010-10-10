@@ -125,7 +125,7 @@ public class JdbcEventRepository implements EventRepository {
 							rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), new SubResourceReference<Long, Integer>(rs.getLong("venue"), rs.getInt("room"), rs.getString("roomName")), rs.getBoolean("favorite"));
 				}
 				protected void addChild(EventSession session, ResultSet rs) throws SQLException {
-					session.addLeader(new EventSessionLeader(rs.getString("firstName"), rs.getString("lastName")));					
+					session.addLeader(new EventSessionLeader(rs.getString("name")));					
 				}
 			}.mapInto(new ArrayList<EventSession>(), rs);
 		}
@@ -141,27 +141,30 @@ public class JdbcEventRepository implements EventRepository {
 
 	private static final String SELECT_EVENT_BY_SLUG = SELECT_EVENT + " where g.slug = ? and extract(year from e.startTime) = ? and extract(month from e.startTime) = ? and e.slug = ?";
 
-	private static final String SELECT_FROM_EVENT_SESSION = "select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, s.venue, s.room, r.name as roomName, (f.attendee is not null) as favorite, m.firstName, m.lastName from EventSession s ";
+	private static final String SELECT_FROM_EVENT_SESSION = "select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, s.venue, s.room, r.name as roomName, (f.attendee is not null) as favorite, l.name from EventSession s ";
 	
 	private static final String SELECT_SESSIONS_ON_DAY = SELECT_FROM_EVENT_SESSION +
 		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
-		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
-		"inner join Member m on l.leader = m.id where s.event = ? and s.startTime >= ? and s.endTime <= ? " +
-		"order by s.startTime, l.rank";
+		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
+		"inner join Leader l on sl.leader = l.id " + 
+		"where s.event = ? and s.startTime >= ? and s.endTime <= ? " +
+		"order by s.startTime, sl.rank";
 
 	private static final String SELECT_EVENT_FAVORITES = SELECT_FROM_EVENT_SESSION +
 		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.id = top.session " +
 		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
-		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
-		"inner join Member m on l.leader = m.id where s.event = ? " +
-		"order by top.favoriteCount desc, l.rank";
+		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
+		"inner join Leader l on sl.leader = l.id " + 
+		"where s.event = ? " +
+		"order by top.favoriteCount desc, sl.rank";
 
 	private static final String SELECT_ATTENDEE_FAVORITES = SELECT_FROM_EVENT_SESSION +
 		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"inner join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +	
-		"inner join EventSessionLeader l on s.event = l.event and s.id = l.session " +
-		"inner join Member m on l.leader = m.id where s.event = ? " +
-		"order by f.rank, l.rank";
+		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
+		"inner join Leader l on sl.leader = l.id " + 
+		"where s.event = ? " +
+		"order by f.rank, sl.rank";
 }

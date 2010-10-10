@@ -29,7 +29,7 @@ public class JdbcEventRepositoryTest {
 
 	@Before
 	public void setup() {
-		db = new GreenhouseTestDatabaseBuilder().member().group().activity().venue().event().testData(getClass()).getDatabase();
+		db = new GreenhouseTestDatabaseBuilder().member().group().activity().invite().venue().event().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
 		eventRepository = new JdbcEventRepository(jdbcTemplate);
 	}
@@ -112,8 +112,8 @@ public class JdbcEventRepositoryTest {
 		assertEquals(new DateTime(2010, 10, 21, 19, 45, 0, 0, DateTimeZone.UTC), session.getStartTime());
 		assertEquals(new DateTime(2010, 10, 21, 21, 15, 0, 0, DateTimeZone.UTC), session.getEndTime());
 		assertEquals(2, session.getLeaders().size());
-		assertEquals("Roy", session.getLeaders().get(0).getFirstName());
-		assertEquals("Keith", session.getLeaders().get(1).getFirstName());		
+		assertEquals("Roy Clarkson", session.getLeaders().get(0).getName());
+		assertEquals("Keith Donald", session.getLeaders().get(1).getName());		
 		assertEquals(new Float(0), session.getRating());
 		assertEquals(favorite, session.isFavorite());
 		assertEquals("Junior Ballroom B", session.getRoom().getLabel());
@@ -124,7 +124,7 @@ public class JdbcEventRepositoryTest {
 		assertEquals(new DateTime(2010, 10, 21, 17, 45, 0, 0, DateTimeZone.UTC), session.getStartTime());
 		assertEquals(new DateTime(2010, 10, 21, 19, 15, 0, 0, DateTimeZone.UTC), session.getEndTime());		
 		assertEquals(1, session.getLeaders().size());
-		assertEquals("Craig", session.getLeaders().get(0).getFirstName());
+		assertEquals("Craig Walls", session.getLeaders().get(0).getName());
 		assertEquals(favorite, session.isFavorite());
 		assertEquals(new Float(0), session.getRating());
 		assertEquals(favorite, session.isFavorite());

@@ -2,21 +2,24 @@ package com.springsource.greenhouse.events;
 
 public class EventSessionLeader {
 
-	private String firstName;
+	private String name;
 	
-	private String lastName;
-
-	public EventSessionLeader(String firstName, String lastName) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public EventSessionLeader(String name) {
+		this.name = name;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	// TODO remains for iPhone Client Compatibility	
 	public String getFirstName() {
-		return firstName;
+		return name.split(" ")[0];
 	}
 
+	// TODO remains for iPhone Client Compatibility	
 	public String getLastName() {
-		return lastName;
+		return name.split(" ")[1];
 	}
-	
+
 }

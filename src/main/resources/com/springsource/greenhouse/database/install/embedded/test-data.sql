@@ -3,7 +3,7 @@ insert into Member (firstName, lastName, email, password, username, gender, birt
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'atlanta', 'rclarkson', 'M', '1977-11-15');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Jeremy', 'Grelle', 'jgrelle@vmware.com', 'churchkey', 'jgrelle', 'M', '1977-11-28');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Mark', 'Fisher', 'mfisher@vmware.com', 'boston', 'mfisher', 'M', '1976-10-12');
-insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Keri', 'Donald', 'keridonald@gmail.com', 'thebarn', 'kkdonald', 'F', '1976-7-4');
+insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Keri', 'Donald', 'keridonald@gmail.com', 'donaldbarn', 'kkdonald', 'F', '1976-7-4');
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('David', 'Winterfeldt', 'dwinterfeldt@vmware.com', 'sanfran', 'dwinterfeldt', 'M', '1973-11-4');
 
 insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for iPhone', 'greenhouse-for-iphone', 'Our slick mobile client for the Apple iPhone ', 'SpringSource', 'http://www.springsource.com', 'a08318eb478a1ee31f69a55276f3af64', '80e7f8f7ba724aae9103f297e5fb9bdf', 'x-com-springsource-greenhouse://oauth-response');
@@ -29,7 +29,13 @@ insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 6, '
 insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 7, 'Hary Cary Balroom D', 200, 'first floor');
 insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 8, 'Magnolia', 50, 'first floor');
 insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 9, 'Cypress', 50, 'first floor');
+
 -- SpringOne Chicago 2010
+
+insert into Leader (name, member) values ('Keith Donald', 1);
+insert into Leader (name, member) values ('Craig Walls', 2);
+insert into Leader (name, member) values ('Roy Clarkson', 3);
+insert into Leader (name, member) values ('Jeremy Grelle', 4);
 
 insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2010-10-19 22:00:00Z', '2010-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
 insert into EventVenue (event, venue) values (1, 1);
@@ -54,4 +60,4 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 	'With the rising prevalence of advanced mobile platforms such as iPhone, Android, and Web OS, the desire for rich mobile clients as another means of accessing enterprise services is becoming something that can no longer be ignored. In this session, we will explore the current mobile development landscape and discuss what you as a Spring developer can do to support this increasingly important paradigm. We will examine the benefits and tradeoffs of native mobile client development vs. web-based mobile client development, and we will explore some of the emerging cross-platform options such as PhoneGap. We will look at the various strategies for utilizing a Spring back-end with these mobile platforms, such as consumption of RESTful services, authentication and authorization via OAuth, and server-push style messaging.',
 	'#mobile', 'web', 1, 2);
 insert into EventSessionLeader (event, session, leader, rank) values (1, 4, 3, 1);
-insert into EventSessionLeader (event, session, leader, rank) values (1, 4, 1, 2);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 4, 4, 2);

@@ -17,6 +17,10 @@ insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 9, '
 
 -- SpringOne Chicago 2010
 
+insert into Leader (name, member) values ('Keith Donald', 1);
+insert into Leader (name, member) values ('Craig Walls', 2);
+insert into Leader (name, member) values ('Roy Clarkson', 3);
+
 insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2010-10-19 22:00:00Z', '2010-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
 insert into EventVenue (event, venue) values (1, 1);
 

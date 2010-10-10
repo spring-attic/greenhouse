@@ -25,6 +25,11 @@ public class GreenhouseTestDatabaseBuilder {
 		return this;
 	}
 
+	public GreenhouseTestDatabaseBuilder invite() {
+		populator.addScript(new ClassPathResource("install/Invite.sql", EmbeddedDatabaseFactoryBean.class));
+		return this;
+	}
+
 	public GreenhouseTestDatabaseBuilder venue() {
 		populator.addScript(new ClassPathResource("install/Venue.sql", EmbeddedDatabaseFactoryBean.class));
 		return this;

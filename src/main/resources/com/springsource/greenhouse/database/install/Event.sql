@@ -1,9 +1,22 @@
+create table Leader (id identity,
+					name varchar not null,
+					company varchar,
+					title varchar,
+					location varchar,
+					bio varchar,
+					personalUrl varchar,
+					companyUrl varchar,
+					twitterUsername varchar,
+					member bigint,
+					primary key (id),
+					foreign key (member) references Member(id));
+
 create table Session (id identity,
 					title varchar not null,
 					slug varchar not null,
 					description varchar,
 					hashtag varchar,
-					public boolean default false,
+					public boolean default false, 
 					primary key (id));
 
 create table SessionDeveloper (session bigint,
@@ -57,14 +70,23 @@ create table EventSession (event bigint,
 					foreign key (master) references Session(id));
 				
 create table EventSessionLeader (event bigint,
-					session smallint,
+					session int,
 					leader bigint,
-					rank tinyint,
+					rank tinyint,					
 					primary key (event, session, leader),
 					foreign key (event, session) references EventSession(event, id),
-					foreign key (leader) references Member(id),
+					foreign key (leader) references Leader(id),
 					constraint UniqueEventSessionLeaderRank unique(event, session, rank));
 
+create table InvitedLeaderSession (invite varchar,
+					event bigint,
+					session smallint,
+					leader bigint not null,
+					primary key (invite, event, session),
+					foreign key (invite) references Invite(token),
+					foreign key (event, session) references EventSession(event, id),
+					foreign key (leader) references Leader(id));
+					
 create table EventSessionFavorite (event bigint,
 					session smallint,
 					attendee bigint,
