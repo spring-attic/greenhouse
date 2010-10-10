@@ -20,15 +20,15 @@ insert into MemberGroup (name, slug, description,hashtag, leader) values ('Sprin
 insert into MemberGroup (name, slug, description, hashtag, leader) values ('Atlanta Spring Users', 'atl', 'The Spring developers in the Greater Atlanta area', '#atlspring', 1);
 
 insert into Venue (name, postalAddress, latitude, longitude, locationHint, createdBy) values ('Westin Lombard Yorktown Center', '70 Yorktown Center Lombard, IL 60148', 41.8751108905486, -88.0184300761646, 'adjacent to Shopping Center', 1);
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 1, 'Junior Ballroom A', 150, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 2, 'Junior Ballroom B', 150, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 3, 'Junior Ballroom C', 150, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 4, 'Lilac C', 100, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 5, 'Lilac D', 100, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 6, 'Hary Cary Balroom C', 200, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 7, 'Hary Cary Balroom D', 200, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 8, 'Magnolia', 50, 'first floor');
-insert into VenueRoom  (venue, id, name, capacity, locationHint) values (1, 9, 'Cypress', 50, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 1, 'Junior Ballroom A', 150, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 2, 'Junior Ballroom B', 150, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 3, 'Junior Ballroom C', 150, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 4, 'Lilac C', 100, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 5, 'Lilac D', 100, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 6, 'Hary Cary Balroom C', 200, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 7, 'Hary Cary Balroom D', 200, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 8, 'Magnolia', 50, 'first floor');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 9, 'Cypress', 50, 'first floor');
 
 -- SpringOne Chicago 2010
 
