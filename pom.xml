@@ -309,6 +309,12 @@
 			<groupId>org.atmosphere</groupId>
 			<artifactId>atmosphere-runtime</artifactId>
 			<version>0.6.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.atmosphere</groupId>
+					<artifactId>atmosphere-compat-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Scribe OAuth 1.0 Consumer API -->
