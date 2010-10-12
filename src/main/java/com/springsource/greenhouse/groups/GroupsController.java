@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.TwitterOperations;
