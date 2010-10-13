@@ -25,8 +25,10 @@
 		<form:input path="firstName" />
 		<form:label path="lastName">Last Name <form:errors path="lastName" cssClass="error" /></form:label>
 		<form:input path="lastName" />
-		<form:label path="email">Email <form:errors path="email" cssClass="error" /></form:label>
+		<form:label path="email">Email (never shared, used for correspondance) <form:errors path="email" cssClass="error" /></form:label>
 		<form:input path="email" />	
+		<form:label path="confirmEmail">Confirm Email <form:errors path="confirmEmail" cssClass="error" /></form:label>
+		<form:input path="confirmEmail" />	
 		<form:label path="password">Password (at least 6 characters) <form:errors path="password" cssClass="error" /></form:label>
 		<form:password path="password" />
 		<form:label path="gender">Gender</form:label>
@@ -35,7 +37,7 @@
 			<form:option value="Female" />
 		</form:select>
 		<!-- TODO only one error message that considers all 3 fields -->	
-		<form:label path="month">Birthday <form:errors path="month" cssClass="error" /></form:label>		
+		<form:label path="month">Birthday (never shared, used to display age) <form:errors path="month" cssClass="error" /></form:label>		
 		<div class="multiple">
 			<form:select path="month">
 				<form:option value="">Month</form:option>

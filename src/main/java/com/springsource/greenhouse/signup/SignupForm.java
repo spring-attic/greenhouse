@@ -3,23 +3,29 @@ package com.springsource.greenhouse.signup;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 
 import com.springsource.greenhouse.account.Gender;
 import com.springsource.greenhouse.account.Person;
+import com.springsource.greenhouse.validation.Confirm;
 
+@Confirm(field="email")
 public class SignupForm {
 	
-	@NotNull
+	@NotEmpty
 	private String firstName;
 
-	@NotNull
+	@NotEmpty
 	private String lastName;
 
-	@NotNull
-	@Size(max=320)
+	@NotEmpty
+	@Email
 	private String email;
 
+	private String confirmEmail;
+	
 	private Gender gender;
 
 	@NotNull
@@ -31,8 +37,7 @@ public class SignupForm {
 	@NotNull
 	private Integer year;
 	
-	@NotNull
-	@Size(min=6)
+	@Size(min=6, message="must be at least 6 characters")
 	private String password;
 
 	public String getFirstName() {
@@ -57,6 +62,14 @@ public class SignupForm {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getConfirmEmail() {
+		return confirmEmail;
+	}
+
+	public void setConfirmEmail(String confirmEmail) {
+		this.confirmEmail = confirmEmail;
 	}
 
 	public String getPassword() {

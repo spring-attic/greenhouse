@@ -8,7 +8,7 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 
 	<!-- Configures the Spring MVC @Controller programming model -->
-	<annotation-driven conversion-service="conversionService" />
+	<annotation-driven validator="validator" />
 
 	<!-- Enables annotation-driven asynchronous tasks e.g. @Async -->	
 	<task:annotation-driven/>
@@ -43,16 +43,25 @@
 		</beans:property>
 		<beans:property name="checkRefresh" value="true" />
 	</beans:bean>
+
+	<!-- Bean validation -->
+	<beans:bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<beans:property name="validationMessageSource">
+			<beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+				<beans:property name="basename" value="/WEB-INF/messages/validation" />
+				<beans:property name="cacheSeconds" value="0" />
+			</beans:bean>	
+		</beans:property>
+	</beans:bean>
+	
+	<!-- Messages -->
 	
 	<!-- Configures File Upload -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="500000" />
 	</beans:bean>
 
-	<!-- Configures a custom ConversionService -->
-	<beans:bean id="conversionService" class="com.springsource.greenhouse.config.ConversionServiceFactoryBean" />
-	
 	<!-- Imports the application controllers that process client requests -->
 	<beans:import resource="controllers.xml" />
-	
+
 </beans:beans>

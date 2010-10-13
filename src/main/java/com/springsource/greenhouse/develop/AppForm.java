@@ -1,13 +1,13 @@
 package com.springsource.greenhouse.develop;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class AppForm {
 	
-	@NotNull
+	@NotEmpty
 	private String name;
 	
-	@NotNull
+	@NotEmpty
 	private String description;
 	
 	private String organization;

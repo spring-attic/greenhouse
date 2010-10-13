@@ -2,14 +2,14 @@ package com.springsource.greenhouse.invite;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class MailInviteForm {
 
-	@NotNull
+	@NotEmpty
 	private List<Invitee> invitees;
 	
-	@NotNull
+	@NotEmpty
 	private String invitationText;
 
 	public List<Invitee> getInvitees() {

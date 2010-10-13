@@ -2,13 +2,12 @@ package com.springsource.greenhouse.reset;
 
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.springsource.greenhouse.validation.Confirm;
 
+@Confirm(field="password")
 public class ChangePasswordForm {
 	
-	@NotEmpty
 	@Size(min=6, message="must be at least 6 characters")
-	// TODO confirmation constraint
 	private String password;
 
 	private String confirmPassword;
