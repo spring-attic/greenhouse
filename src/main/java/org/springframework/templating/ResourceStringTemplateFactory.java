@@ -70,22 +70,4 @@ public final class ResourceStringTemplateFactory implements StringTemplateFactor
 		template.setName(name);
 		return template;
 	}
-
-	private static class DelegatingStringTemplate implements StringTemplate {
-
-		private org.antlr.stringtemplate.StringTemplate instance;
-
-		public DelegatingStringTemplate(org.antlr.stringtemplate.StringTemplate instance) {
-			this.instance = instance;
-		}
-
-		public void put(String name, Object value) {
-			instance.setAttribute(name, value);
-		}
-
-		public String render() {
-			return instance.toString();
-		}
-
-	}
  }
