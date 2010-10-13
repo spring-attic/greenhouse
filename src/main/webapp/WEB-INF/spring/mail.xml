@@ -25,7 +25,4 @@
 	<!-- Mailer thread pool -->
 	<task:executor id="mailerExecutor" />
 
-	<!-- Cache of email templates -->
-	<bean id="emailTemplateFactory"  class="org.springframework.templating.StandardStringTemplateLoader" />
-   	
 </beans>

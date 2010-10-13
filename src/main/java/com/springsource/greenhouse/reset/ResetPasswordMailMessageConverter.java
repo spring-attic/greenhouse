@@ -9,12 +9,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.templating.ResourceStringTemplateFactory;
 import org.springframework.templating.StringTemplate;
+import org.springframework.templating.StringTemplateFactory;
 import org.springframework.web.util.UriTemplate;
 
 @Component
 public final class ResetPasswordMailMessageConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
 	
-	private final ResourceStringTemplateFactory resetTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("reset-password.st", getClass()));
+	private final StringTemplateFactory resetTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("reset-password.st", getClass()));
 
 	private final UriTemplate resetUriTemplate;
 	
@@ -29,7 +30,7 @@ public final class ResetPasswordMailMessageConverter implements Converter<ResetP
 		mailMessage.setTo(request.getAccount().getEmail());
 		StringTemplate textTemplate;
 		mailMessage.setSubject("Reset your Greenhouse password");
-		textTemplate = resetTemplateFactory.createStringTemplate();
+		textTemplate = resetTemplateFactory.getStringTemplate();
 		textTemplate.put("firstName", request.getAccount().getFirstName());		
 		textTemplate.put("resetUrl", resetUriTemplate.expand(request.getToken()));
 		mailMessage.setText(textTemplate.render());

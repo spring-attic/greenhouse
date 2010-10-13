@@ -19,7 +19,7 @@ public class StandardStringTemplateLoader implements StringTemplateLoader {
 			factory = new ResourceStringTemplateFactory(resource);
 			templateFactories.put(resource, factory);			
 		}
-		return factory.createStringTemplate();
+		return factory.getStringTemplate();
 	}
 
 }

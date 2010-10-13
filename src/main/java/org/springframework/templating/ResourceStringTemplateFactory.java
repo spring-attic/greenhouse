@@ -7,7 +7,7 @@ import java.io.Reader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 
-public final class ResourceStringTemplateFactory {
+public final class ResourceStringTemplateFactory implements StringTemplateFactory {
 	
 	private final org.antlr.stringtemplate.StringTemplate compiledPrototype;
 	
@@ -15,11 +15,13 @@ public final class ResourceStringTemplateFactory {
 		this.compiledPrototype = createPrototype(resource);
 	}
 	
-	public StringTemplate createStringTemplate() {
+	public StringTemplate getStringTemplate() {
 		return new DelegatingStringTemplate(compiledPrototype.getInstanceOf());
 	}
 	
-	public org.antlr.stringtemplate.StringTemplate createPrototype(Resource resource) {
+	// internal helpers
+	
+	private org.antlr.stringtemplate.StringTemplate createPrototype(Resource resource) {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(getResourceReader(resource));
