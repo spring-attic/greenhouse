@@ -3,32 +3,23 @@ package org.springframework.templating;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 
-public class StandardStringTemplateFactory implements StringTemplateFactory {
-
-	private Map<Resource, org.antlr.stringtemplate.StringTemplate> compiledPrototypes;
-
-	public StandardStringTemplateFactory() {
-		compiledPrototypes = new ConcurrentHashMap<Resource, org.antlr.stringtemplate.StringTemplate>();
+public final class ResourceStringTemplateFactory {
+	
+	private final org.antlr.stringtemplate.StringTemplate compiledPrototype;
+	
+	public ResourceStringTemplateFactory(Resource resource) {
+		this.compiledPrototype = createPrototype(resource);
 	}
-
-	public StringTemplate getStringTemplate(Resource resource) {
-		org.antlr.stringtemplate.StringTemplate prototype = compiledPrototypes.get(resource);
-		if (prototype != null) {
-			return new DefaultStringTemplate(prototype.getInstanceOf());			
-		} else {
-			prototype = createPrototype(resource);
-			compiledPrototypes.put(resource, prototype);
-			return new DefaultStringTemplate(prototype.getInstanceOf());
-		}
+	
+	public StringTemplate createStringTemplate() {
+		return new DelegatingStringTemplate(compiledPrototype.getInstanceOf());
 	}
-
-	private org.antlr.stringtemplate.StringTemplate createPrototype(Resource resource) {
+	
+	public org.antlr.stringtemplate.StringTemplate createPrototype(Resource resource) {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(getResourceReader(resource));
@@ -56,7 +47,7 @@ public class StandardStringTemplateFactory implements StringTemplateFactory {
 			return new EncodedResource(resource).getReader();
 		}
 	}
-
+	
 	private String getTemplateName(Resource resource) {
 		return resource.getFilename();
 	}
@@ -78,11 +69,11 @@ public class StandardStringTemplateFactory implements StringTemplateFactory {
 		return template;
 	}
 
-	private static class DefaultStringTemplate implements StringTemplate {
+	private static class DelegatingStringTemplate implements StringTemplate {
 
 		private org.antlr.stringtemplate.StringTemplate instance;
 
-		public DefaultStringTemplate(org.antlr.stringtemplate.StringTemplate instance) {
+		public DelegatingStringTemplate(org.antlr.stringtemplate.StringTemplate instance) {
 			this.instance = instance;
 		}
 
@@ -95,5 +86,4 @@ public class StandardStringTemplateFactory implements StringTemplateFactory {
 		}
 
 	}
-
-}
+ }

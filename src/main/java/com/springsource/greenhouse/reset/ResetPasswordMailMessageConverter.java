@@ -5,26 +5,21 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
+import org.springframework.templating.ResourceStringTemplateFactory;
 import org.springframework.templating.StringTemplate;
-import org.springframework.templating.StringTemplateFactory;
 import org.springframework.web.util.UriTemplate;
 
 @Component
-public class StringTemplateResetPasswordMailConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
+public final class ResetPasswordMailMessageConverter implements Converter<ResetPasswordRequest, SimpleMailMessage> {
 	
-	private StringTemplateFactory templateFactory;
-	
-	private Resource resetPasswordTemplate = new ClassPathResource("reset-password.st", getClass());
+	private final ResourceStringTemplateFactory resetTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("reset-password.st", getClass()));
 
-	private UriTemplate resetUriTemplate;
+	private final UriTemplate resetUriTemplate;
 	
 	@Inject
-	public StringTemplateResetPasswordMailConverter(StringTemplateFactory templateFactory, 
-			@Value("${application.secureUrl}/reset?token={token}") String resetUriTemplate) {
-		this.templateFactory = templateFactory;
+	public ResetPasswordMailMessageConverter(@Value("${application.secureUrl}/reset?token={token}") String resetUriTemplate) {
 		this.resetUriTemplate = new UriTemplate(resetUriTemplate);
 	}
 	
@@ -34,7 +29,7 @@ public class StringTemplateResetPasswordMailConverter implements Converter<Reset
 		mailMessage.setTo(request.getAccount().getEmail());
 		StringTemplate textTemplate;
 		mailMessage.setSubject("Reset your Greenhouse password");
-		textTemplate = templateFactory.getStringTemplate(resetPasswordTemplate);
+		textTemplate = resetTemplateFactory.createStringTemplate();
 		textTemplate.put("firstName", request.getAccount().getFirstName());		
 		textTemplate.put("resetUrl", resetUriTemplate.expand(request.getToken()));
 		mailMessage.setText(textTemplate.render());

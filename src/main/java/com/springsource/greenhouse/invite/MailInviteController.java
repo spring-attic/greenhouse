@@ -13,7 +13,8 @@ public class MailInviteController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public MailInviteForm invitePage() {
-		return new MailInviteForm();
+		MailInviteForm form = new MailInviteForm();
+		return form;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
