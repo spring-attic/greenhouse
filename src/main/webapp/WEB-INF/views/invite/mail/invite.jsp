@@ -3,9 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<div class="header">
-	<h2>Invite friends via Email</h2>
-</div>
+<h2>Invite friends via Email</h2>
 
 <c:url value="/invite/mail" var="inviteUrl" />
 <form:form action="${inviteUrl}" method="post" modelAttribute="mailInviteForm">

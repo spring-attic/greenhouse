@@ -7,15 +7,11 @@
   		<h2>Reset password</h2>
 	</div>
   	<fieldset>
-  		<form:label path="password">
-  			Password (at least 6 characters) <form:errors path="password" cssClass="error" />
-  		</form:label>
+  		<form:label path="password">Password (at least 6 characters) <form:errors path="password" cssClass="error" /></form:label>
   		<form:password path="password" />
   		<form:label path="confirmPassword">Confirm Password</form:label>
   		<form:password path="confirmPassword" />
   		<input type="hidden" value="${token}" />
 	</fieldset>
-	<p>
-		<button type="submit">Reset</button>
-	</p>
+	<p><button type="submit">Reset</button></p>
 </form:form>

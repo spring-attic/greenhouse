@@ -8,10 +8,5 @@
 <c:url value="/oauth/authorize" var="authorize_url" />
 <form action="${authorize_url}" method="post">
 	<input name="requestToken" value="${oauth_token}" type="hidden" />
-	<c:if test="${!empty oauth_callback}">
-		<input name="callbackURL" value="${oauth_callback}" type="hidden" />
-	</c:if>
-	<p>
-		<button type="submit">Authorize</button>
-	</p>
+	<p><button type="submit">Authorize</button></p>
 </form>

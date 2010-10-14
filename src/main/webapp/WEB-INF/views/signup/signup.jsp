@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <c:if test="${not empty message}">
-	<div class="${message.type}">${message.text}</div>
+<div class="${message.type}">${message.text}</div>
 </c:if>
 
 <c:url value="/signup" var="signupUrl" />
@@ -12,11 +12,11 @@
 	<div class="formInfo">
   		<h2>Sign Up at the Greenhouse</h2>
   		<s:bind path="*">
-  		    <c:choose>
-	  			<c:when test="${status.error}">
-			  		<div class="error">Unable to signup. Please fix the errors below and resubmit.</div>
-	  			</c:when>
-  			</c:choose>			
+  		<c:choose>
+  		<c:when test="${status.error}">
+  			<div class="error">Unable to signup. Please fix the errors below and resubmit.</div>
+  		</c:when>
+  		</c:choose>			
   		</s:bind>
   		<p>Join Greenhouse to connect with other application developers using Spring.</p>  		
 	</div>

@@ -4,16 +4,14 @@
 
 <h2>Settings</h2>
 
-<div id="apps">
+<div id="connectedApps">
 	<h3>Connected Apps</h3>
 	<ul>
 	<c:forEach var="app" items="${apps}">
 		<li>
 			${app.name}
 			<form action="settings/apps/${app.accessToken}" method="post">
-				<p>
-					<button type="submit">Disconnect</button>
-				</p>
+				<p><button type="submit">Disconnect</button></p>
 				<input type="hidden" name="_method" value="DELETE" />
 			</form>
 		</li>
@@ -38,6 +36,5 @@
 	<div id="tripIt">
 		<h4>TripIt</h4>
 		<a href="<s:url value="/connect/tripit" />">Connect to TripIt</a>	
-	</div>
-	
+	</div>	
 </div>

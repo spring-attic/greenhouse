@@ -3,14 +3,12 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
-<div class="header">
-	<h2>Invite friends to the Greenhouse</h2>
-	<c:if test="${not empty message}">
-		<div class="${message.type}">${message.text}</div>
-	</c:if>
-</div>
+<h2>Invite friends to the Greenhouse</h2>
+<c:if test="${not empty message}">
+	<div class="${message.type}">${message.text}</div>
+</c:if>
 		
-<ul id="inviteNetworks">
+<ul>
 	<li>
 		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Logo"/>
 		<a href="<c:url value="/invite/twitter" />">See which of your Twitter followers are in the Greenhouse</a>

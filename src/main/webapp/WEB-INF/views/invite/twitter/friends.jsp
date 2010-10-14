@@ -4,16 +4,16 @@
 
 <h2>Find Results</h2>
 <c:choose>
-	<c:when test="${not empty friendAccounts}">
-		<ul>
-			<c:forEach var="friendAccount" items="${friendAccounts}">
-				<li>
-					<a href="<s:url value="/members/${friendAccount.profileId}" />">${friendAccount.fullName}</a>
-				</li>
-			</c:forEach>
-		</ul>
-	</c:when>
-	<c:when test="${empty friendAccounts}">
-		<p>No friends found</p>
-	</c:when>
+<c:when test="${not empty friendAccounts}">
+<ul>
+<c:forEach var="friendAccount" items="${friendAccounts}">
+	<li>
+		<a href="<s:url value="/members/${friendAccount.profileId}" />">${friendAccount.fullName}</a>
+	</li>
+</c:forEach>
+</ul>
+</c:when>
+<c:when test="${empty friendAccounts}">
+<p>No friends found</p>
+</c:when>
 </c:choose>

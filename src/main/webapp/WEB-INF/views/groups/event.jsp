@@ -15,12 +15,10 @@
 </dl>
 
 <c:if test="${not empty searchResults.tweets}">
-<div id="eventTweets">
-	<h3>What others are tweeting about this event...</h3>
-	<ul>
-	<c:forEach var="tweet" items="${searchResults.tweets}">	
-		<li><strong>${tweet.fromUser} says</strong> ${tweet.text}</li>
-	</c:forEach>
-	</ul>
-</div>
+<h3>What others are tweeting about this event...</h3>
+<ul>
+<c:forEach var="tweet" items="${searchResults.tweets}">	
+	<li><strong>${tweet.fromUser} says</strong> ${tweet.text}</li>
+</c:forEach>
+</ul>
 </c:if>

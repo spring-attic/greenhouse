@@ -7,14 +7,14 @@
 <h2>Greenhouse Apps</h2>
 
 <c:if test="${fn:length(appSummaryList) == 0}">
-	<p>You have not registered any apps.</p>
+<p>You have not registered any apps.</p>
 </c:if>
 <c:if test="${fn:length(appSummaryList) > 0}">
-	<p>You have registered the following apps:</p>
+<p>You have registered the following apps:</p>
 </c:if>
 
 <c:forEach var="appSummary" items="${appSummaryList}">
-	<apps:summary value="${appSummary}" />
+<apps:summary value="${appSummary}" />
 </c:forEach>
 
 <ul>
