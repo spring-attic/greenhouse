@@ -10,6 +10,15 @@ public final class Invitee {
 	
 	private final String email;
 
+	public Invitee(String firstName, String lastName, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		if (!EmailUtils.isEmail(email)) {
+			throw new IllegalArgumentException("'" + email +  "' is not a valid email address");
+		}
+		this.email = email;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -63,6 +72,7 @@ public final class Invitee {
 		builder.append('<').append(email).append('>');
 		return builder.toString();
 	}
+	
 	// internal helpers
 	
 	private Invitee(String email) {
@@ -71,15 +81,6 @@ public final class Invitee {
 
 	private Invitee(String firstName, String email) {
 		this(firstName, null, email);
-	}
-
-	private Invitee(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		if (!EmailUtils.isEmail(email)) {
-			throw new IllegalArgumentException("'" + email +  "' is not a valid email address");
-		}
-		this.email = email;
 	}
 
 }

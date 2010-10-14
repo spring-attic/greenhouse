@@ -26,13 +26,12 @@ public class AccountMapper implements RowMapper<Account> {
 		this(new PictureUrlMapper(new PictureUrlFactory(pictureStorage), PictureSize.small), profileUrlTemplate);
 	}
 
-	public AccountMapper(PictureUrlMapper pictureUrlMapper, String profileUrlTemplate) {
-		this.pictureUrlMapper = pictureUrlMapper;
-		this.profileUrlTemplate = new UriTemplate(profileUrlTemplate);
-	}
-
 	public Account mapRow(ResultSet rs, int row) throws SQLException {
 		return new Account(rs.getLong("id"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), pictureUrlMapper.mapRow(rs, row), profileUrlTemplate);
+	}
+
+	public RowMapper<AccountReference> getReferenceMapper() {
+		return referenceMapper;
 	}
 
 	public Account newAccount(Long accountId, Person person) {
@@ -40,9 +39,7 @@ public class AccountMapper implements RowMapper<Account> {
 		return new Account(accountId, person.getFirstName(), person.getLastName(), person.getEmail(), null, pictureUrl, profileUrlTemplate);
 	}
 
-	public RowMapper<AccountReference> getReferenceMapper() {
-		return referenceMapper;
-	}
+	// internal helpers
 	
 	private final RowMapper<AccountReference> referenceMapper = new RowMapper<AccountReference>() {
 		public AccountReference mapRow(ResultSet rs, int row) throws SQLException {
@@ -56,5 +53,10 @@ public class AccountMapper implements RowMapper<Account> {
 			return username != null ? username : rs.getString("id");
 		}
 	};
-	
+
+	private AccountMapper(PictureUrlMapper pictureUrlMapper, String profileUrlTemplate) {
+		this.pictureUrlMapper = pictureUrlMapper;
+		this.profileUrlTemplate = new UriTemplate(profileUrlTemplate);
+	}
+
 }
