@@ -9,11 +9,12 @@ class DelegatingStringTemplate implements StringTemplate {
 	}
 
 	public void put(String name, Object value) {
+		delegate.removeAttribute(name);
 		delegate.setAttribute(name, value);
 	}
 
 	public String render() {
 		return delegate.toString();
 	}
-
+	
 }

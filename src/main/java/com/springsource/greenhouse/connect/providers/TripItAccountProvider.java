@@ -14,18 +14,18 @@ public final class TripItAccountProvider extends AbstractAccountProvider<TripItO
 		super(parameters, connectionRepository);
 	}
 
-	public TripItOperations createApi(OAuthToken accessToken) {
+	protected TripItOperations createApi(OAuthToken accessToken) {
 		if (accessToken == null) {
 			throw new IllegalStateException("Cannot access TripIt without an access token");
 		}
 		return new TripItTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
 	}
 
-	public String getProviderAccountId(TripItOperations api) {
+	protected String getProviderAccountId(TripItOperations api) {
 		return api.getProfileId();
 	}
 
-	public String getProviderProfileUrl(TripItOperations api) {
+	protected String getProviderProfileUrl(TripItOperations api) {
 		return api.getProfileUrl();
 	}
 	

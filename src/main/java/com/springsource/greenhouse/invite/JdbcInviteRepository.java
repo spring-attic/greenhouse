@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.invite.mail;
+package com.springsource.greenhouse.invite;
 
 import javax.inject.Inject;
 
@@ -15,11 +15,10 @@ public class JdbcInviteRepository implements InviteRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	public void saveInvite(String token, Invitee sentTo, String text, Long sentBy) {
-		jdbcTemplate.update(INSERT_INVITE, token, sentTo.getEmail(), sentTo.getFirstName(), sentTo.getLastName(), text, sentBy);
+	public void saveInvite(String token, String email, String firstName, String lastName, String text, Long sentBy) {
+		jdbcTemplate.update(INSERT_INVITE, token, email, firstName, lastName, text, sentBy);
 	}
-	
-	
+		
 	public void removeInvite(String token) {
 		jdbcTemplate.update("delete from Invite where token = ?", token);
 	}

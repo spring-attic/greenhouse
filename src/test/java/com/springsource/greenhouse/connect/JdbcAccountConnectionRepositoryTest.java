@@ -18,7 +18,6 @@ import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.twitter.TwitterOperations;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
@@ -80,28 +79,28 @@ public class JdbcAccountConnectionRepositoryTest {
 	}
 
 	@Test
-	public void getProviderAccountId() {
-		assertEquals("habuma", accountProvider.getProviderAccountId(1L));
+	public void getConnectedAccountId() {
+		assertEquals("habuma", accountProvider.getConnectedAccountId(1L));
 	}
 
 	@Test
-	public void getProviderAccountIdNotConnected() {
-		assertNull(accountProvider.getProviderAccountId(2L));
+	public void getConnectedAccountIdNotConnected() {
+		assertNull(accountProvider.getConnectedAccountId(2L));
 	}
 	
 	@Test
-	public void findConnectedAccount() throws Exception {
+	public void findAccountByConnection() throws Exception {
 		assertNotNull(accountProvider.findAccountByConnection("345678901"));
 	}
 
 	@Test(expected = NoSuchAccountConnectionException.class)
-	public void connectedAccountNotFound() throws Exception {
+	public void accountConnectionNotFound() throws Exception {
 		accountProvider.findAccountByConnection("badtoken");
 	}
 	
 	@Test
-	public void findFriendAccounts() throws Exception {
-		List<Account> accounts = accountProvider.findAccountsWithProviderAccountIds(asList("habuma", "rclarkson", "BarakObama"));
+	public void findAccountsConnectedTo() throws Exception {
+		List<AccountReference> accounts = accountProvider.findAccountsConnectedTo(asList("habuma", "rclarkson", "BarakObama"));
 		assertEquals(2, accounts.size());
 	}
 

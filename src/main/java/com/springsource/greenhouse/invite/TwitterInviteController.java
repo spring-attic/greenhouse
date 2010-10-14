@@ -28,7 +28,7 @@ public class TwitterInviteController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		String twitterId = twitterAccountProvider.getProviderAccountId(account.getId());	
+		String twitterId = twitterAccountProvider.getConnectedAccountId(account.getId());	
 		if (twitterId != null) {			
 			model.addAttribute("username", twitterId);
 		}
@@ -38,7 +38,7 @@ public class TwitterInviteController {
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
 			List<String> screenNames = twitterAccountProvider.getApi(account.getId()).getFollowed(username);
-			model.addAttribute("friendAccounts", twitterAccountProvider.findAccountsWithProviderAccountIds(screenNames));
+			model.addAttribute("friendAccounts", twitterAccountProvider.findAccountsConnectedTo(screenNames));
 		}
 		return "invite/twitterFriends";
 	}

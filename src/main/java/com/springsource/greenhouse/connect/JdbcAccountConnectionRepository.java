@@ -71,12 +71,12 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 		}
 	}
 
-	public List<Account> findAccountsWithProviderAccountIds(String provider, List<String> providerAccountIds) {
+	public List<AccountReference> findAccountsConnectedTo(String provider, List<String> providerAccountIds) {
 		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", provider);
 		params.put("providerAccountIds", providerAccountIds);
-		return namedTemplate.query(SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS, params, accountMapper);
+		return namedTemplate.query(SELECT_ACCOUNTS_CONNECTED_TO, params, accountMapper.getReferenceMapper());
 	}
 
 	private static final String SELECT_PROVIDER_ACCOUNT_ID = "select accountId from AccountConnection where member = ? and provider = ?";
@@ -89,6 +89,6 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 
 	private static final String SELECT_ACCESS_TOKEN = "select accessToken, secret from AccountConnection where member = ? and provider = ?";
 
-	private static final String SELECT_ACCOUNTS_WITH_PROVIDER_ACCOUNT_IDS = AccountMapper.SELECT_ACCOUNT + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :providerAccountIds ))";
+	private static final String SELECT_ACCOUNTS_CONNECTED_TO = AccountMapper.SELECT_ACCOUNT_REFERENCE + " where id in (select member from AccountConnection where provider = :provider and accountId in ( :providerAccountIds ))";
 
 }

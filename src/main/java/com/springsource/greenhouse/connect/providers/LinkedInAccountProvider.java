@@ -14,18 +14,18 @@ public final class LinkedInAccountProvider extends AbstractAccountProvider<Linke
 		super(parameters, connectionRepository);
 	}
 
-	public LinkedInOperations createApi(OAuthToken accessToken) {
+	protected LinkedInOperations createApi(OAuthToken accessToken) {
 		if (accessToken == null) {
 			throw new IllegalStateException("Cannot access LinkedIn without an access token");
 		}
 		return new LinkedInTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
 	}
 
-	public String getProviderAccountId(LinkedInOperations api) {
+	protected String getProviderAccountId(LinkedInOperations api) {
 		return api.getProfileId();
 	}
 
-	public String getProviderProfileUrl(LinkedInOperations api) {
+	protected String getProviderProfileUrl(LinkedInOperations api) {
 		return api.getProfileUrl();
 	}
 	

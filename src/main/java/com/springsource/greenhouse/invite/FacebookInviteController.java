@@ -31,7 +31,7 @@ public class FacebookInviteController {
 	public void friendFinder(Model model, Account account) {
 		if (accountProvider.isConnected(account.getId())) {
 			List<String> providerAccountIds = accountProvider.getApi(account.getId()).getFriendIds();
-			model.addAttribute("friendAccounts", accountProvider.findAccountsWithProviderAccountIds(providerAccountIds));
+			model.addAttribute("friendAccounts", accountProvider.findAccountsConnectedTo(providerAccountIds));
 		} else {
 			model.addAttribute("friendAccounts", Collections.emptySet());
 		}

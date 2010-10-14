@@ -34,12 +34,10 @@ public interface AccountProvider<A> {
 	
 	// additional finders
 	
-	String getProviderAccountId(Long accountId);
-
-	String getProviderProfileUrl(A api);
+	String getConnectedAccountId(Long accountId);
 
 	Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException;
 	
-	List<Account> findAccountsWithProviderAccountIds(List<String> providerAccountIds);
+	List<AccountReference> findAccountsConnectedTo(List<String> providerAccountIds);
 
 }

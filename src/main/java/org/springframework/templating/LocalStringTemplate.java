@@ -15,5 +15,5 @@ public class LocalStringTemplate implements StringTemplate {
 	public String render() {
 		return template.render();
 	}
-	
+		
 }

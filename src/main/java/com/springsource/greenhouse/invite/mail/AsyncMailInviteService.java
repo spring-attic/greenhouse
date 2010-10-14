@@ -19,6 +19,7 @@ import org.springframework.templating.StringTemplateFactory;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.invite.InviteRepository;
 
 @Service
 public class AsyncMailInviteService implements MailInviteService {
@@ -35,7 +36,7 @@ public class AsyncMailInviteService implements MailInviteService {
 	
 	@Inject
 	public AsyncMailInviteService(MailSender mailSender, TaskExecutor mailerExecutor, InviteRepository inviteRepository,
-			@Value("${application.secureUrl}/invite/accept?token={token}") String acceptUriTemplate) {
+			@Value("${application.secureUrl}/invite?token={token}") String acceptUriTemplate) {
 		this.mailSender = mailSender;
 		this.mailerExecutor = mailerExecutor;
 		this.inviteRepository = inviteRepository;
@@ -43,15 +44,17 @@ public class AsyncMailInviteService implements MailInviteService {
 	}
 
 	public void sendInvite(Account from, List<Invitee> to, String invite) {
-		StringTemplate bodyTemplate = new LocalStringTemplate(invite);
 		StringTemplate textTemplate = textTemplateFactory.getStringTemplate();
 		textTemplate.put("account", from);
+		StringTemplate bodyTemplate = new LocalStringTemplate(invite);
 		for (Invitee invitee : to) {
 			bodyTemplate.put("invitee", invitee);
-			textTemplate.put("body", bodyTemplate.render());
+			String body = bodyTemplate.render();
+			textTemplate.put("body", body);
 			String token = tokenGenerator.generateKey();
 			textTemplate.put("acceptUrl", acceptUriTemplate.expand(token));
-			send(from, invitee, textTemplate.render(), token);
+			String text = textTemplate.render();
+			send(from, invitee, text, token);
 		}
 	}
 	
@@ -59,22 +62,22 @@ public class AsyncMailInviteService implements MailInviteService {
 		inviteRepository.removeInvite(token);
 	}
 
-	private void send(final Account from, final Invitee to, final String inviteText, final String token) {
-		final SimpleMailMessage mailMessage = createInviteMailMessage(to, inviteText);
+	private void send(final Account from, final Invitee to, final String text, final String token) {
+		final SimpleMailMessage mailMessage = createInviteMailMessage(to, text);
 		mailerExecutor.execute(new Runnable() {
 			public void run() {
 				mailSender.send(mailMessage);
-				inviteRepository.saveInvite(token, to, inviteText, from.getId());
+				inviteRepository.saveInvite(token, to.getEmail(), to.getFirstName(), to.getLastName(), text, from.getId());
 			}
 		});
 	}
 	
-	private SimpleMailMessage createInviteMailMessage(Invitee to, String inviteText) {
+	private SimpleMailMessage createInviteMailMessage(Invitee to, String text) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom("noreply@springsource.com");
 		mailMessage.setTo(to.getEmail());
 		mailMessage.setSubject("Your Greenhouse Invitation");
-		mailMessage.setText(inviteText);
+		mailMessage.setText(text);
 		return mailMessage;
 	}
 

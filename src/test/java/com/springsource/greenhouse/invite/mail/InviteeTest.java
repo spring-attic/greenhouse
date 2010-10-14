@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import com.springsource.greenhouse.invite.mail.Invitee;
 
 public class InviteeTest {
 	

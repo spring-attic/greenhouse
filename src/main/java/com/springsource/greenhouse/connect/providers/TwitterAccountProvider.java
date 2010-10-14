@@ -14,15 +14,15 @@ public final class TwitterAccountProvider extends AbstractAccountProvider<Twitte
 		super(parameters, connectionRepository);
 	}
 
-	public TwitterOperations createApi(OAuthToken accessToken) {
+	protected TwitterOperations createApi(OAuthToken accessToken) {
 		return accessToken != null ? new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret()) : new TwitterTemplate();
 	}
 
-	public String getProviderAccountId(TwitterOperations api) {
+	protected String getProviderAccountId(TwitterOperations api) {
 		return api.getProfileId();
 	}
 
-	public String getProviderProfileUrl(TwitterOperations api) {
+	protected String getProviderProfileUrl(TwitterOperations api) {
 		return "http://www.twitter.com/" + api.getProfileId();
 	}
 	

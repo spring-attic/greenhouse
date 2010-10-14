@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+
 public class MailInviteForm {
 
 	@NotEmpty

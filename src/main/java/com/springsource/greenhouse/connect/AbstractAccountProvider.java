@@ -87,7 +87,7 @@ public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 
 	// additional finders
 	
-	public String getProviderAccountId(Long accountId) {
+	public String getConnectedAccountId(Long accountId) {
 		return connectionRepository.getProviderAccountId(accountId, getName());
 	}
 
@@ -95,8 +95,8 @@ public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 		return connectionRepository.findAccountByConnection(getName(), accessToken);
 	}
 
-	public List<Account> findAccountsWithProviderAccountIds(List<String> providerAccountIds) {
-		return connectionRepository.findAccountsWithProviderAccountIds(getName(), providerAccountIds);
+	public List<AccountReference> findAccountsConnectedTo(List<String> providerAccountIds) {
+		return connectionRepository.findAccountsConnectedTo(getName(), providerAccountIds);
 	}
 
 	// subclassing hooks
@@ -104,7 +104,9 @@ public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 	protected abstract A createApi(OAuthToken accessToken);
 
 	protected abstract String getProviderAccountId(A api);
-	
+
+	protected abstract String getProviderProfileUrl(A api);
+
 	protected String getSecret() {
 		return parameters.getSecret();
 	}

@@ -17,6 +17,8 @@ import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.invite.InviteRepository;
+import com.springsource.greenhouse.invite.JdbcInviteRepository;
 
 public class MailInviteServiceTest {
 	
@@ -32,7 +34,7 @@ public class MailInviteServiceTest {
 		jdbcTemplate = new JdbcTemplate(db);		
 		InviteRepository inviteRepository = new JdbcInviteRepository(jdbcTemplate);
 		MailSender mailSender = mock(MailSender.class);
-		inviteService = new AsyncMailInviteService(mailSender, new SyncTaskExecutor(), inviteRepository, "http://localhost:8443/invite/accept?token={token}");
+		inviteService = new AsyncMailInviteService(mailSender, new SyncTaskExecutor(), inviteRepository, "http://localhost:8443/invite?token={token}");
 	}
 	
 	@After
