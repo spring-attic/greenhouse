@@ -19,7 +19,7 @@ import com.springsource.greenhouse.account.Account;
 @RequestMapping("/invite/mail")
 public class MailInviteController {
 
-	private final StringTemplateFactory inviteTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("mail-invite.st", getClass()));
+	private final StringTemplateFactory inviteTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("mail-invite-body.st", getClass()));
 
 	private final MailInviteService inviteService;
 
