@@ -6,6 +6,7 @@ It can help you stay on top of everything that's happening in the Spring communi
 
 Sign up here: $signupUrl$
 
-Have fun,
+Have fun!
+
 $account.firstName$
 $account.profileUrl$
