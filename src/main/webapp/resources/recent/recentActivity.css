@@ -1,0 +1,23 @@
+#recentActivityList li {
+	border: 1px solid #000;
+	height:5em;
+	overflow:hidden;
+}
+
+#recentActivityList img {
+	width: 5em;
+	vertical-align:middle;
+}
+
+#recentActivityList img.profile {
+	float:left;
+	padding-right:2em;
+}
+
+#recentActivityList img.activity {
+	float:right;
+}
+
+#recentActivityList li.newItem {
+	display: none;
+}

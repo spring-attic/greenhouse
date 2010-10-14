@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.springsource.greenhouse.invite.Invitee;
+
 
 public class MailInviteForm {
 

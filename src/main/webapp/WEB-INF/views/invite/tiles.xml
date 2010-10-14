@@ -6,5 +6,9 @@
 	<definition name="invite" extends="standard">
 		<put-attribute name="content" value="/WEB-INF/views/invite/invite.jsp" />
 	</definition>
+
+	<definition name="invite/accept" extends="standard">
+		<put-attribute name="content" value="/WEB-INF/views/invite/accept.jsp" />
+	</definition>
           
 </tiles-definitions>

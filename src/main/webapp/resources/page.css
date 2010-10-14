@@ -8,62 +8,23 @@ body {
 	width: 763px;
 }
 
+ul {
+	list-style: none;
+}
+
 ul li {
-	padding: 5px;
+	padding: 10px;
 }
 
 #topbar {
 	text-align: right;
 }
 
-li.eventTweet {
-	list-style: none;
-	padding-bottom: 10pt;
-}
-
-ul#inviteNetworks li {
-	list-style: none;
-	padding-bottom: 20pt;
-}
-
-dt.event {
+dt {
 	list-style: none;
 	font-size: 1.2em;
 }
 
-dd.event {
-	padding-bottom: 10pt;
-}
-
-dt.event span.locationAndDate {
-	font-size: .75em;
-	font-style: italic;
-}
-
-#recentActivityList {
-	list-style: none;
-}
-
-#recentActivityList li {
-	border: 1px solid #000;
-	height:5em;
-	overflow:hidden;
-}
-
-#recentActivityList img {
-	width: 5em;
-	vertical-align:middle;
-}
-
-#recentActivityList img.profile {
-	float:left;
-	padding-right:2em;
-}
-
-#recentActivityList img.activity {
-	float:right;
-}
-
-#recentActivityList li.newItem {
-	display: none;
+dd {
+	padding: 5px;
 }

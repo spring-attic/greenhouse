@@ -5,25 +5,22 @@
 
 <h2><c:out value="${event.title}"/></h2>
 
-<div id="eventInfo">
-	<p>
-		<strong>When:</strong> <d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" />
-	</p>
-	<p>
-		<strong>Where:</strong> <c:out value="${event.location}" />
-	</p>
-	<p>
-		<c:out value="${event.description}" escapeXml="true" />
-	</p>		
-</div>
+<dl>
+	<dt>When</dt>
+	<dd><d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /></dd>
+	<dt>Where</dt>
+	<dd><c:out value="${event.location}" /></dd>
+	<dt>Description</dt>
+	<dd><c:out value="${event.description}" escapeXml="true" /></dd>
+</dl>
 
 <c:if test="${not empty searchResults.tweets}">
-	<div id="eventTweets">
-		<h3>What others are tweeting about this event...</h3>
-		<ul class="eventTweets">
-		<c:forEach var="tweet" items="${searchResults.tweets}">	
-			<li class="eventTweet"><strong>${tweet.fromUser} says</strong> ${tweet.text}</li>
-		</c:forEach>
-		</ul>
-	</div>
+<div id="eventTweets">
+	<h3>What others are tweeting about this event...</h3>
+	<ul>
+	<c:forEach var="tweet" items="${searchResults.tweets}">	
+		<li><strong>${tweet.fromUser} says</strong> ${tweet.text}</li>
+	</c:forEach>
+	</ul>
+</div>
 </c:if>

@@ -1,8 +1,7 @@
-@import url("messages/messages.css");
-@import url("form-mobile.css");
+@import url("../messages/messages.css");
+@import url("form.css");
 
-body 
-{
+body {
 	margin: 0px;
 	margin-bottom: 10px;
 	font-family: Helvetica;
@@ -10,20 +9,17 @@ body
 	color: #666666;
 }
 
-#content
-{
+#content {
 	margin-left: 36px;
 	margin-right: 36px;
 }
 
-#footer
-{
+#footer {
 	font-size: .625em;
 	text-align: center;	
 }
 
-h2
-{
+h2 {
 	font-size: 1.075em; 
 	font-weight: bold;
 	text-transform: uppercase;

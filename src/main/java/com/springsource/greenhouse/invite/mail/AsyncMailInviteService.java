@@ -20,6 +20,7 @@ import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.invite.InviteRepository;
+import com.springsource.greenhouse.invite.Invitee;
 
 @Service
 public class AsyncMailInviteService implements MailInviteService {
@@ -67,7 +68,7 @@ public class AsyncMailInviteService implements MailInviteService {
 		mailerExecutor.execute(new Runnable() {
 			public void run() {
 				mailSender.send(mailMessage);
-				inviteRepository.saveInvite(token, to.getEmail(), to.getFirstName(), to.getLastName(), text, from.getId());
+				inviteRepository.saveInvite(token, to, text, from.getId());
 			}
 		});
 	}

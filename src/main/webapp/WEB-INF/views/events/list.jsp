@@ -14,13 +14,11 @@
 			<s:param name="month" value="${event.startTime.monthOfYear}" />
 			<s:param name="slug" value="${event.slug}" />
 		</s:url>
-		<dt class="event">
+		<dt>
 			<a href="${eventUrl}"><c:out value="${event.title}" /></a> <br/>
-			<span class="locationAndDate">
-				<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /> at <c:out value="${event.location}" />
-			</span>
+			<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /> at <c:out value="${event.location}" />
 		</dt>
-		<dd class="event">
+		<dd>
 			<c:out value="${event.description}" escapeXml="true" />
 		</dd>
 	</c:forEach>
