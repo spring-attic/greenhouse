@@ -26,6 +26,8 @@ public final class Invitee {
 		if (inviteeString == null || inviteeString.length() == 0) {
 			throw new IllegalArgumentException("The Invitee string to parse cannot be null or empty");
 		}
+		// remove once this is done by conversion service
+		inviteeString = inviteeString.trim();
 		String[] pieces = inviteeString.split("[<>]");
 		if (pieces.length == 1) {
 			return new Invitee(pieces[0]);	
@@ -45,6 +47,22 @@ public final class Invitee {
 		throw new IllegalArgumentException("Unable to parse invalid invitee string '" + inviteeString + "'");		
 	}
 
+	public String toString() {
+		if (firstName == null && lastName == null) {
+			return email;
+		}
+		StringBuilder builder = new StringBuilder();
+		if (firstName != null) {
+			builder.append(firstName);
+			builder.append(' ');
+		}
+		if (lastName != null) {
+			builder.append(lastName);
+			builder.append(' ');
+		}
+		builder.append('<').append(email).append('>');
+		return builder.toString();
+	}
 	// internal helpers
 	
 	private Invitee(String email) {

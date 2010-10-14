@@ -9,6 +9,10 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.core.convert.support.ConversionServiceFactory;
+import org.springframework.core.convert.support.GenericConversionService;
+import org.springframework.core.style.StylerUtils;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -62,6 +66,16 @@ public class MailInviteServiceTest {
 
 		inviteService.acceptInvite(token2);
 		assertEquals(0, jdbcTemplate.queryForInt("select count(*) from Invite"));
-		
 	}
+	
+	@Test
+	public void convert() throws SecurityException, NoSuchFieldException {
+		GenericConversionService service = new GenericConversionService();
+		ConversionServiceFactory.addDefaultConverters(service);
+		List<Invitee> invitee = (List<Invitee>) service.convert("Keith Donald <keith.donald@springsource.com>,Keri Donald <keridonald@gmail.com>", TypeDescriptor.valueOf(String.class), new TypeDescriptor(getClass().getField("invitees")));
+		System.out.println(StylerUtils.style(invitee));
+	}
+	
+	public List<Invitee> invitees;
+	
 }
