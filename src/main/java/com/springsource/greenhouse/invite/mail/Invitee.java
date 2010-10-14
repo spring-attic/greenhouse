@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.invite;
+package com.springsource.greenhouse.invite.mail;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
@@ -9,23 +9,6 @@ public final class Invitee {
 	private final String lastName;
 	
 	private final String email;
-
-	public Invitee(String email) {
-		this(null, null, email);
-	}
-
-	public Invitee(String firstName, String email) {
-		this(firstName, null, email);
-	}
-
-	public Invitee(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		if (!EmailUtils.isEmail(email)) {
-			throw new IllegalArgumentException("'" + email +  "' is not a valid email address");
-		}
-		this.email = email;
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -61,5 +44,24 @@ public final class Invitee {
 		}
 		throw new IllegalArgumentException("Unable to parse invalid invitee string '" + inviteeString + "'");		
 	}
+
+	// internal helpers
 	
+	private Invitee(String email) {
+		this(null, null, email);
+	}
+
+	private Invitee(String firstName, String email) {
+		this(firstName, null, email);
+	}
+
+	private Invitee(String firstName, String lastName, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		if (!EmailUtils.isEmail(email)) {
+			throw new IllegalArgumentException("'" + email +  "' is not a valid email address");
+		}
+		this.email = email;
+	}
+
 }

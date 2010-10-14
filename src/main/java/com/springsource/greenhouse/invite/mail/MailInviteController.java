@@ -1,9 +1,8 @@
-package com.springsource.greenhouse.invite;
+package com.springsource.greenhouse.invite.mail;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.templating.ResourceStringTemplateFactory;
@@ -19,16 +18,13 @@ import com.springsource.greenhouse.account.Account;
 @RequestMapping("/invite/mail")
 public class MailInviteController {
 
-	private final StringTemplateFactory inviteTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("mail-invite-body.st", getClass()));
+	private final StringTemplateFactory inviteTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("invite-text-body.st", getClass()));
 
 	private final MailInviteService inviteService;
-
-	private final String signupUrl;
-	
+ 
 	@Inject
-	public MailInviteController(MailInviteService inviteService, @Value("${application.secureUrl}/signup") String signupUrl) {
+	public MailInviteController(MailInviteService inviteService) {
 		this.inviteService = inviteService;
-		this.signupUrl = signupUrl;
 	}
 
 	@RequestMapping(method=RequestMethod.GET)
@@ -50,7 +46,6 @@ public class MailInviteController {
 	private String renderStandardInvitationText(Account account) {
 		StringTemplate template = inviteTemplateFactory.getStringTemplate();
 		template.put("account", account);
-		template.put("signupUrl", signupUrl);
 		return template.render();
 	}
 

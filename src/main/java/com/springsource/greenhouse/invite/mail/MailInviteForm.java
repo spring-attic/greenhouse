@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.invite;
+package com.springsource.greenhouse.invite.mail;
 
 import java.util.List;
 

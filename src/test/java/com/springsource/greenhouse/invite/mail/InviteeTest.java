@@ -1,9 +1,11 @@
-package com.springsource.greenhouse.invite;
+package com.springsource.greenhouse.invite.mail;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
+
+import com.springsource.greenhouse.invite.mail.Invitee;
 
 public class InviteeTest {
 	
