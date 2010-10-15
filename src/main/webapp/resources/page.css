@@ -15,7 +15,7 @@ p {
 }
 
 textarea, body, input, button, a.button {
-	font-family: Arial, Helvetica, Sans-Serif;
+	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
 }
 
 body {
