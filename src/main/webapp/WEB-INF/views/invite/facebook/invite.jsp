@@ -10,9 +10,7 @@
 <h3>Some of your friends are already in the Greenhouse</h3>
 <ul>
 	<c:forEach var="friendAccount" items="${friendAccounts}">
-	<li>
-		<a href="<s:url value="/members/${friendAccount.id}" />">${friendAccount.label}</a>
-	</li>
+	<li><a href="<s:url value="/members/${friendAccount.id}" />">${friendAccount.label}</a></li>
 	</c:forEach>
 </ul>
 <h3>Invite more...</h3>

@@ -1,15 +1,12 @@
 <%@ page session="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 
-<h2>Find Results</h2>
+<h3>Find Results</h3>
 <c:choose>
 <c:when test="${not empty friendAccounts}">
 <ul>
 <c:forEach var="friendAccount" items="${friendAccounts}">
-	<li>
-		<a href="<s:url value="/members/${friendAccount.profileId}" />">${friendAccount.fullName}</a>
-	</li>
+	<li><a href="<c:url value="/members/${friendAccount.id}" />">${friendAccount.label}</a></li>
 </c:forEach>
 </ul>
 </c:when>
