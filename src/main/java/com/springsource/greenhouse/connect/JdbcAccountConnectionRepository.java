@@ -50,7 +50,12 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 	public OAuthToken getAccessToken(Long accountId, String provider) {
 		return jdbcTemplate.queryForObject(SELECT_ACCESS_TOKEN, new RowMapper<OAuthToken>() {
 			public OAuthToken mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(rs.getString("secret")));
+				String secret = rs.getString("secret");
+				if (secret == null || secret.length() == 0) {
+					return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")));
+				} else {
+					return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(secret));
+				}
 			}
 		}, accountId, provider);
 	}

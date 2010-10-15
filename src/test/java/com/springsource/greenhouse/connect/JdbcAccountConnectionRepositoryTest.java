@@ -22,6 +22,7 @@ import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
+// TODO This is testing more than just the jdbc account connection repository - factor out and focus on the data access logic
 public class JdbcAccountConnectionRepositoryTest {
 	
 	private EmbeddedDatabase db;
@@ -50,10 +51,13 @@ public class JdbcAccountConnectionRepositoryTest {
 	}
 
 	@Test
-	public void connect() {
+	public void addConnection() throws NoSuchAccountConnectionException {
 		assertFalse(accountProvider.isConnected(2L));
 		accountProvider.addConnection(2L, "accessToken", "kdonald");
 		assertTrue(accountProvider.isConnected(2L));
+		TwitterOperations api = accountProvider.getApi(2L);
+		assertNotNull(api);
+		assertNotNull(accountProvider.findAccountByConnection("accessToken"));
 	}
 	
 	@Test

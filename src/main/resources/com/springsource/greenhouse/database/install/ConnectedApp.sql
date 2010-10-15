@@ -16,10 +16,10 @@ create table AppDeveloper (app bigint,
 				foreign key (member) references Member(id));
 
 create table AppConnection (app varchar,
-					member bigint,
-					accessToken varchar not null unique,					
-					secret varchar not null,
-					primary key (app, member),
-					foreign key (member) references Member(id),
-					foreign key (app) references App(id) on delete cascade);
+				member bigint,
+				accessToken varchar not null unique,					
+				secret varchar not null,
+				primary key (app, member),
+				foreign key (member) references Member(id),
+				foreign key (app) references App(id) on delete cascade);
 					
