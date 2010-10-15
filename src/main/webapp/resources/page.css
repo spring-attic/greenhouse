@@ -11,8 +11,64 @@ a img, frameset, fieldset {
 }
 
 p {
-	margin:0 0 0.5em;
+	margin: 0 0 0.5em;
 }
+
+h2, h3, h4, h5 {
+	font-weight:300;
+}
+
+h2 {
+	color: #3C3D40;
+	font-size: 1.6em;
+	font-weight: 700;
+	margin: 0 0 25px;
+}
+
+h3 {
+	color: #3C3D40;
+	font-size: 1.3em;
+	font-weight: bold;
+	margin: 0 0 10px;
+}
+
+h4 {
+	font-size: 1.12em;
+	margin: 0 0 10px 0;
+	color: #272727;
+	font-weight: bold;
+}
+
+h5 { 
+	font-weight: bold;
+	margin: 0 0 0 0;
+	font-size:1.12em;
+}
+
+.listings {
+	list-style-type: none;
+	margin: 0 0 20px;
+}
+
+.listing {
+	clear: both;
+	list-style-type: none;
+	margin-bottom:5px;
+	overflow: hidden;
+	padding: 0 0 5px;
+}
+
+dt {
+    float: left;
+    clear: left;
+    width: 8em;
+    }
+ dd {
+    margin: 0 0 0 9em;
+     padding: 0 0 2.5em 0;
+    }
+
+
 
 textarea, body, input, button, a.button {
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
@@ -102,15 +158,4 @@ body {
 	text-align: left;
 	text-shadow: 0 1px 0 #F1FBFF;
 	width: 345px;
-}
-
-h2 {
-	color: #3C3D40;
-	font-size: 1.6em;
-	font-weight: 700;
-	margin: 0 0 25px;
-}
-
-#topbar {
-	text-align: right;
 }

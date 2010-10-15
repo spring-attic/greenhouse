@@ -8,12 +8,12 @@
 	<div class="${message.type}">${message.text}</div>
 </c:if>
 		
-<ul>
-	<li>
+<ul class="listings">
+	<li class="listing">
 		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Logo"/>
 		<a href="<c:url value="/invite/twitter" />">See which of your Twitter followers are in the Greenhouse</a>
 	</li> 
-	<li>
+	<li class="listing">
 		<img src="http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_medium_short.gif" alt="Facebook Connect" id="fb_login_image" />		
 		<a class="button large" href="#" onclick="FB.requireSessionThenGoTo('<c:url value="/invite/facebook"/>');return false;">Invite your Facebook friends</a>
 		  <c:if test="${not empty facebookUserId}">
@@ -21,7 +21,7 @@
           <a onclick="FB.logoutThenGoTo('<c:url value="/signout"/>');return false;" href="#">Not you?</a>)
           </c:if>          
 	</li>
-	<li>
+	<li class="listing">
 		<a href="<c:url value="/invite/mail" />">Invite friends via email</a>
 	</li>	
 </ul>

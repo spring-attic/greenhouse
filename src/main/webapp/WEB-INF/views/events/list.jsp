@@ -6,7 +6,7 @@
 <h2>Upcoming Events</h2>
 
 <c:if test="${not empty eventList}">
-<dl>
+<dl class="listings">
 <c:forEach items="${eventList}" var="event">
 	<s:url value="/groups/{group}/events/{year}/{month}/{slug}" var="eventUrl">
 		<s:param name="group" value="${event.groupSlug}" />
@@ -16,9 +16,11 @@
 	</s:url>
 	<dt>
 		<a href="${eventUrl}"><c:out value="${event.title}" /></a><br/>
-		<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /> at <c:out value="${event.location}" />
 	</dt>
-	<dd><c:out value="${event.description}" escapeXml="true" /></dd>
+	<dd>
+		<d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /> at <c:out value="${event.location}" /> <br/>
+		<c:out value="${event.description}" escapeXml="true" />		
+	</dd>	
 </c:forEach>
 </dl>
 </c:if>

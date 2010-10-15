@@ -14,7 +14,11 @@
 </c:if>
 
 <c:forEach var="appSummary" items="${appSummaryList}">
-<apps:summary value="${appSummary}" />
+<ul class="listings">
+	<li class="listing">
+		<apps:summary value="${appSummary}" />
+	</li>
+</ul>
 </c:forEach>
 
 <ul>

@@ -16,9 +16,9 @@
 
 <c:if test="${not empty searchResults.tweets}">
 <h3>What others are tweeting about this event...</h3>
-<ul>
+<ul class="listings">
 <c:forEach var="tweet" items="${searchResults.tweets}">	
-	<li><strong>${tweet.fromUser} says</strong> ${tweet.text}</li>
+	<li class="listing"><strong>${tweet.fromUser} says</strong> ${tweet.text}</li>
 </c:forEach>
 </ul>
 </c:if>
