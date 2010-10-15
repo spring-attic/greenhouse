@@ -3,10 +3,9 @@
 
 <tiles-definitions>
 	
-	<definition name="page" templateExpression="/WEB-INF/layouts/page${currentDevice.mobileBrowser ? '-mobile' : ''}.jsp" />
-	
-	<definition name="standard" extends="page">
-		<put-attribute name="header" expression="/WEB-INF/layouts/header${currentDevice.mobileBrowser ? '-mobile' : ''}.jsp" />	
+	<definition name="page" templateExpression="/WEB-INF/layouts/${currentDevice.mobileBrowser ? 'mobile/' : 'standard/'}page.jsp">
+		<put-attribute name="header" expression="/WEB-INF/layouts/${currentDevice.mobileBrowser ? 'mobile/' : 'standard/'}header.jsp" />
+		<put-attribute name="footer" expression="/WEB-INF/layouts/${currentDevice.mobileBrowser ? 'mobile/' : 'standard/'}footer.jsp" />
 	</definition>
-
+	
 </tiles-definitions>

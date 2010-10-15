@@ -3,7 +3,7 @@
 
 <tiles-definitions>
 
-	<definition name="signin" extends="standard">
+	<definition name="signin" extends="page">
 		<put-attribute name="title" value="Sign In | Greenhouse" />
 		<put-attribute name="content" value="/WEB-INF/views/signin/signin.jsp" />
 	</definition>

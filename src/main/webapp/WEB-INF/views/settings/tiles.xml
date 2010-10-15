@@ -3,7 +3,7 @@
 
 <tiles-definitions>
 
-	<definition name="settings" extends="standard">
+	<definition name="settings" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/settings/settings.jsp" />
 	</definition>
 

@@ -3,37 +3,36 @@
 
 <tiles-definitions>
 
-    <definition name="connect/twitterConnect" extends="standard">
+    <definition name="connect/twitterConnect" extends="page">
         <put-attribute name="content" value="/WEB-INF/views/connect/twitterConnect.jsp" />
     </definition>
 
-    <definition name="connect/twitterConnected" extends="standard">
+    <definition name="connect/twitterConnected" extends="page">
         <put-attribute name="content" value="/WEB-INF/views/connect/twitterConnected.jsp" />
     </definition>
 
-    <definition name="connect/linkedinConnect" extends="standard">
-        <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnect.jsp" />
-    </definition>
-
-    <definition name="connect/linkedinConnected" extends="standard">
-        <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnected.jsp" />
-    </definition>
-
-    <definition name="connect/tripitConnect" extends="standard">
-        <put-attribute name="content" value="/WEB-INF/views/connect/tripItConnect.jsp" />
-    </definition>
-
-    <definition name="connect/tripitConnected" extends="standard">
-        <put-attribute name="content" value="/WEB-INF/views/connect/tripItConnected.jsp" />
-    </definition>
-
-   
-    <definition name="connect/facebookConnect" extends="standard">
+    <definition name="connect/facebookConnect" extends="page">
         <put-attribute name="content" value="/WEB-INF/views/connect/facebookConnect.jsp" />
     </definition>
 
-    <definition name="connect/facebookConnected" extends="standard">
+    <definition name="connect/facebookConnected" extends="page">
         <put-attribute name="content" value="/WEB-INF/views/connect/facebookConnected.jsp" />
+    </definition>
+
+    <definition name="connect/linkedinConnect" extends="page">
+        <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnect.jsp" />
+    </definition>
+
+    <definition name="connect/linkedinConnected" extends="page">
+        <put-attribute name="content" value="/WEB-INF/views/connect/linkedInConnected.jsp" />
+    </definition>
+
+    <definition name="connect/tripitConnect" extends="page">
+        <put-attribute name="content" value="/WEB-INF/views/connect/tripItConnect.jsp" />
+    </definition>
+
+    <definition name="connect/tripitConnected" extends="page">
+        <put-attribute name="content" value="/WEB-INF/views/connect/tripItConnected.jsp" />
     </definition>
     
 </tiles-definitions>

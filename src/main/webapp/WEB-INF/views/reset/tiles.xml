@@ -3,15 +3,15 @@
 
 <tiles-definitions>
 
-	<definition name="reset" extends="standard">
+	<definition name="reset" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/reset/reset.jsp" />
 	</definition>
 
-	<definition name="reset/changePassword" extends="standard">
+	<definition name="reset/changePassword" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/reset/changePassword.jsp" />
 	</definition>
 
-	<definition name="reset/invalidToken" extends="standard">
+	<definition name="reset/invalidToken" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/reset/invalidToken.jsp" />
 	</definition>
 

@@ -3,11 +3,11 @@
 
 <tiles-definitions>
 	
-	<definition name="groups/event" extends="standard">
+	<definition name="groups/event" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/groups/event.jsp" />
 	</definition>
 
-	<definition name="groups/view" extends="standard">
+	<definition name="groups/view" extends="page">
 		<put-attribute name="title" expression="${group.name} | Greenhouse" />
 		<put-attribute name="content" value="/WEB-INF/views/groups/view.jsp" />
 	</definition>

@@ -3,11 +3,11 @@
 
 <tiles-definitions>
 	
-	<definition name="events/view" extends="standard">
+	<definition name="events/view" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/events/view.jsp" />
 	</definition>
 
-	<definition name="events/list" extends="standard">
+	<definition name="events/list" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/events/list.jsp" />
 	</definition>
 	

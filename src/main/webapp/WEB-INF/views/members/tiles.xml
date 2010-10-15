@@ -3,7 +3,7 @@
 
 <tiles-definitions>
 
-	<definition name="members/view" extends="standard">
+	<definition name="members/view" extends="page">
 		<put-attribute name="title" expression="${profile.displayName} | Greenhouse" />
 		<put-attribute name="content" value="/WEB-INF/views/members/view.jsp" />
 	</definition>

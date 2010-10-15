@@ -20,7 +20,7 @@
         </put-list-attribute>
 	</definition>
 	
-	<definition name="homeSignedIn" extends="standard">
+	<definition name="homeSignedIn" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/home/intro.jsp" />
 	</definition>
 	

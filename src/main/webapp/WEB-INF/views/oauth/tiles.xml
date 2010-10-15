@@ -3,7 +3,7 @@
 
 <tiles-definitions>
 
-	<definition name="oauth/confirmAccess" extends="standard">
+	<definition name="oauth/confirmAccess" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/oauth/confirmAccess.jsp" />
 	</definition>
  

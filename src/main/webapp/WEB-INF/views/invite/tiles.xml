@@ -3,11 +3,11 @@
 
 <tiles-definitions>
 
-	<definition name="invite" extends="standard">
+	<definition name="invite" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/invite/invite.jsp" />
 	</definition>
 
-	<definition name="invite/accept" extends="standard">
+	<definition name="invite/accept" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/invite/accept.jsp" />
 	</definition>
           

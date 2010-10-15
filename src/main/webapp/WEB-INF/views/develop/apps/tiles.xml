@@ -3,19 +3,19 @@
 
 <tiles-definitions>
 
-	<definition name="develop/apps" extends="standard">
+	<definition name="develop/apps" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/develop/apps/list.jsp" />
  	</definition>
 
-	<definition name="develop/apps/new" extends="standard">
+	<definition name="develop/apps/new" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/develop/apps/new.jsp" />
 	</definition>
 
-	<definition name="develop/apps/edit" extends="standard">
+	<definition name="develop/apps/edit" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/develop/apps/edit.jsp" />
 	</definition>
 	
-	<definition name="develop/apps/view" extends="standard">
+	<definition name="develop/apps/view" extends="page">
 		<put-attribute name="content" value="/WEB-INF/views/develop/apps/view.jsp" />
 	</definition>
 	

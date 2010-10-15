@@ -5,9 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>
-		<tiles:insertAttribute name="title" defaultValue="Greenhouse" />
-	</title>
+	<title><tiles:insertAttribute name="title" defaultValue="Greenhouse" /></title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 	<link rel="stylesheet" href="<c:url value="/resources/mobile/page.css" />" type="text/css" media="screen" />
@@ -22,14 +20,13 @@
 </head>
 <body>
 	<div id="header">
-		<img src="<c:url value="/resources/header-logo.png" />">
+		<tiles:insertAttribute name="header" />
 	</div>
 	<div id="content">
 		<tiles:insertAttribute name="content" />
 	</div>
 	<div id="footer">
-		<p><img src="<c:url value="/resources/springsource-logo.png" />" /></p>
-		<p>© Copyright 2010 SpringSource, a division of VMware.</p>
+		<tiles:insertAttribute name="footer" />	
 	</div>
 	<tiles:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true" />
 	<c:forEach var="script" items="${scripts}">
