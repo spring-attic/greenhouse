@@ -6,14 +6,20 @@
 	padding: 0;
 }
 
-a img, frameset { border: 0; }
+a img, frameset, fieldset { 
+	border: 0;
+}
+
+p {
+	margin:0 0 0.5em;
+}
 
 textarea, body, input, button, a.button {
 	font-family: Arial, Helvetica, Sans-Serif;
 }
 
 body {
-	background: url("body.png") repeat-x scroll 0 0 #EEEEEE;
+	background: url("background-body.png") repeat-x scroll 0 0 #EEEEEE;
 	font-size: 80%;
 }
 
@@ -23,49 +29,88 @@ body {
 }
 
 #header {
-	background: url("header-logo.png") no-repeat scroll 0 0 #6DB33F;
+	background: url("logo-header.png") no-repeat scroll 0 0 #6DB33F;
 	height: 92px;
 	position: relative;
 	display: block;
 }
 
-#topbar {
-	position: absolute;
-	right: 0;
-	top: 70px;
+#header h1 a img {
+	left: -9999px;
+	position: relative;
 }
 
-#contentContainer {	
-	background: none repeat-x scroll center top #EEEEEE;
+#nav {
+	position: absolute;
+	right: 0;
+	top: 60px;
+}
+
+#nav li {
+	float: left;
+	list-style-type: none;
+	margin-left: 10px;
+}
+
+#nav li a {
+	color: #FFFFFF;
+	display: block;
+}
+
+#content-container {	
+	background-color: #EEEEEE;
 	padding: 25px;	
 }
 
 #content {
+	background-color: #FFFFFF;
 	padding: 25px;
-	background: none repeat scroll 0 0 #FFFFFF;
 }
 
 #footer {
-	padding: 25px;
+	height: 90px;
+	line-height: 1.5em;
+	padding: 10px 0 30px;
 }
 
-ul {
-	list-style: none;
+#springsource {
+	background:url("logo-springsource.png") no-repeat scroll 0 0 transparent;
+	display: block;
+	float: right;
+	height: 40px;
+	text-indent: -9999px;
+	width: 157px;	
 }
 
-ul li {
-	padding: 10px;
+#nav-secondary {
+	float: left;
+	list-style-type: none;
+	margin: 8px 0 0;
+	text-align: right;
+	width: 600px;
+}
+
+#nav-secondary li {
+	display: block;
+	float: left;
+	margin: 0 10px 0 0;
+}
+
+#footer p {
+	float: left;
+	padding: 10px 0 0;
+	text-align: left;
+	text-shadow: 0 1px 0 #F1FBFF;
+	width: 345px;
+}
+
+h2 {
+	color: #3C3D40;
+	font-size: 1.6em;
+	font-weight: 700;
+	margin: 0 0 25px;
 }
 
 #topbar {
 	text-align: right;
-}
-
-dt {
-	list-style: none;
-	font-size: 1.2em;
-}
-
-dd {
-	padding: 5px;
 }

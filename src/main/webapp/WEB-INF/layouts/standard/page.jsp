@@ -28,7 +28,7 @@
   	<div id="header">
 		<tiles:insertAttribute name="header" />
 	</div>
-	<div id="contentContainer">
+	<div id="content-container">
 		<div id="content">
 			<tiles:insertAttribute name="content" />
 		</div>
