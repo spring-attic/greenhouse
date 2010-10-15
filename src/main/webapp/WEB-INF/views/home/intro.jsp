@@ -1,6 +1,6 @@
 <%@ page session="false" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
-<h2>Welcome to the Greenhouse!</h2>
+<h2>Welcome to the Greenhouse</h2>
 <p>
 	We make it fun to be an application developer.
 </p>
