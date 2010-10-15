@@ -11,7 +11,7 @@
 <ul>
 	<c:forEach var="friendAccount" items="${friendAccounts}">
 	<li>
-		<a href="<s:url value="/members/${friendAccount.profileId}" />">${friendAccount.fullName}</a>
+		<a href="<s:url value="/members/${friendAccount.id}" />">${friendAccount.label}</a>
 	</li>
 	</c:forEach>
 </ul>
