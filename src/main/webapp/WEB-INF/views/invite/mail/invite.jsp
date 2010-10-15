@@ -3,8 +3,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<h2>Invite friends via Email</h2>
-
 <c:url value="/invite/mail" var="inviteUrl" />
 <form:form action="${inviteUrl}" method="post" modelAttribute="mailInviteForm">
 	<div class="formInfo">
@@ -31,12 +29,12 @@
 	<fieldset>
 		<legend>Tell us who you'd like to send an invite to</legend>
 		<form:label path="invitees">Invitees, separated by commas in format <i>firstName lastName &lt;email&gt;</i></form:label>
-		<form:textarea path="invitees" cols="80" />
+		<form:textarea path="invitees" cols="60" />
 	</fieldset>
 	<fieldset>
 		<legend>Personalize your invitation</legend>
 		<form:label path="invitationText">Invitation Text</form:label>
-		<form:textarea path="invitationText" cols="80" rows="20" />
+		<form:textarea path="invitationText" cols="60" rows="10" />
 	</fieldset>
 	<p><button type="submit">Send</button></p>	
 </form:form>
