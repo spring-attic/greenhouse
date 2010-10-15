@@ -25,14 +25,16 @@
 	<script type="text/javascript" src="<c:url value="/resources/jquery-cookie/1.0/jquery-cookie.js" />"></script>
 </head>
 <body>
-	<div id="header">
+  	<div id="header">
 		<tiles:insertAttribute name="header" />
 	</div>
-	<div id="content">
-		<tiles:insertAttribute name="content" />
-	</div>
-	<div id="footer">
-		<tiles:insertAttribute name="footer" />
+	<div id="contentContainer">
+		<div id="content">
+			<tiles:insertAttribute name="content" />
+		</div>
+		<div id="footer">
+			<tiles:insertAttribute name="footer" />
+		</div>
 	</div>
 	<tiles:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true" />
 	<c:forEach var="script" items="${scripts}">

@@ -1,11 +1,52 @@
 @import url("messages/messages.css");
 @import url("form.css");
 
+* {
+	margin: 0;
+	padding: 0;
+}
+
+a img, frameset { border: 0; }
+
+textarea, body, input, button, a.button {
+	font-family: Arial, Helvetica, Sans-Serif;
+}
+
 body {
-	font-family: Lucida Grande, sans-serif;
-	font-size: .75em;
-	margin: 1em auto;
-	width: 763px;
+	background: url("body.png") repeat-x scroll 0 0 #EEEEEE;
+	font-size: 80%;
+}
+
+#header, #content, #footer {
+	margin: 0 auto;
+	width: 944px;
+}
+
+#header {
+	background: url("header-logo.png") no-repeat scroll 0 0 #6DB33F;
+	height: 92px;
+	position: relative;
+	display: block;
+}
+
+#topbar {
+	position: absolute;
+	right: 0;
+	top: 70px;
+}
+
+#contentContainer {	
+	background: none repeat-x scroll center top #EEEEEE;
+	padding: 25px;	
+}
+
+#content {
+	padding: 25px;
+	background: none repeat scroll 0 0 #FFFFFF;
+}
+
+#footer {
+	padding: 25px;
 }
 
 ul {
