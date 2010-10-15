@@ -35,8 +35,6 @@ public final class Invitee {
 		if (inviteeString == null || inviteeString.length() == 0) {
 			throw new IllegalArgumentException("The Invitee string to parse cannot be null or empty");
 		}
-		// remove once this is done by conversion service
-		inviteeString = inviteeString.trim();
 		String[] pieces = inviteeString.split("[<>]");
 		if (pieces.length == 1) {
 			return new Invitee(pieces[0]);	
