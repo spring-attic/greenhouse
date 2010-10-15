@@ -10,11 +10,11 @@
 		
 <ul class="listings">
 	<li class="listing">
-		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Logo"/>
+		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Connect Logo" />
 		<a href="<c:url value="/invite/twitter" />">See which of your Twitter followers are in the Greenhouse</a>
 	</li> 
 	<li class="listing">
-		<img src="http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_medium_short.gif" alt="Facebook Connect" id="fb_login_image" />		
+		<img src="<c:url value="/resources/social/facebook/connect_light_medium_short.gif" />" alt="Facebook Connect Logo" id="fb_login_image" />		
 		<a class="button large" href="#" onclick="FB.requireSessionThenGoTo('<c:url value="/invite/facebook"/>');return false;">Invite your Facebook friends</a>
 		  <c:if test="${not empty facebookUserId}">
           (you are currently logged into Facebook as <fb:name linked="false" useyou="false" uid="${facebookUserId}"></fb:name>.
@@ -22,6 +22,7 @@
           </c:if>          
 	</li>
 	<li class="listing">
+		<img src="<c:url value="/resources/social/google/logo-gmail.png" />" alt="Gmail Logo "/>
 		<a href="<c:url value="/invite/mail" />">Invite friends via email</a>
 	</li>	
 </ul>

@@ -58,17 +58,35 @@ h5 {
 	padding: 0 0 5px;
 }
 
+.listing .pic {
+	float: left;
+}
+
+.listing-pic-large {
+	padding-left: 220px;
+}
+
+.listing-pic-large .pic {
+	margin-left: -220px;
+}
+
+.pic {
+	background-color: #D7EDFA;
+	border: 3px solid #DFECF2;
+	line-height: 0;
+	position: relative;
+}
+
 dt {
-    float: left;
-    clear: left;
-    width: 8em;
-    }
- dd {
-    margin: 0 0 0 9em;
-     padding: 0 0 2.5em 0;
-    }
+	float: left;
+	clear: left;
+	width: 8em;
+}
 
-
+dd {
+ 	margin: 0 0 0 9em;
+ 	padding: 0 0 2.5em 0;
+}
 
 textarea, body, input, button, a.button {
 	font-family: "lucida grande", lucida, tahoma, helvetica, arial, sans-serif !important;
@@ -158,4 +176,17 @@ body {
 	text-align: left;
 	text-shadow: 0 1px 0 #F1FBFF;
 	width: 345px;
+}
+
+#connectedProfiles  {
+	float: left;
+	list-style-type: none;
+	margin-bottom: 8px;
+	width: 100%;
+}
+
+#connectedProfiles li {
+	display: block;
+	float: left;
+	margin-right: 8px;
 }

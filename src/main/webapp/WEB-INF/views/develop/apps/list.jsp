@@ -21,6 +21,4 @@
 </ul>
 </c:forEach>
 
-<ul>
-	<li><a href="<c:url value="/develop/apps/new" />">Register App</a></li>
-</ul>
+<a href="<c:url value="/develop/apps/new" />">Register App</a>
