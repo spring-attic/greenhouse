@@ -10,6 +10,15 @@ a img, frameset, fieldset {
 	border: 0;
 }
 
+a:visited {
+}
+
+a {
+	color: #0095D3;
+	outline: medium none;
+	text-decoration: underline;
+}
+
 p {
 	margin: 0 0 0.5em;
 }
@@ -91,10 +100,19 @@ body {
 }
 
 #header {
-	background: url("logo-header.png") no-repeat scroll 0 0 #6DB33F;
 	height: 92px;
 	position: relative;
 	display: block;
+}
+
+#header h1 a {
+	background: url("logo-header.png") no-repeat scroll 0 0 #6DB33F;
+	display: block;
+	height: 83px;
+	left: 2px;
+	position: relative;
+	top: 0;
+	width: 243px;
 }
 
 #header h1 a img {

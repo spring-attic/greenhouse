@@ -7,18 +7,18 @@
 <h2>Invite Facebook Friends</h2>
 
 <c:if test="${not empty friendAccounts}">
-<h3>Some of your friends are already in the Greenhouse</h3>
+<p>Some of your friends are already in the Greenhouse</p>
 <ul>
 	<c:forEach var="friendAccount" items="${friendAccounts}">
 	<li><a href="<s:url value="/members/${friendAccount.id}" />">${friendAccount.label}</a></li>
 	</c:forEach>
 </ul>
-<h3>Invite more...</h3>
+<h5>Invite more...</h5>
 </c:if>
 
 <c:if test="${empty friendAccounts}">
-<h3>None of your friends have Greenhouse accounts connected to Facebook</h3>
-<h3>Invite some...</h3>
+<p>None of your friends have Greenhouse accounts connected to Facebook</p>
+<h5>Invite some...</h5>
 </c:if>
 
 <fb:serverfbml style="width: 625px;">
