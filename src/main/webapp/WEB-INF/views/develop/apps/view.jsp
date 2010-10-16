@@ -19,6 +19,4 @@
 	<p><button type="submit">Delete</button></p>
 </form>
 
-<ul>
-	<li><a href="<c:url value="/develop/apps/edit/${slug}" />">Edit details</a></li>
-</ul>
+<a href="<c:url value="/develop/apps/edit/${slug}" />">Edit details</a>
