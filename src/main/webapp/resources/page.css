@@ -186,13 +186,13 @@ body {
 
 #connectedProfiles  {
 	float: left;
+	display: block;
 	list-style-type: none;
 	margin-bottom: 8px;
-	width: 100%;
+	width: 400px;
 }
 
 #connectedProfiles li {
-	display: block;
 	float: left;
 	margin-right: 8px;
 }
