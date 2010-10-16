@@ -58,21 +58,9 @@ h5 {
 	padding: 0 0 5px;
 }
 
-.listing .pic {
+.listing img {
 	float: left;
-}
-
-.listing-pic-large {
-	padding-left: 220px;
-}
-
-.listing-pic-large .pic {
-	margin-left: -220px;
-}
-
-.pic {
-	background-color: #D7EDFA;
-	border: 3px solid #DFECF2;
+	margin-right: 8px;
 	line-height: 0;
 	position: relative;
 }

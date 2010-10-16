@@ -3,8 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
-<div id="profile" class="listing listing-pic-large">
-	<span class="pic"><img src="${profile.pictureUrl}" alt="Profile Picture" /></span>
+<div id="profile" class="listing">
+	<img src="${profile.pictureUrl}" alt="Profile Picture" />
 	<h2><c:out value="${profile.displayName}" /></h2>
 	<ul id="connectedProfiles">
 		<c:forEach var="connectedProfile" items="${connectedProfiles}">

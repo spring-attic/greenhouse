@@ -9,7 +9,7 @@
 </c:if>
 		
 <ul class="listings">
-	<li class="listing">
+	<li class="listing">	
 		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Connect Logo" />
 		<a href="<c:url value="/invite/twitter" />">See which of your Twitter followers are in the Greenhouse</a>
 	</li> 

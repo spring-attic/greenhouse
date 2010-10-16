@@ -15,9 +15,7 @@
 
 <c:forEach var="appSummary" items="${appSummaryList}">
 <ul class="listings">
-	<li class="listing">
-		<apps:summary value="${appSummary}" />
-	</li>
+	<li><apps:summary value="${appSummary}" /></li>
 </ul>
 </c:forEach>
 
