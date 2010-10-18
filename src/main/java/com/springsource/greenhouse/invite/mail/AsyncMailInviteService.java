@@ -16,6 +16,7 @@ import org.springframework.templating.LocalStringTemplate;
 import org.springframework.templating.ResourceStringTemplateFactory;
 import org.springframework.templating.StringTemplate;
 import org.springframework.templating.StringTemplateFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
@@ -62,9 +63,12 @@ public class AsyncMailInviteService implements MailInviteService {
 	private void send(final Account from, final Invitee to, final String text, final String token) {
 		final SimpleMailMessage mailMessage = createInviteMailMessage(to, text);
 		mailerExecutor.execute(new Runnable() {
+			@Transactional
 			public void run() {
-				mailSender.send(mailMessage);
-				inviteRepository.saveInvite(token, to, text, from.getId());
+				if (!inviteRepository.alreadyInvited(to.getEmail())) {
+					inviteRepository.saveInvite(token, to, text, from.getId());
+					mailSender.send(mailMessage);
+				}
 			}
 		});
 	}

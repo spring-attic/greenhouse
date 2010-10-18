@@ -1,7 +1,7 @@
 package com.springsource.greenhouse.invite.mail;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
@@ -29,12 +30,14 @@ public class MailInviteServiceTest {
 	
 	private JdbcTemplate jdbcTemplate;
 	
+	private MailSender mailSender;
+	
 	@Before
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().activity().invite().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);		
 		InviteRepository inviteRepository = new JdbcInviteRepository(jdbcTemplate, null);
-		MailSender mailSender = mock(MailSender.class);
+		mailSender = mock(MailSender.class);
 		inviteService = new AsyncMailInviteService(mailSender, new SyncTaskExecutor(), inviteRepository, "http://localhost:8443/invite/accept?token={token}");
 	}
 	
@@ -53,11 +56,11 @@ public class MailInviteServiceTest {
 		invitees.add(Invitee.valueOf("Craig Walls <cwalls@vmware.com>"));
 		String invitationText = "Come join me at the Greenhouse!";
 		inviteService.sendInvite(account, invitees, invitationText);
+		inviteService.sendInvite(account, invitees, invitationText);
 		assertEquals(2, jdbcTemplate.queryForInt("select count(*) from Invite"));
+		verify(mailSender, times(2)).send(any(SimpleMailMessage.class));
 		jdbcTemplate.queryForObject("select token from Invite where email = 'keith.donald@springsource.com'", String.class);
 		jdbcTemplate.queryForObject("select token from Invite where email = 'cwalls@vmware.com'", String.class);
 	}
-	
-	public List<Invitee> invitees;
 	
 }

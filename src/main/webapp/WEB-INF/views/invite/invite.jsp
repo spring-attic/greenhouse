@@ -7,11 +7,11 @@
 		
 <ul class="listings">
 	<li class="listing">	
-		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Connect Logo" />
+		<img src="<c:url value="/resources/social/twitter/logo.png" />" alt="Twitter Connect Logo"  style="max-height: 43px; max-width: 88px;" />
 		See which of your <a href="<c:url value="/invite/twitter" />">Twitter followers</a> are in the Greenhouse
 	</li> 
 	<li class="listing">
-		<img src="<c:url value="/resources/social/facebook/connect_light_medium_short.gif" />" alt="Facebook Connect Logo" id="fb_login_image" />		
+		<img src="<c:url value="/resources/social/facebook/connect_light_medium_short.gif" />" alt="Facebook Connect Logo" id="fb_login_image" style="max-height: 43px; max-width: 88px;"/>		
 		Invite your <a class="button large" href="#" onclick="FB.requireSessionThenGoTo('<c:url value="/invite/facebook"/>');return false;">Facebook friends</a>
 		  <c:if test="${not empty facebookUserId}">
           (you are currently logged into Facebook as <fb:name linked="false" useyou="false" uid="${facebookUserId}"></fb:name>.
@@ -19,7 +19,7 @@
           </c:if>          
 	</li>
 	<li class="listing">
-		<img src="<c:url value="/resources/social/google/logo-gmail.png" />" alt="Gmail Logo "/>
+		<img src="<c:url value="/resources/social/google/logo-gmail.png" />" alt="Gmail Logo " style="max-height: 43px; max-width:88px;" />
 		Invite friends via <a href="<c:url value="/invite/mail" />">email</a>
 	</li>	
 </ul>

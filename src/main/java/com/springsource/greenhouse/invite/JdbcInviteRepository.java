@@ -32,6 +32,11 @@ public class JdbcInviteRepository implements InviteRepository {
 		this.actionRepository = actionRepository;
 	}
 	
+	public boolean alreadyInvited(String email) {
+		return jdbcTemplate.queryForObject("select exists(select 1 from Invite where email = ?)", Boolean.class, email) ||
+			jdbcTemplate.queryForObject("select exists(select 1 from Member where email = ?)", Boolean.class, email);	
+	}
+	
 	public void saveInvite(String token, Invitee invitee, String text, Long sentBy) {
 		jdbcTemplate.update(INSERT_INVITE, token, invitee.getEmail(), invitee.getFirstName(), invitee.getLastName(), text, sentBy);
 	}
