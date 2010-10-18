@@ -48,7 +48,7 @@ public class JdbcAppRepositoryTest {
 		AppSummary summary = summaries.get(0);
 		assertEquals("Greenhouse for Facebook", summary.getName());
 		assertEquals("Awesome", summary.getDescription());
-		assertEquals("http://images.greenhouse.springsource.org/default-app-icon.jpg", summary.getIconUrl());
+		assertEquals("http://images.greenhouse.springsource.org/apps/icon-default-app.png", summary.getIconUrl());
 		assertEquals("greenhouse-for-facebook", summary.getSlug());
 
 		summaries = appRepository.findAppSummaries(3L);
