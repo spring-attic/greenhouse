@@ -5,7 +5,7 @@ $(document).ready(function() {
 		var activityItems = $.parseJSON(response.responseBody);
 		for (var i = 0; i < activityItems.length; i++) {
 			var activity = activityItems[i];
-			$("<li></li>").addClass("newItem").append($("<img/>", { "src" : activity.memberPictureUrl }).addClass("profile")).
+			$("<li class='listing'></li>").addClass("newItem").append($("<img/>", { "src" : activity.memberPictureUrl }).addClass("profile")).
 				append("<p>" + activity.text + "</p>").
 				append($("<img/>", { "src" : activity.imageUrl}).addClass("activity")).
 				prependTo("#recentActivityList");	

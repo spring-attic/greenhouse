@@ -1,6 +1,6 @@
 <%@ page session="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<ul id="recentActivityList">
+<ul id="recentActivityList" class="listings">
 	<c:forEach var="item" items="${recentActivity}">
 		<li>
 			<img class="profile" src="${item.memberPictureUrl}" />

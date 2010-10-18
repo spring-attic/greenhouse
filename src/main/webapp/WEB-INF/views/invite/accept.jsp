@@ -4,7 +4,10 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <c:url value="/invite" var="inviteUrl" />
+<!-- TODO use Web Flow here so invitee and sentBy state can be preserved through the accept flow -->
+<c:if test="${invitee != null}">
 <h2>Welcome to the Greenhouse, ${invitee.firstName}!</h2>
+</c:if>
 
 <c:url value="/invite/accept" var="acceptUrl" />
 <form:form action="${acceptUrl}" method="post" modelAttribute="signupForm">
@@ -18,7 +21,9 @@
   		</c:choose>			
   		</s:bind>
 		<p>
+			<c:if test="${sentBy != null}">
 			You've been invited to the Greenhouse by <a href="<c:url value="/members/${sentBy.id}" />">${sentBy.label}</a>.
+			</c:if>
 			Accept your invitation by completing the signup form below.
 		</p>
 	</div>

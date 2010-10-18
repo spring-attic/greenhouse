@@ -12,7 +12,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.action.ActionRepository;
@@ -37,7 +36,6 @@ public class JdbcInviteRepository implements InviteRepository {
 		jdbcTemplate.update(INSERT_INVITE, token, invitee.getEmail(), invitee.getFirstName(), invitee.getLastName(), text, sentBy);
 	}
 
-	@Transactional
 	public void markInviteAccepted(final String token, Account signedUp) {
 		actionRepository.createAction(InviteAcceptAction.class, signedUp, new ActionFactory<InviteAcceptAction>() {
 			public InviteAcceptAction createAction(Long id, DateTime performTime, Account account, Location location) {
@@ -50,7 +48,7 @@ public class JdbcInviteRepository implements InviteRepository {
 		});
 	}
 	
-	public Invite getInvite(String token) throws NoSuchInviteException, InviteAlreadyAcceptedException {
+	public Invite findInvite(String token) throws NoSuchInviteException, InviteAlreadyAcceptedException {
 		Invite invite = queryForInvite(token);
 		if (invite.isAccepted()) {
 			throw new InviteAlreadyAcceptedException(token);

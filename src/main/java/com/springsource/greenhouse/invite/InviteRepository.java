@@ -8,6 +8,6 @@ public interface InviteRepository {
 
 	void markInviteAccepted(String token, Account signedUp);
 
-	Invite getInvite(String token) throws NoSuchInviteException, InviteAlreadyAcceptedException;
+	Invite findInvite(String token) throws NoSuchInviteException, InviteAlreadyAcceptedException;
 
 }

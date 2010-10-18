@@ -11,6 +11,7 @@ import org.springframework.templating.StringTemplateFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 
@@ -40,6 +41,7 @@ public class MailInviteController {
 			return null;
 		}
 		inviteService.sendInvite(account, form.getInvitees(),  form.getInvitationText());
+		FlashMap.setSuccessMessage("Your invitations have been sent");
 		return "redirect:/invite/mail";
 	}
 	

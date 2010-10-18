@@ -15,8 +15,8 @@
 
 	<!-- ACTION PROCESSING -->
 	
-	<!-- Saves a 'SignedUp' action to the database and outputs it to the actionChannel -->
-	<service-activator input-channel="signedUpChannel" expression="@actionRepository.createSimpleAction('SignedUp', payload)" />
+	<!-- The actionRepository saves a 'SignedUp' action to the database and outputs it to the actionChannel for us -->
+	<service-activator input-channel="signedUpChannel" expression="@actionRepository.createSimpleAction('SignedUp', payload)" output-channel="nullChannel" />
 	
 	<!-- WELCOME MAIL -->
 	

@@ -47,7 +47,7 @@ public class JdbcInviteRepositoryTest {
 	
 	@Test
 	public void getInvite() throws InviteException {
-		Invite details = inviteRepository.getInvite("abc");
+		Invite details = inviteRepository.findInvite("abc");
 		assertEquals("Keith", details.getInvitee().getFirstName());
 		assertEquals("Donald", details.getInvitee().getLastName());
 		assertEquals("keith.donald@springsource.com", details.getInvitee().getEmail());
@@ -57,12 +57,12 @@ public class JdbcInviteRepositoryTest {
 
 	@Test(expected=InviteAlreadyAcceptedException.class)
 	public void inviteAlreadyAccepted() throws InviteException {
-		inviteRepository.getInvite("def");
+		inviteRepository.findInvite("def");
 	}
 
 	@Test(expected=NoSuchInviteException.class)
 	public void noSuchInvite() throws InviteException {
-		inviteRepository.getInvite("bogus");
+		inviteRepository.findInvite("bogus");
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class JdbcInviteRepositoryTest {
 		Account signedUp = new Account(3L, "Keith", "Donald", "keith.donald@springsource.com", "kdonald", "http://localhost:8080/resources/profile-pics/3.jpg", new UriTemplate("http://localhost:8080/members/{id}"));
 		inviteRepository.markInviteAccepted("abc", signedUp);
 		try {
-			inviteRepository.getInvite("abc");
+			inviteRepository.findInvite("abc");
 			fail("Should have failed already accepted");
 		} catch (InviteAlreadyAcceptedException e) {
 			

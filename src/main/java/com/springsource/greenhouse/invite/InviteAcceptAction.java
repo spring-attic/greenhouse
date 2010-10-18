@@ -26,4 +26,9 @@ public final class InviteAcceptAction extends Action {
 		return sentTime;
 	}
 	
+	public String toString() {
+		// TODO Account.gender needs to be preserved
+		return getAccount().getFullName() + " accepted his Greenhouse invitation";
+	}
+	
 }

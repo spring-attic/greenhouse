@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.social.facebook.FacebookUserId;
 import org.springframework.stereotype.Controller;
@@ -42,11 +43,11 @@ public class InviteController {
 	@RequestMapping(value="/accept", method=RequestMethod.GET, params="token")
 	public String acceptInvitePage(@RequestParam String token, Model model, HttpServletResponse response) throws IOException {
 		try {
-			Invite invite = inviteRepository.getInvite(token);
-			model.addAttribute("token", token);
+			Invite invite = inviteRepository.findInvite(token);
 			model.addAttribute(invite.getInvitee());
 			model.addAttribute("sentBy", invite.getSentBy());
 			model.addAttribute(invite.createSignupForm());
+			model.addAttribute("token", token);
 			return "invite/accept";
 		} catch (InviteException e) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -55,16 +56,21 @@ public class InviteController {
 	}
 
 	@RequestMapping(value="/accept", method=RequestMethod.POST)
-	public String acceptInvite(final @RequestParam String token, SignupForm form, BindingResult formBinding) {
+	public String acceptInvite(final @RequestParam String token, @Valid SignupForm form, BindingResult formBinding, Model model) {
 		if (formBinding.hasErrors()) {
-			return null;
+			return form(token, model);
 		}
 		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
 			public void postCreateAccount(Account account) {
 				inviteRepository.markInviteAccepted(token, account);
 			}
 		});
-		return result ? "redirect:/" : null;
+		return result ? "redirect:/" : form(token, model);
+	}
+
+	private String form(String token, Model model) {
+		model.addAttribute("token", token);
+		return null;
 	}
 
 }
