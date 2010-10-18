@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.social.twitter.TwitterOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,13 +24,10 @@ public class GroupsController {
 
 	private EventRepository eventRepository;	
 	
-	private TwitterOperations twitterApi;
-
 	@Inject
-	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository, TwitterOperations twitterApi) {
+	public GroupsController(GroupRepository groupRepository, EventRepository eventRepository) {
 		this.groupRepository = groupRepository;
 		this.eventRepository = eventRepository;
-		this.twitterApi = twitterApi;
 	}
 	
 	@RequestMapping(value="/{groupKey}")
@@ -46,7 +42,6 @@ public class GroupsController {
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(event);
-		model.addAttribute(twitterApi.search(event.getHashtag(), 1, 10));
 		return "groups/event";
 	}	
 	

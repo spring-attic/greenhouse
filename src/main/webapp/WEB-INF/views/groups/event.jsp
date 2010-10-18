@@ -13,12 +13,10 @@
 	<dt>Description</dt>
 	<dd><c:out value="${event.description}" escapeXml="true" /></dd>
 </dl>
-
-<c:if test="${not empty searchResults.tweets}">
-<h3>What others are tweeting about this event...</h3>
-<ul class="listings">
-<c:forEach var="tweet" items="${searchResults.tweets}">	
-	<li class="listing"><strong>${tweet.fromUser} says</strong> ${tweet.text}</li>
-</c:forEach>
-</ul>
-</c:if>
+<p>
+	Grab the Greenhouse mobile client to follow this Event as it happens.
+</p>
+<div id="appIcons">
+	<a href="<c:url value="/iphone" />"><img src="<c:url value="/resources/mobile/icon-apple-appstore.gif"/>" /></a>	
+	<a href="<c:url value="/android" />"><img src="<c:url value="/resources/mobile/icon-android-marketplace.gif"/>" /></a>	
+</div>
