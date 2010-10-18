@@ -1,7 +1,7 @@
 <%@ page session="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<h1><a href="<c:url value="/" />"><img src="<c:url value="/resources/logo-header.png" />" alt="Greenhouse" /></a></h1>
+<h1><a title="Greenhouse" href="<c:url value="/" />"><img src="<c:url value="/resources/logo-header.png" />" alt="Greenhouse" /></a></h1>
 <div id="nav">
 	<ul>
 		<c:if test="${account == null}">

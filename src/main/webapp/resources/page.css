@@ -194,6 +194,17 @@ body {
 	margin-right: 8px;
 }
 
+#connectedAccounts li {
+	padding-bottom: 12px;
+}
+
+#connectedAccounts li h4 img {
+	display: block;
+	float: none;
+	max-height: 40px;
+	max-width: 88px;
+}
+
 #intro {
 	margin-bottom: 16px;
 }

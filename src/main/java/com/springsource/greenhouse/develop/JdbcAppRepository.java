@@ -84,8 +84,7 @@ public class JdbcAppRepository implements AppRepository {
 		String secret = keyGenerator.generateKey();
 		Long appId = findAppIdByApiKey(apiKey);
 		jdbcTemplate.update("delete from AppConnection where app = ? and member = ?", appId, accountId);
-		jdbcTemplate.update("insert into AppConnection (app, member, accessToken, secret) values (?, ?, ?, ?)",
-				appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
+		jdbcTemplate.update("insert into AppConnection (app, member, accessToken, secret) values (?, ?, ?, ?)", appId, accountId, encryptor.encrypt(accessToken), encryptor.encrypt(secret));
 		return new AppConnection(accountId, apiKey, accessToken, secret);
 	}
 
@@ -139,7 +138,8 @@ public class JdbcAppRepository implements AppRepository {
 
 	private RowMapper<AppSummary> appSummaryMapper = new RowMapper<AppSummary>() {
 		public AppSummary mapRow(ResultSet rs, int rowNum) throws SQLException {
-			String iconUrl = "http://images.greenhouse.springsource.org/default-app-icon.jpg";
+			// TODO this is currently hardcoded
+			String iconUrl = "http://images.greenhouse.springsource.org/apps/icon-default-app.png";
 			return new AppSummary(rs.getString("name"), iconUrl, rs.getString("description"), rs.getString("slug"));
 		}
 	};

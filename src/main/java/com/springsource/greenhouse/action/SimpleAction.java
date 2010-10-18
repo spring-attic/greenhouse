@@ -18,7 +18,9 @@ public final class SimpleAction extends Action {
 	}
 	
 	public String toString() {
-		return getAccount().getFullName() + " " + getType();
+		// TODO do not hardcode
+		String actionText = "SignedUp".equals(getType()) ? "signed up" : getType();
+		return getAccount().getFullName() + " " + actionText;
 	}
 
 }

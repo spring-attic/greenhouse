@@ -13,8 +13,8 @@ public class RecentActivityTransformer {
 	public RecentActivity forAction(Action action) {
 		String memberPictureUrl = action.getAccount().getPictureUrl();
 		// TODO don't hardcode
-		String actionImageUrl = "http://localhost:8080/resources/members/action.jpg";
-		RecentActivity activity = new RecentActivity(memberPictureUrl, action.toString(), actionImageUrl);
+		String imageUrl = "http://images.greenhouse.springsource.org/activity/icon-default-action.png";
+		RecentActivity activity = new RecentActivity(memberPictureUrl, action.toString(), imageUrl);
 		return activity;
 	}
 	
