@@ -9,10 +9,6 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.convert.TypeDescriptor;
-import org.springframework.core.convert.support.ConversionServiceFactory;
-import org.springframework.core.convert.support.GenericConversionService;
-import org.springframework.core.style.StylerUtils;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -37,9 +33,9 @@ public class MailInviteServiceTest {
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().activity().invite().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);		
-		InviteRepository inviteRepository = new JdbcInviteRepository(jdbcTemplate);
+		InviteRepository inviteRepository = new JdbcInviteRepository(jdbcTemplate, null);
 		MailSender mailSender = mock(MailSender.class);
-		inviteService = new AsyncMailInviteService(mailSender, new SyncTaskExecutor(), inviteRepository, "http://localhost:8443/invite?token={token}");
+		inviteService = new AsyncMailInviteService(mailSender, new SyncTaskExecutor(), inviteRepository, "http://localhost:8443/invite/accept?token={token}");
 	}
 	
 	@After
@@ -57,16 +53,9 @@ public class MailInviteServiceTest {
 		invitees.add(Invitee.valueOf("Craig Walls <cwalls@vmware.com>"));
 		String invitationText = "Come join me at the Greenhouse!";
 		inviteService.sendInvite(account, invitees, invitationText);
-	
 		assertEquals(2, jdbcTemplate.queryForInt("select count(*) from Invite"));
-		String token1 = jdbcTemplate.queryForObject("select token from Invite where email = 'keith.donald@springsource.com'", String.class);
-		String token2 = jdbcTemplate.queryForObject("select token from Invite where email = 'cwalls@vmware.com'", String.class);
-
-		inviteService.acceptInvite(token1);
-		assertEquals(1, jdbcTemplate.queryForInt("select count(*) from Invite"));
-
-		inviteService.acceptInvite(token2);
-		assertEquals(0, jdbcTemplate.queryForInt("select count(*) from Invite"));
+		jdbcTemplate.queryForObject("select token from Invite where email = 'keith.donald@springsource.com'", String.class);
+		jdbcTemplate.queryForObject("select token from Invite where email = 'cwalls@vmware.com'", String.class);
 	}
 	
 	public List<Invitee> invitees;

@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.invite.mail;
+package com.springsource.greenhouse.invite;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

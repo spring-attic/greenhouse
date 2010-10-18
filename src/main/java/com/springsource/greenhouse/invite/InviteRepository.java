@@ -1,11 +1,13 @@
 package com.springsource.greenhouse.invite;
 
+import com.springsource.greenhouse.account.Account;
+
 public interface InviteRepository {
 
 	void saveInvite(String token, Invitee invitee, String text, Long sentBy);
 
-	void removeInvite(String token);
+	void markInviteAccepted(String token, Account signedUp);
 
-	InviteDetails getInviteDetails(String token);
+	Invite getInvite(String token) throws NoSuchInviteException, InviteAlreadyAcceptedException;
 
 }

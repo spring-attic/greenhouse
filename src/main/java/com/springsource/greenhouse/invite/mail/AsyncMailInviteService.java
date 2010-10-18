@@ -37,7 +37,7 @@ public class AsyncMailInviteService implements MailInviteService {
 	
 	@Inject
 	public AsyncMailInviteService(MailSender mailSender, TaskExecutor mailerExecutor, InviteRepository inviteRepository,
-			@Value("${application.secureUrl}/invite?token={token}") String acceptUriTemplate) {
+			@Value("${application.secureUrl}/invite/accept?token={token}") String acceptUriTemplate) {
 		this.mailSender = mailSender;
 		this.mailerExecutor = mailerExecutor;
 		this.inviteRepository = inviteRepository;
@@ -57,10 +57,6 @@ public class AsyncMailInviteService implements MailInviteService {
 			String text = textTemplate.render();
 			send(from, invitee, text, token);
 		}
-	}
-	
-	public void acceptInvite(String token) {
-		inviteRepository.removeInvite(token);
 	}
 
 	private void send(final Account from, final Invitee to, final String text, final String token) {

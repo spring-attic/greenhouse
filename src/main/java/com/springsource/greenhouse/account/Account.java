@@ -19,7 +19,7 @@ public class Account implements Serializable {
 	
 	private final String pictureUrl;
 	
-	private final UriTemplate profileUrlTemplate;
+	private final String profileUrl;
 	
 	public Account(Long id, String firstName, String lastName, String email, String username, String pictureUrl, UriTemplate profileUrlTemplate) {
 		this.id = id;
@@ -28,7 +28,7 @@ public class Account implements Serializable {
 		this.email = email;
 		this.username = username;
 		this.pictureUrl = pictureUrl;
-		this.profileUrlTemplate = profileUrlTemplate;
+		this.profileUrl = profileUrlTemplate.expand(getProfileId()).toString();
 	}
 	
 	public Long getId() {
@@ -60,15 +60,11 @@ public class Account implements Serializable {
 	}
 
 	public String getProfileUrl() {
-		return profileUrlTemplate.expand(getProfileId()).toString();
+		return profileUrl;
 	}
 
 	public String getProfileId() {
 		return username != null ? username : id.toString(); 
-	}
-	
-	public Account makeUsername(String username) {
-		return new Account(id, firstName, lastName, email, username, pictureUrl, profileUrlTemplate);
 	}
 	
 }

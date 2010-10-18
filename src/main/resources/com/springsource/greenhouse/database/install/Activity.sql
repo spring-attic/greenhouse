@@ -1,6 +1,6 @@
 create table MemberAction (id identity,
 					actionType varchar not null,
-					performTime timestamp not null,
+					performTime timestamp not null default now(),
 					latitude double,
 					longitude double,
 					member bigint,

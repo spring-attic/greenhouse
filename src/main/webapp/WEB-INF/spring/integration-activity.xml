@@ -5,6 +5,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+	<!-- Gateway that publishes signed up messages -->
+	<gateway id="actionGateway" service-interface="com.springsource.greenhouse.action.ActionGateway" default-request-channel="actionChannel" />
+
 	<!-- For persisting simple actions -->
 	<beans:bean id="actionRepository" class="com.springsource.greenhouse.action.JdbcActionRepository" />
 

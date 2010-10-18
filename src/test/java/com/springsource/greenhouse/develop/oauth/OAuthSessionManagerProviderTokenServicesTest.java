@@ -22,6 +22,7 @@ import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.security.oauth.provider.token.InvalidOAuthTokenException;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
+import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
@@ -65,8 +66,7 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException,
 			NoSuchAccountConnectionException {
 		for (int i = 0; i < numberOfTimes; i++) {
-			OAuthProviderToken token = tokenServices.createUnauthorizedRequestToken("123456789",
-					"x-com-springsource-greenhouse://oauth-response");
+			OAuthProviderToken token = tokenServices.createUnauthorizedRequestToken("123456789", "x-com-springsource-greenhouse://oauth-response");
 			assertEquals("123456789", token.getConsumerKey());
 			assertEquals("x-com-springsource-greenhouse://oauth-response", token.getCallbackUrl());
 			String requestToken = token.getValue();
@@ -82,9 +82,8 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 			assertEquals(secret, token.getSecret());
 			assertNull(token.getVerifier());
 
-			Account account = new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", null, null, null);
-			Authentication auth = new UsernamePasswordAuthenticationToken(account, null,
-					(Collection<GrantedAuthority>) null);
+			Account account = new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", "rlarkson", "http://localhost:8080/resources/profile-pics/1.jpg", new UriTemplate("http://localhost:8080/members/{id}"));
+			Authentication auth = new UsernamePasswordAuthenticationToken(account, null, (Collection<GrantedAuthority>) null);
 			tokenServices.authorizeRequestToken(requestToken, "verifier", auth);
 
 			token = tokenServices.getToken(token.getValue());

@@ -16,8 +16,7 @@
 	<!-- ACTION PROCESSING -->
 	
 	<!-- Saves a 'SignedUp' action to the database and outputs it to the actionChannel -->
-	<!-- TODO resolve currentLocation from request -->
-	<service-activator input-channel="signedUpChannel" expression="@actionRepository.createSimpleAction('SignedUp', payload)" output-channel="actionChannel" />
+	<service-activator input-channel="signedUpChannel" expression="@actionRepository.createSimpleAction('SignedUp', payload)" />
 	
 	<!-- WELCOME MAIL -->
 	

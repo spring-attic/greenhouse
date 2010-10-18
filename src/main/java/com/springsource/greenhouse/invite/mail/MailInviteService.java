@@ -9,6 +9,4 @@ public interface MailInviteService {
 
 	void sendInvite(Account account, List<Invitee> to, String invitationText);
 
-	void acceptInvite(String token);
-
 }
