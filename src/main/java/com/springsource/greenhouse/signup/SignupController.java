@@ -21,12 +21,12 @@ public class SignupController {
 		this.signupHelper = new SignupHelper(accountRepository, gateway);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public SignupForm signupForm() {
 		return new SignupForm();
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	public String signup(@Valid SignupForm form, BindingResult formBinding) {
 		if (formBinding.hasErrors()) {
 			return null;

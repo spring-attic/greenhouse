@@ -193,3 +193,16 @@ body {
 	display: inline;
 	margin-right: 8px;
 }
+
+#intro {
+	margin-bottom: 16px;
+}
+
+#appIcons a {
+	margin-right:12px;
+}
+
+#appIcons img {
+	max-height: 43px;
+	max-width: 130px;
+}
