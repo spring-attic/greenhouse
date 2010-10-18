@@ -4,8 +4,8 @@ import javax.inject.Inject;
 
 import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookOperations;
+import org.springframework.social.facebook.FacebookProfile;
 import org.springframework.social.facebook.FacebookTemplate;
-import org.springframework.social.facebook.FacebookUserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,13 +39,13 @@ public class FacebookSigninController {
 			AccountUtils.signin(account);
 			return "redirect:/";
 		} catch (NoSuchAccountConnectionException e) {
-			return handleNoFacebookConnection(new FacebookTemplate(accessToken).getUserInfo());
+			return handleNoFacebookConnection(new FacebookTemplate(accessToken).getUserProfile());
 		}
 	}
 	
 	// internal helpers
 	
-	private String handleNoFacebookConnection(FacebookUserInfo userInfo) {
+	private String handleNoFacebookConnection(FacebookProfile userInfo) {
 		try {
 			accountRepository.findByUsername(userInfo.getEmail());
 			FlashMap.setWarningMessage("Your Facebook account is not linked with your Greenhouse account. To connect them, sign in and then go to the Settings page.");
