@@ -149,7 +149,7 @@ public class JdbcEventRepository implements EventRepository {
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
 		"where s.event = ? and s.startTime >= ? and s.endTime <= ? " +
-		"order by s.startTime, sl.rank";
+		"order by s.startTime, s.id, sl.rank";
 
 	private static final String SELECT_EVENT_FAVORITES = SELECT_FROM_EVENT_SESSION +
 		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.id = top.session " +
@@ -158,7 +158,7 @@ public class JdbcEventRepository implements EventRepository {
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
 		"where s.event = ? " +
-		"order by top.favoriteCount desc, sl.rank";
+		"order by top.favoriteCount desc, s.id, sl.rank";
 
 	private static final String SELECT_ATTENDEE_FAVORITES = SELECT_FROM_EVENT_SESSION +
 		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
@@ -166,5 +166,5 @@ public class JdbcEventRepository implements EventRepository {
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
 		"where s.event = ? " +
-		"order by f.rank, sl.rank";
+		"order by f.rank, s.id, sl.rank";
 }
