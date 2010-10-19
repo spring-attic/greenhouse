@@ -32,6 +32,6 @@
 	<bean class="com.springsource.greenhouse.connect.FacebookConnectController" />
 	
 	<!-- Configurable properties TODO: this is also loaded in the root-context.xml; can we load just once instead? See GREENHOUSE-308 -->
-	<context:property-placeholder location="classpath:application.properties" />   	
+	<import resource="../properties.xml" />   	
 	 
 </beans>

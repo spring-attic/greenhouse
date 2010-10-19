@@ -10,7 +10,7 @@ public class StubFileStorage implements FileStorage {
 	}
 	
 	public String storeFile(FileData file) {
-		return absoluteUrl(file.getContentType());
+		return absoluteUrl(file.getName());
 	}
 	
 }

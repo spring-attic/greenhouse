@@ -23,7 +23,7 @@
 	
 	<bean class="com.springsource.greenhouse.config.AccountProvidersApiConfiguration" />
 
-	<!-- Common parents -->
+	<!-- Common parent -->
 	
 	<bean abstract="true" id="accountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider" />
 				

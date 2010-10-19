@@ -10,14 +10,14 @@
 	<!-- Mail sender -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="defaultEncoding" value="UTF-8" />
-		<property name="host" value="${mail.host}" />
-		<property name="port" value="${mail.port}" />
-		<property name="username" value="${mail.username}" />
-		<property name="password" value="${mail.password}" />
+		<property name="host" value="${mail.host?localhost}" />
+		<property name="port" value="${mail.port?25}" />
+		<property name="username" value="${mail.username?}" />
+		<property name="password" value="${mail.password?}" />
 	    <property name="javaMailProperties">
 	        <props>
-	            <prop key="mail.smtp.auth">true</prop>
-	            <prop key="mail.smtp.starttls.enable">true</prop>
+	            <prop key="mail.smtp.auth">${mail.smtp.auth?false}</prop>
+	            <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable?false}</prop>
 	        </props>
 	    </property>
    	</bean>

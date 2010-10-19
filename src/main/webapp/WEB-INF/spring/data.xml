@@ -33,10 +33,20 @@
 		</gh:otherwise>
 	</gh:environment-bean>
 
-	<bean id="pictureStorage" class="org.springframework.data.S3FileStorage">
-		<constructor-arg value="${s3.accessKey}" />
-		<constructor-arg value="${s3.secretKey}" />
-		<constructor-arg value="images.greenhouse.springsource.org" />
-	</bean>
+	<gh:environment-bean id="pictureStorage">
+		<gh:when environment="embedded">
+			<bean class="org.springframework.data.LocalFileStorage">
+				<constructor-arg value="${application.url}/resources/uploads/" />
+				<constructor-arg value="/resources/uploads/" />
+			</bean>
+		</gh:when>
+		<gh:otherwise>
+			<bean class="org.springframework.data.S3FileStorage">
+				<constructor-arg value="${s3.accessKey}" />
+				<constructor-arg value="${s3.secretKey}" />
+				<constructor-arg value="images.greenhouse.springsource.org" />
+			</bean>
+		</gh:otherwise>
+	</gh:environment-bean>
 				
 </beans>
