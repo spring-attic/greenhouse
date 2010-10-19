@@ -501,7 +501,8 @@
 									username="${publish.username}"
 									command="${publish.serverPath}/bin/tcruntime-ctl.sh stop"
 									keyfile="${publish.keyfile}"
-									trust="true" />				
+									trust="true"
+									failonerror="false" />				
 								<sshexec host="${publish.host}"
 									username="${publish.username}"
 									command="rm -rf ${publish.serverPath}/webapps/*"
