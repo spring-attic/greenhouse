@@ -15,7 +15,7 @@ public class WelcomeMailTransformer {
 	@Transformer
 	public MailMessage welcomeMail(Account account) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setFrom("noreply@springsource.com");
+		mailMessage.setFrom("Greenhouse <noreply@springsource.com>");
 		mailMessage.setTo(account.getEmail());
 		mailMessage.setSubject("Welcome to the Greenhouse!");
 		StringTemplate textTemplate;

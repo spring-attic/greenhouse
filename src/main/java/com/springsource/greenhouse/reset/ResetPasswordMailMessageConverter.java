@@ -26,7 +26,7 @@ public final class ResetPasswordMailMessageConverter implements Converter<ResetP
 	
 	public SimpleMailMessage convert(ResetPasswordRequest request) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setFrom("noreply@springsource.com");
+		mailMessage.setFrom("Greenhouse <noreply@springsource.com>");
 		mailMessage.setTo(request.getAccount().getEmail());
 		StringTemplate textTemplate;
 		mailMessage.setSubject("Reset your Greenhouse password");

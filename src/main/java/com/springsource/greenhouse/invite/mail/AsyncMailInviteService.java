@@ -75,7 +75,7 @@ public class AsyncMailInviteService implements MailInviteService {
 	
 	private SimpleMailMessage createInviteMailMessage(Invitee to, String text) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setFrom("noreply@springsource.com");
+		mailMessage.setFrom("Greenhouse <noreply@springsource.com>");
 		mailMessage.setTo(to.getEmail());
 		mailMessage.setSubject("Your Greenhouse Invitation");
 		mailMessage.setText(text);
