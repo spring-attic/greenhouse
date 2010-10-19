@@ -1,5 +1,5 @@
-#Mon Oct 18 23:36:11 EDT 2010
-activeProfiles=greenhouse-dev
+#Tue Oct 19 00:34:16 EDT 2010
+activeProfiles=greenhouse-embedded
 eclipse.preferences.version=1
 fullBuildGoals=process-test-resources
 includeModules=false
