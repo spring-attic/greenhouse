@@ -49,7 +49,8 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long attendeeId) {
-		DateTime dayStart = day.toDateTimeAtStartOfDay(DateTimeZone.UTC);
+		// TODO do not hardcode this
+		DateTime dayStart = day.toDateTimeAtStartOfDay(DateTimeZone.forID("America/Chicago"));
 		DateTime dayEnd = dayStart.plusDays(1);
 		return jdbcTemplate.query(SELECT_SESSIONS_ON_DAY, eventSessionsExtractor, attendeeId, eventId, dayStart.toDate(), dayEnd.toDate());
 	}

@@ -74,7 +74,13 @@ public class JdbcEventRepositoryTest {
 		assertSocial(sessions.get(0), true);
 		assertMobile(sessions.get(1), true);
 	}
-	
+
+	@Test
+	public void findSessionsOnDayEdge() {
+		List<EventSession> sessions = eventRepository.findSessionsOnDay(1L, new LocalDate(2010, 10, 19), 1L);
+		assertEquals(1, sessions.size());
+	}
+
 	@Test
 	public void findEventFavorites() {
 		List<EventSession> favorites = eventRepository.findEventFavorites(1L, 2L);

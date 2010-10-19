@@ -27,6 +27,12 @@ insert into EventVenue (event, venue) values (1, 1);
 insert into EventTrack (event, code, name, description, chair) values (1, 'spr', 'Essential Spring', 'Spring techniques and technologies applicable to most classes of applications', 2);
 insert into EventTrack (event, code, name, description, chair) values (1, 'web', 'Web Application Development', 'What you need to know to build rich web applications', 1);
 
+insert into Leader (name) values ('Rod Johnson');
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 5, 'Opening Keynote', '2010-10-20 00:30:00Z', '2010-10-20 01:45:00Z',
+	'Rod kicks off #s2gx with a bang.', '#opener', null, 1, 1);
+insert into EventSessionLeader (event, session, leader) values (1, 5, 4);
+
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 1, 'Mastering MVC 3', '2010-10-20 17:45:00Z', '2010-10-20 19:15:00Z',
 	'A deep-dive into the latest capabilities of Spring MVC, Spring''s REST-ful web application development platform.', '#mvc', 'web', 1, 2);
 insert into EventSessionLeader (event, session, leader) values (1, 1, 1);
