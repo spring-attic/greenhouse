@@ -499,7 +499,22 @@
 									trust="true" />
 								<sshexec host="${publish.host}"
 									username="${publish.username}"
-									command="mv /tmp/greenhouse.war ${publish.path}"
+									command="${publish.serverPath}/bin/tcruntime-ctl.sh stop"
+									keyfile="${publish.keyfile}"
+									trust="true" />				
+								<sshexec host="${publish.host}"
+									username="${publish.username}"
+									command="rm -rf ${publish.serverPath}/webapps/*"
+									keyfile="${publish.keyfile}"
+									trust="true" />
+								<sshexec host="${publish.host}"
+									username="${publish.username}"
+									command="mv /tmp/greenhouse.war ${publish.serverPath}/webapps/ROOT.war"
+									keyfile="${publish.keyfile}"
+									trust="true" />
+								<sshexec host="${publish.host}"
+									username="${publish.username}"
+									command="${publish.serverPath}/bin/tcruntime-ctl.sh start"
 									keyfile="${publish.keyfile}"
 									trust="true" />
 							</tasks>
