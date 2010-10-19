@@ -14,6 +14,8 @@ public class LocalFileStorage implements FileStorage {
 	
 	private final File storageDirectory;
 	
+	private boolean deleteOnExit;
+	
 	public LocalFileStorage(String storageUrl, Resource storageDirectory) {
 		this.storageUrl = storageUrl;
 		try {
@@ -23,6 +25,10 @@ public class LocalFileStorage implements FileStorage {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public void setDeleteOnExit(boolean deleteOnExit) {
+		this.deleteOnExit = deleteOnExit;
 	}
 	
 	public String absoluteUrl(String fileName) {
@@ -43,10 +49,12 @@ public class LocalFileStorage implements FileStorage {
  			parents.addFirst(parent);
 			parent = parent.getParentFile();
 		}
- 		for (File p : parents) {
- 			p.deleteOnExit();
+ 		if (deleteOnExit) {
+ 			for (File p : parents) {
+ 				p.deleteOnExit();
+ 			}
+ 			file.deleteOnExit();
  		}
-		file.deleteOnExit();
  		try {
  			file.createNewFile();
  			FileOutputStream os = new FileOutputStream(file);

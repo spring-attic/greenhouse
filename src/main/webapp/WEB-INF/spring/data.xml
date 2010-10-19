@@ -36,8 +36,9 @@
 	<gh:environment-bean id="pictureStorage">
 		<gh:when environment="embedded">
 			<bean class="org.springframework.data.LocalFileStorage">
-				<constructor-arg value="${application.url}/resources/uploads/" />
-				<constructor-arg value="/resources/uploads/" />
+				<constructor-arg value="${application.url}/resources/" />
+				<constructor-arg value="/resources/" />
+				<property name="deleteOnExit" value="true" />
 			</bean>
 		</gh:when>
 		<gh:otherwise>
