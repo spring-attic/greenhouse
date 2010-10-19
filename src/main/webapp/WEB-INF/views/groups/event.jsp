@@ -17,5 +17,5 @@
 	Grab the Greenhouse mobile client to follow this Event as it happens.
 </p>
 <div id="appIcons">
-	<a href="<c:url value="/iphone" />"><img src="http://itunes.apple.com/us/app/greenhouse/id395862873"/></a>	
+	<a href="http://itunes.apple.com/us/app/greenhouse/id395862873"><img src="<c:url value="/resources/mobile/icon-apple-appstore.gif" />" /></a>	
 </div>
