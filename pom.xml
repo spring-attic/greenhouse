@@ -450,6 +450,23 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>write-active-profile-properties</goal>
+						</goals>
+					<configuration>
+						<!-- Writes properties defined in current active profile(s) to application.properties, which is picked up by PropertyPlaceholderConfigurer in the classpath -->
+						<outputFile>${project.build.outputDirectory}/application.properties</outputFile>
+					</configuration>
+					</execution>
+			 	</executions>
+			</plugin>			
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
@@ -474,7 +491,8 @@
 						<phase>deploy</phase>
 						<goals><goal>run</goal></goals>
 						<configuration>
-							<tasks>									
+							<tasks>
+								<!-- TODO update this to shutdown server, clear out deploy area, copy new war in, startup server: for safety with PermGen and JSP compilation -->
 								<scp file="${project.build.directory}/${project.build.finalName}.${project.packaging}" 
 									todir="${publish.username}@${publish.host}:/tmp/greenhouse.war" 
 									keyfile="${publish.keyfile}"
@@ -495,22 +513,6 @@
 						<version>1.8.1</version>
 					</dependency>
 				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>write-active-profile-properties</goal>
-						</goals>
-					<configuration>
-						<outputFile>${project.build.outputDirectory}/application.properties</outputFile>
-					</configuration>
-					</execution>
-			 	</executions>
 			</plugin>
 		</plugins>		
 	</build>
