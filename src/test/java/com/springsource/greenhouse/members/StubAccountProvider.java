@@ -32,11 +32,11 @@ public class StubAccountProvider implements AccountProvider<SocialProviderOperat
 		return 99L;
 	}
 
-	public OAuthToken getRequestToken(String callbackUrl) {
+	public OAuthToken fetchNewRequestToken(String callbackUrl) {
 		return null;
 	}
 
-	public String getAuthorizeUrl(String requestToken) {
+	public String buildAuthorizeUrl(String requestToken) {
 		return null;
 	}
 

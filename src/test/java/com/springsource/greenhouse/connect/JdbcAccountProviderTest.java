@@ -80,13 +80,6 @@ public class JdbcAccountProviderTest {
 	}
 
 	@Test
-	public void updateProviderAccountId() {
-		assertEquals("habuma", accountProvider.getProviderAccountId(1L));
-		accountProvider.updateProviderAccountId(1L, "springdude");
-		assertEquals("springdude", accountProvider.getProviderAccountId(1L));
-	}
-
-	@Test
 	public void getProviderAccountId() {
 		assertEquals("habuma", accountProvider.getProviderAccountId(1L));
 	}

@@ -59,9 +59,9 @@ public class ConnectController {
 	public String connect(@PathVariable String provider, WebRequest request) {
 		AccountProvider<?> accountProvider = getAccountProvider(provider);
 		preConnect(accountProvider, request);
-		OAuthToken requestToken = accountProvider.getRequestToken(baseCallbackUrl + provider);
+		OAuthToken requestToken = accountProvider.fetchNewRequestToken(baseCallbackUrl + provider);
 		request.setAttribute(OAUTH_TOKEN_ATTRIBUTE, requestToken, WebRequest.SCOPE_SESSION);
-		return "redirect:" + accountProvider.getAuthorizeUrl(requestToken.getValue());
+		return "redirect:" + accountProvider.buildAuthorizeUrl(requestToken.getValue());
 	}
 	
 	@RequestMapping(value="/{provider}", method=RequestMethod.GET, params="oauth_token")

@@ -6,6 +6,8 @@ import com.springsource.greenhouse.account.Account;
 
 public interface AccountProvider<A> {
 
+	// provider meta-data
+	
 	String getName();
 	
 	String getDisplayName();
@@ -14,9 +16,11 @@ public interface AccountProvider<A> {
 	
 	Long getAppId();
 
-	OAuthToken getRequestToken(String callbackUrl);
+	// connection management
 	
-	String getAuthorizeUrl(String requestToken);
+	OAuthToken fetchNewRequestToken(String callbackUrl);
+	
+	String buildAuthorizeUrl(String requestToken);
 	
 	A connect(Long accountId, OAuthToken requestToken, String verifier);
 	
@@ -24,16 +28,16 @@ public interface AccountProvider<A> {
 
 	boolean isConnected(Long accountId);
 
-	void updateProviderAccountId(Long accountId, String providerAccountId);
+	A getApi(Long accountId);
 
+	void disconnect(Long accountId);
+	
+	// additional finders
+	
 	String getProviderAccountId(Long accountId);
 
 	Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException;
 	
 	List<Account> findAccountsWithProviderAccountIds(List<String> providerAccountIds);
 
-	A getApi(Long accountId);
-
-	void disconnect(Long accountId);
-	
 }

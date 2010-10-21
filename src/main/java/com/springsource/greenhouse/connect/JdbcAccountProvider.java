@@ -61,12 +61,12 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 		return parameters.getAppId();
 	}
 	
-	public OAuthToken getRequestToken(String callbackUrl) {
+	public OAuthToken fetchNewRequestToken(String callbackUrl) {
 		Token requestToken = getOAuthService(callbackUrl).getRequestToken();
 		return new OAuthToken(requestToken.getToken(), requestToken.getSecret());
 	}
 
-	public String getAuthorizeUrl(String requestToken) {
+	public String buildAuthorizeUrl(String requestToken) {
 		return parameters.getAuthorizeUrl().expand(requestToken).toString();
 	}
 
