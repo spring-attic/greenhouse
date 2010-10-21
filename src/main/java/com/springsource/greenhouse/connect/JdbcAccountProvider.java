@@ -22,6 +22,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.encrypt.StringEncryptor;
+import org.springframework.social.core.SocialProviderOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
@@ -71,8 +72,14 @@ abstract class JdbcAccountProvider<A> implements AccountProvider<A> {
 
 	public A connect(Long accountId, OAuthToken requestToken, String verifier) {
 		OAuthToken accessToken = getAccessToken(requestToken, verifier);
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()), encryptor.encrypt(accessToken.getSecret()), null);
-		return createApi(accessToken);
+		A api = createApi(accessToken);
+
+		// TODO: Remove dependence on SocialProviderOperations
+		String profileId = ((SocialProviderOperations) api).getProfileId();
+
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, getName(), encryptor.encrypt(accessToken.getValue()),
+				encryptor.encrypt(accessToken.getSecret()), profileId);
+		return api;
 	}
 
 	public A addConnection(Long accountId, String accessToken, String providerAccountId) {
