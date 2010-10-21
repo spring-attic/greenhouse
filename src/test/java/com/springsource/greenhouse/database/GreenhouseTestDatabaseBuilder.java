@@ -55,6 +55,16 @@ public class GreenhouseTestDatabaseBuilder {
 		return this;
 	}
 	
+	public GreenhouseTestDatabaseBuilder testData(String script) {
+		populator.addScript(new ClassPathResource(script));
+		return this;
+	}
+
+	public GreenhouseTestDatabaseBuilder testData(String script, Class<?> relativeTo) {
+		populator.addScript(new ClassPathResource(script, relativeTo));
+		return this;
+	}
+	
 	public EmbeddedDatabase getDatabase() {
 		EmbeddedDatabaseFactory databaseFactory = new EmbeddedDatabaseFactory();
 		databaseFactory.setDatabaseName("greenhouse");

@@ -396,25 +396,24 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 insert into EventSessionLeader (event, session, leader) values (1, 49, 48);
 
 
-insert into Leader (name) values ('Mark Thomas');
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 50, 'Introduction to Tomcat 7', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
 	'Apache Tomcat is the mostly widely deployed application server in today''s enterprise market. Developers, QA teams and IT managers all use Tomcat in a wide variety of deployments with incredible success. This session looks inside the popular Apache project to review some of the new features available with Apache Tomcat 7, including asynchronous request processing, memory leak protection, security improvements and simpler embedding.',
 	'#tomcat7', 'int', 1, 1);
-insert into EventSessionLeader (event, session, leader) values (1, 50, 49);
+insert into EventSessionLeader (event, session, leader) values (1, 50, 13);
 
 
 insert into Leader (name) values ('Richard McDougall');
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 51, 'Deep-dive into hypervisors and virtualization', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
 	'Have you ever wondered how the low level magic of virtual machines works?  Have you ever wondered if an application would run differently when it''s virtualized, if there are overheads, or what other impacts there might be?',
 	'#hypervisor', 'emg', 1, 4);
-insert into EventSessionLeader (event, session, leader) values (1, 51, 50);
+insert into EventSessionLeader (event, session, leader) values (1, 51, 49);
 
 
 insert into Leader (name) values ('Chris Ramsdale');
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 52, 'Google Web Toolkit 101', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
 	'In this session, Chris Ramsdale will get you up and running with Google Web Toolkit (GWT), a development toolkit for building and optimizing sophisticated browser-based applications. Starting with an overview, we''ll build a hello-world sample app and then move into deeper topics including: how it works, code generators, native Javascript interop, and compiler optimizations.',
 	'#gwt', 'vmw', 1, 5);
-insert into EventSessionLeader (event, session, leader) values (1, 52, 51);
+insert into EventSessionLeader (event, session, leader) values (1, 52, 50);
 
 
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 53, 'Groovy Update: to Infinity and Beyond!', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
@@ -439,7 +438,7 @@ insert into Leader (name) values ('Colin Harrington');
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 56, 'Grails Layouts & Sitemesh', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
 	'In this talk, I''ll do a deep dive on how Grails uses Sitemesh and explore integration/customization points as well as some light live-coding examples of how to use the apply layout tag in conjunction with layouts to achieve a very flexible and intuitive approach to developing DRY applications with Grails.',
 	'#mesh', 'grf', 1, 9);
-insert into EventSessionLeader (event, session, leader) values (1, 56, 52);
+insert into EventSessionLeader (event, session, leader) values (1, 56, 51);
 
 
 
@@ -461,22 +460,22 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 	'The Spring AMQP project''s goal is to simplify development of messaging applications based on the AMQP protocol. Spring AMQP provides portable Java and .NET API across RabbitMQ and Apache Qpid implementations as well as convenient abstractions that promote a POJO based programming model. If you are familiar with Spring''s JMS support, you will feel right at home. In this session you will take a tour of Spring AMQP features such as publishing, message converters, and creating multithreaded consumers. Support for the management of the RabbitMQ server will also be covered as well as its configuration using Spring.',
 	'#amqp', 'int', 1, 1);
 insert into EventSessionLeader (event, session, leader) values (1, 59, 36);
+insert into EventSessionLeader (event, session, leader) values (1, 59, 52);
 insert into EventSessionLeader (event, session, leader) values (1, 59, 53);
-insert into EventSessionLeader (event, session, leader) values (1, 59, 54);
 
 
 insert into Leader (name) values ('Chris Richardson');
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 60, 'Developing Java applications with Cloud Services', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
 	'Cloud computing isn''t just about application deployment. There is also a growing number of cloud-based web services that you can use to develop your application. One of the most well known is Amazon''s Simple Storage Service. But there are many others including web services for messaging, relational and NoSQL databases, email and telephony. Using these services allows you to build highly scalable applications without the pain and cost of having to develop and operate your own infrastructure. In this presentation, you will learn how to use some of these web services. We will describe the Java libraries for interacting with them. You will learn about the benefits and drawbacks of these Web services and their typical use cases. We will describe an example application that is built using cloud services.',
 	'#cloud', 'emg', 1, 4);
-insert into EventSessionLeader (event, session, leader) values (1, 60, 55);
+insert into EventSessionLeader (event, session, leader) values (1, 60, 54);
 
 
 insert into Leader (name) values ('Amit Manjhi');
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 61, 'Building business apps with GWT and Roo', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
 	'Who says you can''t build rich web apps for your business? Follow along in this session to learn how you can use the latest integrated set of tools from Google and VMware to take your internal business apps into the cloud. We''ll cover how to get started using GWT with Spring Roo and SpringSource Tool Suite (STS), as well as the new data presentation widgets and MVP framework that will be available in the 2.1 release of GWT.',
 	'#gwt #roo', 'vmw', 1, 5);
-insert into EventSessionLeader (event, session, leader) values (1, 61, 56);
+insert into EventSessionLeader (event, session, leader) values (1, 61, 55);
 
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 62, 'Metaprogramming With Groovy', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
 	'The dynamic nature of Groovy makes it a fantastic language for building dynamic applications for the Java Platform.  The metaprogramming capabilities offered by the language provide everything that an application development team needs to build systems that are far more capable than their all Java counterparts.  Taking advantage of Groovy''s metaprogramming capabilities brings great new possibilities that would be very difficult or just plain impossible to write with Java alone.  Building Domain Specific Languages in Groovy is easy to do once a team has a good understanding of the Metaobject-Protocol (MOP) and the method dispatch mechanisms used by the Groovy runtime environment.',
@@ -496,9 +495,194 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 insert into EventSessionLeader (event, session, leader) values (1, 64, 29);
 
 
-insert into Leader (name) values ('Scott "Longhair" Davis');
+insert into Leader (name) values ('Scott "Longhair"-Davis');
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 65, 'Tomorrow''s Tech Today: HTML 5 + Grails', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
 	'It''s easy for a Grails application to grow to an unmanageable size as more and more features are added. Fortunately, Grails comes with a built-in mechanism for separating an application into different concerns: plugins!',
 	'#ghtml5', 'grf', 1, 9);
-insert into EventSessionLeader (event, session, leader) values (1, 65, 57);
+insert into EventSessionLeader (event, session, leader) values (1, 65, 56);
 
+
+insert into Leader (name) values ('John Davies');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 66, 'Payments in one API', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Innovation in the payment landscape is accelerating. New payment options, such as micropayments, combined with new technologies, such as virtual wallets and virtual currency, is changing the payment world. Working with Incept5, SpringSource is actively engaged in Visa''s effort to drive innovation in the payment landscape by defining new payment standards and payment APIs.',
+	'#visa', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 66, 57);
+
+
+insert into Leader (name) values ('Craig Walls');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 67, 'Developing Social-Ready Web Applications', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Businesses are increasingly recognizing the value of connecting with their customers on a more personal level. Companies can utilize social networking to transition from "Big Faceless Corporation" to "Friend" by taking their wares to the online communities where their customers are. In this age of social media, those communities are found at social network sites such as Facebook, Twitter, and LinkedIn. In this session, you''ll learn how to build Spring-based applications that interact with the various social networks. We''ll talk about new features in the Spring portfolio to support integration with social networks as well as how to start building social features into your own applications.',
+	'#social', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader) values (1, 67, 58);
+
+
+insert into Leader (name) values ('Sudhir Menon');
+insert into Leader (name) values ('Jags Ramnarayan');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 68, 'Low latency and linear scalability with a Data Grid', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Demand spikes are getting to be far more unpredictable than ever before. One way to achieve predictably low latencies is through main-memory data grids. In this talk, we explore the various features offered by GemFire (and other popular data grids) like Synchronous/asyncrhonous replication, hash or relationship based partitioning, hierarchical caching, parallel behavior execution on data nodes, dynamic rebalancing of data and behavior, etc all from a perspective of managing continuously changing load patterns. We will discuss pros and cons of different approaches and provide design recommendations that can lead to better performance, higher availability and linear scalability and your applications.',
+	'#grid', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader) values (1, 68, 59);
+insert into EventSessionLeader (event, session, leader) values (1, 68, 60); 
+
+
+insert into Leader (name) values ('Gil Tene');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 69, 'Supercharging Your App thru Virtualization', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Hardware virtualization is ubiquitous and Clouds are growing in popularity, but Java runtimes and frameworks still face challenges in providing application responsiveness, consistency and scale when deployed in virtualized environments. In this session we will explore new deployment paradigms which can dramatically improve application performance and accelerate your adoption of virtualization for Spring deployments.',
+	'#azul', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader) values (1, 69, 61);
+
+
+insert into Leader (name) values ('Rajeev Dayal');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 70, 'How to Build and Optimize Cloud-based Apps for Speed', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Join us the session to learn how you can use Google''s Plugin for Eclipse alongside SpringSource Tool Suite to build complex, cloud-deployable apps, and Google''s Speed Tracer in conjunction with Spring Insight to measure application performance both in the browser and on the server. As Developers we''re concerned with speed and efficiency -- build the fastest apps possible in the shortest amount of time. Having the right developer tools at your disposal is crucial.',
+	'#google', 'vmw', 1, 5);
+insert into EventSessionLeader (event, session, leader) values (1, 70, 62);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 71, 'Groovy and Concurrency', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'This talk looks at using Groovy for multi-threaded, concurrent and grid computing. It covers everything from using processes, multiple threads, the concurrency libraries ear-marked for Java 7, functional programming, actors including a brief glimpse of GPars, as well as map/reduce, grid and cloud computing frameworks.',
+	'#gconcurrent', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 71, 28);
+
+
+insert into Leader (name) values ('Peter Bell');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 72, 'DSL Evolution for Groovy Developers', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Oh no, you''re new Groovy DSL is actually popular. And of course, the feature requests keep come in. But what do you do to evolve your DSLs without breaking the existing models as your understanding of the domain changes radically over time?',
+	'#dsl', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader) values (1, 72, 63);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 73, 'Database Migrations in Grails', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Hibernate''s create-drop mode is great when you''re prototyping your Grails applications but once you get past the initial stages of your project you''ll need to manage database changes (adding, removing, and renaming tables, columns, and indexes, refactoring data, etc.)',
+	'#dbmigrate', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 73, 41);
+
+
+insert into Leader (name) values ('Andres Almiray');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 74, 'Flying with Griffon, 2010 style', '2010-10-21 17:45:00Z', '2010-10-21 19:15:00Z',
+	'Building a desktop application is a hard task, there are some many things to keep track of that many projects simply fail to meet their goals.',
+	'#griffon', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 74, 64);
+
+
+
+insert into Leader (name) values ('Dave Syer');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 75, 'Concurrent and Distributed Applications with Spring', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'This presentation leads the audience through the minefield of concurrent and distributed computing starting with the basics of Java concurrency, and ending with global patterns for distributed applications. The basic principles of design for such applications are explored and it is shown how using various features of Spring (e.g. task management, scheduling, POJO adapters) can take the pain out of implementing them in many cases.',
+	'#concurrent', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 75, 65);
+
+
+insert into Leader (name) values ('Roy Clarkson');
+insert into Leader (name) values ('Jeremy Grelle');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 76, 'Choices in Mobile Application Development', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'With the rising prevalence of advanced mobile platforms such as iPhone, Android, and Web OS, the desire for rich mobile clients as another means of accessing enterprise services is becoming something that can no longer be ignored. In this session, we will explore the current mobile development landscape and discuss what you as a Spring developer can do to support this increasingly important paradigm. We will examine the benefits and tradeoffs of native mobile client development vs. web-based mobile client development, and we will explore some of the emerging cross-platform options such as PhoneGap. We will look at the various strategies for utilizing a Spring back-end with these mobile platforms, such as consumption of RESTful services, authentication and authorization via OAuth, and server-push style messaging.',
+	'#mobile', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 76, 66, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 76, 67, 2);
+
+
+insert into Leader (name) values ('Scot Junkin');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 77, 'Scaling Spring Apps with Cloud Storage', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'When building content-rich applications, developers often underestimate the challenge of storing the content. Spring developers now have new options for highly flexible, scalable and automated infrastructure, including inside their corporate data centers. In this session, we will look at these options, explain how to leverage them within the Spring framework, as well as share a case study of an enterprise deployment of social networking software with next generation storage technology.',
+	'#cloudstore', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader) values (1, 77, 68);
+
+
+insert into Leader (name) values ('Mik Kersten');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 78, 'Code2Cloud', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'Join Mik Kersten, the CEO of Tasktop Technologies and creator of the Eclipse Mylyn project, for this discussion and demonstration session of how recent the latest Agile and ALM tools can make it dramatically easier to develop, deploy, and evolve your Spring-powered applications. This session will cover new choices for source code repositories for collaborative and social programming, new developments in issue tracking systems, and practical considerations for integrated build and integration testing.  Demonstrations will feature a range of best-of-breed Agile and ALM technologies, including the latest open source tools such as Mylyn, Git and Hudson.  This session will give you an overview of the state-of-the art for managing the evolution of your code evolve from concept, through Scrum planning, then into development, testing and production.',
+	'#code2cloud', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader) values (1, 78, 69);
+
+
+insert into Leader (name) values ('Christian Schalk');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 79, 'Google App Engine for Business 101', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'With Google''s announcement of App Engine for Business earlier this year,  developers can now build and manage business class applications on Google''s Infrastructure. This presentation will introduce Google App Engine for Business explaining how it builds on the the original App Engine product. Specifically covered will be how to build and manage a collection of enterprise applications using the new centralized administration console, as well as sneak preview demos of other upcoming features such as hosted SQL, custom domain SSL etc.',
+	'#appengine', 'vmw', 1, 5);
+insert into EventSessionLeader (event, session, leader) values (1, 79, 70);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 80, 'Concurrency with GPars', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'This talk looks at writing concurrent Groovy programs using GPars. GPars is a comprehensive library for parallel execution that provides a menu of options to the developer.',
+	'#gpars', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 80, 28);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 81, 'Tools for DSLs in Groovy', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'In this session we''ll build up a DSL in Groovy test first, showing a number of test strategies which can be used to develop various types of DSLs.',
+	'#dsltools', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader) values (1, 81, 28);
+
+
+insert into Leader (name) values ('Jean Barmash');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 82, 'Extreme Scaffolding & User Interface Techniques in Grails', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'This talk will examine various techniques and solutions for extending the Grails UI in interesting ways.  The underlying platform for Grails offers a powerful combination of great ideas, such as scaffolding, sitemesh templates, taglibs, templates, and other that get us nice and close to DRY goal.  We will examine several plugins and techniques that take these ideas even further, resulting in yet another boost to productivity.',
+	'#scaffold', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 82, 71);
+
+ 
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 83, 'Griffon Plugin Development', '2010-10-21 19:45:00Z', '2010-10-21 21:15:00Z',
+	'The Griffon framework can be extended via plugins. Plugins can work their magic both at build time and runtime. Building a plugin is actually an easy task however there are a few things you should know to get the most out of the Griffon plugin system.',
+	'#griffon #plugin', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 83, 64);
+
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 84, 'New Persistence Features in Spring Roo 1.1', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'Persistence is the lifeblood of enterprise applications. Spring Roo''s Java Persistence API (JPA) support has been significantly expanded in Spring Roo 1.1, including upgrades to the latest JPA 2 specification and associated implementations, new support of DataNucleus for Google App Engine deployments, Apache Solr for blazing fast enterprise search and the most highly-voted community feature: database reverse engineering (DBRE). In this session we will explore how Spring Roo''s new DBRE feature ventures beyond traditional approaches to reverse engineering to offer a complete, incremental, round-trip-aware capability. We''ll also explore how to add Apache Solr integration to your application in just seconds, and tour many of the other new persistence technology improvements.',
+	'#roopersist', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 84, 20);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 85, 'Harnessing the Power of HTML 5', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'Come to this session to see what HTML 5 can do, as well as get introduced to several Spring MVC extensions in development that take advantage of killer HTML 5 features.',
+	'#html5', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 85, 67, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 85, 39, 2);
+
+
+insert into Leader (name) values ('Brian Dussault');
+insert into Leader (name) values ('Tom McCuch');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 86, 'Case Study: EMC Next-Gen ERP Integration Architecture', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'In this case study, Brian Dussault from EMC will walk through EMC''s requirements and vision for the EMC Next Generation ERP solution &ndash; a Pass-by-Reference integration architecture that supports very high availability with no loss of messages across a highly distributed cloud-based deployment. Tom McCuch, a Sr. Systems Engineer with SpringSource, will demonstrate how SpringSource is meeting EMC''s requirements with a modern integration architecture optimized for the cloud that integrates Spring Integration - a highly distributed POJO-based message bus, GemFire Enterprise - a highly-distributed POJO-based data grid, and RabbitMQ &ndash; a highly distributed protocol-based messaging transport.',
+	'#emc', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 86, 72, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 86, 73, 2);
+
+ 
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 87, 'Using Spring with Non-relational Databases ', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'The needs of many enterprises have stretched traditional RDBMS based solutions to the breaking point and as a result, a plethora of new non-relational storage options have appeared. In this talk your learn about some popular NoSQL database including Redis, Cassandra and MongoDB. We show how the Spring Framework is evolving to support non relational (''NoSQL'') databases by bringing traditional Spring values such as portability, productivity and a unified POJO based programming model to this style of data access.',
+	'#nosql', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 87, 52, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 87, 54, 2);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 88, 'Google Data Analysis and Machine Learning for Your App', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'In addition to Google App Engine, Google has also recently launched several new cloud technologies known as the Prediction API, and BigQuery. This talk will serve as a detailed introduction along with various demos of these new cloud technologies with an emphasis on how they can complement existing Google and third party web technologies.',
+	'#bigquery', 'vmw', 1, 5);
+insert into EventSessionLeader (event, session, leader) values (1, 88, 70);
+
+ 
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 89, 'Code Generation on the JVM: Writing Code that Writes Code', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'"The Pragmatic Programmer" admonished us all to "write code that writes code": use code generators to increase productivity and avoid duplication. Today''s language communities have clearly caught on, as more and more frameworks generate code at compile time: AST Transforms, Project Lombok, Spring Roo, and more.',
+	'#codegen', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 89, 17);
+
+insert into Leader (name) values ('Peter Niederwieser');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 90, 'Smarter Testing Tools with Spock', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'Spock is a developer testing framework for Java and Groovy applications. Even though it is fully JUnit-compatible on the outside, Spock isn''t just another JUnit clone - its goal is to take developer testing to the next level! With its Groovy-powered and highly expressive testing language, Spock boosts productivity and brings back the fun to testing.',
+	'#spock', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader) values (1, 90, 74);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 91, 'Grails Sans SQL', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'Grails provides solid and mature support for SQL databases, but what about the upcoming range of NoSQL data stores?',
+	'#nosql', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 91, 42);
+
+
+insert into Leader (name) values ('James Williams');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 92, 'Griffon for the Enterprise', '2010-10-21 21:30:00Z', '2010-10-21 23:00:00Z',
+	'Java Swing has for a long had a bad reputation of being slow, unwieldy, and a difficult platform to develop on. Griffon, a rapid application development framework using Groovy, brings that pain to an end by leveraging the best paradigms of web development on the desktop.',
+	'#egriffon', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 92, 75);
