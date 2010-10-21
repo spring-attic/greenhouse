@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.connect;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
@@ -56,14 +56,13 @@ public class JdbcAccountProviderFactoryTest {
 	
 	@Test
 	public void getAccountProviderByName() {
-		AccountProvider<TwitterOperations> twitterProvider = providerFactory.getAccountProviderByName("twitter");
+		AccountProvider<TwitterOperations> twitterProvider = (AccountProvider<TwitterOperations>) providerFactory.getAccountProviderByName("twitter");
 		assertEquals("twitter", twitterProvider.getName());
 		assertEquals("Twitter", twitterProvider.getDisplayName());
 		assertEquals("123456789", twitterProvider.getApiKey());
-		assertEquals("http://www.twitter.com/authorize?oauth_token=123456789",
-				twitterProvider.buildAuthorizeUrl("123456789"));
+		assertEquals("http://www.twitter.com/authorize?oauth_token=123456789", twitterProvider.buildAuthorizeUrl("123456789"));
 
-		AccountProvider<FacebookOperations> facebookProvider = providerFactory.getAccountProviderByName("facebook");
+		AccountProvider<FacebookOperations> facebookProvider = (AccountProvider<FacebookOperations>) providerFactory.getAccountProviderByName("facebook");
 		assertEquals("facebook", facebookProvider.getName());
 		assertEquals("Facebook", facebookProvider.getDisplayName());
 		assertEquals("345678901", facebookProvider.getApiKey());

@@ -11,24 +11,20 @@ import com.springsource.greenhouse.account.Account;
 @Component
 public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterOperations> {
 
-	private static final String POST_TWEET_PARAM = "postTweet";
-
-	public boolean supportsProvider(String providerName) {
-		return providerName.equals("twitter");
-	}
+	private static final String POST_TWEET_PARAM = "twitterConnect.postTweet";
 
 	public void preConnect(AccountProvider<TwitterOperations> provider, WebRequest request) {
-		String tweetIt = request.getParameter(POST_TWEET_PARAM);
-		if (StringUtils.hasText(tweetIt)) {
-			request.setAttribute(POST_TWEET_PARAM, true, WebRequest.SCOPE_SESSION);
+		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAM))) {
+			request.setAttribute(POST_TWEET_PARAM, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}
 	}
 
 	public void postConnect(AccountProvider<TwitterOperations> provider, Account account, WebRequest request) {
 		if (request.getAttribute(POST_TWEET_PARAM, WebRequest.SCOPE_SESSION) != null) {
 			try {
+				// TODO consider renaming setStatus to updateStatus
 				provider.getApi(account.getId()).setStatus("Join me at the Greenhouse! " + account.getProfileUrl());
-			} catch (DuplicateTweetException doesntMatter) {
+			} catch (DuplicateTweetException e) {
 			}
 			request.removeAttribute(POST_TWEET_PARAM, WebRequest.SCOPE_SESSION);
 		}

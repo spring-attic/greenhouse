@@ -76,16 +76,15 @@ public class JdbcAccountProviderFactory implements AccountProviderFactory {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public <A> AccountProvider<A> getAccountProviderByName(String name) {
+	public AccountProvider<?> getAccountProviderByName(String name) {
 		if (name.equals("facebook")) {
-			return (AccountProvider<A>) getAccountProvider(FacebookOperations.class);
+			return getAccountProvider(FacebookOperations.class);
 		} else if (name.equals("twitter")) {
-			return (AccountProvider<A>) getAccountProvider(TwitterOperations.class);
+			return getAccountProvider(TwitterOperations.class);
 		} else if (name.equals("linkedin")) {
-			return (AccountProvider<A>) getAccountProvider(LinkedInOperations.class);
+			return getAccountProvider(LinkedInOperations.class);
 		} else if (name.equals("tripit")) {
-			return (AccountProvider<A>) getAccountProvider(TripItOperations.class);
+			return getAccountProvider(TripItOperations.class);
 		} else {
 			throw new IllegalArgumentException("Not a known provider: " + name);
 		}
