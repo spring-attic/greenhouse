@@ -376,3 +376,129 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 	'Adrian shares all the exciting technologial work happening in the Spring community.',
 	'#keynote', null, 1, 10);
 insert into EventSessionLeader (event, session, leader) values (1, 47, 44);
+
+
+insert into Leader (name) values ('Maudrit Martinez');
+insert into Leader (name) values ('Anatoly Polinsky');
+insert into Leader (name) values ('Vipul Savjani');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 48, 'Creating next-gen of on-line transaction authorization', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'Creating a distributed highly scalable system to process close to real time transaction authorization is always a good architecture challenge. Learn how Accenture combined best of breed open source technologies, emerging JVM languages and industrialize architecture approaches to deliver a high performance solution.',
+	'#accenture', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 48, 45);
+insert into EventSessionLeader (event, session, leader) values (1, 48, 46);
+insert into EventSessionLeader (event, session, leader) values (1, 48, 47);
+
+
+insert into Leader (name) values ('Ryan Heaton');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 49, 'OAuth for Spring Security', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'OAuth is an open authorization standard that has gained significant momentum in recent years as more and more resource providers adopt it to allow users to share their private data with other applications without compromising their credentials. Some of the most notable adopters include Google, Facebook, Twitter, Yahoo, and Netflix. This broad adoption of OAuth opens the door to a rich set of valuable data and resources that can be leveraged for enormous potential by innovative application developers.',
+	'#oauth', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader) values (1, 49, 48);
+
+
+insert into Leader (name) values ('Mark Thomas');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 50, 'Introduction to Tomcat 7', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'Apache Tomcat is the mostly widely deployed application server in today''s enterprise market. Developers, QA teams and IT managers all use Tomcat in a wide variety of deployments with incredible success. This session looks inside the popular Apache project to review some of the new features available with Apache Tomcat 7, including asynchronous request processing, memory leak protection, security improvements and simpler embedding.',
+	'#tomcat7', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader) values (1, 50, 49);
+
+
+insert into Leader (name) values ('Richard McDougall');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 51, 'Deep-dive into hypervisors and virtualization', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'Have you ever wondered how the low level magic of virtual machines works?  Have you ever wondered if an application would run differently when it''s virtualized, if there are overheads, or what other impacts there might be?',
+	'#hypervisor', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader) values (1, 51, 50);
+
+
+insert into Leader (name) values ('Chris Ramsdale');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 52, 'Google Web Toolkit 101', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'In this session, Chris Ramsdale will get you up and running with Google Web Toolkit (GWT), a development toolkit for building and optimizing sophisticated browser-based applications. Starting with an overview, we''ll build a hello-world sample app and then move into deeper topics including: how it works, code generators, native Javascript interop, and compiler optimizations.',
+	'#gwt', 'vmw', 1, 5);
+insert into EventSessionLeader (event, session, leader) values (1, 52, 51);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 53, 'Groovy Update: to Infinity and Beyond!', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'Guillaume Laforge will looks at Groovy''s past, present and future. First, he''ll do a quick review of Groovy 1.6 features: multiple assignment and option return in if/else and try/catch blocks, AST transformations with @Delegate, @Lazy, @Immutable, @Mixin and friends, the Grape dependency module, metaprogramming enhancements, JSR-223, JMX and OSGi support built-in. Then hel''ll dive into Groovy 1.7, especially how to simplify the creation of AST transformations, the small incremental improvements to the Groovy GDK, how to "customize the truth", power asserts, and more.',
+	'#groovy', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 53, 8);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 54, 'Functional Programming in Groovy', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'Functional programming style is gaining popularity. Though Groovy is not a functional programming language, writing in functional style is common and idiomatic in Groovy. While you have used these features in Groovy, learning the tents of functional programming will help you recognized these and make better use of them in the future.',
+	'#gfunc', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader) values (1, 54, 7);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 55, 'Grails Spring Security Plugins', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'In this talk we''ll look at the new Spring Security Core plugin and its dependent plugins. The core plugin provides all of the standard functionality you expect from a security plugin (URL security, users, roles, form-based authentication, etc.) and extension plugins add extra functionality such as OpenID support, LDAP authentication, object and method security with ACLs, and more.',
+	'#gsec', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 55, 41);
+
+
+insert into Leader (name) values ('Colin Harrington');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 56, 'Grails Layouts & Sitemesh', '2010-10-21 13:30:00Z', '2010-10-21 15:00:00Z',
+	'In this talk, I''ll do a deep dive on how Grails uses Sitemesh and explore integration/customization points as well as some light live-coding examples of how to use the apply layout tag in conjunction with layouts to achieve a very flexible and intuitive approach to developing DRY applications with Grails.',
+	'#mesh', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 56, 52);
+
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 57, 'Spring and Java EE 6', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'Spring is known to have a strong story for applications running on J2EE 1.4 and also on Java EE 5 servers. What is the situation like with Java EE 6, e.g. when running Spring 3.0/3.1 on GlassFish 3? What pieces of EE 6 are useful outside of an EE server as well, e.g. on Tomcat 7? This talk provides a pragmatic overview of the state of the art in 2010/2011.',
+	'#ee6', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 57, 2);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 58, 'Having Fun with RestTemplate', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'In this session, we will take a close look at one of the new features of Spring 3.0: the RestTemplate. We will show how to use this component to interact with RESTful Web sites, varying from Flickr to Twitter and more. We will also dig deeper into the RestTemplate mechanics, and show how you can expand on these.',
+	'#rest', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader) values (1, 58, 11);
+
+
+insert into Leader (name) values ('Mark Pollack');
+insert into Leader (name) values ('Matthias Radestock');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 59, 'Spring AMQP', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'The Spring AMQP project''s goal is to simplify development of messaging applications based on the AMQP protocol. Spring AMQP provides portable Java and .NET API across RabbitMQ and Apache Qpid implementations as well as convenient abstractions that promote a POJO based programming model. If you are familiar with Spring''s JMS support, you will feel right at home. In this session you will take a tour of Spring AMQP features such as publishing, message converters, and creating multithreaded consumers. Support for the management of the RabbitMQ server will also be covered as well as its configuration using Spring.',
+	'#amqp', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader) values (1, 59, 36);
+insert into EventSessionLeader (event, session, leader) values (1, 59, 53);
+insert into EventSessionLeader (event, session, leader) values (1, 59, 54);
+
+
+insert into Leader (name) values ('Chris Richardson');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 60, 'Developing Java applications with Cloud Services', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'Cloud computing isn''t just about application deployment. There is also a growing number of cloud-based web services that you can use to develop your application. One of the most well known is Amazon''s Simple Storage Service. But there are many others including web services for messaging, relational and NoSQL databases, email and telephony. Using these services allows you to build highly scalable applications without the pain and cost of having to develop and operate your own infrastructure. In this presentation, you will learn how to use some of these web services. We will describe the Java libraries for interacting with them. You will learn about the benefits and drawbacks of these Web services and their typical use cases. We will describe an example application that is built using cloud services.',
+	'#cloud', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader) values (1, 60, 55);
+
+
+insert into Leader (name) values ('Amit Manjhi');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 61, 'Building business apps with GWT and Roo', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'Who says you can''t build rich web apps for your business? Follow along in this session to learn how you can use the latest integrated set of tools from Google and VMware to take your internal business apps into the cloud. We''ll cover how to get started using GWT with Spring Roo and SpringSource Tool Suite (STS), as well as the new data presentation widgets and MVP framework that will be available in the 2.1 release of GWT.',
+	'#gwt #roo', 'vmw', 1, 5);
+insert into EventSessionLeader (event, session, leader) values (1, 61, 56);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 62, 'Metaprogramming With Groovy', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'The dynamic nature of Groovy makes it a fantastic language for building dynamic applications for the Java Platform.  The metaprogramming capabilities offered by the language provide everything that an application development team needs to build systems that are far more capable than their all Java counterparts.  Taking advantage of Groovy''s metaprogramming capabilities brings great new possibilities that would be very difficult or just plain impossible to write with Java alone.  Building Domain Specific Languages in Groovy is easy to do once a team has a good understanding of the Metaobject-Protocol (MOP) and the method dispatch mechanisms used by the Groovy runtime environment.',
+	'#metaprog', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 62, 18);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 63, 'Unit and Functional Testing using Groovy', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'The concise, expressive syntax of Groovy and the ability to create internal DSLs make Groovy a great language for testing related tools.',
+	'#test', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader) values (1, 63, 7);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 64, 'Plugin-oriented architecture for large-scale Grails development', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'It''s easy for a Grails application to grow to an unmanageable size as more and more features are added. Fortunately, Grails comes with a built-in mechanism for separating an application into different concerns: plugins!',
+	'#plugins', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 64, 29);
+
+
+insert into Leader (name) values ('Scott "Longhair" Davis');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 65, 'Tomorrow''s Tech Today: HTML 5 + Grails', '2010-10-21 15:15:00Z', '2010-10-21 16:45:00Z',
+	'It''s easy for a Grails application to grow to an unmanageable size as more and more features are added. Fortunately, Grails comes with a built-in mechanism for separating an application into different concerns: plugins!',
+	'#ghtml5', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 65, 57);
+
