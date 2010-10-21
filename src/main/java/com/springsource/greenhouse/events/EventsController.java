@@ -60,14 +60,14 @@ public class EventsController {
 	@RequestMapping(value = "/{eventId}/tweets", method = RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation) {
 		twitterApi.get().tweet(status);
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{eventId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postRetweet(@PathVariable Long eventId, @RequestParam Long tweetId) {
 		twitterApi.get().retweet(tweetId);
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{eventId}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
@@ -86,8 +86,8 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/rating", method=RequestMethod.POST)
-	public @ResponseBody void updateRating(@PathVariable Long eventId, @PathVariable Integer sessionId, Account account, @RequestParam Short value, @RequestParam String comment) {
-		eventRepository.rate(eventId, sessionId, account.getId(), value, comment);
+	public @ResponseBody Float updateRating(@PathVariable Long eventId, @PathVariable Integer sessionId, Account account, @RequestParam Short value, @RequestParam String comment) throws SessionNotEndedException {
+		return eventRepository.rate(eventId, sessionId, account.getId(), value, comment);
 	}
 
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
@@ -99,14 +99,14 @@ public class EventsController {
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam String status, Location currentLocation) {
 		twitterApi.get().tweet(status);
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam Long tweetId) {
 		twitterApi.get().retweet(tweetId);
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	// for web browser (HTML) clients

@@ -44,3 +44,15 @@ insert into EventSessionLeader (event, session, leader, rank) values (1, 4, 1, 2
 
 insert into EventSessionFavorite (event, session, attendee, rank) values (1, 3, 1, 1);
 insert into EventSessionFavorite (event, session, attendee, rank) values (1, 4, 1, 2);
+
+-- Prior Event
+
+insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('SpringOne2gx', 'America/Chicago', '2009-10-19 22:00:00Z', '2009-10-22 22:00:00Z', 'chicago', 'SpringOne 2GX is a one-of-a-kind conference for application developers, solution architects, web operations and IT teams who develop, deploy and manage business applications.', 1);
+insert into EventVenue (event, venue) values (2, 1);
+
+insert into EventTrack (event, code, name, description, chair) values (2, 'spr', 'Essential Spring', 'Spring techniques and technologies applicable to most classes of applications', 2);
+insert into EventTrack (event, code, name, description, chair) values (2, 'web', 'Web Application Development', 'What you need to know to build rich web applications', 1);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 1, 'Mastering MVC 3', '2009-10-20 17:45:00Z', '2009-10-20 19:15:00Z',
+	'A deep-dive into the latest capabilities of Spring MVC, Spring''s REST-ful web application development platform.', '#mvc', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader) values (2, 1, 1);

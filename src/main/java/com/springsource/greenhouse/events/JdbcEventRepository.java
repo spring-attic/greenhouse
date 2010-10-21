@@ -74,7 +74,10 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	@Transactional
-	public void rate(Long eventId, Integer sessionId, Long attendeeId, Short value, String comment) {
+	public Float rate(Long eventId, Integer sessionId, Long attendeeId, Short value, String comment) throws SessionNotEndedException {
+		if (!isSessionEnded(eventId, sessionId)) {
+			throw new SessionNotEndedException(eventId, sessionId);
+		}
 		boolean rated = jdbcTemplate.queryForObject("select exists(select 1 from EventSessionRating where event = ? and session = ? and attendee = ?)", Boolean.class, eventId, sessionId, attendeeId);
 		if (rated) {
 			jdbcTemplate.update("update EventSessionRating set rating = ?, comment = ? where event = ? and session = ? and attendee = ?", value, comment, eventId, sessionId, attendeeId);			
@@ -83,10 +86,16 @@ public class JdbcEventRepository implements EventRepository {
 		}
 		Float rating = jdbcTemplate.queryForObject("select round(avg(cast(rating as double)) * 2, 0) / 2 from EventSessionRating where event = ? and session = ? group by event, session", Float.class, eventId, sessionId);
 		jdbcTemplate.update("update EventSession set rating = ? where event = ? and id = ?", rating, eventId, sessionId);
+		return rating;
 	}
 	
 	// internal helpers
-	
+
+	private boolean isSessionEnded(Long eventId, Integer sessionId) {
+		Date endTime = jdbcTemplate.queryForObject("select endTime from EventSession where event = ? and id = ?", Date.class, eventId, sessionId);
+		return new Date().after(endTime);
+	}
+
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
 			return new MultipleRowMapper<Event, Long, Venue>() {

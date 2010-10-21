@@ -22,6 +22,6 @@ public interface EventRepository {
 
 	boolean toggleFavorite(Long eventId, Integer sessionId, Long attendeeId);
 
-	void rate(Long eventId, Integer sessionId, Long attendeeId, Short value, String comment);
+	Float rate(Long eventId, Integer sessionId, Long attendeeId, Short value, String comment) throws SessionNotEndedException;
 	
 }
