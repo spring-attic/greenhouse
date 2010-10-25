@@ -686,3 +686,163 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 	'Java Swing has for a long had a bad reputation of being slow, unwieldy, and a difficult platform to develop on. Griffon, a rapid application development framework using Groovy, brings that pain to an end by leveraging the best paradigms of web development on the desktop.',
 	'#egriffon', 'grf', 1, 9);
 insert into EventSessionLeader (event, session, leader) values (1, 92, 75);
+
+
+
+insert into Leader (name) values ('Chris Beams');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 93, 'Configuration Enhancements in Spring 3.1', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'Spring 3.1 introduces a number of often-requested configuration features. Need a standalone datasource in dev, but one from JNDI in production? Environment-Specific Bean Definitions are a first-class approach to solving this very common kind of problem. Love code-based configuration, but need the power and concision of Spring XML namespaces? Spring''s new Builder APIs are what you need.',
+	'#config', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 93, 76);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 94, 'Rapid RIAs with Spring Flex and Roo', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'Spring BlazeDS Integration has proven itself as a powerful tool for enabling rich Flex client applications to fully take advantage of the power and flexibility of Spring-based services. The latest release of Spring BlazeDS Integration and it''s accompanying addon for Spring Roo make developing Spring-backed Flex applications easier and more productive than ever. In this session developers will learn the basics of the integration and will learn how to use the Roo addon build a rich application that leverages the remoting, security, and server-push capabilities of this simple-yet-powerful technology. Along the way, we''ll cover the new features in Spring BlazeDS Integration 1.5, such as first-class support for AMF serialization of Hibernate entities, that make the Roo addon possible.',
+	'#flex', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader) values (1, 94, 67);
+
+insert into Leader (name) values ('Jennifer Hickey');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 95, 'Case Study: Migrating Hyperic HQ from EJB to Spring', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'This session will cover the migration from the technical specifics all the way to motivations, project planning, and end results',
+	'#hq', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader) values (1, 95, 77);
+
+
+insert into Leader (name) values ('Charles Lee');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 96, 'Developing Applications for the Cloud', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'Most people agree that the future of computing is in the cloud.  However, what does that imply about how you develop or migrate existing applications to the new environment?  Leveraging the lightweight and portable Spring framework appears to be a requirement to creating such applications.  However, is that enough?  Furthermore, is the cloud of the future in your private data center or in the public infrastructure?  Will nirvana be achieved when we create the hybrid cloud to capture the best of both private and public clouds?  Please join us as we walk through the evolution and the scenarios of various IaaS, PaaS, and future technologies yet to be made available.',
+	'#appcloud', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 96, 78, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 96, 54, 2);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 97, 'Functional Web Testing with Geb and Spock', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'Geb is a next generation Functional Web Testing tool that removes the ceremony and tedium of traditional web testing, leaving you with a concise, pragmatic and productive environment in which to work. It combines the power of Groovy with the WebDriver/Selenium 2.0 browser automation library to provide a programmer''s DSL for modeling pages (known as the PageObject Pattern) and easily automating real browsers such as Internet Explorer, FireFox and Chrome as well as the HTMLUnit library. Geb can be used standalone, or with testing frameworks such as Spock, JUnit, EasyB or Cucumber.',
+	'#geb', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 97, 74);
+
+
+insert into Leader (name) values ('Hans Dockter');
+insert into Leader (name) values ('Ken Sipe');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 98, 'Gradle - A Better Way To Build', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'Gradle allows you to describe your build using a rich, easily extendable build language based on Groovy. It provides compelling solutions for many of the big pain points that exist with current build systems. This session will be mostly driven by live demos. You will see how easy and elegant Gradle enables you to solve a broad range of requirements - over the full life cycle of typical and atypical Java builds.',
+	'#gradle', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 98, 79, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 98, 80, 2);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 99, 'Polyglot Web Programming With Grails', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'Grails is one of the most flexible and most powerful frameworks on The Java Platform. Grails leverages the flexibility offered by the platform in a way that other web frameworks do not.  Grails is a fantastic platform for polglot web programming.',
+	'#polygot', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 99, 18);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 100, 'Getting to know Git: How to give back to Grails', '2010-10-22 13:30:00Z', '2010-10-22 15:00:00Z',
+	'In this session we will spend some time getting to know some of the basics of Git and exploring successful tools and workflows.  We will also learn how we can utilize git and git-svn to work with grails and many of ~500 plugins listed on grails.org.  Finally we''ll explore how to submit pull requests, format patches and contribute code back to original authors and the entire community.',
+	'#git', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 100, 51);
+
+
+
+insert into Leader (name) values ('Josh Long');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 101, 'Extending Spring Integration', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'Spring Integration is a powerful integration framework that enables you to connect your application to the events that are relevant to your business. Unless it doesn''t know how. In this talk, the attendee will explore the wide world of Spring Integration adapters, endpoints and general components. The attendee will work through understanding the lifecycle and makeup of existing adapters in Spring Integration, and then look to building custom adapters tailored to a specific business case. This talk is ideal for engineers and architects who want to embrace and extend this very powerful integration framework.',
+	'#extint', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 101, 81);
+ 
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 102, 'Inside the Greenhouse', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'This session will explore the architecture of a real-world open source web application system built on SpringSource technology. Attendees will gain insight into the technologies employed, the domain problems solved, and the project team''s development practices.',
+	'#greenhouse', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader) values (1, 102, 22);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 103, 'Monitoring Spring Batch and Integration with Hyperic', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'Spring Batch and Spring Integration are complementary technologies and ofetn get deployed together in applications. But what is the best way to manage and monitor those applications in a production environment? This presentation answers that question by looking at typical metrics and alert scenarios used by real projects, and how they have been implemented in SpringSource Hyperic.',
+	'#batch', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader) values (1, 103, 65);
+
+
+insert into Leader (name) values ('David Montag');
+insert into Leader (name) values ('Thomas Risberg');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 104, 'Graph Database Persistence using Neo4J and Roo', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'It''s getting more and more common to use non-relational data stores for storing parts of or the entire domain model. In this talk we will show you how you can easily do this with Neo4J (a "NoSQL" graph database) using new features now available in Spring and in Roo. We will introduce the Neo4J database and some graph database concepts. After that we will look at new Spring features that makes it easier to work with the Neo4J graph model. The talk will also highlight support now available in Roo for persisting entity classes in Neo4J.',
+	'#neo4j', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 104, 82, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 104, 83, 2);
+
+
+insert into Leader (name) values ('Brian Sletten');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 105, 'Groovy + The Semantic Web', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'The Semantic Web is Tim Berners-Lee''s full vision of what the Web can and will be. This HTML stuff we are all so enamored with is just the tip of the iceberg. "Web 2.0" is a kindergarten plaything (and a stupid name). Webs of linked data will allow us unprecedented flexibility in how we produce and consume information. While many people have been waiting on the sideline for the Semantic Web to get here, others have been making it happen.',
+	'#semantic', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 105, 84);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 106, 'Beauty and the Beast: Software-Design for Build Systems', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'For our production code we apply a wealth of design values and principles. Currently this is rarely done for our builds. Yet the project automation domain, specially in the enterprise, is often at least as complex as the business domain.',
+	'#build', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader) values (1, 106, 79);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 107, 'Grails and Messaging with AMQP/RabbitMQ', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'Messaging in the Java world is dominated by JMS and its providers. But is it the best model for your needs? And what if you want to work with non-Java consumers or publishers?',
+	'#rabbit', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 107, 29);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 108, 'When GSP is not enough: using ZK with Grails', '2010-10-22 15:15:00Z', '2010-10-22 16:45:00Z',
+	'The ZK Framework is a RIA AJAX framework that encourages server side development to create Rich Internet Application.  It abstracts AJAX calls for you and allows you to code all of your UI logic in Groovy or Java, without having to spend a lot of time worrying about generated HTML / CSS / JavaScript, and getting all those technologies to work together along with Grails backend.  The ZKGrails integrates ZK with Grails, including automatic component binding with GORM.',
+	'#zk', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 108, 71);
+
+
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 109, 'Introduction to Spring Security 3 and 3.1', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'In this demo based session, Mike will show you how you can use Spring Security 3, one of the most popular enterprise security frameworks, to implement Authentication and Authorization requirements in your Java Application. You will learn about the new features of Version 3.0 and 3.1, like the expression language based authorization and also about the new project Spring Security Extensions, which for example enables Kerberos/SPNEGO authentication.',
+	'#sec3.1', 'spr', 1, 3);
+insert into EventSessionLeader (event, session, leader) values (1, 109, 3);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 110, 'Next-Generation Spring MVC with Spring Roo', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'Spring MVC is one of the most popular web frameworks in enterprise Java, successfully being deployed in thousands of production applications and used by millions of developers. Spring Roo delivers a set of integrated, highly-productive tooling for those developers building REST-based Spring MVC applications than can serve JavaScript, Flash, and Desktop (.NET/Swing) clients. In Spring Roo 1.1 there were significant improvements made to Roo''s Spring MVC support, including fine-grained, incremental round-tripping of individual JSP elements, new integration with JQuery, and better workflow features. In this presentation attendees will discover the power of using Spring Roo to build Spring MVC applications, including detailed cover of how to get started, edit pages, add controllers and other tasks typical of MVC development. ',
+	'#roomvc', 'web', 1, 2);
+insert into EventSessionLeader (event, session, leader) values (1, 110, 20);
+
+
+insert into Leader (name) values ('David Brown');
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 111, 'GemFire SQLDataFabric: "noSQL database" scalability using SQL', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'NoSQL databases offer horizontal scalability through data partitioning and relaxing the consistency semantics in traditional SQL databases. But, often, this also means that developers have to relinquish the use of SQL as the querying language. This talk presents, SQLFabric, a SQL data grid that brings together Apache Derby and GemFire data grid to offer a horizontally scalable, memory oriented data management system where developers can continue to use SQL. We discuss the product features, where it strays from popular SQL databases and how it compares to other "noSQL" offerings.',
+	'#gemfire', 'int', 1, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 111, 85, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (1, 111, 60, 2);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 112, 'An introduction to Spring.NET for Java developers', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'In this session you will learn the basics of getting started using Spring on .NET. All your friendly features will be there to great you: dependency injection, AOP, declarative transaction management, web framework, ORM, and messaging middleware integration, but with a .NET twist. Moving beyond the Spring Framework itself, the .NET version of Spring Integration will also be discussed. Come and see how you can your existing Spring Java skills to develop easily testable POCO based .NET applications',
+	'#spring.net', 'emg', 1, 4);
+insert into EventSessionLeader (event, session, leader) values (1, 112, 52);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 113, 'Metaprogramm ing the Microkernel: Groovy + NetKernel', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'Most organizations have a pretty conservative attitude toward adopting technology. If you are allowed to use a language like Groovy, chances are it is still going to be deployed in a conventional container like Tomcat or some other J2EE infrastructure.',
+	'#netkernel', 'grv', 1, 6);
+insert into EventSessionLeader (event, session, leader) values (1, 113, 84);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 114, 'Gradle in the Enterprise', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'The project automation requirements of complex enterprise builds are the true stress test for any build system. Gradle has a special focus on enterprise builds. In this session we will talk about and demo on: Multi-project builds, incremental builds, parallel testing, dependency management and concluding with organizing build logic, custom plugins and custom tasks.',
+	'#egradle', 'gxe', 1, 7);
+insert into EventSessionLeader (event, session, leader) values (1, 114, 79);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 115, 'Integrating Grails with Daisy CMS', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'This session will describe the use of Daisy, an Open Source Content Management System (CMS) and the different options for integrating it with Grails. ',
+	'#daisy', 'gra', 1, 8);
+insert into EventSessionLeader (event, session, leader) values (1, 115, 19);
+
+ 
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 116, 'Grails + CouchDB', '2010-10-22 19:45:00Z', '2010-10-22 21:15:00Z',
+	'"CouchDB is built of the Web. IÕve never seen software that so completely embraces the philosophies behind HTTP." Jacob Kaplan-Moss, Django Developer',
+	'#couchdb', 'grf', 1, 9);
+insert into EventSessionLeader (event, session, leader) values (1, 116, 56);
