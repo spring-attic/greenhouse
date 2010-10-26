@@ -22,8 +22,8 @@ import com.springsource.greenhouse.utils.Location;
 // support in Spring MVC namespace should be added for that (this would go away then)
 public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProcessor {
 
-	@Value("#{facebookAccountProvider.apiKey}")
-	private String facebookAppKey;
+	@Value("#{facebookProvider.apiKey}")
+	private String facebookApiKey;
 	
 	public Object postProcessBeforeInitialization(Object bean, String name)
 			throws BeansException {
@@ -36,7 +36,7 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 			WebArgumentResolver[] resolvers = new WebArgumentResolver[5];
 			resolvers[0] = new DeviceWebArgumentResolver();
 			resolvers[1] = new AccountWebArgumentResolver();
-			resolvers[2] = new FacebookWebArgumentResolver(facebookAppKey);
+			resolvers[2] = new FacebookWebArgumentResolver(facebookApiKey);
 			resolvers[3] = new LocationWebArgumentResolver();
 			resolvers[4] = new DateTimeZoneWebArgumentResolver();
 			controllerInvoker.setCustomArgumentResolvers(resolvers);

@@ -1,4 +1,4 @@
-create table AccountProvider (name varchar,
+create table ServiceProvider (name varchar,
                     displayName varchar not null,
                    	implementation varchar not null,
 					apiKey varchar not null,					
@@ -17,5 +17,5 @@ create table AccountConnection (member bigint,
 					profileUrl varchar,
 					primary key (member, provider, accessToken),
 					foreign key (member) references Member(id),
-					foreign key (provider) references AccountProvider(name));
+					foreign key (provider) references ServiceProvider(name));
 create index ProviderAccountKey on AccountConnection(accountId);

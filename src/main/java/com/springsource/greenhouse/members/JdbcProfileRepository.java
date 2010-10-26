@@ -85,6 +85,6 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private static final String SELECT_PROFILE_PIC = "select id, gender, pictureSet from Member";
 	
-	private static final String SELECT_CONNECTED_PROFILES = "select p.displayName, c.profileUrl from AccountConnection c inner join AccountProvider p on c.provider = p.name where member = ? order by displayName";
+	private static final String SELECT_CONNECTED_PROFILES = "select p.displayName, c.profileUrl from AccountConnection c inner join ServiceProvider p on c.provider = p.name where member = ? order by displayName";
 
 }

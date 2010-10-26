@@ -26,7 +26,7 @@ public class JdbcAccountRepositoryTest {
 
 	@Before
 	public void setup() {
-		db = new GreenhouseTestDatabaseBuilder().member().connectedAccount().testData(getClass()).getDatabase();
+		db = new GreenhouseTestDatabaseBuilder().member().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), accountMapper);

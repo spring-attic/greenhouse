@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.AccountProvider;
+import com.springsource.greenhouse.connect.ServiceProvider;
 
 @Controller
 @RequestMapping("/invite/twitter")
 public class TwitterInviteController {
 	
-	private AccountProvider<TwitterOperations> twitterAccountProvider;
+	private ServiceProvider<TwitterOperations> twitterProvider;
 	
 	@Inject
-	public TwitterInviteController(AccountProvider<TwitterOperations> twitterAccountProvider) {
-		this.twitterAccountProvider = twitterAccountProvider;
+	public TwitterInviteController(ServiceProvider<TwitterOperations> twitterProvider) {
+		this.twitterProvider = twitterProvider;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		String twitterId = twitterAccountProvider.getConnectedAccountId(account.getId());	
+		String twitterId = twitterProvider.getProviderAccountId(account.getId());	
 		if (twitterId != null) {			
 			model.addAttribute("username", twitterId);
 		}
@@ -37,8 +37,8 @@ public class TwitterInviteController {
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> screenNames = twitterAccountProvider.getApi(account.getId()).getFollowed(username);
-			model.addAttribute("friendAccounts", twitterAccountProvider.findAccountsConnectedTo(screenNames));
+			List<String> screenNames = twitterProvider.getServiceOperations(account.getId()).getFollowed(username);
+			model.addAttribute("friendAccounts", twitterProvider.findAccountsConnectedTo(screenNames));
 		}
 		return "invite/twitterFriends";
 	}

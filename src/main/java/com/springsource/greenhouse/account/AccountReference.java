@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.connect;
+package com.springsource.greenhouse.account;
 
 import com.springsource.greenhouse.utils.ResourceReference;
 

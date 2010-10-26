@@ -3,8 +3,9 @@ package com.springsource.greenhouse.connect;
 import java.util.List;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountReference;
 
-public interface AccountProvider<A> {
+public interface ServiceProvider<S> {
 
 	// provider meta-data
 	
@@ -28,13 +29,13 @@ public interface AccountProvider<A> {
 
 	boolean isConnected(Long accountId);
 
-	A getApi(Long accountId);
+	S getServiceOperations(Long accountId);
 
 	void disconnect(Long accountId);
 	
 	// additional finders
 	
-	String getConnectedAccountId(Long accountId);
+	String getProviderAccountId(Long accountId);
 
 	Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException;
 	

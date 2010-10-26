@@ -14,9 +14,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountReference;
 import com.springsource.greenhouse.action.ActionRepository;
 import com.springsource.greenhouse.action.ActionRepository.ActionFactory;
-import com.springsource.greenhouse.connect.AccountReference;
 import com.springsource.greenhouse.utils.Location;
 
 @Repository

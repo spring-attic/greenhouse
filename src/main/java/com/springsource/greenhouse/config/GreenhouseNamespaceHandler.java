@@ -5,7 +5,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class GreenhouseNamespaceHandler extends NamespaceHandlerSupport {
 
 	public void init() {
-		registerBeanDefinitionParser("environment-bean", new EnvironmentBeanDefinitionParser());
+		// TODO add custom tags here as we need them for our application
 	}
 
 }

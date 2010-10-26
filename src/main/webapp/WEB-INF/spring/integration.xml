@@ -5,8 +5,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<beans:import resource="integration-signup.xml" />
+	<beans:import resource="classpath:com/springsource/greenhouse/signup/integration-signup.xml" />
 
-	<beans:import resource="integration-activity.xml" />
+	<beans:import resource="classpath:com/springsource/greenhouse/recent/integration-activity.xml" />
 			
 </beans:beans>

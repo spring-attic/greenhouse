@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
+import com.springsource.greenhouse.account.AccountReference;
 
 @Repository
 public class JdbcAccountConnectionRepository implements AccountConnectionRepository {
@@ -32,11 +33,7 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 	}
 
 	public void addConnection(Long accountId, String provider, OAuthToken accessToken, String providerAccountId, String providerProfileUrl) {
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, provider, encryptor.encrypt(accessToken.getValue()), encryptor.encrypt(accessToken.getSecret()), providerAccountId, providerProfileUrl);
-	}
-
-	public void addConnection(Long accountId, String provider, String accessToken, String providerAccountId, String providerProfileUrl) {
-		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, provider, encryptor.encrypt(accessToken), null, providerAccountId, providerProfileUrl);
+		jdbcTemplate.update(INSERT_ACCOUNT_CONNECTION, accountId, provider, encryptor.encrypt(accessToken.getValue()), encryptIfPresent(accessToken.getSecret()), providerAccountId, providerProfileUrl);
 	}
 
 	public boolean isConnected(Long accountId, String provider) {
@@ -50,12 +47,7 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 	public OAuthToken getAccessToken(Long accountId, String provider) {
 		return jdbcTemplate.queryForObject(SELECT_ACCESS_TOKEN, new RowMapper<OAuthToken>() {
 			public OAuthToken mapRow(ResultSet rs, int rowNum) throws SQLException {
-				String secret = rs.getString("secret");
-				if (secret == null || secret.length() == 0) {
-					return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")));
-				} else {
-					return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")), encryptor.decrypt(secret));
-				}
+				return new OAuthToken(encryptor.decrypt(rs.getString("accessToken")), decryptIfPresent(rs.getString("secret")));
 			}
 		}, accountId, provider);
 	}
@@ -84,6 +76,16 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 		return namedTemplate.query(SELECT_ACCOUNTS_CONNECTED_TO, params, accountMapper.getReferenceMapper());
 	}
 
+	// internal helpers
+
+	private String encryptIfPresent(String string) {
+		return string != null ? encryptor.encrypt(string) : null;
+	}
+
+	private String decryptIfPresent(String string) {
+		return string != null ? encryptor.decrypt(string) : null;
+	}
+	
 	private static final String SELECT_PROVIDER_ACCOUNT_ID = "select accountId from AccountConnection where member = ? and provider = ?";
 
 	private static final String SELECT_ACCOUNT_CONNECTION_COUNT = "select exists(select 1 from AccountConnection where member = ? and provider = ?)";

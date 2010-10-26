@@ -1,6 +1,6 @@
 package com.springsource.greenhouse.invite;
 
-import com.springsource.greenhouse.connect.AccountReference;
+import com.springsource.greenhouse.account.AccountReference;
 import com.springsource.greenhouse.signup.SignupForm;
 
 public final class Invite {

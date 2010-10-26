@@ -29,7 +29,7 @@
 			</list>			
 		</property>
 	</bean>
-	<bean class="com.springsource.greenhouse.connect.FacebookConnectController" />
+	<bean class="com.springsource.greenhouse.connect.providers.FacebookConnectController" />
 	
 	<!-- Configurable properties TODO: this is also loaded in the root-context.xml; can we load just once instead? See GREENHOUSE-308 -->
 	<import resource="../properties.xml" />   	

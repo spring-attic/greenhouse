@@ -3,28 +3,33 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="accountProviderFactory" class="com.springsource.greenhouse.connect.JdbcAccountProviderFactory" />
+	<bean id="serviceProviderFactory" class="com.springsource.greenhouse.connect.JdbcServiceProviderFactory" />
 
-	<bean id="twitterAccountProvider" parent="accountProvider">
+	<!-- Twitter -->
+	<bean id="twitterProvider" parent="serviceProvider">
 		<constructor-arg value="twitter" />
 	</bean>
 
-	<bean id="facebookAccountProvider" parent="accountProvider">
+	<!-- Facebook -->
+	<bean id="facebookProvider" parent="serviceProvider">
 		<constructor-arg value="facebook" />
 	</bean>
 
-	<bean id="linkedInAccountProvider" parent="accountProvider">
+	<!-- LinkedIn -->
+	<bean id="linkedInProvider" parent="serviceProvider">
 		<constructor-arg value="linkedin" />
 	</bean>
-	
-	<bean id="tripItAccountProvider" parent="accountProvider">
+
+	<!-- TripIt -->	
+	<bean id="tripItProvider" parent="serviceProvider">
 		<constructor-arg value="tripit" />
 	</bean>
 	
-	<bean class="com.springsource.greenhouse.config.AccountProvidersApiConfiguration" />
+	<!-- Exposes ServiceProvider APIs as request-scoped beans -->
+	<bean class="com.springsource.greenhouse.config.ServiceProvidersApiConfiguration" />
 
 	<!-- Common parent -->
 	
-	<bean abstract="true" id="accountProvider" factory-bean="accountProviderFactory" factory-method="getAccountProvider" />
+	<bean abstract="true" id="serviceProvider" factory-bean="serviceProviderFactory" factory-method="getServiceProvider" />
 				
 </beans>

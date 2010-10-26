@@ -6,21 +6,21 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.AccountProvider;
+import com.springsource.greenhouse.connect.ServiceProvider;
 import com.springsource.greenhouse.connect.ConnectInterceptor;
 
 public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterOperations> {
 
-	public void preConnect(AccountProvider<TwitterOperations> provider, WebRequest request) {
+	public void preConnect(ServiceProvider<TwitterOperations> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAMETER))) {
 			request.setAttribute(POST_TWEET_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}
 	}
 
-	public void postConnect(AccountProvider<TwitterOperations> provider, Account account, WebRequest request) {
+	public void postConnect(ServiceProvider<TwitterOperations> provider, Account account, WebRequest request) {
 		if (request.getAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
 			try {
-				provider.getApi(account.getId()).updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());
+				provider.getServiceOperations(account.getId()).updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());
 			} catch (DuplicateTweetException e) {
 			}
 			request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);

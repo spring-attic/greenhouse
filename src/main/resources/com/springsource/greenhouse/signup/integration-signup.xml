@@ -25,7 +25,7 @@
 	
 	<!-- Asynchronously dispatches welcome mails -->
 	<channel id="welcomeMailerChannel">
-		<dispatcher task-executor="mailerExecutor" />
+		<dispatcher task-executor="taskExecutor" />
 	</channel>
 
 	<!-- Transforms a new Account to a welcome SimpleMailMessage -->

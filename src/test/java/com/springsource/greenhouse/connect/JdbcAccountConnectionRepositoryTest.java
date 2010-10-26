@@ -19,6 +19,7 @@ import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.twitter.TwitterOperations;
 
 import com.springsource.greenhouse.account.AccountMapper;
+import com.springsource.greenhouse.account.AccountReference;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -29,9 +30,9 @@ public class JdbcAccountConnectionRepositoryTest {
 
 	private JdbcTemplate jdbcTemplate;
 
-	private AccountProvider<TwitterOperations> accountProvider;
+	private ServiceProvider<TwitterOperations> serviceProvider;
 
-	private JdbcAccountProviderFactory providerFactory;
+	private JdbcServiceProviderFactory providerFactory;
 
 	@Before
 	public void setup() {
@@ -39,8 +40,8 @@ public class JdbcAccountConnectionRepositoryTest {
 		jdbcTemplate = new JdbcTemplate(db);
 		StringEncryptor encryptor = new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed");
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		providerFactory = new JdbcAccountProviderFactory(jdbcTemplate, encryptor, accountMapper);
-		accountProvider = providerFactory.getAccountProvider("twitter", TwitterOperations.class);
+		providerFactory = new JdbcServiceProviderFactory(jdbcTemplate, encryptor, accountMapper);
+		serviceProvider = providerFactory.getServiceProvider("twitter", TwitterOperations.class);
 	}
 
 	@After
@@ -52,67 +53,67 @@ public class JdbcAccountConnectionRepositoryTest {
 
 	@Test
 	public void addConnection() throws NoSuchAccountConnectionException {
-		assertFalse(accountProvider.isConnected(2L));
-		accountProvider.addConnection(2L, "accessToken", "kdonald");
-		assertTrue(accountProvider.isConnected(2L));
-		TwitterOperations api = accountProvider.getApi(2L);
+		assertFalse(serviceProvider.isConnected(2L));
+		serviceProvider.addConnection(2L, "accessToken", "kdonald");
+		assertTrue(serviceProvider.isConnected(2L));
+		TwitterOperations api = serviceProvider.getServiceOperations(2L);
 		assertNotNull(api);
-		assertNotNull(accountProvider.findAccountByConnection("accessToken"));
+		assertNotNull(serviceProvider.findAccountByConnection("accessToken"));
 	}
 	
 	@Test
 	public void connected() {
-		assertTrue(accountProvider.isConnected(1L));
+		assertTrue(serviceProvider.isConnected(1L));
 	}
 
 	@Test
 	public void notConnected() {
-		assertFalse(accountProvider.isConnected(2L));
+		assertFalse(serviceProvider.isConnected(2L));
 	}
 
 	@Test
 	public void getApi() {
-		TwitterOperations api = accountProvider.getApi(1L);
+		TwitterOperations api = serviceProvider.getServiceOperations(1L);
 		assertNotNull(api);
 	}
 
 	@Test
 	public void getApiNotConnected() {
-		TwitterOperations api = accountProvider.getApi(2L);
+		TwitterOperations api = serviceProvider.getServiceOperations(2L);
 		assertNotNull(api);
 	}
 
 	@Test
 	public void getConnectedAccountId() {
-		assertEquals("habuma", accountProvider.getConnectedAccountId(1L));
+		assertEquals("habuma", serviceProvider.getProviderAccountId(1L));
 	}
 
 	@Test
 	public void getConnectedAccountIdNotConnected() {
-		assertNull(accountProvider.getConnectedAccountId(2L));
+		assertNull(serviceProvider.getProviderAccountId(2L));
 	}
 	
 	@Test
 	public void findAccountByConnection() throws Exception {
-		assertNotNull(accountProvider.findAccountByConnection("345678901"));
+		assertNotNull(serviceProvider.findAccountByConnection("345678901"));
 	}
 
 	@Test(expected = NoSuchAccountConnectionException.class)
 	public void accountConnectionNotFound() throws Exception {
-		accountProvider.findAccountByConnection("badtoken");
+		serviceProvider.findAccountByConnection("badtoken");
 	}
 	
 	@Test
 	public void findAccountsConnectedTo() throws Exception {
-		List<AccountReference> accounts = accountProvider.findAccountsConnectedTo(asList("habuma", "rclarkson", "BarakObama"));
+		List<AccountReference> accounts = serviceProvider.findAccountsConnectedTo(asList("habuma", "rclarkson", "BarakObama"));
 		assertEquals(2, accounts.size());
 	}
 
 	@Test
 	public void disconnect() {
-		assertTrue(accountProvider.isConnected(1L));
-		accountProvider.disconnect(1L);
-		assertFalse(accountProvider.isConnected(1L));
+		assertTrue(serviceProvider.isConnected(1L));
+		serviceProvider.disconnect(1L);
+		assertFalse(serviceProvider.isConnected(1L));
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.connect;
+package com.springsource.greenhouse.connect.providers;
 
 import java.io.IOException;
 
@@ -19,28 +19,29 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.connect.ServiceProvider;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
 @Controller
 @RequestMapping("/connect/facebook")
 public class FacebookConnectController {
 
-	private final AccountProvider<FacebookOperations> facebookAccountProvider;
+	private final ServiceProvider<FacebookOperations> facebookProvider;
 	
 	private final ProfilePictureService profilePictureService;
 
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookConnectController(AccountProvider<FacebookOperations> facebookAccountProvider, ProfilePictureService profilePictureService, AccountRepository accountRepository) {
-		this.facebookAccountProvider = facebookAccountProvider;
+	public FacebookConnectController(ServiceProvider<FacebookOperations> facebookProvider, ProfilePictureService profilePictureService, AccountRepository accountRepository) {
+		this.facebookProvider = facebookProvider;
 		this.profilePictureService = profilePictureService;
 		this.accountRepository = accountRepository;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
-		if (facebookAccountProvider.isConnected(account.getId())) {
+		if (facebookProvider.isConnected(account.getId())) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "connect/facebookConnected";
 		} else {
@@ -52,8 +53,8 @@ public class FacebookConnectController {
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId,
 			@RequestParam(required=false, defaultValue="false") boolean postToWall, @RequestParam(required=false, defaultValue="false") boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
-			facebookAccountProvider.addConnection(account.getId(), accessToken, facebookUserId);
-			FacebookOperations api = facebookAccountProvider.getApi(account.getId());
+			facebookProvider.addConnection(account.getId(), accessToken, facebookUserId);
+			FacebookOperations api = facebookProvider.getServiceOperations(account.getId());
 			if (postToWall) {
 				postToWall(api, account);
 			}
@@ -67,7 +68,7 @@ public class FacebookConnectController {
 	
 	@RequestMapping(method=RequestMethod.DELETE)
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
-		facebookAccountProvider.disconnect(account.getId());
+		facebookProvider.disconnect(account.getId());
 		return "redirect:/connect/facebook";
 	}
 	

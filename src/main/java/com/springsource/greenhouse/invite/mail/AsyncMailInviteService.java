@@ -6,9 +6,9 @@ import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 import org.springframework.security.encrypt.StringKeyGenerator;
 import org.springframework.stereotype.Service;
@@ -26,21 +26,15 @@ import com.springsource.greenhouse.invite.Invitee;
 @Service
 public class AsyncMailInviteService implements MailInviteService {
 
-	private final StringTemplateFactory textTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("invite-text.st", getClass()));
-
 	private final MailSender mailSender;
-
-	private final TaskExecutor mailerExecutor;
 
 	private final InviteRepository inviteRepository;
 
 	private final UriTemplate acceptUriTemplate;
 	
 	@Inject
-	public AsyncMailInviteService(MailSender mailSender, TaskExecutor mailerExecutor, InviteRepository inviteRepository,
-			@Value("${application.secureUrl}/invite/accept?token={token}") String acceptUriTemplate) {
+	public AsyncMailInviteService(MailSender mailSender, InviteRepository inviteRepository, @Value("${application.secureUrl}/invite/accept?token={token}") String acceptUriTemplate) {
 		this.mailSender = mailSender;
-		this.mailerExecutor = mailerExecutor;
 		this.inviteRepository = inviteRepository;
 		this.acceptUriTemplate = new UriTemplate(acceptUriTemplate);
 	}
@@ -60,17 +54,14 @@ public class AsyncMailInviteService implements MailInviteService {
 		}
 	}
 
-	private void send(final Account from, final Invitee to, final String text, final String token) {
-		final SimpleMailMessage mailMessage = createInviteMailMessage(to, text);
-		mailerExecutor.execute(new Runnable() {
-			@Transactional
-			public void run() {
-				if (!inviteRepository.alreadyInvited(to.getEmail())) {
-					inviteRepository.saveInvite(token, to, text, from.getId());
-					mailSender.send(mailMessage);
-				}
-			}
-		});
+	@Async
+	@Transactional
+	private void send(Account from, Invitee to, String text, String token) {
+		SimpleMailMessage mailMessage = createInviteMailMessage(to, text);
+		if (!inviteRepository.alreadyInvited(to.getEmail())) {
+			inviteRepository.saveInvite(token, to, text, from.getId());
+			mailSender.send(mailMessage);
+		}
 	}
 	
 	private SimpleMailMessage createInviteMailMessage(Invitee to, String text) {
@@ -81,6 +72,8 @@ public class AsyncMailInviteService implements MailInviteService {
 		mailMessage.setText(text);
 		return mailMessage;
 	}
+
+	private final StringTemplateFactory textTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("invite-text.st", getClass()));
 
 	private final StringKeyGenerator tokenGenerator = new SecureRandomStringKeyGenerator();
 	

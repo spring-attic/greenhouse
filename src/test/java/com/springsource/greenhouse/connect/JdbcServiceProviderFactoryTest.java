@@ -16,13 +16,13 @@ import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
-public class JdbcAccountProviderFactoryTest {
+public class JdbcServiceProviderFactoryTest {
 	
 	private EmbeddedDatabase db;
 
 	private JdbcTemplate jdbcTemplate;
 
-	private AccountProviderFactory providerFactory;
+	private ServiceProviderFactory providerFactory;
 
 	@Before
 	public void setup() {
@@ -30,7 +30,7 @@ public class JdbcAccountProviderFactoryTest {
 		jdbcTemplate = new JdbcTemplate(db);
 		StringEncryptor encryptor = new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed");
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
-		providerFactory = new JdbcAccountProviderFactory(jdbcTemplate, encryptor, accountMapper);
+		providerFactory = new JdbcServiceProviderFactory(jdbcTemplate, encryptor, accountMapper);
 	}
 
 	@After
@@ -42,13 +42,13 @@ public class JdbcAccountProviderFactoryTest {
 
 	@Test
 	public void getAccountProvider() {
-		AccountProvider<TwitterOperations> twitterProvider = providerFactory.getAccountProvider("twitter", TwitterOperations.class);
+		ServiceProvider<TwitterOperations> twitterProvider = providerFactory.getServiceProvider("twitter", TwitterOperations.class);
 		assertEquals("twitter", twitterProvider.getName());
 		assertEquals("Twitter", twitterProvider.getDisplayName());
 		assertEquals("123456789", twitterProvider.getApiKey());
 		assertEquals("http://www.twitter.com/authorize?oauth_token=123456789", twitterProvider.buildAuthorizeUrl("123456789"));
 
-		AccountProvider<FacebookOperations> facebookProvider = providerFactory.getAccountProvider("facebook", FacebookOperations.class);
+		ServiceProvider<FacebookOperations> facebookProvider = providerFactory.getServiceProvider("facebook", FacebookOperations.class);
 		assertEquals("facebook", facebookProvider.getName());
 		assertEquals("Facebook", facebookProvider.getDisplayName());
 		assertEquals("345678901", facebookProvider.getApiKey());
@@ -56,13 +56,13 @@ public class JdbcAccountProviderFactoryTest {
 	
 	@Test
 	public void getAccountProviderByName() {
-		AccountProvider<TwitterOperations> twitterProvider = providerFactory.getAccountProvider("twitter", TwitterOperations.class);
+		ServiceProvider<TwitterOperations> twitterProvider = providerFactory.getServiceProvider("twitter", TwitterOperations.class);
 		assertEquals("twitter", twitterProvider.getName());
 		assertEquals("Twitter", twitterProvider.getDisplayName());
 		assertEquals("123456789", twitterProvider.getApiKey());
 		assertEquals("http://www.twitter.com/authorize?oauth_token=123456789", twitterProvider.buildAuthorizeUrl("123456789"));
 
-		AccountProvider<FacebookOperations> facebookProvider = providerFactory.getAccountProvider("facebook", FacebookOperations.class);
+		ServiceProvider<FacebookOperations> facebookProvider = providerFactory.getServiceProvider("facebook", FacebookOperations.class);
 		assertEquals("facebook", facebookProvider.getName());
 		assertEquals("Facebook", facebookProvider.getDisplayName());
 		assertEquals("345678901", facebookProvider.getApiKey());

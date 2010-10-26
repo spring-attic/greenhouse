@@ -13,30 +13,26 @@
 	 -->
 	 
 	<!-- Spring Security OAuth 1.0 Provider Configuration -->	
-	<oauth:provider consumer-details-service-ref="consumerDetails"
-		token-services-ref="tokenServices"
-		request-token-url="/oauth/request_token"
-		authenticate-token-url="/oauth/authorize"
-		authentication-failed-url="/oauth/confirm_access"
-		access-token-url="/oauth/access_token"
-		require10a="false" />
+	<oauth:provider consumer-details-service-ref="oauthConsumerDetails" token-services-ref="oauthProviderTokenServices"
+		request-token-url="/oauth/request_token" authenticate-token-url="/oauth/authorize" authentication-failed-url="/oauth/confirm_access" access-token-url="/oauth/access_token" require10a="false" />
 
-	<bean class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
-		<property name="realmName" value="Greenhouse" />
-	</bean>
+	<!-- ConsumerDetailsService that constructs ConsumerDetails objects from Apps loaded by the AppRepository -->			
+	<bean id="oauthConsumerDetails" class="com.springsource.greenhouse.develop.oauth.AppConsumerDetailsService" />
 
-	<!-- Adapter that loads ConsumerDetails using an AppRepository -->			
-	<bean id="consumerDetails" class="com.springsource.greenhouse.develop.oauth.AppConsumerDetailsService" />
-
-	<!-- Loads registered client Apps and OAuth-based AppConnections -->
-	<bean id="appRepository" class="com.springsource.greenhouse.develop.JdbcAppRepository" />
-	
-	<!-- Adapter that uses a OAuthSessionManager to manage OAuthSession storage -->
-	<bean id="tokenServices" class="com.springsource.greenhouse.develop.oauth.OAuthSessionManagerProviderTokenServices">
+	<!-- OAuthProviderTokenServices that uses a OAuthSessionManager to manage OAuthSession storage -->
+	<bean id="oauthProviderTokenServices" class="com.springsource.greenhouse.develop.oauth.OAuthSessionManagerProviderTokenServices">
 		<constructor-arg>
 			<!-- Stores OAuthSessions in a ConcurrentMap with soft values and 2 minutes time idle -->
 			<bean class="com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager" />
 		</constructor-arg>
+	</bean>
+	
+	<!-- Loads registered client Apps and OAuth-based AppConnections -->
+	<bean id="appRepository" class="com.springsource.greenhouse.develop.JdbcAppRepository" />
+
+	<!-- Sends a UNAUTHORIZED response back to clients attempting to access protected resources but who have not yet authenticated via OAuth -->
+	<bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
+		<property name="realmName" value="Greenhouse" />
 	</bean>
     	
 </beans>

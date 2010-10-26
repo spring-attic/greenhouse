@@ -16,14 +16,15 @@ import org.scribe.services.TimestampServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountReference;
 
-public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
+public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 	
-	private final AccountProviderParameters parameters;
+	private final ServiceProviderParameters parameters;
 
 	private final AccountConnectionRepository connectionRepository;
 	
-	public AbstractAccountProvider(AccountProviderParameters parameters, AccountConnectionRepository connectionRepository) {
+	public AbstractServiceProvider(ServiceProviderParameters parameters, AccountConnectionRepository connectionRepository) {
 		this.parameters = parameters;
 		this.connectionRepository = connectionRepository;
 	}
@@ -59,13 +60,15 @@ public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 
 	public void connect(Long accountId, OAuthToken requestToken, String verifier) {
 		OAuthToken accessToken = getAccessToken(requestToken, verifier);
-		A api = createApi(accessToken);
-		connectionRepository.addConnection(accountId, getName(), accessToken, getProviderAccountId(api), getProviderProfileUrl(api));
+		S serviceOperations = createServiceOperations(accessToken);
+		String providerAccountId = fetchProviderAccountId(serviceOperations);
+		connectionRepository.addConnection(accountId, getName(), accessToken, providerAccountId, buildProviderProfileUrl(providerAccountId, serviceOperations));
 	}
 
 	public void addConnection(Long accountId, String accessToken, String providerAccountId) {
-		A api = createApi(new OAuthToken(accessToken));
-		connectionRepository.addConnection(accountId, getName(), accessToken, providerAccountId, getProviderProfileUrl(api));
+		OAuthToken oauthAccessToken = new OAuthToken(accessToken);
+		S serviceOperations = createServiceOperations(oauthAccessToken);
+		connectionRepository.addConnection(accountId, getName(), oauthAccessToken, providerAccountId, buildProviderProfileUrl(providerAccountId, serviceOperations));
 	}
 
 	public boolean isConnected(Long accountId) {
@@ -77,17 +80,17 @@ public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 	}
 	
 	@Transactional
-	public A getApi(Long accountId) {
+	public S getServiceOperations(Long accountId) {
 		if (accountId == null || !isConnected(accountId)) {
-			return createApi(null);
+			return createServiceOperations(null);
 		}
 		OAuthToken accessToken = connectionRepository.getAccessToken(accountId, getName());
-		return createApi(accessToken);
+		return createServiceOperations(accessToken);
 	}
 
 	// additional finders
 	
-	public String getConnectedAccountId(Long accountId) {
+	public String getProviderAccountId(Long accountId) {
 		return connectionRepository.getProviderAccountId(accountId, getName());
 	}
 
@@ -101,11 +104,11 @@ public abstract class AbstractAccountProvider<A> implements AccountProvider<A> {
 
 	// subclassing hooks
 	
-	protected abstract A createApi(OAuthToken accessToken);
+	protected abstract S createServiceOperations(OAuthToken accessToken);
 
-	protected abstract String getProviderAccountId(A api);
+	protected abstract String fetchProviderAccountId(S serviceOperations);
 
-	protected abstract String getProviderProfileUrl(A api);
+	protected abstract String buildProviderProfileUrl(String providerAccountId, S serviceOperations);
 
 	protected String getSecret() {
 		return parameters.getSecret();

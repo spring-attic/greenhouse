@@ -3,20 +3,8 @@ package com.springsource.greenhouse.invite;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
-
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.core.convert.TypeDescriptor;
-import org.springframework.core.convert.support.ConversionServiceFactory;
-import org.springframework.core.convert.support.GenericConversionService;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.style.StylerUtils;
-
 
 public class InviteeTest {
 	

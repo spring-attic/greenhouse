@@ -1,7 +1,10 @@
 package com.springsource.greenhouse.invite.mail;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +12,6 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.mail.MailSender;
@@ -38,7 +40,7 @@ public class MailInviteServiceTest {
 		jdbcTemplate = new JdbcTemplate(db);		
 		InviteRepository inviteRepository = new JdbcInviteRepository(jdbcTemplate, null);
 		mailSender = mock(MailSender.class);
-		inviteService = new AsyncMailInviteService(mailSender, new SyncTaskExecutor(), inviteRepository, "http://localhost:8443/invite/accept?token={token}");
+		inviteService = new AsyncMailInviteService(mailSender, inviteRepository, "http://localhost:8443/invite/accept?token={token}");
 	}
 	
 	@After

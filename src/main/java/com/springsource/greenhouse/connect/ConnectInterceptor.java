@@ -4,10 +4,10 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.springsource.greenhouse.account.Account;
 
-public interface ConnectInterceptor<T> {
+public interface ConnectInterceptor<S> {
 	
-	void preConnect(AccountProvider<T> provider, WebRequest request);
+	void preConnect(ServiceProvider<S> provider, WebRequest request);
 
-	void postConnect(AccountProvider<T> provider, Account account, WebRequest request);
+	void postConnect(ServiceProvider<S> provider, Account account, WebRequest request);
 	
 }

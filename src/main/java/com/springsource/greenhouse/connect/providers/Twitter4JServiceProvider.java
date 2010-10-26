@@ -11,18 +11,18 @@ import twitter4j.http.AccessToken;
 import twitter4j.http.Authorization;
 import twitter4j.http.OAuthAuthorization;
 
-import com.springsource.greenhouse.connect.AbstractAccountProvider;
+import com.springsource.greenhouse.connect.AbstractServiceProvider;
 import com.springsource.greenhouse.connect.AccountConnectionRepository;
-import com.springsource.greenhouse.connect.AccountProviderParameters;
+import com.springsource.greenhouse.connect.ServiceProviderParameters;
 import com.springsource.greenhouse.connect.OAuthToken;
 
-public class Twitter4JAccountProvider extends AbstractAccountProvider<Twitter> {
+public class Twitter4JServiceProvider extends AbstractServiceProvider<Twitter> {
 	
-	public Twitter4JAccountProvider(AccountProviderParameters parameters, AccountConnectionRepository connectionRepository) {
+	public Twitter4JServiceProvider(ServiceProviderParameters parameters, AccountConnectionRepository connectionRepository) {
 		super(parameters, connectionRepository);
 	}
 
-	protected Twitter createApi(OAuthToken accessToken) {
+	protected Twitter createServiceOperations(OAuthToken accessToken) {
 		TwitterFactory twitterFactory = new TwitterFactory();
 		AccessToken oauthToken = new AccessToken(accessToken.getValue(), accessToken.getSecret());
 		Configuration configuration = new PropertyConfiguration(new Properties());
@@ -30,19 +30,15 @@ public class Twitter4JAccountProvider extends AbstractAccountProvider<Twitter> {
 		return accessToken != null ? twitterFactory.getInstance(authorization) : twitterFactory.getInstance();
 	}
 
-	protected String getProviderAccountId(Twitter api) {
+	protected String fetchProviderAccountId(Twitter twitter) {
 		try {
-			return api.getScreenName();
+			return twitter.getScreenName();
 		} catch (TwitterException e) {
 			return null;
 		}
 	}
 
-	protected String getProviderProfileUrl(Twitter api) {
-		try {
-			return "http://www.twitter.com/" + api.getScreenName();
-		} catch (TwitterException e) {
-			return null;
-		}
+	protected String buildProviderProfileUrl(String screenName, Twitter twitter) {
+		return "http://www.twitter.com/" + screenName;
 	}
 }

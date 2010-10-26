@@ -15,27 +15,27 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
 import com.springsource.greenhouse.account.UsernameNotFoundException;
-import com.springsource.greenhouse.connect.AccountProvider;
+import com.springsource.greenhouse.connect.ServiceProvider;
 import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 
 @Controller
 @RequestMapping("/signin/facebook")
 public class FacebookSigninController {
 
-	private final AccountProvider<FacebookOperations> facebookAccountProvider;
+	private final ServiceProvider<FacebookOperations> facebookProvider;
 
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookSigninController(AccountProvider<FacebookOperations> facebookAccountProvider, AccountRepository accountRepository) {
-		this.facebookAccountProvider = facebookAccountProvider;
+	public FacebookSigninController(ServiceProvider<FacebookOperations> facebookProvider, AccountRepository accountRepository) {
+		this.facebookProvider = facebookProvider;
 		this.accountRepository = accountRepository;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String signin(@FacebookAccessToken String accessToken) {
 		try {
-			Account account = facebookAccountProvider.findAccountByConnection(accessToken);
+			Account account = facebookProvider.findAccountByConnection(accessToken);
 			AccountUtils.signin(account);
 			return "redirect:/";
 		} catch (NoSuchAccountConnectionException e) {

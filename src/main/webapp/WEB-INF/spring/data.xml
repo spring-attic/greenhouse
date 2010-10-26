@@ -4,12 +4,10 @@
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:gh="http://www.springsource.com/schema/greenhouse"	
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
-		http://www.springsource.com/schema/greenhouse http://www.springsource.com/schema/greenhouse/greenhouse-1.0.xsd">
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<!-- Configures transaction management around @Transactional components -->
 	<tx:annotation-driven mode="aspectj" transaction-manager="transactionManager" />
@@ -24,30 +22,24 @@
 		<constructor-arg ref="dataSource" />
 	</bean>
 	
-	<gh:environment-bean id="dataSource">
-		<gh:when environment="embedded">
-			<bean class="com.springsource.greenhouse.database.EmbeddedDatabaseFactoryBean" />
-		</gh:when>
-		<gh:otherwise>
-			<bean class="com.springsource.greenhouse.database.ConnectionPoolFactoryBean" />
-		</gh:otherwise>
-	</gh:environment-bean>
+	<!-- Profile-specific beans -->
+		
+	<beans profile="embedded">
+		<bean id="dataSource" class="com.springsource.greenhouse.database.EmbeddedDatabaseFactoryBean" />	
+		<bean id="pictureStorage" class="org.springframework.data.LocalFileStorage">
+			<constructor-arg value="${application.url}/resources/" />
+			<constructor-arg value="/resources/" />
+			<property name="deleteOnExit" value="true" />
+		</bean>
+	</beans>
 
-	<gh:environment-bean id="pictureStorage">
-		<gh:when environment="embedded">
-			<bean class="org.springframework.data.LocalFileStorage">
-				<constructor-arg value="${application.url}/resources/" />
-				<constructor-arg value="/resources/" />
-				<property name="deleteOnExit" value="true" />
-			</bean>
-		</gh:when>
-		<gh:otherwise>
-			<bean class="org.springframework.data.S3FileStorage">
-				<constructor-arg value="${s3.accessKey}" />
-				<constructor-arg value="${s3.secretKey}" />
-				<constructor-arg value="images.greenhouse.springsource.org" />
-			</bean>
-		</gh:otherwise>
-	</gh:environment-bean>
+	<beans profile="standard">
+		<bean id="dataSource" class="com.springsource.greenhouse.database.ConnectionPoolFactoryBean" />
+		<bean id="pictureStorage" class="org.springframework.data.S3FileStorage">
+			<constructor-arg value="${s3.accessKey}" />
+			<constructor-arg value="${s3.secretKey}" />
+			<constructor-arg value="images.greenhouse.springsource.org" />
+		</bean>
+	</beans>
 				
 </beans>

@@ -2,10 +2,8 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:gh="http://www.springsource.com/schema/greenhouse"	
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springsource.com/schema/greenhouse http://www.springsource.com/schema/greenhouse/greenhouse-1.0.xsd">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
 	<http use-expressions="true">
 		<!-- Authentication policy -->
@@ -35,37 +33,31 @@
 
 	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
 
-	<beans:bean class="com.springsource.greenhouse.account.AccountMapper">
+	<beans:bean id="accountMapper" class="com.springsource.greenhouse.account.AccountMapper">
 		<beans:constructor-arg value="${application.url}/members/{profileKey}" />		
 	</beans:bean>
 	
 	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
-	
-	<gh:environment-bean id="passwordEncoder">
-		<gh:when environment="embedded">
-			<beans:bean class="org.springframework.security.encrypt.NoOpPasswordEncoder" factory-method="getInstance" />
-		</gh:when>
-		<gh:otherwise>
-			<beans:bean class="org.springframework.security.encrypt.StandardPasswordEncoder">
-				<beans:constructor-arg value="${security.encryptPassword}" />
-			</beans:bean>
-		</gh:otherwise>
-	</gh:environment-bean>
 
-	<gh:environment-bean id="stringEncryptor">
-		<gh:when environment="embedded">
-			<beans:bean class="org.springframework.security.encrypt.NoOpStringEncryptor" factory-method="getInstance" />
-		</gh:when>
-		<gh:otherwise>
-			<beans:bean class="org.springframework.security.encrypt.SearchableStringEncryptor">
-				<beans:constructor-arg value="${security.encryptPassword}" />
-				<beans:constructor-arg value="${security.encryptSalt}" />
-			</beans:bean>
-		</gh:otherwise>
-	</gh:environment-bean>
-		
 	<beans:import resource="security-oauth-provider.xml" />
 	
 	<beans:import resource="security-oauth-consumer.xml" />
-    
+	
+	<!-- Profile-specific beans -->
+		
+	<beans:beans profile="embedded">
+		<beans:bean id="passwordEncoder" class="org.springframework.security.encrypt.NoOpPasswordEncoder" factory-method="getInstance" />		
+		<beans:bean id="stringEncryptor" class="org.springframework.security.encrypt.NoOpStringEncryptor" factory-method="getInstance" />
+	</beans:beans>
+
+	<beans:beans profile="standard">
+		<beans:bean id="passwordEncoder" class="org.springframework.security.encrypt.StandardPasswordEncoder">
+			<beans:constructor-arg value="${security.encryptPassword}" />
+		</beans:bean>
+		<beans:bean id="stringEncryptor" class="org.springframework.security.encrypt.SearchableStringEncryptor">
+			<beans:constructor-arg value="${security.encryptPassword}" />
+			<beans:constructor-arg value="${security.encryptSalt}" />
+		</beans:bean>		
+	</beans:beans>
+
 </beans:beans>

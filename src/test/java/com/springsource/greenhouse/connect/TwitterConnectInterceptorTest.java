@@ -55,9 +55,9 @@ public class TwitterConnectInterceptorTest {
 	public void postConnect() {
 		request.setAttribute("twitterConnect.postTweet", Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		@SuppressWarnings("unchecked")
-		AccountProvider<TwitterOperations> provider = mock(AccountProvider.class);
+		ServiceProvider<TwitterOperations> provider = mock(ServiceProvider.class);
 		TwitterOperations twitterOperations = mock(TwitterOperations.class);
-		when(provider.getApi(2L)).thenReturn(twitterOperations);
+		when(provider.getServiceOperations(2L)).thenReturn(twitterOperations);
 		Account account = new Account(2L, "Craig", "Walls", "cwalls@vmware.com", "habuma", "http://picture.com/url",
 				new UriTemplate("http://greenhouse.springsource.org/members/{profile}"));
 		interceptor.postConnect(provider, account, request);
@@ -68,9 +68,9 @@ public class TwitterConnectInterceptorTest {
 	@Test
 	public void postConnect_noPostTweetAttribute() {
 		@SuppressWarnings("unchecked")
-		AccountProvider<TwitterOperations> provider = mock(AccountProvider.class);
+		ServiceProvider<TwitterOperations> provider = mock(ServiceProvider.class);
 		interceptor.postConnect(provider, null, request);
-		verify(provider, never()).getApi(anyLong());
+		verify(provider, never()).getServiceOperations(anyLong());
 	}
 	
 }

@@ -3,12 +3,11 @@ package com.springsource.greenhouse.connect;
 import java.util.List;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountReference;
 
 public interface AccountConnectionRepository {
 
 	void addConnection(Long accountId, String provider, OAuthToken accessToken, String providerAccountId, String providerProfileUrl);
-
-	void addConnection(Long accountId, String provider, String accessToken, String providerAccountId, String providerProfileUrl);
 
 	boolean isConnected(Long accountId, String provider);
 

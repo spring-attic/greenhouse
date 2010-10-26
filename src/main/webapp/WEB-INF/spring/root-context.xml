@@ -16,6 +16,9 @@
 	<!-- Configures Shared Data Access Resources -->
 	<import resource="data.xml" />
 				
+	<!-- Configures Shared @Async task behavior -->
+	<import resource="task.xml" />
+					
 	<!-- Configures Shared Security Layer -->
 	<import resource="security.xml" />
 

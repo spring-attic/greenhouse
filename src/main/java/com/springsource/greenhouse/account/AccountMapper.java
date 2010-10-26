@@ -9,8 +9,6 @@ import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.util.UriTemplate;
 
-import com.springsource.greenhouse.connect.AccountReference;
-
 public class AccountMapper implements RowMapper<Account> {
 
 	public static final String SELECT_ACCOUNT = "select id, firstName, lastName, email, username, gender, pictureSet from Member";

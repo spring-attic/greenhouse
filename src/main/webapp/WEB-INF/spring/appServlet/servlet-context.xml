@@ -10,9 +10,6 @@
 	<!-- Configures the Spring MVC @Controller programming model -->
 	<annotation-driven validator="validator" />
 
-	<!-- Enables annotation-driven asynchronous tasks e.g. @Async -->	
-	<task:annotation-driven/>
-	
 	<!-- Installs Greenhouse-specific @Controller extensions not configurable via the mvc namespace -->
 	<beans:bean class="com.springsource.greenhouse.config.AnnotationMethodHandlerAdapterPostProcessor" />
 	
@@ -21,9 +18,9 @@
      
 	<!-- Interceptors that execute common control logic across multiple requests -->
 	<interceptors>
-		<beans:bean class="com.springsource.greenhouse.home.UserLocationHandlerInterceptor" />
-		<beans:bean class="com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor" />
 		<beans:bean class="com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor" />
+		<beans:bean class="com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor" />
+		<beans:bean class="com.springsource.greenhouse.home.UserLocationHandlerInterceptor" />
 		<beans:bean class="org.springframework.mobile.mvc.DeviceResolvingHandlerInterceptor">
 			<beans:constructor-arg>
 				<beans:bean class="org.springframework.mobile.config.DeviceResolverFactoryBean" />
