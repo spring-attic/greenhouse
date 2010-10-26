@@ -20,7 +20,7 @@
 		<org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version> <!-- 3.1.0.CI-SNAPSHOT once compatible with OAuth -->
 		<org.springframework.integration-version>2.0.0.M7</org.springframework.integration-version>		
 		<org.aspectj-version>1.6.9</org.aspectj-version>
-		<org.slf4j-version>1.5.10</org.slf4j-version>
+		<org.slf4j-version>1.6.1</org.slf4j-version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -262,7 +262,7 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>1.6</version>
+			<version>1.6.2</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -275,7 +275,7 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.5.3</version>
+			<version>1.6.1</version>
 		</dependency>
 
 		<!-- File Upload -->
