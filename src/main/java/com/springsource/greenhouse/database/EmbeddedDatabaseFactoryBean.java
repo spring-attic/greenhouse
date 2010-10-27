@@ -39,8 +39,8 @@ public class EmbeddedDatabaseFactoryBean implements FactoryBean<DataSource>, Ini
 	}
 
 	private void populateDatabase() {
-		new BaseDatabaseInstaller(database) {
-			protected void addCustomChanges(DatabaseChangeSetBuilder builder) {
+		new BaseDatabaseUpgrader(database) {
+			protected void addInstallChanges(DatabaseChangeSetBuilder builder) {
 				builder.addChange(databaseResource("install/embedded/test-data.sql"));
 			}
 		}.run();

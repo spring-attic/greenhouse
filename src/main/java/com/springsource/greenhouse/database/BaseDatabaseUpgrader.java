@@ -6,19 +6,18 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.versioned.DatabaseChangeSet;
 import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 import org.springframework.jdbc.versioned.DatabaseUpgrader;
 import org.springframework.jdbc.versioned.DatabaseVersion;
 import org.springframework.jdbc.versioned.GenericDatabaseUpgrader;
 
-public class BaseDatabaseInstaller {
+public class BaseDatabaseUpgrader {
 	
 	private DatabaseUpgrader upgrader;
 
-	private DatabaseVersion installVersion = DatabaseVersion.valueOf("1");
-	
 	@Autowired
-	public BaseDatabaseInstaller(DataSource dataSource) {		
+	public BaseDatabaseUpgrader(DataSource dataSource) {		
 		this.upgrader = initUpgrader(dataSource);
 	}
 	
@@ -26,10 +25,33 @@ public class BaseDatabaseInstaller {
 	public void run() {
 		upgrader.run();		
 	}
+
+	// subclassing hooks
+	
+	protected void addInstallChanges(DatabaseChangeSetBuilder builder) {}
+
+	protected Resource databaseResource(String resource) {
+		return new ClassPathResource(resource, getClass());
+	}
+
+	protected DatabaseChangeSet singletonChangeSet(String version, Resource resource) {
+		return new DatabaseChangeSetBuilder(DatabaseVersion.valueOf(version)).addChange(resource).getChangeSet();
+	}
+	
+	// internal helpers
 	
 	private DatabaseUpgrader initUpgrader(DataSource dataSource) {
 		GenericDatabaseUpgrader upgrader = new GenericDatabaseUpgrader(dataSource);
-		DatabaseChangeSetBuilder builder = new DatabaseChangeSetBuilder(installVersion);
+		if (upgrader.getCurrentDatabaseVersion().equals(DatabaseVersion.zero())) {
+			addInstallChangeSet(upgrader);			
+		} else {
+			addUpgradeChangeSets(upgrader);
+		}
+		return upgrader;
+	}
+
+	private void addInstallChangeSet(GenericDatabaseUpgrader upgrader) {
+		DatabaseChangeSetBuilder builder = new DatabaseChangeSetBuilder(DatabaseVersion.valueOf("2"));
 		builder.addChange(databaseResource("install/Member.sql"));
 		builder.addChange(databaseResource("install/Group.sql"));
 		builder.addChange(databaseResource("install/Activity.sql"));
@@ -39,14 +61,12 @@ public class BaseDatabaseInstaller {
 		builder.addChange(databaseResource("install/Invite.sql"));		
 		builder.addChange(databaseResource("install/Venue.sql"));
 		builder.addChange(databaseResource("install/Event.sql"));
-		addCustomChanges(builder);
+		addInstallChanges(builder);
 		upgrader.addChangeSet(builder.getChangeSet());
-		return upgrader;
 	}
 
-	protected void addCustomChanges(DatabaseChangeSetBuilder builder) {}
-
-	protected Resource databaseResource(String resource) {
-		return new ClassPathResource(resource, getClass());
+	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
+		upgrader.addChangeSet(singletonChangeSet("2", databaseResource("upgrade/474.sql")));
 	}
+	
 }

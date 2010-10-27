@@ -12,6 +12,18 @@ public class DatabaseVersion {
 		return new DatabaseVersion(0);
 	}
 
+	public boolean equals(Object o) {
+		if (!(o instanceof DatabaseVersion)) {
+			return false;
+		}
+		DatabaseVersion version = (DatabaseVersion) o;
+		return major == version.major;
+	}
+	
+	public int hashCode() {
+		return major * 29;
+	}
+
 	public boolean lessThan(DatabaseVersion version) {
 		return major < version.major;
 	}

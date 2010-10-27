@@ -15,8 +15,9 @@ public class DatabaseChangeSetBuilder {
 		changeSet = new DatabaseChangeSet(version);
 	}
 
-	public void addChange(Resource resource) {
+	public DatabaseChangeSetBuilder addChange(Resource resource) {
 		changeSet.add(new DatabaseChange(readSql(resource)));
+		return this;
 	}
 
 	public DatabaseChangeSet getChangeSet() {

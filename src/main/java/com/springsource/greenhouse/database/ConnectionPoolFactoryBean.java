@@ -44,8 +44,8 @@ public class ConnectionPoolFactoryBean implements FactoryBean<DataSource>, Initi
 	}
 	
 	private void populateDatabase() {
-		new BaseDatabaseInstaller(connectionPool) {
-			protected void addCustomChanges(DatabaseChangeSetBuilder builder) {
+		new BaseDatabaseUpgrader(connectionPool) {
+			protected void addInstallChanges(DatabaseChangeSetBuilder builder) {
 				builder.addChange(databaseResource("install/data/AccountProviders.sql"));
 			}
 		}.run();
