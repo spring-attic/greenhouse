@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.util.UriTemplate;
 
+import com.springsource.greenhouse.signup.WelcomeMailTransformer;
+
 public class WelcomeMailTransformerTest {
 	@Test
 	public void welcomeMail() {

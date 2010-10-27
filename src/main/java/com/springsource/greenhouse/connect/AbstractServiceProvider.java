@@ -16,7 +16,7 @@ import org.scribe.services.TimestampServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountReference;
+import com.springsource.greenhouse.account.ProfileReference;
 
 public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 	
@@ -98,7 +98,7 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 		return connectionRepository.findAccountByConnection(getName(), accessToken);
 	}
 
-	public List<AccountReference> findAccountsConnectedTo(List<String> providerAccountIds) {
+	public List<ProfileReference> findAccountsConnectedTo(List<String> providerAccountIds) {
 		return connectionRepository.findAccountsConnectedTo(getName(), providerAccountIds);
 	}
 

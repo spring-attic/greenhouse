@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
-import com.springsource.greenhouse.account.UsernameNotFoundException;
+import com.springsource.greenhouse.account.SignInNotFoundException;
 
 @Controller
 @RequestMapping("/reset")
@@ -36,7 +36,7 @@ public class ResetPasswordController {
 			service.sendResetMail(username);
 			FlashMap.setInfoMessage("An email has been sent to you.  Follow its instructions to reset your password.");
 			return "redirect:/reset";
-		} catch (UsernameNotFoundException e) {
+		} catch (SignInNotFoundException e) {
 			model.addAttribute("username", FieldModel.error("not on file", username));
 			return null;
 		}

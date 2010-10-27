@@ -66,7 +66,7 @@ public class JdbcProfileRepository implements ProfileRepository {
 	
 	private class ProfileMapper implements RowMapper<Profile> {
 		
-		private PictureUrlMapper profilePictureUrlMapper = new PictureUrlMapper(pictureUrlFactory, PictureSize.large);
+		private PictureUrlMapper profilePictureUrlMapper = new PictureUrlMapper(pictureUrlFactory, PictureSize.LARGE);
 		
 		public Profile mapRow(ResultSet rs, int row) throws SQLException {
 			return new Profile(rs.getLong("id"), rs.getString("displayName"), profilePictureUrlMapper.mapRow(rs, row));

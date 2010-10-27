@@ -19,7 +19,7 @@ import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.social.twitter.TwitterOperations;
 
 import com.springsource.greenhouse.account.AccountMapper;
-import com.springsource.greenhouse.account.AccountReference;
+import com.springsource.greenhouse.account.ProfileReference;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
@@ -105,7 +105,7 @@ public class JdbcAccountConnectionRepositoryTest {
 	
 	@Test
 	public void findAccountsConnectedTo() throws Exception {
-		List<AccountReference> accounts = serviceProvider.findAccountsConnectedTo(asList("habuma", "rclarkson", "BarakObama"));
+		List<ProfileReference> accounts = serviceProvider.findAccountsConnectedTo(asList("habuma", "rclarkson", "BarakObama"));
 		assertEquals(2, accounts.size());
 	}
 

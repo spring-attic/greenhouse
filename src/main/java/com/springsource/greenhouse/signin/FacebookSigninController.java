@@ -14,7 +14,7 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
-import com.springsource.greenhouse.account.UsernameNotFoundException;
+import com.springsource.greenhouse.account.SignInNotFoundException;
 import com.springsource.greenhouse.connect.ServiceProvider;
 import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 
@@ -47,10 +47,10 @@ public class FacebookSigninController {
 	
 	private String handleNoFacebookConnection(FacebookProfile userInfo) {
 		try {
-			accountRepository.findByUsername(userInfo.getEmail());
+			accountRepository.findBySignin(userInfo.getEmail());
 			FlashMap.setWarningMessage("Your Facebook account is not linked with your Greenhouse account. To connect them, sign in and then go to the Settings page.");
 			return "redirect:/signin";
-		} catch (UsernameNotFoundException e) {
+		} catch (SignInNotFoundException e) {
 			FlashMap.setInfoMessage("Your Facebook account is not linked with a Greenhouse account. "
 					+ "If you do not have a Greenhouse account, complete the following form to create one. "
 					+ "If you already have an account, sign in with your username and password, then go to the Settings page to connect with Facebook.");

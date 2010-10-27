@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountMapper;
-import com.springsource.greenhouse.account.AccountReference;
+import com.springsource.greenhouse.account.ProfileReference;
 
 @Repository
 public class JdbcAccountConnectionRepository implements AccountConnectionRepository {
@@ -68,7 +68,7 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 		}
 	}
 
-	public List<AccountReference> findAccountsConnectedTo(String provider, List<String> providerAccountIds) {
+	public List<ProfileReference> findAccountsConnectedTo(String provider, List<String> providerAccountIds) {
 		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", provider);

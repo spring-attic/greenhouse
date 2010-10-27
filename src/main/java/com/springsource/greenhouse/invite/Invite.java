@@ -1,17 +1,17 @@
 package com.springsource.greenhouse.invite;
 
-import com.springsource.greenhouse.account.AccountReference;
+import com.springsource.greenhouse.account.ProfileReference;
 import com.springsource.greenhouse.signup.SignupForm;
 
 public final class Invite {
 	
 	private final Invitee invitee;
 	
-	private final AccountReference sentBy;
+	private final ProfileReference sentBy;
 
 	private final boolean accepted;
 	
-	public Invite(Invitee invitee, AccountReference sentBy, boolean accepted) {
+	public Invite(Invitee invitee, ProfileReference sentBy, boolean accepted) {
 		this.invitee = invitee;
 		this.sentBy = sentBy;
 		this.accepted = accepted;
@@ -21,7 +21,7 @@ public final class Invite {
 		return invitee;
 	}
 
-	public AccountReference getSentBy() {
+	public ProfileReference getSentBy() {
 		return sentBy;
 	}
 

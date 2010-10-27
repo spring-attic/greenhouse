@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountReference;
+import com.springsource.greenhouse.account.ProfileReference;
 import com.springsource.greenhouse.action.ActionRepository;
 import com.springsource.greenhouse.action.ActionRepository.ActionFactory;
 import com.springsource.greenhouse.utils.Location;
@@ -66,7 +66,7 @@ public class JdbcInviteRepository implements InviteRepository {
 			return jdbcTemplate.queryForObject(SELECT_INVITE, new RowMapper<Invite>() {
 				public Invite mapRow(ResultSet rs, int rowNum) throws SQLException {
 					Invitee invitee = new Invitee(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"));
-					AccountReference sentBy = AccountReference.textOnly(rs.getLong("sentById"), rs.getString("sentByUsername"), rs.getString("sentByFirstName"), rs.getString("sentByLastName"));
+					ProfileReference sentBy = ProfileReference.textOnly(rs.getLong("sentById"), rs.getString("sentByUsername"), rs.getString("sentByFirstName"), rs.getString("sentByLastName"));
 					return new Invite(invitee, sentBy, rs.getBoolean("accepted"));
 				}
 			}, token, token);

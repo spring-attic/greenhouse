@@ -3,7 +3,7 @@ package com.springsource.greenhouse.connect;
 import java.util.List;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountReference;
+import com.springsource.greenhouse.account.ProfileReference;
 
 public interface AccountConnectionRepository {
 
@@ -19,6 +19,6 @@ public interface AccountConnectionRepository {
 
 	Account findAccountByConnection(String provider, String accessToken) throws NoSuchAccountConnectionException;
 
-	List<AccountReference> findAccountsConnectedTo(String provider, List<String> providerAccountIds);
+	List<ProfileReference> findAccountsConnectedTo(String provider, List<String> providerAccountIds);
 
 }

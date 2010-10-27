@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.springsource.greenhouse.account;
 
 import java.sql.ResultSet;
@@ -14,6 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.utils.EmailUtils;
 
+/**
+ * AccountRepository implementation that stores Accounts in a relational database using the JDBC API.
+ * @author Keith Donald
+ */
 @Repository
 public class JdbcAccountRepository implements AccountRepository {
 
@@ -42,12 +61,11 @@ public class JdbcAccountRepository implements AccountRepository {
 		}
 	}
 
-	public Account authenticate(String username, String password) throws UsernameNotFoundException,
-			InvalidPasswordException {
+	public Account authenticate(String signin, String password) throws SignInNotFoundException, InvalidPasswordException {
 		try {
-			return jdbcTemplate.queryForObject(passwordProtectedAccountQuery(username), passwordProtectedAccountMapper, username).accessAccount(password, passwordEncoder);
+			return jdbcTemplate.queryForObject(passwordProtectedAccountQuery(signin), passwordProtectedAccountMapper, signin).accessAccount(password, passwordEncoder);
 		} catch (EmptyResultDataAccessException e) {
-			throw new UsernameNotFoundException(username);
+			throw new SignInNotFoundException(signin);
 		}
 	}
 
@@ -59,26 +77,22 @@ public class JdbcAccountRepository implements AccountRepository {
 		return jdbcTemplate.queryForObject(AccountMapper.SELECT_ACCOUNT + " where id = ?", accountMapper, id);
 	}
 
-	public Account findByUsername(String username) throws UsernameNotFoundException {
+	public Account findBySignin(String signin) throws SignInNotFoundException {
 		try {
-			return jdbcTemplate.queryForObject(accountQuery(username), accountMapper, username);
+			return jdbcTemplate.queryForObject(accountQuery(signin), accountMapper, signin);
 		} catch (EmptyResultDataAccessException e) {
-			throw new UsernameNotFoundException(username);
+			throw new SignInNotFoundException(signin);
 		}
-	}
-
-	public void markProfilePictureSet(Long id) {
-		jdbcTemplate.update("update Member set pictureSet = true where id = ?", id);
 	}
 
 	// internal helpers
 
-	private String accountQuery(String username) {
-		return EmailUtils.isEmail(username) ? AccountMapper.SELECT_ACCOUNT + " where email = ?" : AccountMapper.SELECT_ACCOUNT + " where username = ?";
+	private String accountQuery(String signin) {
+		return EmailUtils.isEmail(signin) ? AccountMapper.SELECT_ACCOUNT + " where email = ?" : AccountMapper.SELECT_ACCOUNT + " where username = ?";
 	}
 
-	private String passwordProtectedAccountQuery(String username) {
-		return EmailUtils.isEmail(username) ? SELECT_PASSWORD_PROTECTED_ACCOUNT + " where email = ?" : SELECT_PASSWORD_PROTECTED_ACCOUNT + " where username = ?";
+	private String passwordProtectedAccountQuery(String signin) {
+		return EmailUtils.isEmail(signin) ? SELECT_PASSWORD_PROTECTED_ACCOUNT + " where email = ?" : SELECT_PASSWORD_PROTECTED_ACCOUNT + " where username = ?";
 	}
 
 	private RowMapper<PasswordProtectedAccount> passwordProtectedAccountMapper = new RowMapper<PasswordProtectedAccount>() {

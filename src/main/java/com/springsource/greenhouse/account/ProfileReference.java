@@ -15,30 +15,23 @@
  */
 package com.springsource.greenhouse.account;
 
+import com.springsource.greenhouse.utils.VisualResourceReference;
+
 /**
- * Male or Female.
- * Used to customize Account messages (e.g. he or she usage) and to choose the default profile picture.
+ * A reference to a member profile.
+ * Used to render a link to the profile.
+ * The link may contain text and a img.
+ * The link text is generally the member's full name.
  * @author Keith Donald
  */
-public enum Gender {
-	
-	MALE ('M'), FEMALE ('F');
-	
-	private char code;
-	
-	private Gender(char code) { 
-		this.code = code;
-	}
-	
-	public char code() {
-		return code;
+public class ProfileReference extends VisualResourceReference<String> {
+
+	public ProfileReference(String id, String label, String imageUrl) {
+		super(id, label, imageUrl);
 	}
 
-	public static Gender valueOf(char charAt) {
-		if (charAt == 'M') {
-			return Gender.MALE;
-		} else {
-			return Gender.FEMALE;
-		}
+	public static ProfileReference textOnly(Long id, String username, String firstName, String lastName) {
+		return new ProfileReference(username != null && username.length() > 0 ? username : id.toString(), firstName + " " + lastName, null);
 	}
+	
 }

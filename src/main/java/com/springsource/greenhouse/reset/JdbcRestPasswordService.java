@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.account.UsernameNotFoundException;
+import com.springsource.greenhouse.account.SignInNotFoundException;
 
 @Service
 public class JdbcRestPasswordService implements ResetPasswordService {
@@ -32,8 +32,8 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 	}
 
 	@Transactional
-	public void sendResetMail(String username) throws UsernameNotFoundException {
-		Account account = accountRepository.findByUsername(username);
+	public void sendResetMail(String username) throws SignInNotFoundException {
+		Account account = accountRepository.findBySignin(username);
 		String token = tokenGenerator.generateKey();
  		jdbcTemplate.update("insert into ResetPassword (token, member) values (?, ?)", token, account.getId());
  		mailer.send(new ResetPasswordRequest(token, account));

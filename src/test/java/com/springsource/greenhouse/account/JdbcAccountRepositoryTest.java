@@ -1,7 +1,6 @@
 package com.springsource.greenhouse.account;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -42,7 +41,7 @@ public class JdbcAccountRepositoryTest {
 	@Test
 	@Transactional
 	public void create() throws EmailAlreadyOnFileException {
-		Person person = new Person("Jack", "Black", "jack@black.com", "foobie", Gender.Male, new LocalDate(1977, 12, 1));
+		Person person = new Person("Jack", "Black", "jack@black.com", "foobie", Gender.MALE, new LocalDate(1977, 12, 1));
 		Account account = accountRepository.createAccount(person);
 		assertEquals(3L, (long) account.getId());
 		assertEquals("Jack Black", account.getFullName());
@@ -52,13 +51,13 @@ public class JdbcAccountRepositoryTest {
 	}
 
 	@Test
-	public void authenticate() throws UsernameNotFoundException, InvalidPasswordException {
+	public void authenticate() throws SignInNotFoundException, InvalidPasswordException {
 		Account account = accountRepository.authenticate("kdonald", "password");
 		assertEquals("Keith Donald", account.getFullName());
 	}
 
 	@Test(expected = InvalidPasswordException.class)
-	public void authenticateInvalidPassword() throws UsernameNotFoundException, InvalidPasswordException {
+	public void authenticateInvalidPassword() throws SignInNotFoundException, InvalidPasswordException {
 		accountRepository.authenticate("kdonald", "bogus");
 	}
 
@@ -68,29 +67,23 @@ public class JdbcAccountRepositoryTest {
 	}
 
 	@Test
-	public void findtByEmail() throws Exception {
-		assertExpectedAccount(accountRepository.findByUsername("cwalls@vmware.com"));
+	public void findtBySigninEmail() throws Exception {
+		assertExpectedAccount(accountRepository.findBySignin("cwalls@vmware.com"));
 	}
 
 	@Test
-	public void findByUsername() throws Exception {
-		assertExpectedAccount(accountRepository.findByUsername("habuma"));
+	public void findBySigninUsername() throws Exception {
+		assertExpectedAccount(accountRepository.findBySignin("habuma"));
 	}
 
-	@Test(expected = UsernameNotFoundException.class)
+	@Test(expected = SignInNotFoundException.class)
 	public void usernameNotFound() throws Exception {
-		accountRepository.findByUsername("strangerdanger");
+		accountRepository.findBySignin("strangerdanger");
 	}
 
-	@Test(expected = UsernameNotFoundException.class)
+	@Test(expected = SignInNotFoundException.class)
 	public void usernameNotFoundEmail() throws Exception {
-		accountRepository.findByUsername("stranger@danger.com");
-	}
-
-	@Test
-	public void markProfilePictureSet() {
-		accountRepository.markProfilePictureSet(1L);
-		assertTrue(jdbcTemplate.queryForObject("select pictureSet from Member where id = ?", Boolean.class, 1L));
+		accountRepository.findBySignin("stranger@danger.com");
 	}
 
 	private void assertExpectedAccount(Account account) {

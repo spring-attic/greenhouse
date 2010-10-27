@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.connect.ServiceProvider;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
@@ -30,13 +29,10 @@ public class FacebookConnectController {
 	
 	private final ProfilePictureService profilePictureService;
 
-	private final AccountRepository accountRepository;
-
 	@Inject
-	public FacebookConnectController(ServiceProvider<FacebookOperations> facebookProvider, ProfilePictureService profilePictureService, AccountRepository accountRepository) {
+	public FacebookConnectController(ServiceProvider<FacebookOperations> facebookProvider, ProfilePictureService profilePictureService) {
 		this.facebookProvider = facebookProvider;
 		this.profilePictureService = profilePictureService;
-		this.accountRepository = accountRepository;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
@@ -81,7 +77,6 @@ public class FacebookConnectController {
 		try {
 			byte[] imageBytes = api.getProfilePicture(facebookUserId);
 	        profilePictureService.saveProfilePicture(account.getId(), imageBytes);
-			accountRepository.markProfilePictureSet(account.getId());
 		} catch (IOException e) {
 			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
 		}
