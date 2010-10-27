@@ -15,8 +15,8 @@
 		<form:password path="password" />
 		<form:label path="gender">Gender</form:label>
 		<form:select path="gender">
-			<form:option value="Male" />
-			<form:option value="Female" />
+			<form:option value="MALE" label="Male" />
+			<form:option value="FEMALE" label="Female" />
 		</form:select>
 		<!-- TODO only one error message that considers all 3 fields -->	
 		<form:label path="month">Birthday (never shared, used to display age) <form:errors path="month" cssClass="error" /></form:label>		

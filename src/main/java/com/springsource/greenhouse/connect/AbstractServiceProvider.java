@@ -98,8 +98,8 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 		return connectionRepository.findAccountByConnection(getName(), accessToken);
 	}
 
-	public List<ProfileReference> findAccountsConnectedTo(List<String> providerAccountIds) {
-		return connectionRepository.findAccountsConnectedTo(getName(), providerAccountIds);
+	public List<ProfileReference> findMembersConnectedTo(List<String> providerAccountIds) {
+		return connectionRepository.findMembersConnectedTo(getName(), providerAccountIds);
 	}
 
 	// subclassing hooks

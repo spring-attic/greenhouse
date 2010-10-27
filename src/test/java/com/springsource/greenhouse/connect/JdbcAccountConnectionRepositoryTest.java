@@ -104,9 +104,9 @@ public class JdbcAccountConnectionRepositoryTest {
 	}
 	
 	@Test
-	public void findAccountsConnectedTo() throws Exception {
-		List<ProfileReference> accounts = serviceProvider.findAccountsConnectedTo(asList("habuma", "rclarkson", "BarakObama"));
-		assertEquals(2, accounts.size());
+	public void findMembersConnectedTo() throws Exception {
+		List<ProfileReference> profiles = serviceProvider.findMembersConnectedTo(asList("habuma", "rclarkson", "BarakObama"));
+		assertEquals(2, profiles.size());
 	}
 
 	@Test

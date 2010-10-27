@@ -9,8 +9,8 @@
 <c:if test="${not empty friendAccounts}">
 <p>Some of your friends are already in the Greenhouse</p>
 <ul>
-	<c:forEach var="friendAccount" items="${friendAccounts}">
-	<li><a href="<s:url value="/members/${friendAccount.id}" />">${friendAccount.label}</a></li>
+	<c:forEach var="friend" items="${friends}">
+	<li><a href="<s:url value="/members/${friend.id}" />">${friend.label}</a></li>
 	</c:forEach>
 </ul>
 <h5>Invite more...</h5>

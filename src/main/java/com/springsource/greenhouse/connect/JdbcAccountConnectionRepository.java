@@ -68,7 +68,7 @@ public class JdbcAccountConnectionRepository implements AccountConnectionReposit
 		}
 	}
 
-	public List<ProfileReference> findAccountsConnectedTo(String provider, List<String> providerAccountIds) {
+	public List<ProfileReference> findMembersConnectedTo(String provider, List<String> providerAccountIds) {
 		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 		Map<String, Object> params = new HashMap<String, Object>(2, 1);
 		params.put("provider", provider);

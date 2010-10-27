@@ -39,6 +39,6 @@ public interface ServiceProvider<S> {
 
 	Account findAccountByConnection(String accessToken) throws NoSuchAccountConnectionException;
 	
-	List<ProfileReference> findAccountsConnectedTo(List<String> providerAccountIds);
+	List<ProfileReference> findMembersConnectedTo(List<String> providerAccountIds);
 
 }

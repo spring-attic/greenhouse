@@ -19,6 +19,6 @@ public interface AccountConnectionRepository {
 
 	Account findAccountByConnection(String provider, String accessToken) throws NoSuchAccountConnectionException;
 
-	List<ProfileReference> findAccountsConnectedTo(String provider, List<String> providerAccountIds);
+	List<ProfileReference> findMembersConnectedTo(String provider, List<String> providerAccountIds);
 
 }
