@@ -6,7 +6,7 @@
 
 <h2>Invite Facebook Friends</h2>
 
-<c:if test="${not empty friendAccounts}">
+<c:if test="${not empty friends}">
 <p>Some of your friends are already in the Greenhouse</p>
 <ul>
 	<c:forEach var="friend" items="${friends}">
@@ -16,7 +16,7 @@
 <h5>Invite more...</h5>
 </c:if>
 
-<c:if test="${empty friendAccounts}">
+<c:if test="${empty friends}">
 <p>None of your friends have Greenhouse accounts connected to Facebook</p>
 <h5>Invite some...</h5>
 </c:if>
