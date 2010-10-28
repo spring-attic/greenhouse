@@ -3,12 +3,12 @@ package com.springsource.greenhouse.events;
 import javax.inject.Inject;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.activity.badge.BadgeAwarder;
+import com.springsource.greenhouse.activity.badge.AwardedBadge;
+import com.springsource.greenhouse.activity.badge.BadgeRepository;
 
-import com.springsource.greenhouse.badge.ActionTriggeredBadgeAwarder;
-import com.springsource.greenhouse.badge.AwardedBadge;
-import com.springsource.greenhouse.badge.BadgeRepository;
 
-public class BroadcasterBadgeAwarder implements ActionTriggeredBadgeAwarder<EventTweetAction> {
+public class BroadcasterBadgeAwarder implements BadgeAwarder<EventTweetAction> {
 
 	private BadgeRepository badgeRepository;
 	

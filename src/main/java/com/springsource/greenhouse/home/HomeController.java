@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.springsource.greenhouse.recent.RecentActivityRepository;
+import com.springsource.greenhouse.activity.recent.RecentActivityRepository;
 
 @Controller
 public class HomeController {

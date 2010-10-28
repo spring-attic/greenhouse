@@ -15,8 +15,8 @@ import org.springframework.stereotype.Repository;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.ProfileReference;
-import com.springsource.greenhouse.action.ActionRepository;
-import com.springsource.greenhouse.action.ActionRepository.ActionFactory;
+import com.springsource.greenhouse.activity.action.ActionFactory;
+import com.springsource.greenhouse.activity.action.ActionRepository;
 import com.springsource.greenhouse.utils.Location;
 
 @Repository
@@ -41,14 +41,14 @@ public class JdbcInviteRepository implements InviteRepository {
 		jdbcTemplate.update(INSERT_INVITE, token, invitee.getEmail(), invitee.getFirstName(), invitee.getLastName(), text, sentBy);
 	}
 
-	public void markInviteAccepted(final String token, Account signedUp) {
-		actionRepository.createAction(InviteAcceptAction.class, signedUp, new ActionFactory<InviteAcceptAction>() {
-			public InviteAcceptAction createAction(Long id, DateTime performTime, Account account, Location location) {
+	public void markInviteAccepted(final String token, Account account) {
+		actionRepository.saveAction(InviteAcceptAction.class, account, new ActionFactory<InviteAcceptAction>() {
+			public InviteAcceptAction createAction(Long id, DateTime time, Account account, Location location) {
 				jdbcTemplate.update("insert into InviteAcceptAction (invite, memberAction) values (?, ?)", token, id);
 				Map<String, Object> invite = jdbcTemplate.queryForMap("select sentBy, sentTime from Invite where token = ?", token);
 				Long sentBy = (Long) invite.get("sentBy");
 				DateTime sentTime = new DateTime(invite.get("sentTime"), DateTimeZone.UTC);
-				return new InviteAcceptAction(id, performTime, account, location, sentBy, sentTime);
+				return new InviteAcceptAction(id, time, account, location, sentBy, sentTime);
 			}
 		});
 	}

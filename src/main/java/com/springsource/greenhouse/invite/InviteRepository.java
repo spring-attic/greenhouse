@@ -8,7 +8,7 @@ public interface InviteRepository {
 	
 	void saveInvite(String token, Invitee invitee, String text, Long sentBy);
 	
-	void markInviteAccepted(String token, Account signedUp);
+	void markInviteAccepted(String token, Account account);
 
 	Invite findInvite(String token) throws NoSuchInviteException, InviteAlreadyAcceptedException;
 

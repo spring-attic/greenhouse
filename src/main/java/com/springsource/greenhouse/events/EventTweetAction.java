@@ -3,7 +3,7 @@ package com.springsource.greenhouse.events;
 import org.joda.time.DateTime;
 import com.springsource.greenhouse.account.Account;
 
-import com.springsource.greenhouse.action.Action;
+import com.springsource.greenhouse.activity.action.Action;
 import com.springsource.greenhouse.utils.Location;
 
 public final class EventTweetAction extends Action {

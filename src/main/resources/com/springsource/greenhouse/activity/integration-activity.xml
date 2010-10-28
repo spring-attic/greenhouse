@@ -6,19 +6,19 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- Gateway that publishes signed up messages -->
-	<gateway id="actionGateway" service-interface="com.springsource.greenhouse.action.ActionGateway" default-request-channel="actionChannel" />
+	<gateway id="actionGateway" service-interface="com.springsource.greenhouse.activity.action.ActionGateway" default-request-channel="actionChannel" />
 
 	<!-- For persisting simple actions -->
-	<beans:bean id="actionRepository" class="com.springsource.greenhouse.action.JdbcActionRepository" />
+	<beans:bean id="actionRepository" class="com.springsource.greenhouse.activity.action.JdbcActionRepository" />
 
 	<!-- Channel for Member Action messages -->
 	<publish-subscribe-channel id="actionChannel" />
 	
 	<!-- BADGE AWARDING -->
 
-	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.badge.BadgeSystemFactoryBean" />
+	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.activity.badge.BadgeSystemFactoryBean" />
 	
-	<beans:bean id="badgeRepository" class="com.springsource.greenhouse.badge.JdbcBadgeRepository" />
+	<beans:bean id="badgeRepository" class="com.springsource.greenhouse.activity.badge.JdbcBadgeRepository" />
 		
 	<!-- Sends Member Actions to the badging system for processing -->		 		
 	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="awardedBadgeChannel" />
@@ -33,7 +33,7 @@
 		
 	<transformer input-channel="awardedBadgeChannel" output-channel="recentActivity" ref="recentActivityTransformer" />
 	
-	<beans:bean id="recentActivityTransformer" class="com.springsource.greenhouse.recent.RecentActivityTransformer" />
+	<beans:bean id="recentActivityTransformer" class="com.springsource.greenhouse.activity.recent.RecentActivityTransformer" />
 	  	
 	<!-- RecentActivity Channel Adapter -->
 	<publish-subscribe-channel id="recentActivity" />

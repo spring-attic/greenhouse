@@ -14,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.action.Action;
-import com.springsource.greenhouse.action.ActionGateway;
-import com.springsource.greenhouse.action.JdbcActionRepository;
+import com.springsource.greenhouse.activity.action.Action;
+import com.springsource.greenhouse.activity.action.ActionGateway;
+import com.springsource.greenhouse.activity.action.JdbcActionRepository;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcInviteRepositoryTest {

@@ -7,6 +7,6 @@
 
 	<beans:import resource="classpath:com/springsource/greenhouse/signup/integration-signup.xml" />
 
-	<beans:import resource="classpath:com/springsource/greenhouse/recent/integration-activity.xml" />
+	<beans:import resource="classpath:com/springsource/greenhouse/activity/integration-activity.xml" />
 			
 </beans:beans>
