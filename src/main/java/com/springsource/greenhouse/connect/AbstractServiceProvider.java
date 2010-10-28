@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.springsource.greenhouse.connect;
 
 import java.util.List;
@@ -18,6 +33,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.ProfileReference;
 
+/**
+ * General-purpose base class for ServiceProvider implementations.
+ * @author Keith Donald
+ * @param <S> The service API hosted by this service provider.
+ */
 public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 	
 	private final ServiceProviderParameters parameters;
@@ -104,12 +124,30 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 
 	// subclassing hooks
 	
+	/**
+	 * Construct the strongly-typed service API template that callers may use to invoke the service offered by this service provider.
+	 * Subclasses should override to return their concrete service implementation.
+	 * @param accessToken the granted access token needed to make authorized requests for protected resources
+	 */
 	protected abstract S createServiceOperations(OAuthToken accessToken);
 
+	/**
+	 * Use the service API to fetch the id the member has been assigned in the provider's system.
+	 * This id is stored locally to support linking to the user's connected profile page.
+	 * It is also used for finding connected friends, see {@link #findMembersConnectedTo(List)}.
+	 */
 	protected abstract String fetchProviderAccountId(S serviceOperations);
 
+	/**
+	 * Build the URL pointing to the member's public profile on the provider's system.
+	 * @param providerAccountId the id the member is known by in the provider's system.
+	 * @param serviceOperations the service API
+	 */
 	protected abstract String buildProviderProfileUrl(String providerAccountId, S serviceOperations);
 
+	/**
+	 * The {@link #getApiKey() apiKey} secret.
+	 */
 	protected String getSecret() {
 		return parameters.getSecret();
 	}
