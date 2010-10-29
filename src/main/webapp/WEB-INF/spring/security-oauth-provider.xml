@@ -21,12 +21,12 @@
 
 	<!-- OAuthProviderTokenServices that uses a OAuthSessionManager to manage OAuthSession storage -->
 	<bean id="oauthProviderTokenServices" class="com.springsource.greenhouse.develop.oauth.OAuthSessionManagerProviderTokenServices">
-		<constructor-arg>
-			<!-- Stores OAuthSessions in a ConcurrentMap with soft values and 2 minutes time idle -->
-			<bean class="com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager" />
-		</constructor-arg>
+		<constructor-arg ref="oauthSessionManager" />
 	</bean>
-	
+
+	<!-- Stores OAuthSessions in a ConcurrentMap with soft values and 2 minutes time idle -->
+	<bean id="oauthSessionManager" class="com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager" />
+		
 	<!-- Loads registered client Apps and OAuth-based AppConnections -->
 	<bean id="appRepository" class="com.springsource.greenhouse.develop.JdbcAppRepository" />
 

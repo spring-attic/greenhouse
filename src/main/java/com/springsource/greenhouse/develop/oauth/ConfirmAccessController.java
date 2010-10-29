@@ -15,6 +15,8 @@
  */
 package com.springsource.greenhouse.develop.oauth;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ public class ConfirmAccessController {
 	
 	private final AppRepository appRepository;
 
+	@Inject
 	public ConfirmAccessController(OAuthSessionManager sessionManager, AppRepository appRepository) {
 		this.sessionManager = sessionManager;
 		this.appRepository = appRepository;
