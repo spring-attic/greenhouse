@@ -88,7 +88,12 @@ public class FacebookConnectController {
 	}
 	
 	private void postToWall(FacebookOperations api, Account account) {
-		api.postToWall("Join me at the Greenhouse!", new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.", 
+		api.updateStatus(
+				"Join me at the Greenhouse!",
+				new FacebookLink(
+						account.getProfileUrl(),
+						"Greenhouse",
+						"Where Spring developers hang out.",
 			"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 	}
 	

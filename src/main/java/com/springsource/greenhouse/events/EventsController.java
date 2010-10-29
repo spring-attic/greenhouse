@@ -58,7 +58,7 @@ public class EventsController {
 
 	@RequestMapping(value = "/{eventId}/tweets", method = RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation) {
-		twitterApi.tweet(status);
+		twitterApi.updateStatus(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
@@ -97,7 +97,7 @@ public class EventsController {
 
 	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam String status, Location currentLocation) {
-		twitterApi.tweet(status);
+		twitterApi.updateStatus(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	

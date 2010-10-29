@@ -37,7 +37,7 @@ public class TwitterInviteController {
 	@RequestMapping(method=RequestMethod.POST)
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> screenNames = twitterProvider.getServiceOperations(account.getId()).getFollowed(username);
+			List<String> screenNames = twitterProvider.getServiceOperations(account.getId()).getFriends(username);
 			model.addAttribute("friends", twitterProvider.findMembersConnectedTo(screenNames));
 		}
 		return "invite/twitterFriends";
