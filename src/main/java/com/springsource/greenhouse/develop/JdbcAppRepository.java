@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.springsource.greenhouse.develop;
 
 import java.sql.ResultSet;
@@ -16,7 +31,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.utils.SlugUtils;
 
-// TODO this is disabled because it's needed in root-context yet scanned by app-servlet-context. not very clean: revisit this.
+/**
+ * AppRepository implementation that stores App data in a relational database using the JDBC API.
+ * ApiKeys and secrets, as well as accessTokens and secrets, are encrypted for storage using a {@link StringEncryptor}.
+ * @author Keith Donald
+ */
+// TODO this is disabled because it's needed in root-context for Spring Security yet scanned by app-servlet-context. not very clean: revisit this.
+// unfortunately, the context hierarchy that requires some beans to reside in the root context and others in the child context promotes technically-oriented packaging over functionally-oriented.
 //@Repository
 public class JdbcAppRepository implements AppRepository {
 

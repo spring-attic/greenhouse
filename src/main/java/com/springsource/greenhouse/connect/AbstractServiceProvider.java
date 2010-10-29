@@ -44,6 +44,11 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 
 	private final AccountConnectionRepository connectionRepository;
 	
+	/**
+	 * Creates a ServiceProvider.
+	 * @param parameters the parameters needed to implement the behavior in this class
+	 * @param connectionRepository a data access interface for managing account connection records
+	 */
 	public AbstractServiceProvider(ServiceProviderParameters parameters, AccountConnectionRepository connectionRepository) {
 		this.parameters = parameters;
 		this.connectionRepository = connectionRepository;

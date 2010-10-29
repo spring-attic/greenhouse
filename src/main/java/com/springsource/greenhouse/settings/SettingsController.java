@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/settings")
+// TODO move the jdbc logic here into AppRepository
 public class SettingsController {
 
 	private JdbcTemplate jdbcTemplate;

@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.database.MultipleRowMapper;
+import com.springsource.greenhouse.database.JoinRowMapper;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
 import com.springsource.greenhouse.utils.SubResourceReference;
@@ -99,7 +99,7 @@ public class JdbcEventRepository implements EventRepository {
 
 	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
 		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			return new MultipleRowMapper<Event, Long, Venue>() {
+			return new JoinRowMapper<Event, Long>() {
 				protected Long mapId(ResultSet rs) throws SQLException {
 					return rs.getLong("id");
 				}
@@ -117,7 +117,7 @@ public class JdbcEventRepository implements EventRepository {
 
 	private ResultSetExtractor<List<EventSession>> eventSessionsExtractor = new ResultSetExtractor<List<EventSession>>() {
 		public List<EventSession> extractData(ResultSet rs) throws SQLException {
-			return new MultipleRowMapper<EventSession, Integer, EventSessionLeader>() {
+			return new JoinRowMapper<EventSession, Integer>() {
 				protected Integer mapId(ResultSet rs) throws SQLException {
 					return rs.getInt("id");
 				}

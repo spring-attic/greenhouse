@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.springsource.greenhouse.config;
 
 import org.joda.time.DateTimeZone;
@@ -18,13 +33,18 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
 import com.springsource.greenhouse.utils.Location;
 
-// TODO - see SPR-7327: it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter
-// support in Spring MVC namespace should be added for that (this would go away then)
+/**
+ * A PostProcessor for Spring MVC's {@link AnnotationMethodHandlerAdapter}.
+ * Performs additional configuration on the adapter instance required by the Greenhouse application.
+ * Currently, this includes the registration of custom web argument resolvers.
+ * 
+ * TODO - see SPR-7327: it would be better to do this as part of instantiating AnnotationMethodHandlerAdapter.
+ * Support in Spring MVC namespace should be added for that (this class would go away then)
+ * 
+ * @author Keith Donald
+ */
 public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProcessor {
 
-	@Value("#{facebookProvider.apiKey}")
-	private String facebookApiKey;
-	
 	public Object postProcessBeforeInitialization(Object bean, String name)
 			throws BeansException {
 		return bean;
@@ -44,6 +64,10 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 		return bean;
 	}
 
+	/**
+	 * Resolves {@link Account} @Controller method parameter values from the current request's Authentication userPrincipal.
+	 * @author Keith Donald
+	 */
 	private static class AccountWebArgumentResolver implements WebArgumentResolver {
 		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
 			if (Account.class.isAssignableFrom(param.getParameterType())) {
@@ -54,7 +78,11 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 			}
 		}
 	}
-	
+
+	/**
+	 * Resolves {@link Location} @Controller method parameter values from the current request's resolved Location. 
+	 * @author Keith Donald
+	 */
 	private static class LocationWebArgumentResolver implements WebArgumentResolver {
 		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
 			if (Location.class.isAssignableFrom(param.getParameterType())) {
@@ -65,6 +93,10 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 		}
 	}
 
+	/**
+	 * Resolves {@link DateTimeZone} @Controller method parameter values from the current request's resolved DateTimeZone. 
+	 * @author Keith Donald
+	 */
 	private static class DateTimeZoneWebArgumentResolver implements WebArgumentResolver {
 		public Object resolveArgument(MethodParameter param, NativeWebRequest request) throws Exception {
 			if (DateTimeZone.class.isAssignableFrom(param.getParameterType())) {
@@ -74,4 +106,11 @@ public class AnnotationMethodHandlerAdapterPostProcessor implements BeanPostProc
 			}
 		}
 	}
+	
+	/**
+	 * Needed by {@link FacebookWebArgumentResolver} to resolve Facebook cookies such as the user's Facebook ID and Greenhouse->Facebook access token. 
+	 */
+	@Value("#{facebookProvider.apiKey}")
+	private String facebookApiKey;
+	
 }
