@@ -1,5 +1,5 @@
 /**
- * Actions are activities members perform when using the application.
+ * Action framework for modeling member activity.
  */
 package com.springsource.greenhouse.activity.action;
 

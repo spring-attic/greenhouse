@@ -1,5 +1,5 @@
 /**
- * Badges are awarded to members for participation and are triggered by Actions.
+ * Badge system that rewards members for participation in the community.
  */
 package com.springsource.greenhouse.activity.badge;
 
