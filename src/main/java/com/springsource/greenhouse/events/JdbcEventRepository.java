@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.springsource.greenhouse.events;
 
 import java.sql.ResultSet;
@@ -22,6 +37,10 @@ import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
 import com.springsource.greenhouse.utils.SubResourceReference;
 
+/**
+ * EventRepository implementation that stores Event data in a relational database using the JDBC API.
+ * @author Keith Donald
+ */
 @Repository
 public class JdbcEventRepository implements EventRepository {
 
@@ -75,19 +94,19 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	@Transactional
-	public Float rate(Long eventId, Integer sessionId, Long attendeeId, Short value, String comment) throws SessionNotEndedException {
+	public Float rate(Long eventId, Integer sessionId, Long attendeeId, Rating rating) throws RatingPeriodClosedException {
 		if (!isSessionEnded(eventId, sessionId)) {
-			throw new SessionNotEndedException(eventId, sessionId);
+			throw new RatingPeriodClosedException(eventId, sessionId);
 		}
 		boolean rated = jdbcTemplate.queryForObject("select exists(select 1 from EventSessionRating where event = ? and session = ? and attendee = ?)", Boolean.class, eventId, sessionId, attendeeId);
 		if (rated) {
-			jdbcTemplate.update("update EventSessionRating set rating = ?, comment = ? where event = ? and session = ? and attendee = ?", value, comment, eventId, sessionId, attendeeId);			
+			jdbcTemplate.update("update EventSessionRating set rating = ?, comment = ? where event = ? and session = ? and attendee = ?", rating.getValue(), rating.getComment(), eventId, sessionId, attendeeId);			
 		} else {
-			jdbcTemplate.update("insert into EventSessionRating (event, session, attendee, rating, comment) values (?, ?, ?, ?, ?)", eventId, sessionId, attendeeId, value, comment);			
+			jdbcTemplate.update("insert into EventSessionRating (event, session, attendee, rating, comment) values (?, ?, ?, ?, ?)", eventId, sessionId, attendeeId, rating.getValue(), rating.getComment());			
 		}
-		Float rating = jdbcTemplate.queryForObject("select round(avg(cast(rating as double)) * 2, 0) / 2 from EventSessionRating where event = ? and session = ? group by event, session", Float.class, eventId, sessionId);
-		jdbcTemplate.update("update EventSession set rating = ? where event = ? and id = ?", rating, eventId, sessionId);
-		return rating;
+		Float newAvgRating = jdbcTemplate.queryForObject("select round(avg(cast(rating as double)) * 2, 0) / 2 from EventSessionRating where event = ? and session = ? group by event, session", Float.class, eventId, sessionId);
+		jdbcTemplate.update("update EventSession set rating = ? where event = ? and id = ?", newAvgRating, eventId, sessionId);
+		return newAvgRating;
 	}
 	
 	// internal helpers
