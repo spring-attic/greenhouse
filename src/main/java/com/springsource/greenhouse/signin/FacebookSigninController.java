@@ -34,6 +34,7 @@ import com.springsource.greenhouse.connect.ServiceProvider;
 import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 
 /**
+ * UI Controller that allows you to signin with your Facebook account, if your local member account has been connected to Facebook.
  * @author Keith Donald
  * @author Craig Walls
  */
@@ -51,6 +52,12 @@ public class FacebookSigninController {
 		this.accountRepository = accountRepository;
 	}
 
+	/**
+	 * Sign in the member with their Facebook account.
+	 * The submitted access token, obtained via a cookie, identifies the connection between a local member account and a Facebook account.
+	 * For sign-in to succeed, the submitted access token must match a Facebook accessToken on file in our system.
+	 * Notifies the user if the access token is invalid.
+	 */
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public String signin(@FacebookAccessToken String accessToken) {
 		try {

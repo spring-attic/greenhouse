@@ -21,6 +21,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
 
 /**
+ * A geo-location that can be plotted on a map.
  * @author Keith Donald
  */
 public final class Location {
@@ -34,10 +35,16 @@ public final class Location {
 		this.longitude = longitude;
 	}
 
+	/**
+	 * The lat value.
+	 */
 	public Double getLatitude() {
 		return latitude;
 	}
 
+	/**
+	 * The long value.
+	 */
 	public Double getLongitude() {
 		return longitude;
 	}
@@ -54,6 +61,9 @@ public final class Location {
 		return latitude.equals(l.latitude) && l.longitude.equals(l.longitude);
 	}
 
+	/**
+	 * Get the location of the user associated with the current request, if resolvable.
+	 */
 	public static Location getCurrentLocation() {
 		RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
 		return attributes != null ? (Location) attributes.getAttribute(UserLocationHandlerInterceptor.USER_LOCATION_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST) : null;

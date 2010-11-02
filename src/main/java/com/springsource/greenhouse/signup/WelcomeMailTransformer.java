@@ -34,6 +34,9 @@ public class WelcomeMailTransformer {
 	
 	private final StringTemplateFactory welcomeTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("welcome.st", getClass()));
 
+	/**
+	 * Perform the Account to MailMessage transformation.
+	 */
 	@Transformer
 	public MailMessage welcomeMail(Account account) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
+ * UI Controller for changing member account settings.
  * @author Keith Donald
  */
 @Controller
@@ -42,12 +43,25 @@ public class SettingsController {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	/**
+	 * Render the setting page to the member as HTML in their web browser.
+	 * Puts the list of applications the member has connected their account with in the model (to support Disconnecting those apps if desired).
+	 */
 	@RequestMapping(value="/settings", method=RequestMethod.GET)
 	public void settingsPage(Account account, Model model) {
 		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select a.name as name, c.accessToken from AppConnection c, App a where c.member = ? and c.app = a.id", account.getId());
 		model.addAttribute("apps", apps);
 	}
 	
+	/**
+	 * Revoke the account access that was previously granted to a client application.
+	 * After executing this operation, the client application will no longer be able to access or update the member's data.
+	 * Used when the member no longer wishes to use the client application, or if the client application was compromised in some way (for example, if the user's mobile phone where the app
+	 * was installed was stolen).
+	 * @param accessToken the access token identifying the connection between a client application and a member account
+	 * @param account the member requesting the termination of the access grant
+	 * @return A redirect back to settings page.
+	 */
 	@RequestMapping(value="/settings/apps/{accessToken}", method=RequestMethod.DELETE)
 	public String disconnectApp(@PathVariable String accessToken, Account account) {
 		jdbcTemplate.update("delete from AppConnection where accessToken = ? and member = ?", accessToken, account.getId());

@@ -26,12 +26,14 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.web.flash.FlashMap;
 
 /**
+ * Custom Spring Security AuthenticationFailureHandler that redirects to back to the signin page on signin failure.
+ * Sets a signinError flag in flash scope to support rendering an error message after the redirect.
+ * Useful for "redirect after post" semantics and keeping sign-in URLs clean.
  * @author Keith Donald
  */
 public class RedirectingAuthenticationFailureHandler implements AuthenticationFailureHandler {
 	
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
-			throws IOException, ServletException {
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 		FlashMap.getCurrent(request).put("signinError", true);
 		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/signin"));
 	}

@@ -24,10 +24,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
+ * Image processing utilities.
  * @author Craig Walls
  */
 public class ImageUtils {
 	
+	/**
+	 * Scale the image stored in the byte array to a specific width.
+	 */
 	public static byte[] scaleImageToWidth(byte[] originalBytes, int scaledWidth) throws IOException {
 		BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(originalBytes));
 		int originalWidth = originalImage.getWidth();

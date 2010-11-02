@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.utils;
 
 /**
+ * A resource reference that includes a picture of the resource.
  * @author Keith Donald
  */
 public class VisualResourceReference<T> extends ResourceReference<T> {
@@ -27,6 +28,9 @@ public class VisualResourceReference<T> extends ResourceReference<T> {
 		this.imageUrl = imageUrl;
 	}
 
+	/**
+	 * A link to a picture of the resource.
+	 */
 	public String getImageUrl() {
 		return imageUrl;
 	}

@@ -19,10 +19,17 @@ import org.springframework.integration.annotation.Gateway;
 import com.springsource.greenhouse.account.Account;
 
 /**
+ * Spring Integration Message Gateway for sending member signed up Messages.
  * @author Keith Donald
  */
 public interface SignedUpGateway {
-	
+
+	/**
+	 * Called by the SignupController after signing up a new user to broadcast a signup notification.
+	 * Subscribers attached to the signup channel can then process the notification.
+	 * Decouples the message sender from the messaging infrastructure and message handling pipeline.
+	 * Generally called after the new member Account has been saved in the system of record. 
+	 */
 	@Gateway
 	void signedUp(Account account);
 	

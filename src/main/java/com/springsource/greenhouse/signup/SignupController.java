@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.springsource.greenhouse.account.AccountRepository;
 
 /**
+ * UI Controller for signing up new members.
  * @author Keith Donald
  */
 @Controller
@@ -38,11 +39,19 @@ public class SignupController {
 		this.signupHelper = new SignupHelper(accountRepository, gateway);
 	}
 
+	/**
+	 * Render a signup form to the person as HTML in their web browser.
+	 */
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public SignupForm signupForm() {
 		return new SignupForm();
 	}
 
+	/**
+	 * Process a signup form submission.
+	 * Delegate to a {@link SignupHelper} to actually complete the signin transaction.
+	 * Redirects the new member to the application home page on successful sign-in.
+	 */
 	@RequestMapping(value="/signup", method=RequestMethod.POST)
 	public String signup(@Valid SignupForm form, BindingResult formBinding) {
 		if (formBinding.hasErrors()) {

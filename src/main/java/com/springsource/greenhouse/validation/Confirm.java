@@ -27,6 +27,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
+ * Class-level constraint denoting that a field value should be confirmed by matching the value of another field.
  * @author Keith Donald
  */
 @Target({ TYPE, ANNOTATION_TYPE })
@@ -41,14 +42,26 @@ public @interface Confirm {
 
 	Class<? extends Payload>[] payload() default {};
 
+	/**
+	 * The name of the field to be confirmed. e.g. password
+	 */
 	String field();
 
+	/**
+	 * The name of the field whose value must match the value of {@link #field()} to satisfy this constraint.
+	 * Optional. If not specified, defaults to "confirm${field}" e.g. confirmPassword.
+	 */
 	String matches() default "";
 
 	@Target({ TYPE, ANNOTATION_TYPE })
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {
+
+		/**
+		 * Used to specify multiple confirm fields per class.
+		 */
 		Confirm[] value();
+		
 	}
 }

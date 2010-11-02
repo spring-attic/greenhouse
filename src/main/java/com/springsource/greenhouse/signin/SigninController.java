@@ -20,11 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
+ * UI Controller that renders the signin-form.
  * @author Keith Donald
  */
 @Controller
 public class SigninController {
 	
+	/**
+	 * Render the signin form to the person as HTML in their web browser.
+	 * Returns void and relies in request-to-view-name translation to kick-in to resolve the view template to render.
+	 */
 	@RequestMapping(value="/signin", method=RequestMethod.GET)
 	public void signin() {
 	}

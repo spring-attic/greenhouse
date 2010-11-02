@@ -24,6 +24,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * Validates @Confirm fields.
  * @author Keith Donald
  */
 public final class ConfirmValidator implements ConstraintValidator<Confirm, Object> {
@@ -43,7 +44,6 @@ public final class ConfirmValidator implements ConstraintValidator<Confirm, Obje
 		message = constraintAnnotation.message();
 	}
 
-	@Override
 	public boolean isValid(Object value, ConstraintValidatorContext context) {
 		BeanWrapper beanWrapper = new BeanWrapperImpl(value);
 		Object fieldValue = beanWrapper.getPropertyValue(field);

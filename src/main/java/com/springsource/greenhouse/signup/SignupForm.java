@@ -22,11 +22,13 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 
+import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.Gender;
 import com.springsource.greenhouse.account.Person;
 import com.springsource.greenhouse.validation.Confirm;
 
 /**
+ * The model for the new member signup form.
  * @author Keith Donald
  */
 @Confirm(field="email")
@@ -58,6 +60,9 @@ public class SignupForm {
 	@Size(min=6, message="must be at least 6 characters")
 	private String password;
 
+	/**
+	 * The person's first name.
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
@@ -66,6 +71,9 @@ public class SignupForm {
 		this.firstName = firstName;
 	}
 
+	/**
+	 * The person's last name.
+	 */
 	public String getLastName() {
 		return lastName;
 	}
@@ -74,6 +82,9 @@ public class SignupForm {
 		this.lastName = lastName;
 	}
 
+	/**
+	 * The person's email, must be unique.
+	 */
 	public String getEmail() {
 		return email;
 	}
@@ -82,6 +93,9 @@ public class SignupForm {
 		this.email = email;
 	}
 
+	/**
+	 * A confirmation of the person's email. Must match.
+	 */
 	public String getConfirmEmail() {
 		return confirmEmail;
 	}
@@ -90,6 +104,9 @@ public class SignupForm {
 		this.confirmEmail = confirmEmail;
 	}
 
+	/**
+	 * The member's password.
+	 */
 	public String getPassword() {
 		return password;
 	}
@@ -98,6 +115,9 @@ public class SignupForm {
 		this.password = password;
 	}
 
+	/**
+	 * The member's gender.
+	 */
 	public Gender getGender() {
 		return gender;
 	}
@@ -105,7 +125,10 @@ public class SignupForm {
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
-		
+
+	/**
+	 * The month them member as born.
+	 */
 	public Integer getMonth() {
 		return month;
 	}
@@ -114,6 +137,9 @@ public class SignupForm {
 		this.month = month;
 	}
 
+	/**
+	 * The day them member was born.
+	 */
 	public Integer getDay() {
 		return day;
 	}
@@ -122,6 +148,9 @@ public class SignupForm {
 		this.day = day;
 	}
 
+	/**
+	 * The year the member was born.
+	 */
 	public Integer getYear() {
 		return year;
 	}
@@ -130,6 +159,10 @@ public class SignupForm {
 		this.year = year;
 	}
 
+	/**
+	 * Creates a Person record from this SignupForm.
+	 * A Person is used as input to {@link AccountRepository} to create a new member Account.
+	 */
 	public Person createPerson() {
 		return new Person(firstName, lastName, email, password, gender, new LocalDate(year, month, day));
 	}

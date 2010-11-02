@@ -25,6 +25,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
+ * Spring MVC Interceptor that exposes the Account identifying the currently signed in member as a well-known 
+ * request attribute that can be used during the course of request processing.
+ * Supports obtaining a reference to the current member Account from @Controllers and views.
  * @author Keith Donald
  */
 public class AccountExposingHandlerInterceptor implements HandlerInterceptor {

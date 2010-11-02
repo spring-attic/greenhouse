@@ -23,8 +23,12 @@ import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
 import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
 import com.springsource.greenhouse.account.Person;
+import com.springsource.greenhouse.invite.InviteController;
 
 /**
+ * A helper for signing up new users.
+ * Encapsulates common signup UI control and business logic.
+ * Factored out since signup can be triggered by a normal {@link SignupController} flow or via a {@link InviteController accept invite} flow.
  * @author Keith Donald
  */
 public class SignupHelper {
@@ -38,10 +42,21 @@ public class SignupHelper {
 		this.gateway = gateway;
 	}
 
+	/**
+	 * Signup the person who completed the signup form.
+	 * Returns true if signup was successful, false if there was an error.
+	 * Records any errors in the form's BindingResult context for display to the person.
+	 */
 	public boolean signup(SignupForm form, BindingResult formBinding) {
 		return signup(form, formBinding, null);
 	}
 	
+	/**
+	 * Signup the person who completed the signup form.
+	 * Returns true if signup was successful, false if there was an error.
+	 * Records any errors in the form's BindingResult context for display to the person.
+	 * An optional SignupCallback may be specified for performing custom processing after successful member signup.
+	 */
 	public boolean signup(SignupForm form, BindingResult formBinding, SignupCallback callback) {
 		try {
 			Account account = createAccount(form.createPerson(),callback);
@@ -54,6 +69,8 @@ public class SignupHelper {
 		}		
 	}
 	
+	// internal helpers
+	
 	@Transactional
 	private Account createAccount(Person person, SignupCallback callback) throws EmailAlreadyOnFileException {
 		Account account = accountRepository.createAccount(person);
@@ -63,8 +80,13 @@ public class SignupHelper {
 		return account;
 	}
 	
+	/**
+	 * Called after new member Account signup to allow for custom post processing.
+	 */
 	public interface SignupCallback {
+		
 		void postCreateAccount(Account account);
+		
 	}
 
 }

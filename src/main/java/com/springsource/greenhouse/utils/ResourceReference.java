@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.utils;
 
 /**
+ * A reference to another REST-ful resource.
  * @author Keith Donald
  */
 public class ResourceReference<T> {
@@ -29,10 +30,17 @@ public class ResourceReference<T> {
 		this.label = label;
 	}
 
+	/**
+	 * The id of the refernced entity.
+	 * Used to generate a hyperlink to the resource.
+	 */
 	public T getId() {
 		return id;
 	}
 
+	/**
+	 * A caption or label for the entity.
+	 */
 	public String getLabel() {
 		return label;
 	}

@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
+ * Utilities for generating slugs: a short, meaningful name for a resource that can be used in the resource's friendly URL path.
  * @author Keith Donald
  */
 public class SlugUtils {
@@ -29,6 +30,9 @@ public class SlugUtils {
 	  
 	  private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
 
+	  /**
+	   * Convert the String input to a slug.
+	   */
 	  public static String toSlug(String input) {
 		if (input == null) {
 			throw new IllegalArgumentException("Input cannot be null");

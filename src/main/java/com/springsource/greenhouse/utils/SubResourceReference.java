@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.utils;
 
 /**
+ * A resource that is the child of another.
  * @author Keith Donald
  */
 public final class SubResourceReference<P, C> extends ResourceReference<C> {
@@ -27,6 +28,10 @@ public final class SubResourceReference<P, C> extends ResourceReference<C> {
 		this.parentId = parentId;
 	}
 
+	/**
+	 * The parent id.
+	 * Used to generate a link to the child resource, where the parent is scoping.
+	 */
 	public P getParentId() {
 		return parentId;
 	}
