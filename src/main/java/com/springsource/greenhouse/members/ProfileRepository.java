@@ -20,14 +20,27 @@ import java.util.List;
 import com.springsource.greenhouse.account.PictureSize;
 
 /**
+ * Data access interface for public member profiles.
  * @author Keith Donald
  */
 public interface ProfileRepository {
 
-	Profile findByKey(String profileKey);
+	/**
+	 * Find a profile by it is id.
+	 * The id may be the member's public username or their internal account id if no username is set.
+	 */
+	Profile findById(String profileId);
 
+	/**
+	 * Find a profile by the member's internal account identifier.
+	 */
 	Profile findByAccountId(Long accountId);
 
+	/**
+	 * Get references to the member's profiles at service providers the member has connected their local account with.
+	 * For example, the member may have connected their local account with their Facebook account.
+	 * In that case, a ConnectedProfile instance pointing to their Facebook profile will be returned by this method. 
+	 */
 	List<ConnectedProfile> findConnectedProfiles(Long accountId);
 
 	String findProfilePictureUrl(String profileKey, PictureSize size);

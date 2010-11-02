@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.members;
 
 /**
+ * A reference to a profile a member has on another network, such as Facebook or Twitter.
  * @author Keith Donald
  */
 public final class ConnectedProfile {
@@ -29,10 +30,16 @@ public final class ConnectedProfile {
 		this.url = url;
 	}
 
+	/**
+	 * The display name of the service provider or network the member has connected to.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * The URL of the member's profile on the provider's network.
+	 */
 	public String getUrl() {
 		return url;
 	}

@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.members;
 
 /**
+ * The public record containing information about a Member of our community.
  * @author Keith Donald
  */
 public class Profile {
@@ -32,14 +33,25 @@ public class Profile {
 		this.pictureUrl = pictureUrl;
 	}
 
+	/**
+	 * The member's account identifier.
+	 */
 	public Long getAccountId() {
 		return accountId;
 	}
-	
+
+	/**
+	 * The member's display name.
+	 * Typically their full name but may be just their first name or a nick name.
+	 */
 	public String getDisplayName() {
 		return displayName;
 	}
 	
+	/**
+	 * A link to the member's picture.
+	 * Typically a larger version of their picture suitable for display on their own profile page.
+	 */
 	public String getPictureUrl() {
 		return pictureUrl;
 	}

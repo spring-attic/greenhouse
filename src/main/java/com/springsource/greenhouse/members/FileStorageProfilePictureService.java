@@ -28,11 +28,17 @@ import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.utils.ImageUtils;
 
 /**
+ * PictureProfileService that puts profile pics into FileStorage.
+ * Also sets a flag associated with the member's account when a profile pic is set.
+ * This flag is used when constructing the pictureUrl when {@link AccountMapper mapping} Account and Profile objects. 
  * @author Keith Donald
  * @author Craig Walls
+ * @see Account
+ * @see Profile
  */
 @Service
 public class FileStorageProfilePictureService implements ProfilePictureService {
@@ -41,6 +47,11 @@ public class FileStorageProfilePictureService implements ProfilePictureService {
 
 	private final JdbcTemplate jdbcTemplate;
 	
+	/**
+	 * Construct a FileStorageProfilePictureService
+	 * @param storage the file storage implementation; for example, to store files in S3 or a local directory.
+	 * @param jdbcTemplate the data access template used to update the pictureSet flag
+	 */
 	@Inject
 	public FileStorageProfilePictureService(FileStorage storage, JdbcTemplate jdbcTemplate) {
 		this.storage = storage;

@@ -18,6 +18,7 @@ package com.springsource.greenhouse.reset;
 import com.springsource.greenhouse.account.Account;
 
 /**
+ * A request made by a member, or someone on behalf of the member, to reset the member's password.
  * @author Keith Donald
  */
 public class ResetPasswordRequest {
@@ -31,10 +32,16 @@ public class ResetPasswordRequest {
 		this.account = account;
 	}
 
+	/**
+	 * The token that identifies this reset password request.
+	 */
 	public String getToken() {
 		return token;
 	}
 
+	/**
+	 * The member Account for which this reset password request was made.
+	 */
 	public Account getAccount() {
 		return account;
 	}

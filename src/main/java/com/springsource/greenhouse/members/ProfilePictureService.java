@@ -18,11 +18,19 @@ package com.springsource.greenhouse.members;
 import java.io.IOException;
 
 /**
+ * A service for storing profile pictures.
  * @author Keith Donald
  * @author Craig Walls
  */
 public interface ProfilePictureService {
 
+	/**
+	 * Save the imageBytes as the profile picture for the member account.
+	 * The bytes are generally converted to JPG format for space, then scaled to produce multiple picture dimensions, such as a small, normal, and large.
+	 * @param accountId the member account id
+	 * @param imageBytes the image bytes
+	 * @throws IOException failed to store the image due to an output failure
+	 */
 	void saveProfilePicture(Long accountId, byte[] imageBytes) throws IOException;
 	
 }

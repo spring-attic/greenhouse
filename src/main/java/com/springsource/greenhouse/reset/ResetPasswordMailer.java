@@ -16,10 +16,15 @@
 package com.springsource.greenhouse.reset;
 
 /**
+ * Sends out reset password emails.
  * @author Keith Donald
  */
 public interface ResetPasswordMailer {
 
+	/**
+	 * Send a reset password mail as part of fulfilling the member's reset password request.
+	 * @param request the member's reset password request
+	 */
 	void send(ResetPasswordRequest request);
 
 }

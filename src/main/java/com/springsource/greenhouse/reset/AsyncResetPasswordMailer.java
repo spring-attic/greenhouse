@@ -24,14 +24,16 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
+ * A ResetPasswordMailer implementation that mails asynchronously in a separate thread.
+ * Uses a Coverter to transform a RequestPasswordRequest into a mailable SimpleMailMessage.
  * @author Keith Donald
  */
 @Component
-public class AsyncResetPasswordMailer implements ResetPasswordMailer {
+public final class AsyncResetPasswordMailer implements ResetPasswordMailer {
 
-	private Converter<ResetPasswordRequest, SimpleMailMessage> converter;
+	private final Converter<ResetPasswordRequest, SimpleMailMessage> converter;
 
-	private MailSender mailSender;
+	private final MailSender mailSender;
 	
 	@Inject
 	public AsyncResetPasswordMailer(Converter<ResetPasswordRequest, SimpleMailMessage> converter, MailSender mailSender) {

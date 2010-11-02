@@ -10,8 +10,8 @@
   		<h2>Reset Password</h2>
 	</div>
 	<fieldset>
-	  	<label for="username">Username or Email <c:if test="${username.error}"><span class="error">${username.errorMessage}</span></c:if></label>
-	  	<input id="username" type="text" name="username" value="${username.value}" />
+	  	<label for="signin">Username or Email <c:if test="${signin.error}"><span class="error">${signin.errorMessage}</span></c:if></label>
+	  	<input id="siginin" type="text" name="signin" value="${signin.value}" />
 	</fieldset>
 	<p><button type="submit">Submit</button></p>
 </form>

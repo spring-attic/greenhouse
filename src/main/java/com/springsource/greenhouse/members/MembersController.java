@@ -25,14 +25,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.account.PictureSize;
 
 /**
+ * UI Controllers for managing public member profiles.
  * @author Keith Donald
+ * @author Craig Walls
  */
 @Controller
 public class MembersController {
@@ -44,31 +44,35 @@ public class MembersController {
 		this.profileRepository = profileRepository;
 	}
 
+	/**
+	 * Write the currently signed-in member's profile to the response as JSON.
+	 */
 	@RequestMapping(value="/members/@self", headers="Accept=application/json")
 	public @ResponseBody Profile profile(Account account) {
 		return profileRepository.findByAccountId(account.getId());
 	}
 
+	/**
+	 * Render the requested member's profile as HTML in the user's web browser.
+	 * The profile page is accessible to the general public and does not require signin to view.
+	 */
 	@RequestMapping("/members/{profileKey}")
 	public String profileView(@PathVariable String profileKey, Model model) {
-		Profile profile = profileRepository.findByKey(profileKey);
+		Profile profile = profileRepository.findById(profileKey);
 		model.addAttribute(profile);
 		model.addAttribute("connectedProfiles", profileRepository.findConnectedProfiles(profile.getAccountId()));
 		model.addAttribute("metadata", buildFacebookOpenGraphMetadata(profile));
 		return "members/view";
 	}
-	
-	@RequestMapping("/members/{profileKey}/picture")
-	public String profilePicture(@PathVariable String profileKey, @RequestParam(required=false) PictureSize size) {
-		return "redirect:" + profileRepository.findProfilePictureUrl(profileKey, size);
-	}
-	
+		
 	// internal helpers
-	
+
+	// this metadata is required by Facebook's "Like" widgets and included in the page by meta tags in page header
 	private Map<String, String> buildFacebookOpenGraphMetadata(Profile profile) {
 		Map<String, String> metadata = new HashMap<String, String>();
 		metadata.put("og:title", profile.getDisplayName());
 		metadata.put("og:type", "public_figure");
+		// TODO Greenhouse is hardcoded here
 		metadata.put("og:site_name", "Greenhouse");
 		metadata.put("fb:app_id", facebookAppId);
 		return metadata;		

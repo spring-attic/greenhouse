@@ -29,18 +29,22 @@ import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.SignInNotFoundException;
 
 /**
+ * ResetPasswordService implementation that stores reset password requests in a relational database using the JDBC API.
+ * Delegates to {@link AccountRepository} to actually change a member's password.
+ * Delegates to a {@link ResetPasswordMailer} to send out reset password emails.
+ * Delegates to a {@link SecureRandomStringKeyGenerator} to generate unique reset password tokens.
  * @author Keith Donald
  */
 @Service
 public class JdbcRestPasswordService implements ResetPasswordService {
 
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 
-	private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
 	
-	private ResetPasswordMailer mailer;
+	private final ResetPasswordMailer mailer;
 	
-	private StringKeyGenerator tokenGenerator = new SecureRandomStringKeyGenerator();
+	private final StringKeyGenerator tokenGenerator = new SecureRandomStringKeyGenerator();
 	
 	@Inject
 	public JdbcRestPasswordService(JdbcTemplate jdbcTemplate, AccountRepository accountRepository, ResetPasswordMailer mailer) {

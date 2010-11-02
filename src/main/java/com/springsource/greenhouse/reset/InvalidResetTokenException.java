@@ -16,17 +16,22 @@
 package com.springsource.greenhouse.reset;
 
 /**
+ * The reset password request token presented is not valid.
+ * It may have expired or been already used.
  * @author Keith Donald
  */
 @SuppressWarnings("serial")
 public class InvalidResetTokenException extends Exception {
 
-	private String token;
+	private final String token;
 	
 	public InvalidResetTokenException(String token) {
 		this.token = token;
 	}
 	
+	/**
+	 * The invalid request token value.
+	 */
 	public String getToken() {
 		return token;
 	}

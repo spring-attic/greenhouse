@@ -30,35 +30,49 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.SignInNotFoundException;
 
 /**
+ * UI Controller for resetting user passwords.
+ * This Controller may be accessed by the general public and does not require signin.
+ * However, it should be accessed over SSL since it accepts secure user credentials.
  * @author Keith Donald
  */
 @Controller
 public class ResetPasswordController {
 	
-	private ResetPasswordService service;
+	private final ResetPasswordService service;
 	
 	@Inject
 	public ResetPasswordController(ResetPasswordService service) {
 		this.service = service;
 	}
 	
+	/**
+	 * Render the reset password form to the person as HTML in their web browser.
+	 */
 	@RequestMapping(value="/reset", method=RequestMethod.GET)
 	public void resetPage(Model model) {
 		model.addAttribute("username", new FieldModel<String>());
 	}
 	
+	/**
+	 * Process a request by a person to reset a member password.
+	 * Calls the {@link ResetPasswordService} to send a reset password mail.
+	 * The mail message will contain a request token that must be presented to continue the password reset operation. 
+	 */
 	@RequestMapping(value="/reset", method=RequestMethod.POST)
-	public String sendResetMail(@RequestParam String username, Model model) {
+	public String sendResetMail(@RequestParam String signin, Model model) {
 		try {
-			service.sendResetMail(username);
+			service.sendResetMail(signin);
 			FlashMap.setInfoMessage("An email has been sent to you.  Follow its instructions to reset your password.");
 			return "redirect:/reset";
 		} catch (SignInNotFoundException e) {
-			model.addAttribute("username", FieldModel.error("not on file", username));
+			model.addAttribute("signin", FieldModel.error("not on file", signin));
 			return null;
 		}
 	}
 	
+	/**
+	 * Render a change password form to the user once the reset token is validated.
+	 */
 	@RequestMapping(value="/reset", method=RequestMethod.GET, params="token")
 	public String changePasswordForm(@RequestParam String token, Model model) {
 		if (!service.isValidResetToken(token)) {
@@ -67,7 +81,10 @@ public class ResetPasswordController {
 		model.addAttribute(new ChangePasswordForm());
 		return "reset/changePassword";
 	}	
-	
+
+	/**
+	 * Process the change password submission and reset the user's password.
+	 */
 	@RequestMapping(value="/reset", method=RequestMethod.POST, params="token")
 	public String changePassword(@RequestParam String token, @Valid ChangePasswordForm form, BindingResult formBinding, Model model) {
 		if (formBinding.hasErrors()) {

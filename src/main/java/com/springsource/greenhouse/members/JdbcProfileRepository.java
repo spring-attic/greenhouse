@@ -31,6 +31,7 @@ import com.springsource.greenhouse.account.PictureUrlFactory;
 import com.springsource.greenhouse.account.PictureUrlMapper;
 
 /**
+ * ProfileRepository implementation that loads Profile data from a relational database using the JDBC API.
  * @author Keith Donald
  */
 @Service
@@ -42,6 +43,11 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private final RowMapper<Profile> profileMapper;
 
+	/**
+	 * Creates a new JdbcProfileRepository.
+	 * @param jdbcTemplate the relational data access template
+	 * @param pictureStorage the place where profile pictures are stored; used to get a profile picture URL if the member's profile picture is set 
+	 */
 	@Inject
 	public JdbcProfileRepository(JdbcTemplate jdbcTemplate, FileStorage pictureStorage) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -49,7 +55,7 @@ public class JdbcProfileRepository implements ProfileRepository {
 		profileMapper = new ProfileMapper();
 	}
 	
-	public Profile findByKey(String profileKey) {
+	public Profile findById(String profileKey) {
 		Long accountId = getAccountId(profileKey);
 		return accountId != null ? findByAccountId(accountId) : findByUsername(profileKey);
 	}

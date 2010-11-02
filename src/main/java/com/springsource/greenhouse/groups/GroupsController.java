@@ -75,8 +75,9 @@ public class GroupsController {
 	private Map<String, String> buildOpenGraphMetadata(Group group) {
 		Map<String, String> metadata = new HashMap<String, String>();
 		metadata.put("og:title", group.getName());
-		 // TODO: Not sure if this applies to all groups		
+		 // TODO: "non-profit" is hardcoded		
 		metadata.put("og:type", "non_profit");
+		// TODO Greenhouse is hardcoded here		
 		metadata.put("og:site_name", "Greenhouse");
 		metadata.put("fb:app_id", facebookAppId);
 		return metadata;		

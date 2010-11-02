@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 import com.springsource.greenhouse.validation.Confirm;
 
 /**
+ * Model for a change password or reset password form.
  * @author Keith Donald
  */
 @Confirm(field="password")
@@ -30,6 +31,9 @@ public class ChangePasswordForm {
 
 	private String confirmPassword;
 		
+	/**
+	 * The desired new password.
+	 */
 	public String getPassword() {
 		return password;
 	}
@@ -38,6 +42,10 @@ public class ChangePasswordForm {
 		this.password = password;
 	}
 
+	/**
+	 * A confirmation of the desired password.
+	 * Must match {@link ChangePasswordForm#getPassword()}.
+	 */
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}

@@ -42,8 +42,8 @@ public class JdbcProfileRepositoryTest {
 
 	@Test
 	public void findByKey() {
-		assertExpectedProfile(profileRepository.findByKey("habuma"));
-		assertExpectedProfile(profileRepository.findByKey("1"));
+		assertExpectedProfile(profileRepository.findById("habuma"));
+		assertExpectedProfile(profileRepository.findById("1"));
 	}
 
 	@Test

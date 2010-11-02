@@ -28,6 +28,8 @@ import org.springframework.templating.StringTemplateFactory;
 import org.springframework.web.util.UriTemplate;
 
 /**
+ * Converts a ResetPasswordRequest to a SimpleMailMessage for mailing.
+ * The reset password email text is generated using a String template.
  * @author Keith Donald
  */
 @Component
