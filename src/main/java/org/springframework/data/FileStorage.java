@@ -16,12 +16,23 @@
 package org.springframework.data;
 
 /**
+ * Abstraction for storing files.
  * @author Keith Donald
  */
 public interface FileStorage {
 
+	/**
+	 * Get a store URL for the file identified with the following name.
+	 * @param fileName the relative file name
+	 * @return the full path to the file in the store
+	 */
 	String absoluteUrl(String fileName);
 
+	/**
+	 * Put a file in this store.
+	 * @param file the file data
+	 * @return a URL that can be used to obtain the file
+	 */
 	// TODO exception hierarchy
 	String storeFile(FileData file);
 	

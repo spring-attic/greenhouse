@@ -18,6 +18,7 @@ package org.springframework.templating;
 import org.springframework.core.io.Resource;
 
 /**
+ * Loads String templates from resource files.
  * @author Keith Donald
  */
 public interface StringTemplateLoader {

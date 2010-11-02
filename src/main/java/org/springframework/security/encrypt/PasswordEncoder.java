@@ -16,12 +16,24 @@
 package org.springframework.security.encrypt;
 
 /**
+ * Service interface for encoding passwords.
  * @author Keith Donald
  */
 public interface PasswordEncoder {
 	
+	/**
+	 * Encode the raw password.
+	 * Recommendation: SHA-1 or stronger hash combined with a 8-byte or greater randomly generated salt.
+	 */
 	String encode(String rawPassword);
 	
+	/**
+	 * Verify the encoded password matches the raw password after it is also encoded.
+	 * Returns true if the passwords match, false if they do not.
+	 * @param rawPassword the raw password to encode and match
+	 * @param encodedPassword the encoded password from storage to compare with
+	 * @return true if the raw password, after encoding, matches the encoded password from storage
+	 */
 	boolean matches(String rawPassword, String encodedPassword);
 	
 }

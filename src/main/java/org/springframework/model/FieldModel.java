@@ -16,6 +16,7 @@
 package org.springframework.model;
 
 /**
+ * A model for a form field.
  * @author Keith Donald
  */
 public class FieldModel<T> {
@@ -32,14 +33,23 @@ public class FieldModel<T> {
 		this.value = value;
 	}
 	
+	/**
+	 * True if the field value is invalid.
+	 */
 	public boolean isError() {
 		return errorMessage != null;
 	}
-	
+
+	/**
+	 * Get the reason the field is in an invalid state.
+	 */
 	public String getErrorMessage() {
 		return errorMessage;
 	}
 
+	/**
+	 * Get the actual field value.
+	 */
 	public T getValue() {
 		return value;
 	}

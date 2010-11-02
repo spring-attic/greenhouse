@@ -26,6 +26,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
+ * Map for messages that should survive a redirect.
  * @author Keith Donald
  */
 public final class FlashMap {

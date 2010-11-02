@@ -18,6 +18,7 @@ package org.springframework.security.encrypt;
 import java.io.UnsupportedEncodingException;
 
 /**
+ * Helper for hex-encoding strings.
  * @author Keith Donald
  */
 public class EncodingUtils {

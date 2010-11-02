@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
+ * A single change within a change set.
  * @author Keith Donald
  */
 public class DatabaseChange {
@@ -30,6 +31,9 @@ public class DatabaseChange {
 		this.sql = sql;
 	}
 
+	/**
+	 * Apply this change.
+	 */
 	public void apply(Connection connection) {
 		Statement statement = getStatement(connection);
 		try {

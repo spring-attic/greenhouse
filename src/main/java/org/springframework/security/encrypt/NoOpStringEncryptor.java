@@ -16,6 +16,7 @@
 package org.springframework.security.encrypt;
 
 /**
+ * Encryptor that does nothing. Useful for testing.
  * @author Keith Donald
  */
 public class NoOpStringEncryptor implements StringEncryptor {

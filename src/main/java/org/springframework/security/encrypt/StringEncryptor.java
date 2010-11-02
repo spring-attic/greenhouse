@@ -16,12 +16,19 @@
 package org.springframework.security.encrypt;
 
 /**
+ * Service interface for symmetic string encryption.
  * @author Keith Donald
  */
 public interface StringEncryptor {
 
+	/**
+	 * Encrypt the text string.
+	 */
 	String encrypt(String string);
-	
+
+	/**
+	 * Decrypt the encrypted string.
+	 */
 	String decrypt(String encrypted);
 	
 }

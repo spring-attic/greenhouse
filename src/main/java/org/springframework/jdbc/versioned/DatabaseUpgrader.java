@@ -16,12 +16,22 @@
 package org.springframework.jdbc.versioned;
 
 /**
+ * Service interface for a Database migrator or upgrader.
  * @author Keith Donald
  */
 public interface DatabaseUpgrader {
 
+	/**
+	 * The current version of the Database.
+	 * Returns {@link DatabaseVersion#zero()} if no database has been installed.
+	 */
 	public DatabaseVersion getCurrentDatabaseVersion();
 	
+	/**
+	 * Run this Database upgrader.
+	 * The upgrader will upgrade the database to the latest version.
+	 * It will first consider the current version, then apply the change sets needed to upgrade to the latest version.
+	 */
 	public void run();
 	
 }

@@ -20,6 +20,7 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
 /**
+ * KeyGenerator that uses SecureRandom to generate the byte[] keys.
  * @author Keith Donald
  */
 public final class SecureRandomKeyGenerator implements KeyGenerator {

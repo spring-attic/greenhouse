@@ -30,6 +30,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 /**
+ * Helper for working with the Cipher API.
  * @author Keith Donald
  */
 public class CipherUtils {

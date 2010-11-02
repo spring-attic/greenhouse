@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
 /**
+ * Helper for working with the MessageDigest API.
  * @author Keith Donald
  */
 public class Digester {

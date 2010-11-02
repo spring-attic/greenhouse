@@ -16,12 +16,19 @@
 package org.springframework.templating;
 
 /**
+ * Template that generates a text String from a model.
  * @author Keith Donald
  */
 public interface StringTemplate {
 	
+	/**
+	 * Put a attribute in the model for this template.
+	 */
 	void put(String attribute, Object value);
-	
+
+	/**
+	 * Generate the final text by rendering this template.
+	 */
 	String render();
 	
 }

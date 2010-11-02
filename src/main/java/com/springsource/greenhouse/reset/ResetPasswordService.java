@@ -25,7 +25,7 @@ public interface ResetPasswordService {
 
 	/**
 	 * Send a reset password mail to the member with the signin name.
-	 * The mail contains link the member may activate to reset their password.
+	 * The mail contains a link the member may activate to reset their password.
 	 * The link includes a token query parameter required to complete the reset password request.
 	 * This token may expire after a configurable time period if it goes unused.
 	 * @param signin the member's sign name, which may be their public username or their email address

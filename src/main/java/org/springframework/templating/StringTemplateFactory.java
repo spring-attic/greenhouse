@@ -16,6 +16,7 @@
 package org.springframework.templating;
 
 /**
+ * Factory for a fresh StringTemplate instance that can be used in the local thread of execution.
  * @author Keith Donald
  */
 public interface StringTemplateFactory {

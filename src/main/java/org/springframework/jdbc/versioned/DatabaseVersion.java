@@ -16,6 +16,7 @@
 package org.springframework.jdbc.versioned;
 
 /**
+ * A Database version.
  * @author Keith Donald
  */
 public class DatabaseVersion {

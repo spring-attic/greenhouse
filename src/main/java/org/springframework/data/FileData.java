@@ -16,6 +16,7 @@
 package org.springframework.data;
 
 /**
+ * Data needed to put a file into {@link FileStorage}.
  * @author Keith Donald
  */
 public final class FileData {
@@ -32,14 +33,23 @@ public final class FileData {
 		this.contentType = contentType;
 	}
 
+	/**
+	 * The name of the file.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * The file data as a byte array.
+	 */
 	public byte[] getBytes() {
 		return bytes;
 	}
 
+	/**
+	 * The file content type.
+	 */
 	public String getContentType() {
 		return contentType;
 	}

@@ -28,6 +28,7 @@ import org.jets3t.service.model.S3Object;
 import org.jets3t.service.security.AWSCredentials;
 
 /**
+ * Amazon S3-based file storage.
  * @author Keith Donald
  * @author Craig Walls
  */

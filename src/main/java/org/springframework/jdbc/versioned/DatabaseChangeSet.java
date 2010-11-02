@@ -24,26 +24,36 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 /**
+ * A group of changes that are applied atomatically that upgrade the database from one version to another.
  * @author Keith Donald
  */
 public class DatabaseChangeSet {
 
 	private Set<DatabaseChange> changes = new LinkedHashSet<DatabaseChange>();
 
-	private DatabaseVersion version;
+	private final DatabaseVersion version;
 	
 	public DatabaseChangeSet(DatabaseVersion version) {
 		this.version = version;
 	}
 
+	/**
+	 * Add a change to this change set.
+	 */
 	public void add(DatabaseChange change) {
 		changes.add(change);
 	}
 	
+	/**
+	 * The version the Database will be at after applying this change set.
+	 */
 	public DatabaseVersion getVersion() {
 		return version;
 	}
 	
+	/**
+	 * Apply the changes in this change set to upgrade the database to {@link #getVersion()}.
+	 */
 	public DatabaseVersion apply(DataSource dataSource) {
 		Connection connection = getTransactionalConnection(dataSource);
 		try {

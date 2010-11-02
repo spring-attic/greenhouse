@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import org.springframework.core.io.Resource;
 
 /**
+ * File storage implementation that stores files on the local file system within a configurable base directory.
  * @author Keith Donald
  */
 public class LocalFileStorage implements FileStorage {
@@ -45,6 +46,10 @@ public class LocalFileStorage implements FileStorage {
 		}
 	}
 	
+	/**
+	 * Whether the files stored in local storage should be automatically deleted when the VM shuts down.
+	 * Useful for temporary file stores.
+	 */
 	public void setDeleteOnExit(boolean deleteOnExit) {
 		this.deleteOnExit = deleteOnExit;
 	}

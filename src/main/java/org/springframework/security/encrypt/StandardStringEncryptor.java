@@ -30,6 +30,9 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 /**
+ * StringEncryptor that uses MD5 with DES for symmetric password-based encryption.
+ * Prepends a random salt to each encrypted value to prevent dictionary attacks.
+ * The password should be not be shared.
  * @author Keith Donald
  */
 // TODO evaluate AES for higher-level of security

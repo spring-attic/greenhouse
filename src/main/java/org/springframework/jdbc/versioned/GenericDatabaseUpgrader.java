@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * DatabaseUpgrader implementation that is configured programatically.
  * @author Keith Donald
  */
 public class GenericDatabaseUpgrader implements DatabaseUpgrader {

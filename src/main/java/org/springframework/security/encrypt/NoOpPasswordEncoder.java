@@ -16,6 +16,7 @@
 package org.springframework.security.encrypt;
 
 /**
+ * Password encoder that does nothing.  Useful for testing.
  * @author Keith Donald
  */
 public class NoOpPasswordEncoder implements PasswordEncoder {

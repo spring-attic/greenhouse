@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
+ * Filter that exposes flash messages as request attributes in the next request following a redirect.
  * @author Keith Donald
  */
 public class FlashMapFilter extends OncePerRequestFilter {

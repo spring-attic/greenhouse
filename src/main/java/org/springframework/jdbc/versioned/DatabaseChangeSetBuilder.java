@@ -23,6 +23,7 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.util.StringUtils;
 
 /**
+ * A programmatic builder for a DatabaseChangeSet.
  * @author Keith Donald
  */
 public class DatabaseChangeSetBuilder {

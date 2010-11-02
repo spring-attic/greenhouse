@@ -18,6 +18,7 @@ package org.springframework.security.encrypt;
 import static org.springframework.security.encrypt.EncodingUtils.hexEncode;
 
 /**
+ * StringKeyGenerator that uses SecureRandom to generate randomly-generated hex-encoded String keys.
  * @author Keith Donald
  */
 public final class SecureRandomStringKeyGenerator implements StringKeyGenerator {
