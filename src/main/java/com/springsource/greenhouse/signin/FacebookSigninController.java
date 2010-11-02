@@ -39,7 +39,6 @@ import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
  * @author Craig Walls
  */
 @Controller
-@RequestMapping("/signin/facebook")
 public class FacebookSigninController {
 
 	private final ServiceProvider<FacebookOperations> facebookProvider;
@@ -58,7 +57,7 @@ public class FacebookSigninController {
 	 * For sign-in to succeed, the submitted access token must match a Facebook accessToken on file in our system.
 	 * Notifies the user if the access token is invalid.
 	 */
-	@RequestMapping(value="/", method=RequestMethod.POST)
+	@RequestMapping(value="/signin/facebook", method=RequestMethod.POST)
 	public String signin(@FacebookAccessToken String accessToken) {
 		try {
 			Account account = facebookProvider.findAccountByConnection(accessToken);
