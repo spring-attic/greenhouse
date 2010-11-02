@@ -41,7 +41,6 @@ import com.springsource.greenhouse.members.ProfilePictureService;
  * @author Keith Donald
  */
 @Controller
-@RequestMapping("/connect/facebook")
 public class FacebookConnectController {
 
 	private final ServiceProvider<FacebookOperations> facebookProvider;
@@ -54,7 +53,7 @@ public class FacebookConnectController {
 		this.profilePictureService = profilePictureService;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(value="/connect/facebook", method=RequestMethod.GET)
 	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
 		if (facebookProvider.isConnected(account.getId())) {
 			model.addAttribute("facebookUserId", facebookUserId);
@@ -64,7 +63,7 @@ public class FacebookConnectController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.POST) 
+	@RequestMapping(value="/connect/facebook", method=RequestMethod.POST) 
 	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId,
 			@RequestParam(required=false, defaultValue="false") boolean postToWall, @RequestParam(required=false, defaultValue="false") boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
@@ -81,19 +80,16 @@ public class FacebookConnectController {
 		return "redirect:/connect/facebook";
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE)
+	@RequestMapping(value="/connect/facebook", method=RequestMethod.DELETE)
 	public String disconnectFacebook(Account account, HttpServletRequest request, Authentication authentication) {
 		facebookProvider.disconnect(account.getId());
 		return "redirect:/connect/facebook";
 	}
 	
+	// internal helpers
+	
 	private void postToWall(FacebookOperations api, Account account) {
-		api.updateStatus(
-				"Join me at the Greenhouse!",
-				new FacebookLink(
-						account.getProfileUrl(),
-						"Greenhouse",
-						"Where Spring developers hang out.",
+		api.updateStatus("Join me at the Greenhouse!", new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.",
 			"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 	}
 	

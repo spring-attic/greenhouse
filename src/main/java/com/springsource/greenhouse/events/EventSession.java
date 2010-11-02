@@ -24,7 +24,7 @@ import org.joda.time.DateTime;
 import com.springsource.greenhouse.utils.SubResourceReference;
 
 /**
- * A meeting of interest scheduled during an Event.
+ * A meeting of interest scheduled during an event.
  * A session has an start-time and an end-time that occurs within the range of the Event.
  * A session is typically assigned a Room in a Venue where the Event is held.
  * A session has one or more Leaders that lead attendees in the discussion of the topic of interest.

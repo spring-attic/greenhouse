@@ -25,10 +25,10 @@ import org.joda.time.DateTimeZone;
 import com.springsource.greenhouse.utils.ResourceReference;
 
 /**
- * A happening organized by a Group in the community.
- * An Event has a start time and an end time.
- * It hosts one or more Sessions lead by Leaders.
- * It is hosted at one or more Venues.
+ * A happening organized by a group of members.
+ * An event has a start time and an end time.
+ * It hosts one or more sessions lead by leaders.
+ * It is hosted at one or more venues.
  * @author Keith Donald
  */
 public class Event {

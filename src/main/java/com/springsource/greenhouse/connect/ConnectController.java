@@ -45,7 +45,6 @@ import com.springsource.greenhouse.account.Account;
  * @author Keith Donald
  */
 @Controller
-@RequestMapping("/connect")
 public class ConnectController {
 	
 	private final ServiceProviderFactory serviceProviderFactory;
@@ -68,7 +67,7 @@ public class ConnectController {
 		}
 	}
 
-	@RequestMapping(value="/{name}", method=RequestMethod.GET)
+	@RequestMapping(value="/connect/{name}", method=RequestMethod.GET)
 	public String connect(Account account, @PathVariable String name) {
 		String baseViewPath = "connect/" + name;
 		if (getServiceProvider(name).isConnected(account.getId())) {
@@ -78,7 +77,7 @@ public class ConnectController {
 		}
 	}
 
-	@RequestMapping(value="/{name}", method=RequestMethod.POST)
+	@RequestMapping(value="/connect/{name}", method=RequestMethod.POST)
 	public String connect(@PathVariable String name, WebRequest request) {
 		ServiceProvider<?> provider = getServiceProvider(name);
 		preConnect(provider, request);
@@ -87,7 +86,7 @@ public class ConnectController {
 		return "redirect:" + provider.buildAuthorizeUrl(requestToken.getValue());
 	}
 	
-	@RequestMapping(value="/{name}", method=RequestMethod.GET, params="oauth_token")
+	@RequestMapping(value="/connect/{name}", method=RequestMethod.GET, params="oauth_token")
 	public String authorizeCallback(@PathVariable String name, @RequestParam("oauth_token") String token,
 			@RequestParam(value="oauth_verifier", defaultValue="verifier") String verifier, Account account, WebRequest request) {
 		OAuthToken requestToken = (OAuthToken) request.getAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
@@ -102,7 +101,7 @@ public class ConnectController {
 		return "redirect:/connect/" + name;
 	}
 
-	@RequestMapping(value="/{name}", method=RequestMethod.DELETE)
+	@RequestMapping(value="/connect/{name}", method=RequestMethod.DELETE)
 	public String disconnect(@PathVariable String name, Account account) {
 		getServiceProvider(name).disconnect(account.getId());
 		return "redirect:/connect/" + name;

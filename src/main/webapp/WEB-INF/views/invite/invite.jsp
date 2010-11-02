@@ -4,6 +4,10 @@
 <%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
 <h2>Invite friends to the Greenhouse</h2>
+
+<c:if test="${not empty message}">
+<div class="${message.type}">${message.text}</div>
+</c:if>
 		
 <ul class="listings">
 	<li class="listing">	

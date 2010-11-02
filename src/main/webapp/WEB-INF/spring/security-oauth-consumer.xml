@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+	<!-- Loads ServiceProviders by name -->
 	<bean id="serviceProviderFactory" class="com.springsource.greenhouse.connect.JdbcServiceProviderFactory" />
 
 	<!-- Twitter -->
@@ -28,8 +29,7 @@
 	<!-- Exposes ServiceProvider APIs as request-scoped beans -->
 	<bean class="com.springsource.greenhouse.config.ServiceProvidersApiConfiguration" />
 
-	<!-- Common parent -->
-	
+	<!-- Common serviceProvider parent -->
 	<bean abstract="true" id="serviceProvider" factory-bean="serviceProviderFactory" factory-method="getServiceProvider" />
 				
 </beans>

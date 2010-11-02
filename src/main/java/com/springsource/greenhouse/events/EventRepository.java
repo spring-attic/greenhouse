@@ -35,7 +35,7 @@ public interface EventRepository {
 	List<Event> findUpcomingEvents(Long clientTime);
 
 	/**
-	 * Get the details of an Event.
+	 * Get the details of an event.
 	 * Used to show Event details in a web browser at a friendly URL such as /events/2010/10/chicago.
 	 * @param group the group that organized the Event
 	 * @param year the year the Event happens in (based on Event timezone)
@@ -45,19 +45,19 @@ public interface EventRepository {
 	Event findEventBySlug(String group, Integer year, Integer month, String slug);
 
 	/**
-	 * Get the Search String to use to find conversation, such as tweets, covering the Event.
+	 * Get the string to search for to find conversations, such as tweets, about the event.
 	 * @param eventId the internal event identifier
 	 */
 	String findEventSearchString(Long eventId);
 
 	/**
-	 * Get the Search String to use to find conversation, such as tweets, covering an Event Session.
+	 * Get the string to search for to find conversations such as tweets, covering an event session.
 	 * @param eventId the internal event identifier
 	 */
 	String findSessionSearchString(Long eventId, Integer sessionId);
 
 	/**
-	 * Get the list of Sessions that occur on a day for an attendee.
+	 * Get the list of sessions that occur on a day for an attendee.
 	 * The LocalDate specifying the day is converted to a Interval that begins at the start of the day (inclusive) and ends at the start of the next day (exclusive).
 	 * The Event's {@link Event#getTimeZone() timezone} is applied in this conversion to arrive at the correct milliseconds range.
 	 * @param eventId the internal Event identifier

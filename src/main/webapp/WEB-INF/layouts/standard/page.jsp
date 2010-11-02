@@ -12,10 +12,10 @@
 	<link rel="stylesheet" href="<c:url value="/resources/page.css" />" type="text/css" media="screen" />
 	<tiles:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true" />
 	<c:forEach var="style" items="${styles}">
-		<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
+	<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
 	</c:forEach>
 	<c:forEach var="meta" items="${metadata}">
-		<meta name="${meta.key}" content="${meta.value}"/> 
+	<meta name="${meta.key}" content="${meta.value}"/> 
 	</c:forEach>
 	<script>
 		var application = application || {};

@@ -34,7 +34,6 @@ import com.springsource.greenhouse.account.Account;
  * @author Keith Donald
  */
 @Controller
-@RequestMapping("/develop/apps")
 public class AppController {
 
 	private final AppRepository connectedAppRepository;
@@ -47,7 +46,7 @@ public class AppController {
 	/**
 	 * List all applications to the developer.
 	 */
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(value="/develop/apps", method=RequestMethod.GET)
 	public List<AppSummary> list(Account account) {
 		return connectedAppRepository.findAppSummaries(account.getId());
 	}
@@ -55,7 +54,7 @@ public class AppController {
 	/**
 	 * Render a blank form that allows the developer to register a new application.
 	 */
-	@RequestMapping(value="/new", method=RequestMethod.GET)
+	@RequestMapping(value="/develop/apps/new", method=RequestMethod.GET)
 	public AppForm newForm() {
 		return connectedAppRepository.getNewAppForm();
 	}
@@ -63,7 +62,7 @@ public class AppController {
 	/**
 	 * Register a new application for the developer.
 	 */
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(value="/develop/apps", method=RequestMethod.POST)
 	public String create(@Valid AppForm form, BindingResult bindingResult, Account account) {
 		if (bindingResult.hasErrors()) {
 			return "develop/apps/new";
@@ -74,7 +73,7 @@ public class AppController {
 	/**
 	 * Show the details of an application to the developer.
 	 */
-	@RequestMapping(value="/{slug}", method=RequestMethod.GET)
+	@RequestMapping(value="/develop/apps/{slug}", method=RequestMethod.GET)
 	public String view(@PathVariable String slug, Account account, Model model) {
 		model.addAttribute(connectedAppRepository.findAppBySlug(account.getId(), slug));
 		model.addAttribute("slug", slug);
@@ -84,7 +83,7 @@ public class AppController {
 	/**
 	 * Delete an application for the developer.
 	 */
-	@RequestMapping(value="/{slug}", method=RequestMethod.DELETE)
+	@RequestMapping(value="/develop/apps/{slug}", method=RequestMethod.DELETE)
 	public String delete(@PathVariable String slug, Account account) {
 		connectedAppRepository.deleteApp(account.getId(), slug);
 		return "redirect:/develop/apps";
@@ -93,7 +92,7 @@ public class AppController {
 	/**
 	 * Render a pre-populated form that allows the developer to edit an existing application.
 	 */
-	@RequestMapping(value="/edit/{slug}", method=RequestMethod.GET)
+	@RequestMapping(value="/develop/apps/edit/{slug}", method=RequestMethod.GET)
 	public String editForm(@PathVariable String slug, Account account, Model model) {
 		model.addAttribute(connectedAppRepository.getAppForm(account.getId(), slug));
 		model.addAttribute("slug", slug);
@@ -103,7 +102,7 @@ public class AppController {
 	/**
 	 * Update the details of an application for the developer.
 	 */
-	@RequestMapping(value="/{slug}", method=RequestMethod.PUT)
+	@RequestMapping(value="/develop/apps/{slug}", method=RequestMethod.PUT)
 	public String update(@PathVariable String slug, @Valid AppForm form, BindingResult bindingResult, Account account, Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("slug", slug);			

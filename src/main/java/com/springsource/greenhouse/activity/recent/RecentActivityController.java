@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Keith Donald
  */
 @Controller
-@RequestMapping("/recent")
 public class RecentActivityController {
 	
 	private final RecentActivityRepository repository;
@@ -41,7 +40,7 @@ public class RecentActivityController {
 		this.repository = repository;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, headers="Accept=application/json") 
+	@RequestMapping(value="/recent", method=RequestMethod.GET, headers="Accept=application/json") 
 	public @ResponseBody RecentActivity next(@RequestParam @DateTimeFormat(iso=ISO.DATE_TIME) DateTime last) {
 		return repository.findNext(last);
 	}

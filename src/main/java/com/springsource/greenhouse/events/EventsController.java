@@ -44,12 +44,11 @@ import com.springsource.greenhouse.utils.Location;
  * @author Keith Donald
  */
 @Controller
-@RequestMapping("/events")
 public class EventsController {
 	
-	private EventRepository eventRepository;
+	private final EventRepository eventRepository;
 	
-	private TwitterOperations twitterApi;
+	private final TwitterOperations twitterApi;
 		
 	@Inject
 	public EventsController(EventRepository eventRepository, TwitterOperations twitterApi) {
@@ -64,7 +63,7 @@ public class EventsController {
 	 * Only matches 'GET /events' requests for JSON content; a 404 is sent otherwise.
 	 * TODO send a 406 if an unsupported representation, such as XML, is requested.  See SPR-7353.
 	 */
-	@RequestMapping(method=RequestMethod.GET, headers="Accept=application/json") 
+	@RequestMapping(value="/events", method=RequestMethod.GET, headers="Accept=application/json") 
 	public @ResponseBody List<Event> upcomingEvents(@RequestParam(value="after", required=false) @DateTimeFormat(iso=ISO.DATE_TIME) Long afterMillis) {
 		return eventRepository.findUpcomingEvents(afterMillis);
 	}
@@ -72,7 +71,7 @@ public class EventsController {
 	/**
 	 * Write the list of event favorites to the body of the response.
 	 */
-	@RequestMapping(value="/{eventId}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> favorites(@PathVariable Long eventId, Account account) {
 		return eventRepository.findEventFavorites(eventId, account.getId());
 	}
@@ -81,7 +80,7 @@ public class EventsController {
 	 * Write a page of event tweet search results to the body of the response.
 	 * The page number and size may be provided by the client.  If not specified, defaults to the first page of ten results.
 	 */
-	@RequestMapping(value="/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults tweets(@PathVariable Long eventId,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findEventSearchString(eventId);
 		return searchString != null && searchString.length() > 0 ? twitterApi.search(searchString, page, pageSize) : null;
@@ -91,7 +90,7 @@ public class EventsController {
 	 * Post a tweet about the event to Twitter.
 	 * Write OK status back if this is successful.
 	 */
-	@RequestMapping(value = "/{eventId}/tweets", method = RequestMethod.POST)
+	@RequestMapping(value="/events/{eventId}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation) {
 		twitterApi.updateStatus(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
@@ -100,7 +99,7 @@ public class EventsController {
 	/**
 	 * Retweet another event tweet.
 	 */
-	@RequestMapping(value="/{eventId}/retweet", method=RequestMethod.POST)
+	@RequestMapping(value="/events/{eventId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postRetweet(@PathVariable Long eventId, @RequestParam Long tweetId) {
 		twitterApi.retweet(tweetId);
@@ -110,7 +109,7 @@ public class EventsController {
 	/**
 	 * Write the attendee's list of favorite sessions to the body of the response.
 	 */
-	@RequestMapping(value="/{eventId}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long eventId, Account account) {
 		return eventRepository.findAttendeeFavorites(eventId, account.getId());
 	}
@@ -118,7 +117,7 @@ public class EventsController {
 	/**
 	 * Write the sessions scheduled for the day to the body of the response.
 	 */
-	@RequestMapping(value="/{eventId}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody List<EventSession> sessionsOnDay(@PathVariable Long eventId, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day, Account account) {
 		return eventRepository.findSessionsOnDay(eventId, day, account.getId());
 	}
@@ -127,7 +126,7 @@ public class EventsController {
 	 * Toggle a session as an attendee favorite.
 	 * Write the new favorite status to the body of the response.
 	 */
-	@RequestMapping(value="/{eventId}/sessions/{sessionId}/favorite", method=RequestMethod.PUT)
+	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/favorite", method=RequestMethod.PUT)
 	public @ResponseBody Boolean toggleFavorite(@PathVariable Long eventId, @PathVariable Integer sessionId, Account account) {
 		return eventRepository.toggleFavorite(eventId, sessionId, account.getId());
 	}
@@ -136,7 +135,7 @@ public class EventsController {
 	 * Add or update the rating given to the session by the attendee.
 	 * Write the new average rating for the session to the body of the response.
 	 */
-	@RequestMapping(value="/{eventId}/sessions/{sessionId}/rating", method=RequestMethod.POST)
+	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/rating", method=RequestMethod.POST)
 	public @ResponseBody Float updateRating(@PathVariable Long eventId, @PathVariable Integer sessionId, Account account, @RequestParam Short value, @RequestParam String comment) throws RatingPeriodClosedException {
 		return eventRepository.rate(eventId, sessionId, account.getId(), new Rating(value, comment));
 	}
@@ -144,7 +143,7 @@ public class EventsController {
 	/**
 	 * Write a page of session tweet search results to the body of the response.
 	 */
-	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findSessionSearchString(eventId, sessionId);
 		return searchString != null && searchString.length() > 0 ? twitterApi.search(searchString, page, pageSize) : null;
@@ -153,7 +152,7 @@ public class EventsController {
 	/**
 	 * Post a tweet about a session.
 	 */
-	@RequestMapping(value="/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.POST)
+	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam String status, Location currentLocation) {
 		twitterApi.updateStatus(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
@@ -162,7 +161,7 @@ public class EventsController {
 	/**
 	 * Retweet a session tweet.
 	 */
-	@RequestMapping(value="/{eventId}/sessions/{sessionId}/retweet", method=RequestMethod.POST)
+	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam Long tweetId) {
 		twitterApi.retweet(tweetId);
@@ -174,7 +173,7 @@ public class EventsController {
 	/**
 	 * Render the list of upcoming events as HTML in the client's web browser. 
 	 */
-	@RequestMapping(method=RequestMethod.GET, headers="Accept=text/html")
+	@RequestMapping(value="/events", method=RequestMethod.GET, headers="Accept=text/html")
 	public String upcomingEventsView(Model model, DateTimeZone timeZone) {
 		model.addAttribute(eventRepository.findUpcomingEvents(new DateTime(timeZone).getMillis()));
 		return "events/list";

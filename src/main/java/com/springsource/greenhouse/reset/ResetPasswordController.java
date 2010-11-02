@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.springsource.greenhouse.reset;
 
 import javax.inject.Inject;
@@ -14,8 +29,10 @@ import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.SignInNotFoundException;
 
+/**
+ * @author Keith Donald
+ */
 @Controller
-@RequestMapping("/reset")
 public class ResetPasswordController {
 	
 	private ResetPasswordService service;
@@ -25,12 +42,12 @@ public class ResetPasswordController {
 		this.service = service;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(value="/reset", method=RequestMethod.GET)
 	public void resetPage(Model model) {
 		model.addAttribute("username", new FieldModel<String>());
 	}
 	
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(value="/reset", method=RequestMethod.POST)
 	public String sendResetMail(@RequestParam String username, Model model) {
 		try {
 			service.sendResetMail(username);
@@ -42,7 +59,7 @@ public class ResetPasswordController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, params="token")
+	@RequestMapping(value="/reset", method=RequestMethod.GET, params="token")
 	public String changePasswordForm(@RequestParam String token, Model model) {
 		if (!service.isValidResetToken(token)) {
 			return "reset/invalidToken";
@@ -51,7 +68,7 @@ public class ResetPasswordController {
 		return "reset/changePassword";
 	}	
 	
-	@RequestMapping(method=RequestMethod.POST, params="token")
+	@RequestMapping(value="/reset", method=RequestMethod.POST, params="token")
 	public String changePassword(@RequestParam String token, @Valid ChangePasswordForm form, BindingResult formBinding, Model model) {
 		if (formBinding.hasErrors()) {
 			model.addAttribute("token", token);
