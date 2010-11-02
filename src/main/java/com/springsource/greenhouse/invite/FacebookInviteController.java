@@ -40,6 +40,11 @@ public class FacebookInviteController {
 
 	private final ServiceProvider<FacebookOperations> facebookProvider;
 	
+	/**
+	 * Construct the FacebookInviteController.
+	 * The Facebook ServiceProvider is injected for obtaining the client-side proxy to Facebook's REST API.
+	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
+	 */
 	@Inject
 	public FacebookInviteController(ServiceProvider<FacebookOperations> facebookProvider) {
 		this.facebookProvider = facebookProvider;

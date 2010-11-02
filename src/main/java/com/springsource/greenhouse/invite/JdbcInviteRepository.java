@@ -35,6 +35,7 @@ import com.springsource.greenhouse.activity.action.ActionRepository;
 import com.springsource.greenhouse.utils.Location;
 
 /**
+ * InviteRepository implementation that stores Invites in a relational database using a JDBC API.
  * @author Keith Donald
  */
 @Repository
@@ -78,6 +79,8 @@ public class JdbcInviteRepository implements InviteRepository {
 		}
 		return invite;
 	}
+	
+	// internal helpers
 	
 	private Invite queryForInvite(String token) throws NoSuchInviteException {
 		try {

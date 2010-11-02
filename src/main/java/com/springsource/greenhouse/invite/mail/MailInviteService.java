@@ -21,10 +21,17 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.invite.Invitee;
 
 /**
+ * A service for sending invites out by email.
  * @author Keith Donald
  */
 public interface MailInviteService {
 
-	void sendInvite(Account account, List<Invitee> to, String invitationText);
+	/**
+	 * Send an invite from the member to the list of invitees.
+	 * @param from the member account
+	 * @param to the list of invitees
+	 * @param invitationBody the member's personalized invitation body, which may be a template that contains $invitee$ variable references referring to Invitee properties.
+	 */
+	void sendInvite(Account from, List<Invitee> to, String invitationBody);
 
 }

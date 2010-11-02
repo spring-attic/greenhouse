@@ -31,6 +31,7 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.connect.ServiceProvider;
 
 /**
+ * UI Controller for the Twitter invite page.
  * @author Keith Donald
  */
 @Controller
@@ -43,6 +44,10 @@ public class TwitterInviteController {
 		this.twitterProvider = twitterProvider;
 	}
 	
+	/**
+	 * Show the Twitter invite page to the member.
+	 * Puts the user's twitter screen name in the model to pre-populate the friend finder form.
+	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
 		String twitterId = twitterProvider.getProviderAccountId(account.getId());	
@@ -51,8 +56,14 @@ public class TwitterInviteController {
 		}
 	}
 
+	/**
+	 * Render the list of user's Twitter followers that are already members of the community.
+	 * Generally invoked in an Ajax request via JavaScript; if so, renders a partial HTML fragment back.
+	 * If JavaScript has been disabled, should re-render the entire invite page with the results populated.
+	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.POST)
 	// TODO: progressive enhancement: redirect to a full results page if web request is not an ajax request
+	// TODO: consider making a Get request instead of a Post since there are no side effects
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
 			List<String> screenNames = twitterProvider.getServiceOperations(account.getId()).getFriends(username);

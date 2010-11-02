@@ -18,6 +18,8 @@ package com.springsource.greenhouse.invite;
 import com.springsource.greenhouse.utils.EmailUtils;
 
 /**
+ * A person an invite should be, or has been sent to.
+ * Someone you would like to see join our community.
  * @author Keith Donald
  */
 public final class Invitee {
@@ -37,18 +39,36 @@ public final class Invitee {
 		this.email = email;
 	}
 
+	/**
+	 * The first name of the person.
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
+	/**
+	 * The last name of the person.
+	 */
 	public String getLastName() {
 		return lastName;
 	}
 
+	/**
+	 * The email address the invite should be sent to.
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * Parse an Invitee instance from a String in the format <code>[firstName] [lastName] &lt;email&gt;</code>.
+	 * For example: Bob Sanders &lt;bob@sanders.com&gt;.
+	 * The first name and last name fields are optional.
+	 * If only one name field is provided, it is parsed as the firstName.
+	 * @param inviteeString the invitee string to parse
+	 * @return the parsed Invitee
+	 * @throws IllegalArgumentException if parsing failed due to a format error
+	 */
 	public static Invitee valueOf(String inviteeString) {
 		if (inviteeString == null || inviteeString.length() == 0) {
 			throw new IllegalArgumentException("The Invitee string to parse cannot be null or empty");

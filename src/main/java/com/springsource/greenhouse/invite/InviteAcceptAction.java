@@ -22,6 +22,7 @@ import com.springsource.greenhouse.activity.action.Action;
 import com.springsource.greenhouse.utils.Location;
 
 /**
+ * Indicates that a invitee has accepted his or her invite by signing up as a member of our community.
  * @author Keith Donald
  */
 public final class InviteAcceptAction extends Action {
@@ -36,16 +37,22 @@ public final class InviteAcceptAction extends Action {
 		this.sentTime = sentTime;
 	}
 	
+	/**
+	 * The id of the member account that sent the invite.
+	 */
 	public Long getSentBy() {
 		return sentBy;
 	}
-	
+
+	/**
+	 * The time the invite was originally sent.
+	 */
 	public DateTime getSentTime() {
 		return sentTime;
 	}
 	
 	public String toString() {
-		// TODO Account.gender needs to be preserved
+		// TODO Account.gender needs to be preserved for his/her text
 		return getAccount().getFullName() + " accepted his Greenhouse invitation";
 	}
 	

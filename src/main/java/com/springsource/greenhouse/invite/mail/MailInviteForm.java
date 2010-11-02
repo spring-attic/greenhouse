@@ -22,6 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.springsource.greenhouse.invite.Invitee;
 
 /**
+ * Model backing the email invite form.
  * @author Keith Donald
  */
 public class MailInviteForm {
@@ -32,6 +33,10 @@ public class MailInviteForm {
 	@NotEmpty
 	private String invitationText;
 
+	/**
+	 * The list of inviteees to send the invite to.
+	 * Submitted as a comma-delimited string value and converted to a List by the conversion system.
+	 */
 	public List<Invitee> getInvitees() {
 		return invitees;
 	}
@@ -40,6 +45,10 @@ public class MailInviteForm {
 		this.invitees = invitees;
 	}
 
+	/**
+	 * The body text of the invitation.
+	 * May be personalized by the member sending out the invite.
+	 */
 	public String getInvitationText() {
 		return invitationText;
 	}

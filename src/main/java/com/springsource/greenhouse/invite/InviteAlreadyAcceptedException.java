@@ -16,6 +16,8 @@
 package com.springsource.greenhouse.invite;
 
 /**
+ * Thrown if an invite has already been accepted and you try to accept it again.
+ * You can only accept an invite once.
  * @author Keith Donald
  */
 @SuppressWarnings("serial")

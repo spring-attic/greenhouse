@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.invite;
 
 /**
+ * Thrown when an invite could not be found because one indexed by the provided token does not exist.
  * @author Keith Donald
  */
 @SuppressWarnings("serial")

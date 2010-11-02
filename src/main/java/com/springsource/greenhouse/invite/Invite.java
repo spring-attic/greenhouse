@@ -19,6 +19,7 @@ import com.springsource.greenhouse.account.ProfileReference;
 import com.springsource.greenhouse.signup.SignupForm;
 
 /**
+ * A invitation to join our community sent to an invitee by a member.
  * @author Keith Donald
  */
 public final class Invite {
@@ -35,18 +36,32 @@ public final class Invite {
 		this.accepted = accepted;
 	}
 
+	/**
+	 * The person this invite is addressed to.
+	 */
 	public Invitee getInvitee() {
 		return invitee;
 	}
 
+	/**
+	 * A reference to the profile of the member who sent the invite.
+	 * Used to link to the member's profile when displaying the invite to the invitee.
+	 */
 	public ProfileReference getSentBy() {
 		return sentBy;
 	}
 
+	/**
+	 * Whether or not this invite has been accepted.
+	 */
 	public boolean isAccepted() {
 		return accepted;
 	}
-	
+
+	/**
+	 * A factory method that populates a {@link SignupForm} model from this Invite.
+	 * Pre-populates fields to make it as simple as possible for the invitee to sign up.
+	 */
 	public SignupForm createSignupForm() {
 		SignupForm form = new SignupForm();
 		form.setFirstName(invitee.getFirstName());

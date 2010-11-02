@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.invite;
 
 /**
+ * Base class for invite exceptions.
  * @author Keith Donald
  */
 @SuppressWarnings("serial")
@@ -28,6 +29,9 @@ public abstract class InviteException extends Exception {
 		this.token = token;
 	}
 
+	/**
+	 * The token identifying the invite.
+	 */
 	public String getToken() {
 		return token;
 	}

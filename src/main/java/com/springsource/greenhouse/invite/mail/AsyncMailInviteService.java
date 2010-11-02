@@ -39,6 +39,10 @@ import com.springsource.greenhouse.invite.InviteRepository;
 import com.springsource.greenhouse.invite.Invitee;
 
 /**
+ * A MailInviteService implementation that sends email invites asynchronously in a separate thread.
+ * Relies on Spring's @Async support enabled by AspectJ for the asynchronous behavior.
+ * Uses a StringTemplate to generate the invitation mail text from a template.
+ * The text will contain a link to the invite accept page and instruct the invitee to activate it.
  * @author Keith Donald
  */
 @Service
@@ -50,6 +54,12 @@ public class AsyncMailInviteService implements MailInviteService {
 
 	private final UriTemplate acceptUriTemplate;
 	
+	/**
+	 * Creates the AsyncMailInviteService.
+	 * @param mailSender the object that actually does the mail delivery using the JavaMail API.
+	 * @param inviteRepository the interface for saving the invite for retrieval later
+	 * @param acceptUriTemplate a template for generating the URL the invitee should visit to accept the invite; defaults to a secure application URL e.g. https://host/invite/accept?token={token}
+	 */
 	@Inject
 	public AsyncMailInviteService(MailSender mailSender, InviteRepository inviteRepository, @Value("${application.secureUrl}/invite/accept?token={token}") String acceptUriTemplate) {
 		this.mailSender = mailSender;
@@ -57,21 +67,21 @@ public class AsyncMailInviteService implements MailInviteService {
 		this.acceptUriTemplate = new UriTemplate(acceptUriTemplate);
 	}
 
-	public void sendInvite(Account from, List<Invitee> to, String invite) {
+	public void sendInvite(Account from, List<Invitee> to, String invitationBody) {
 		StringTemplate textTemplate = textTemplateFactory.getStringTemplate();
 		textTemplate.put("account", from);
-		StringTemplate bodyTemplate = new LocalStringTemplate(invite);
+		StringTemplate bodyTemplate = new LocalStringTemplate(invitationBody);
 		for (Invitee invitee : to) {
 			bodyTemplate.put("invitee", invitee);
-			String body = bodyTemplate.render();
-			textTemplate.put("body", body);
+			textTemplate.put("body",  bodyTemplate.render());
 			String token = tokenGenerator.generateKey();
 			textTemplate.put("acceptUrl", acceptUriTemplate.expand(token));
-			String text = textTemplate.render();
-			send(from, invitee, text, token);
+			send(from, invitee, textTemplate.render(), token);
 		}
 	}
 
+	// internal helpers
+	
 	@Async
 	@Transactional
 	private void send(Account from, Invitee to, String text, String token) {

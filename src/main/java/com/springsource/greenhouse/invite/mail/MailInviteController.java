@@ -31,6 +31,7 @@ import org.springframework.web.flash.FlashMap;
 import com.springsource.greenhouse.account.Account;
 
 /**
+ * UI Controller for sending email invites.
  * @author Keith Donald
  */
 @Controller
@@ -45,13 +46,21 @@ public class MailInviteController {
 		this.inviteService = inviteService;
 	}
 
+	/**
+	 * Render the mail invite form as HTML in the web browser.
+	 * The invitation text is pre-populated with some standard text that may be customized by the sender.
+	 */
 	@RequestMapping(value="/invite/mail", method=RequestMethod.GET)
 	public MailInviteForm invitePage(Account account) {
 		MailInviteForm form = new MailInviteForm();
 		form.setInvitationText(renderStandardInvitationText(account));
 		return form;
 	}
-	
+
+	/**
+	 * Process the invite form submission and send out the invites.
+	 * On success, redirect back to the invite form and render a success message.
+	 */
 	@RequestMapping(value="/invite/mail", method=RequestMethod.POST)
 	public String sendInvites(@Valid MailInviteForm form, BindingResult result, Account account) {
 		if (result.hasErrors()) {

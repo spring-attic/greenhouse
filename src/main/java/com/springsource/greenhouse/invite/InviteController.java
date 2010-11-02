@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.social.facebook.FacebookUserId;
+import org.springframework.social.facebook.FacebookWebArgumentResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,6 +38,7 @@ import com.springsource.greenhouse.signup.SignupHelper;
 import com.springsource.greenhouse.signup.SignupHelper.SignupCallback;
 
 /**
+ * UI Controller for main invite page and the invite acceptance flow.
  * @author Keith Donald
  */
 @Controller
@@ -52,11 +54,19 @@ public class InviteController {
 		this.signupHelper = new SignupHelper(accountRepository, signupGateway);
 	}
 
+	/**
+	 * Show the root invite page to the member as HTML in their web browser.
+	 * From this page the user can invite Twitter followers, Facebook friends, and email contacts.
+	 * The FacebookUserID obtained from a cookie via {@link FacebookWebArgumentResolver} is exported to the model so the member Facebook's login status can be determined.
+	 */
 	@RequestMapping(value="/invite", method=RequestMethod.GET)
 	public void invitePage(@FacebookUserId String facebookUserId, Model model) {
 		model.addAttribute("facebookUserId", facebookUserId);
 	}
 	
+	/**
+	 * Show the invitee their invite and allow them to accept it.
+	 */
 	@RequestMapping(value="/invite/accept", method=RequestMethod.GET)
 	public String acceptInvitePage(@RequestParam String token, Model model, HttpServletResponse response) throws IOException {
 		try {
@@ -72,6 +82,11 @@ public class InviteController {
 		}
 	}
 
+	/**
+	 * Accept an invite on behalf of an invitee.
+	 * A new member account will be created.
+	 * If everything is successful, the invitee will be signed in under their new account and redirected to the home page.
+	 */
 	@RequestMapping(value="/invite/accept", method=RequestMethod.POST)
 	public String acceptInvite(final @RequestParam String token, @Valid SignupForm form, BindingResult formBinding, Model model) {
 		if (formBinding.hasErrors()) {
@@ -85,6 +100,8 @@ public class InviteController {
 		return result ? "redirect:/" : form(token, model);
 	}
 
+	// internal helpers
+	
 	private String form(String token, Model model) {
 		model.addAttribute("token", token);
 		return null;
