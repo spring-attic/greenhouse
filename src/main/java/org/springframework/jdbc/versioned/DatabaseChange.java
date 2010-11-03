@@ -21,6 +21,7 @@ import java.sql.Statement;
 
 /**
  * A single change within a change set.
+ * Never applied indepently, always applied as part of an atomic {@link DatabaseChangeSet}.
  * @author Keith Donald
  */
 public class DatabaseChange {

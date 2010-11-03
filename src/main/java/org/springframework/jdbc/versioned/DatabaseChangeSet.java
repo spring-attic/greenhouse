@@ -24,15 +24,19 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 /**
- * A group of changes that are applied atomatically that upgrade the database from one version to another.
+ * A group of changes that should be applied atomically to upgrade the database from one version to another.
+ * The changes are applied in the order they are added to this change set.
  * @author Keith Donald
  */
-public class DatabaseChangeSet {
+public class DatabaseChangeSet implements Comparable<DatabaseChangeSet> {
 
-	private Set<DatabaseChange> changes = new LinkedHashSet<DatabaseChange>();
+	private final Set<DatabaseChange> changes = new LinkedHashSet<DatabaseChange>();
 
 	private final DatabaseVersion version;
 	
+	/**
+	 * Constructs a DatabaseChangeSet that upgrades the Database to version.
+	 */
 	public DatabaseChangeSet(DatabaseVersion version) {
 		this.version = version;
 	}
@@ -50,9 +54,34 @@ public class DatabaseChangeSet {
 	public DatabaseVersion getVersion() {
 		return version;
 	}
+
+	public int hashCode() {
+		return version.hashCode();
+	}
 	
+	public boolean equals(Object o) {
+		if (!(o instanceof DatabaseChangeSet)) {
+			return false;
+		}
+		DatabaseChangeSet changeSet = (DatabaseChangeSet) o;
+		return version.equals(changeSet.version);
+	}
+	
+	public int compareTo(DatabaseChangeSet changeSet) {
+		if (version.lessThan(changeSet.getVersion())) {
+			return -1;
+		} else if (version.greaterThan(changeSet.getVersion())){
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
 	/**
-	 * Apply the changes in this change set to upgrade the database to {@link #getVersion()}.
+	 * Apply the changes in this change set to upgrade the database to {@link #getVersion() version}.
+	 * Should only be called if the version of the Database is less than the version of this change set.
+	 * Only upgrade the Database version if all changes in this set are applied successfully.
+	 * If any change fails, the entire set will be rolled back and no changes will be applied.
 	 */
 	public DatabaseVersion apply(DataSource dataSource) {
 		Connection connection = getTransactionalConnection(dataSource);

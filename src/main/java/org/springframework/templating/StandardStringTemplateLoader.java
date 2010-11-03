@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.core.io.Resource;
 
 /**
+ * StringTemplateLoader that caches parsed templates in a concurrent map.
  * @author Keith Donald
  */
 public class StandardStringTemplateLoader implements StringTemplateLoader {
@@ -31,7 +32,7 @@ public class StandardStringTemplateLoader implements StringTemplateLoader {
 		templateFactories = new ConcurrentHashMap<Resource, ResourceStringTemplateFactory>();
 	}
 
-	public StringTemplate getStringTemplate(Resource resource) {
+	public StringTemplate loadStringTemplate(Resource resource) {
 		ResourceStringTemplateFactory factory = templateFactories.get(resource);
 		if (factory == null) {
 			factory = new ResourceStringTemplateFactory(resource);

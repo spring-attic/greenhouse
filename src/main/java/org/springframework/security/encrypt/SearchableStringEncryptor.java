@@ -28,8 +28,9 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 /**
- * String encryptor that applies password-based MD5 + DES encyption.
- * Does not apply any salt so the encrypted value can be queried against.
+ * A string encryptor that applies password-based MD5 plus DES symmetric key encyption.
+ * Note: this encryptor does not apply any salt.
+ * Designed to be used to encrypt fields that are queryable; for example, a indexed field such as an OAuth apiKey.
  * @author Keith Donald
  */
 //TODO evaluate AES for higher-level of security

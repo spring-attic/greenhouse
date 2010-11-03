@@ -29,6 +29,7 @@ import org.jets3t.service.security.AWSCredentials;
 
 /**
  * Amazon S3-based file storage.
+ * Allows files to be stored in S3.
  * @author Keith Donald
  * @author Craig Walls
  */
@@ -38,6 +39,12 @@ public class S3FileStorage implements FileStorage {
 
 	private final String bucketName;
 	
+	/**
+	 * Creates a S3-based file storage.
+	 * @param accessKey the S3 access key
+	 * @param secretAccessKey S3 the secret
+	 * @param bucketName the bucket in your account where files should be stored
+	 */
 	public S3FileStorage(String accessKey, String secretAccessKey, String bucketName) {
 		awsCredentials = new AWSCredentials(accessKey, secretAccessKey);
 		this.bucketName = bucketName;
@@ -46,7 +53,6 @@ public class S3FileStorage implements FileStorage {
 	public String absoluteUrl(String fileName) {
 		return "http://" + bucketName + "/" + fileName;
 	}
-
 
 	public String storeFile(FileData file) {
 		S3Service s3 = createS3Service();
@@ -71,6 +77,8 @@ public class S3FileStorage implements FileStorage {
 		}
 		return absoluteUrl(file.getName());
 	}
+	
+	// internal helpers
 	
 	private S3Service createS3Service() {
 		try {

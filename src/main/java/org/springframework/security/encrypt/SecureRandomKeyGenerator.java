@@ -20,7 +20,8 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
 /**
- * KeyGenerator that uses SecureRandom to generate the byte[] keys.
+ * A KeyGenerator that uses SecureRandom to generate byte array-based keys.
+ * Defaults to 8 byte keys produced by the SHA1PRNG algorithm developed by the Sun Provider.
  * @author Keith Donald
  */
 public final class SecureRandomKeyGenerator implements KeyGenerator {
@@ -29,14 +30,23 @@ public final class SecureRandomKeyGenerator implements KeyGenerator {
 
     private final int keyLength;
     
+    /**
+     * Creates a secure random key generator using the defaults.
+     */
     public SecureRandomKeyGenerator() {
     	this(DEFAULT_ALGORITHM, DEFAULT_PROVIDER, DEFAULT_KEY_LENGTH);
     }
-    
+
+    /**
+     * Creates a secure random key generator with a custom key length.
+     */
     public SecureRandomKeyGenerator(int keyLength) {
     	this(DEFAULT_ALGORITHM, DEFAULT_PROVIDER, keyLength);    	
     }
-    
+
+    /**
+     * Creates a secure random key generator that is fully customized.
+     */
     public SecureRandomKeyGenerator(String algorithm, String provider, int keyLength) {
         this.random = createSecureRandom(algorithm, provider, keyLength);
         this.keyLength = keyLength;
@@ -51,6 +61,8 @@ public final class SecureRandomKeyGenerator implements KeyGenerator {
         random.nextBytes(bytes);
         return bytes;
 	}
+	
+	// internal helpers
 	
 	private SecureRandom createSecureRandom(String algorithm, String provider, int keyLength) {
 		try {

@@ -30,7 +30,8 @@ public interface DatabaseUpgrader {
 	/**
 	 * Run this Database upgrader.
 	 * The upgrader will upgrade the database to the latest version.
-	 * It will first consider the current version, then apply the change sets needed to upgrade to the latest version.
+	 * It will first determine the current version of the Database, then apply the change sets needed to upgrade the Database to the latest version.
+	 * If the Database is already at the latest version, no action is taken. 
 	 */
 	public void run();
 	

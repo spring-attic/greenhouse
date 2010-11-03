@@ -16,6 +16,9 @@
 package org.springframework.templating;
 
 /**
+ * A StringTemplate implementation constructed from template text.
+ * The text is parsed and the template is readied for rendering.
+ * Instances of this object are stateful and should not be shared between threads.
  * @author Keith Donald
  */
 public class LocalStringTemplate implements StringTemplate {

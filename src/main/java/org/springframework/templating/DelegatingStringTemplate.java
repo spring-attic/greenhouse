@@ -16,6 +16,8 @@
 package org.springframework.templating;
 
 /**
+ * Package-private helper that delegates to org.antlr.stringtemplate as the actual StringTemplate implementation.
+ * Encapsulates the dependency on Terrence Parr's StringTemplate implementation.
  * @author Keith Donald
  */
 class DelegatingStringTemplate implements StringTemplate {

@@ -30,14 +30,14 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 /**
- * Helper for working with the Cipher API.
+ * Static helper for working with the Cipher API.
  * @author Keith Donald
  */
 public class CipherUtils {
 	
-	private CipherUtils() {		
-	}
-	
+	/**
+	 * Generates a SecretKey.
+	 */
 	public static SecretKey newSecretKey(String algorithm, String secret) {
 		try {
 			PBEKeySpec pbeKeySpec = new PBEKeySpec(secret.toCharArray());
@@ -49,7 +49,10 @@ public class CipherUtils {
 			throw new IllegalArgumentException("Not a valid secert key", e);
 		}
 	}
-		
+
+	/**
+	 * Constructs a new Cipher.
+	 */
 	public static Cipher newCipher(String algorithm) {
 		try {
 			return Cipher.getInstance(algorithm);
@@ -59,7 +62,10 @@ public class CipherUtils {
 			throw new IllegalStateException("Should not happen", e);
 		}
 	}
-	
+
+	/**
+	 * Initializes the Cipher for use.
+	 */
 	public static void initCipher(Cipher cipher, int mode, SecretKey secretKey, byte[] salt, int iterationCount) {
 		try {
 			cipher.init(mode, secretKey, new PBEParameterSpec(salt, iterationCount));
@@ -69,7 +75,10 @@ public class CipherUtils {
 			throw new IllegalStateException("Unable to initialize due to invalid decryption parameter spec", e);
 		}
 	}
-	
+
+	/**
+	 * Invokes the Cipher to perform encryption or decryption (depending on the initialized mode).
+	 */
 	public static byte[] doFinal(Cipher cipher, byte[] input) {
 		try {
 			return cipher.doFinal(input);
@@ -79,4 +88,8 @@ public class CipherUtils {
 			throw new IllegalStateException("Unable to invoke Cipher due to bad padding", e);
 		}		
 	}
+
+	private CipherUtils() {		
+	}
+	
 }

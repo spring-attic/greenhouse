@@ -31,63 +31,92 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public final class FlashMap {
 	
-	static final String FLASH_MAP_ATTRIBUTE = FlashMap.class.getName();
+	static final String FLASH_MAP_SESSION_ATTRIBUTE = FlashMap.class.getName();
 	
+	/**
+	 * Get the Flash Map for the current servlet request.
+	 * Creates one if necessary.
+	 * @param request the web request
+	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getCurrent(HttpServletRequest request) {
-		HttpSession session = request.getSession(); 
-		Map<String, Object> flash = (Map<String, Object>) session.getAttribute(FLASH_MAP_ATTRIBUTE);
-		if (flash == null) {
-			flash = new HashMap<String, Object>();
-			session.setAttribute(FLASH_MAP_ATTRIBUTE, flash);
+		HttpSession session = request.getSession();
+		synchronized (session) {
+			Map<String, Object> flash = (Map<String, Object>) session.getAttribute(FLASH_MAP_SESSION_ATTRIBUTE);
+			if (flash == null) {
+				flash = new HashMap<String, Object>();
+				session.setAttribute(FLASH_MAP_SESSION_ATTRIBUTE, flash);
+			}
+			return flash;
 		}
-		return flash;
 	}
 	
-	private FlashMap() {
+	/**
+	 * Put an attribute in the current flash map.
+	 * @param name the attribute name
+	 * @param value the attribute value
+	 */
+	public static void put(String name, Object value) {
+		getCurrent(getRequest(RequestContextHolder.currentRequestAttributes())).put(name, value);
 	}
 
-	public static void put(String key, Object value) {
-		getCurrent(getRequest(RequestContextHolder.currentRequestAttributes())).put(key, value);
-	}
-
+	/**
+	 * Set the 'message' attribute to a info {@link Message} that renders the info text. 
+	 */
 	public static void setInfoMessage(String info) {
-		put(MESSAGE_KEY, new Message(MessageType.info, info));
+		put(MESSAGE_ATTRIBUTE, new Message(MessageType.iNFO, info));
 	}
 
+	/**
+	 * Set the 'message' attribute to a warning {@link Message} that renders the warning text. 
+	 */
 	public static void setWarningMessage(String warning) {
-		put(MESSAGE_KEY, new Message(MessageType.warning, warning));
+		put(MESSAGE_ATTRIBUTE, new Message(MessageType.WARNING, warning));
 	}
 
+	/**
+	 * Set the 'message' attribute to a error {@link Message} that renders the error text. 
+	 */
 	public static void setErrorMessage(String error) {
-		put(MESSAGE_KEY, new Message(MessageType.error, error));
+		put(MESSAGE_ATTRIBUTE, new Message(MessageType.ERROR, error));
 	}
 
+	/**
+	 * Set the 'message' attribute to a success {@link Message} that renders the success text. 
+	 */
 	public static void setSuccessMessage(String success) {
-		put(MESSAGE_KEY, new Message(MessageType.success, success));
+		put(MESSAGE_ATTRIBUTE, new Message(MessageType.SUCCESS, success));
 	}
 
-	private static HttpServletRequest getRequest(RequestAttributes requestAttributes) {
-		return ((ServletRequestAttributes)requestAttributes).getRequest();
-	}
-
-	private static final String MESSAGE_KEY = "message";
-
+	/**
+	 * A message to display to the user.
+	 * Has a type indicating the kind of message.
+	 * @author Keith Donald
+	 */
 	public static final class Message {
 		
 		private final MessageType type;
 		
 		private final String text;
 
+		/**
+		 * Creates a new Message of a certain type consisting of the text provided.
+		 */
 		public Message(MessageType type, String text) {
 			this.type = type;
 			this.text = text;
 		}
 
+		/**
+		 * The type of message; such as info, warning, error, or success.
+		 */
 		public MessageType getType() {
 			return type;
 		}
 
+		/**
+		 * The info text.
+		 */
 		public String getText() {
 			return text;
 		}
@@ -98,8 +127,21 @@ public final class FlashMap {
 	
 	}
 	
+	/**
+	 * Enumeration of Message types.
+	 * @author Keith Donald
+	 */
 	public static enum MessageType {
-		info, success, warning, error
+		iNFO, SUCCESS, WARNING, ERROR
 	}
-	
+
+	private static HttpServletRequest getRequest(RequestAttributes requestAttributes) {
+		return ((ServletRequestAttributes)requestAttributes).getRequest();
+	}
+
+	private static final String MESSAGE_ATTRIBUTE = "message";
+
+	private FlashMap() {
+	}
+
 }

@@ -23,22 +23,35 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.util.StringUtils;
 
 /**
- * A programmatic builder for a DatabaseChangeSet.
+ * A fluent builder for constructing a DatabaseChangeSet programatically.
+ * Changes are applied in the order they are {@link #addChange(Resource) added} to the change set.
  * @author Keith Donald
  */
 public class DatabaseChangeSetBuilder {
 	
 	private final DatabaseChangeSet changeSet;
 	
+	/**
+	 * Constructs a builder that builds a change set that upgrades the database to the version specified.
+	 * @param version the target database version
+	 */
 	public DatabaseChangeSetBuilder(DatabaseVersion version) {
 		changeSet = new DatabaseChangeSet(version);
 	}
 
+	/**
+	 * Adds a change to the change set under construction that applies the SQL contained in the resource.
+	 * @param resource the SQL resource
+	 * @return this, for fluent call chaining
+	 */
 	public DatabaseChangeSetBuilder addChange(Resource resource) {
 		changeSet.add(new DatabaseChange(readSql(resource)));
 		return this;
 	}
 
+	/**
+	 * Called at the end of construction to get the fully-built ChangeSet.
+	 */
 	public DatabaseChangeSet getChangeSet() {
 		return changeSet;
 	}
@@ -53,6 +66,7 @@ public class DatabaseChangeSetBuilder {
 		}		
 	}
 	
+	// TODO this code is duplicated from ResourceDatabasePopulator as well
 	private String readScript(Resource resource) throws IOException {
 		EncodedResource encoded = resource instanceof EncodedResource ? (EncodedResource) resource : new EncodedResource(resource);
 		LineNumberReader lnr = new LineNumberReader(encoded.getReader());

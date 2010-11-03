@@ -21,13 +21,14 @@ import java.security.NoSuchProviderException;
 
 /**
  * Helper for working with the MessageDigest API.
+ * Performs 1024 iterations of the hashing algorithm per digest to aid in protecting against brute force attacks.
  * @author Keith Donald
  */
 public class Digester {
 
-	private MessageDigest messageDigest;
+	private final MessageDigest messageDigest;
 
-	private int iterations = 1000;
+	private final int iterations = 1024;
 	
 	public Digester(String algorithm, String provider) {
 		try {

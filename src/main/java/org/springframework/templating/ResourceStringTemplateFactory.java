@@ -23,12 +23,17 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 
 /**
+ * A StringTemplate factory that creates template instances from a single Resource.
  * @author Keith Donald
  */
 public final class ResourceStringTemplateFactory implements StringTemplateFactory {
 	
 	private final org.antlr.stringtemplate.StringTemplate compiledPrototype;
 	
+	/**
+	 * Creates a StringTemplateFactory that creates its StringTemplate instances from the resource.
+	 * @param resource the resource where the template text is defined
+	 */
 	public ResourceStringTemplateFactory(Resource resource) {
 		this.compiledPrototype = createPrototype(resource);
 	}

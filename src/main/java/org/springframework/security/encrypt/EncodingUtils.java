@@ -18,11 +18,14 @@ package org.springframework.security.encrypt;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Helper for hex-encoding strings.
+ * Helper for encoding objects.
  * @author Keith Donald
  */
 public class EncodingUtils {
 
+	/**
+	 * Encode the byte array into a hex String.
+	 */
 	public static String hexEncode(byte[] bytes) {
 		StringBuilder result = new StringBuilder();
 		char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -34,6 +37,9 @@ public class EncodingUtils {
 		return result.toString();
 	}
 
+	/**
+	 * Decode the hex String into a byte array.
+	 */
 	public static byte[] hexDecode(String s) {
 		int len = s.length();
 		byte[] r = new byte[len / 2];
@@ -54,6 +60,9 @@ public class EncodingUtils {
 		return r;
 	}
 
+	/**
+	 * Get the bytes of the String in UTF-8 encoded form.
+	 */
 	public static byte[] utf8Encode(String string) {
 		try {
 			return string.getBytes("UTF-8");
@@ -62,6 +71,9 @@ public class EncodingUtils {
 		}
 	}
 
+	/**
+	 * Decode the bytes in UTF-8 form into a String.
+	 */
 	public static String utf8Decode(byte[] bytes) {
 		try {
 			return new String(bytes, "UTF-8");
@@ -70,6 +82,9 @@ public class EncodingUtils {
 		}
 	}
 
+	/**
+	 * Combine the individual byte arrays into one array.
+	 */
 	public static byte[] concatenate(byte[]... arrays) {
 		int length = 0;
 		for (byte[] array : arrays) {
@@ -83,7 +98,10 @@ public class EncodingUtils {
 		}
 		return newArray;
 	}
-	
+
+	/**
+	 * Extract a sub array of bytes out of the byte array.
+	 */
 	public static byte[] subArray(byte[] array, int beginIndex, int endIndex) {
 		int length = endIndex - beginIndex;
 		byte[] subarray = new byte[length];
@@ -94,10 +112,8 @@ public class EncodingUtils {
 	private EncodingUtils() {
 	}
 
-	private static RuntimeException encodingException(
-			UnsupportedEncodingException e) {
-		return new IllegalStateException("UTF-8 is not an available char set",
-				e);
+	private static RuntimeException encodingException(UnsupportedEncodingException e) {
+		return new IllegalStateException("UTF-8 is not an available char set", e);
 	}
 
 }

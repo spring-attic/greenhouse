@@ -24,7 +24,7 @@ import static org.springframework.security.encrypt.EncodingUtils.utf8Encode;
 import java.util.Arrays;
 
 /**
- * PasswordEncoder implementation that uses SHA-256 hashing with 8-byte random salting by default.
+ * A PasswordEncoder implementation that uses SHA-256 hashing implemented by the Sun provider with 8-byte random salting by default.
  * @author Keith Donald
  */
 public class StandardPasswordEncoder implements PasswordEncoder {
@@ -35,10 +35,17 @@ public class StandardPasswordEncoder implements PasswordEncoder {
 
 	private final SecureRandomKeyGenerator saltGenerator;
 
+	/**
+	 * Constructs a standard password encoder.
+	 * @param secret the secret key used in the encoding process
+	 */
 	public StandardPasswordEncoder(String secret) {
 		this("SHA-256", "SUN", secret);
 	}
 	
+	/**
+	 * Creates a fully customized standard password encoder.
+	 */
 	public StandardPasswordEncoder(String algorithm, String provider, String secret) {
 		this.digester = new Digester(algorithm, provider);
 		this.secret = utf8Encode(secret);

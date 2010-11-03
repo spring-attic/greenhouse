@@ -16,7 +16,7 @@
 package org.springframework.security.encrypt;
 
 /**
- * Password encoder that does nothing.  Useful for testing.
+ * A password encoder that does nothing.  Useful for testing.
  * @author Keith Donald
  */
 public class NoOpPasswordEncoder implements PasswordEncoder {
@@ -29,6 +29,9 @@ public class NoOpPasswordEncoder implements PasswordEncoder {
 		return rawPassword.equals(encodedPassword);
 	}
 	
+	/**
+	 * Get the singleton {@link NoOpPasswordEncoder}.
+	 */
 	public static PasswordEncoder getInstance() {
 		return INSTANCE;
 	}

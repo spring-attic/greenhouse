@@ -17,16 +17,24 @@ package org.springframework.jdbc.versioned;
 
 /**
  * A Database version.
+ * Currently the version is simply a major int id that should be incremented for each change set applied to the Database.
+ * TODO in the future, we should consider supporting minor/micro/qualifier parts.
  * @author Keith Donald
  */
 public class DatabaseVersion {
 
 	private final int major;
 	
+	/**
+	 * Parse a DatabaseVersion from a String.
+	 */
 	public static DatabaseVersion valueOf(String string) {
 		return new DatabaseVersion(Integer.valueOf(string));
 	}
 
+	/**
+	 * The zero database version indicating no database has been installed.
+	 */
 	public static DatabaseVersion zero() {
 		return new DatabaseVersion(0);
 	}
@@ -43,10 +51,20 @@ public class DatabaseVersion {
 		return major * 29;
 	}
 
+	/**
+	 * True if this DatabaseVersion is less than the version provided.
+	 */
 	public boolean lessThan(DatabaseVersion version) {
 		return major < version.major;
 	}
 
+	/**
+	 * True if this DatabaseVersion is greater than the version provided.
+	 */
+	public boolean greaterThan(DatabaseVersion version) {
+		return major > version.major;
+	}
+	
 	private DatabaseVersion(int major) {
 		this.major = major;
 	}
@@ -54,4 +72,5 @@ public class DatabaseVersion {
 	public String toString() {
 		return String.valueOf(major);
 	}
+
 }

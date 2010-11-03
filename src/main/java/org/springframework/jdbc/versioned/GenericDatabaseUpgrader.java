@@ -20,8 +20,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.sql.DataSource;
 
@@ -29,19 +29,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * DatabaseUpgrader implementation that is configured programatically.
+ * DatabaseUpgrader implementation that expects to be fully configured programatically.
+ * Stores version information in a DatabaseVersion table in the database.
  * @author Keith Donald
  */
 public class GenericDatabaseUpgrader implements DatabaseUpgrader {
 	
-	private static Logger logger = LoggerFactory.getLogger(GenericDatabaseUpgrader.class);
+	private static final Logger logger = LoggerFactory.getLogger(GenericDatabaseUpgrader.class);
 	
 	private final DataSource dataSource;
 	
-	private final Set<DatabaseChangeSet> changeSets = new LinkedHashSet<DatabaseChangeSet>();
+	private final Set<DatabaseChangeSet> changeSets = new TreeSet<DatabaseChangeSet>();
 	
 	private DatabaseVersion currentVersion;
 	
+	/**
+	 * Constructs a database upgrader that upgrades the Database accessed by the provided {@link DataSource}.
+	 * @param dataSource the factory for database connections
+	 */
 	public GenericDatabaseUpgrader(DataSource dataSource) {
 		this.dataSource = dataSource;
 		currentVersion = findCurrentVersion();
@@ -50,9 +55,14 @@ public class GenericDatabaseUpgrader implements DatabaseUpgrader {
 		}
 	}
 
+	/**
+	 * Add a change set to the list of change sets to run through when upgrading the Database.
+	 */
 	public void addChangeSet(DatabaseChangeSet changeSet) {
 		changeSets.add(changeSet);
 	}
+	
+	// implementing DatabaseUpgrader
 	
 	public DatabaseVersion getCurrentDatabaseVersion() {
 		return currentVersion;
@@ -72,6 +82,8 @@ public class GenericDatabaseUpgrader implements DatabaseUpgrader {
 		}
 	}
 
+	// internal helpers
+	
 	private DatabaseVersion findCurrentVersion() {
 		Connection connection = null;
 		try {
@@ -79,6 +91,7 @@ public class GenericDatabaseUpgrader implements DatabaseUpgrader {
 			DatabaseMetaData metadata = connection.getMetaData();
 			ResultSet result = metadata.getTables(null, null, "DATABASEVERSION", null);
 			try {
+				// checks if the table exists, if not, creates it
 				if (result.next()) {
 					Statement stmt = connection.createStatement();
 					try {
@@ -99,7 +112,7 @@ public class GenericDatabaseUpgrader implements DatabaseUpgrader {
 					Statement stmt = connection.createStatement();
 					try {
 						stmt.execute("create table DatabaseVersion (value varchar not null)");
-						stmt.execute("insert into DatabaseVersion (value) values ('0.0')");
+						stmt.execute("insert into DatabaseVersion (value) values ('0')");
 					} finally {
 						stmt.close();
 					}

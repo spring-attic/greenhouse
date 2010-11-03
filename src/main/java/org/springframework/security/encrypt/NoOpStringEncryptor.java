@@ -16,7 +16,7 @@
 package org.springframework.security.encrypt;
 
 /**
- * Encryptor that does nothing. Useful for testing.
+ * A String Encryptor that does nothing. Useful for testing.
  * @author Keith Donald
  */
 public class NoOpStringEncryptor implements StringEncryptor {
@@ -29,6 +29,9 @@ public class NoOpStringEncryptor implements StringEncryptor {
 		return encrypted;
 	}
 
+	/**
+	 * Get the singleton {@link NoOpStringEncryptor}.
+	 */
 	public static StringEncryptor getInstance() {
 		return INSTANCE;
 	}

@@ -27,26 +27,28 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Filter that exposes flash messages as request attributes in the next request following a redirect.
+ * Filter that exports flash map attributes stored in the session in the previous request as current request attributes.
+ * Once exported, the flash map is removed from the session.
  * @author Keith Donald
  */
 public class FlashMapFilter extends OncePerRequestFilter {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-		throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session != null) {
-			Map<String, ?> flash = (Map<String, ?>) session.getAttribute(FlashMap.FLASH_MAP_ATTRIBUTE);
-			if (flash != null) {
-				for (Map.Entry<String, ?> entry : flash.entrySet()) {
-					Object currentValue = request.getAttribute(entry.getKey());
-					if (currentValue == null) {
-						request.setAttribute(entry.getKey(), entry.getValue());
-					}					
+		synchronized (session) {
+			if (session != null) {
+				Map<String, ?> flash = (Map<String, ?>) session.getAttribute(FlashMap.FLASH_MAP_SESSION_ATTRIBUTE);
+				if (flash != null) {
+					for (Map.Entry<String, ?> entry : flash.entrySet()) {
+						Object currentValue = request.getAttribute(entry.getKey());
+						if (currentValue == null) {
+							request.setAttribute(entry.getKey(), entry.getValue());
+						}					
+					}
+					session.removeAttribute(FlashMap.FLASH_MAP_SESSION_ATTRIBUTE);
 				}
-				session.removeAttribute(FlashMap.FLASH_MAP_ATTRIBUTE);
 			}
 		}
 		filterChain.doFilter(request, response);

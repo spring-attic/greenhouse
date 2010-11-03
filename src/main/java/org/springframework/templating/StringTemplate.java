@@ -16,18 +16,20 @@
 package org.springframework.templating;
 
 /**
- * Template that generates a text String from a model.
+ * A template that generates text document as a String from a map of model attributes.
+ * Stateful and not designed to be shared between threads.
  * @author Keith Donald
  */
 public interface StringTemplate {
 	
 	/**
-	 * Put a attribute in the model for this template.
+	 * Put an attribute in the model of this template.
 	 */
 	void put(String attribute, Object value);
 
 	/**
 	 * Generate the final text by rendering this template.
+	 * Model attributes referenced in the template have their values resolved during rendering.
 	 */
 	String render();
 	

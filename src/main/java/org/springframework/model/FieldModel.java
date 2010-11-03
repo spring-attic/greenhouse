@@ -17,6 +17,7 @@ package org.springframework.model;
 
 /**
  * A model for a form field.
+ * TODO experimental.
  * @author Keith Donald
  */
 public class FieldModel<T> {

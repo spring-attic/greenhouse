@@ -21,6 +21,10 @@ package org.springframework.templating;
  */
 public interface StringTemplateFactory {
 
+	/**
+	 * Get a fresh StringTemplate instance that can be safely used in the current thread of execution.
+	 * StringTemplates should not be shared between threads.
+	 */
 	StringTemplate getStringTemplate();
 
 }

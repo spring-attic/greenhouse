@@ -35,6 +35,11 @@ public class LocalFileStorage implements FileStorage {
 	
 	private boolean deleteOnExit;
 	
+	/**
+	 * Constructs a local file storage.
+	 * @param storageUrl the logical URL pointing to the root of this file storage
+	 * @param storageDirectory the path to the base directory on the filesystem where files physically reside; created if necessary.
+	 */
 	public LocalFileStorage(String storageUrl, Resource storageDirectory) {
 		this.storageUrl = storageUrl;
 		try {
@@ -48,7 +53,7 @@ public class LocalFileStorage implements FileStorage {
 	
 	/**
 	 * Whether the files stored in local storage should be automatically deleted when the VM shuts down.
-	 * Useful for temporary file stores.
+	 * Useful for temporary file stores.  Defaults to false.
 	 */
 	public void setDeleteOnExit(boolean deleteOnExit) {
 		this.deleteOnExit = deleteOnExit;
