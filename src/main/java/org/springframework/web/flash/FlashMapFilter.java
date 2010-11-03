@@ -37,8 +37,8 @@ public class FlashMapFilter extends OncePerRequestFilter {
 	@SuppressWarnings("unchecked")
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		synchronized (session) {
-			if (session != null) {
+		if (session != null) {
+			synchronized (session) {
 				Map<String, ?> flash = (Map<String, ?>) session.getAttribute(FlashMap.FLASH_MAP_SESSION_ATTRIBUTE);
 				if (flash != null) {
 					for (Map.Entry<String, ?> entry : flash.entrySet()) {

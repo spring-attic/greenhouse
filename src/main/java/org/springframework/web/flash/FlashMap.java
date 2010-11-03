@@ -34,9 +34,10 @@ public final class FlashMap {
 	static final String FLASH_MAP_SESSION_ATTRIBUTE = FlashMap.class.getName();
 	
 	/**
-	 * Get the Flash Map for the current servlet request.
+	 * Get the Flash Map for the current user session.
 	 * Creates one if necessary.
-	 * @param request the web request
+	 * Note this method will create a HttpSession if one does not already exist.
+	 * @param request the servlet request
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getCurrent(HttpServletRequest request) {
