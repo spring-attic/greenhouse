@@ -53,6 +53,11 @@ public class ConnectController {
 	
 	private MultiValueMap<Class<?>, ConnectInterceptor<?>> interceptors;
 
+	/**
+	 * Constructs a ConnectController.
+	 * @param serviceProviderFactory the factory that loads the ServiceProviders members wish to connect to
+	 * @param applicationUrl the base secure URL for this application, used to construct the callback URL passed to the service providers at the beginning of the connection process.
+	 */
 	@Inject
 	public ConnectController(ServiceProviderFactory serviceProviderFactory, @Value("${application.secureUrl}") String applicationUrl) {
 		this.serviceProviderFactory = serviceProviderFactory;
@@ -60,6 +65,9 @@ public class ConnectController {
 		this.interceptors = new LinkedMultiValueMap<Class<?>, ConnectInterceptor<?>>();
 	}
 
+	/**
+	 * Configure the list of interceptors that should receive callbacks during the connection process.
+	 */
 	public void setInterceptors(List<ConnectInterceptor<?>> interceptors) {
 		for (ConnectInterceptor<?> interceptor : interceptors) {
 			Class<?> providerType = GenericTypeResolver.resolveTypeArgument(interceptor.getClass(),  ConnectInterceptor.class);
@@ -67,6 +75,9 @@ public class ConnectController {
 		}
 	}
 
+	/**
+	 * Render the connect form for the service provider identified by {name} to the member as HTML in their web browser.
+	 */
 	@RequestMapping(value="/connect/{name}", method=RequestMethod.GET)
 	public String connect(Account account, @PathVariable String name) {
 		String baseViewPath = "connect/" + name;
@@ -77,6 +88,10 @@ public class ConnectController {
 		}
 	}
 
+	/**
+	 * Process a connect form submission by commencing the process of establishing a connection to the provider on behalf of the member.
+	 * Fetches a new request token from the provider, temporarily stores it in the session, then redirects the member to the provider's site for authorization.
+	 */
 	@RequestMapping(value="/connect/{name}", method=RequestMethod.POST)
 	public String connect(@PathVariable String name, WebRequest request) {
 		ServiceProvider<?> provider = getServiceProvider(name);
@@ -86,6 +101,12 @@ public class ConnectController {
 		return "redirect:" + provider.buildAuthorizeUrl(requestToken.getValue());
 	}
 	
+	/**
+	 * Process the authorization callback from the service provider.
+	 * Called after the member authorizes the connection, generally done by having he or she click "Allow" in their web browser at the provider's site.
+	 * On authorization verification, connects the member's local account to the account they hold at the service provider.
+	 * Removes the request token from the session since it is no longer valid after the connection is established.
+	 */
 	@RequestMapping(value="/connect/{name}", method=RequestMethod.GET, params="oauth_token")
 	public String authorizeCallback(@PathVariable String name, @RequestParam("oauth_token") String token,
 			@RequestParam(value="oauth_verifier", defaultValue="verifier") String verifier, Account account, WebRequest request) {
@@ -95,12 +116,16 @@ public class ConnectController {
 		}
 		request.removeAttribute(OAUTH_TOKEN_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		ServiceProvider<?> provider = getServiceProvider(name);
-		provider.connect(account.getId(), requestToken, verifier);
+		provider.connect(account.getId(), new AuthorizedRequestToken(requestToken, verifier));
 		postConnect(provider, account, request);
 		FlashMap.setSuccessMessage("Your Greenhouse account is now connected to your " + provider.getDisplayName() + " account!");
 		return "redirect:/connect/" + name;
 	}
 
+	/**
+	 * Disconnect from the provider.
+	 * The member has decided they no longer wish to use the service provider from this application.
+	 */
 	@RequestMapping(value="/connect/{name}", method=RequestMethod.DELETE)
 	public String disconnect(@PathVariable String name, Account account) {
 		getServiceProvider(name).disconnect(account.getId());

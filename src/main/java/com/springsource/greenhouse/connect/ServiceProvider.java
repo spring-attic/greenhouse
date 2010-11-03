@@ -63,26 +63,31 @@ public interface ServiceProvider<S> {
 	
 	/**
 	 * Begin the account connection process by fetching a new request token from this service provider.
-	 * The returned token should be stored with in the member's session for later use.
+	 * The new token should be stored in the member's session up until the authorization callback is made and it's time to {@link #connect(Long, AuthorizedRequestToken) connect}.
 	 * @param callbackUrl the URL the provider should redirect to after the member authorizes the connection (may be null for OAuth 1.0-based service providers) 
 	 */
 	OAuthToken fetchNewRequestToken(String callbackUrl);
 
 	/**
-	 * Construct the URL to redirect the member to for service connection authorization.
+	 * Construct the URL to redirect the member to for connection authorization.
 	 * @param requestToken the request token value, to be encoded in the authorize URL
-	 * @return the absolute authorize URL to redirect the member to
+	 * @return the absolute authorize URL to redirect the member to for authorization
 	 */
 	String buildAuthorizeUrl(String requestToken);
 
 	/**
 	 * Connects a member account to this service provider.
-	 * Exchanges the request token and verifier for an access token, then stores the granted access token with the account.
+	 * Called after the user authorizes the connection at the {@link #buildAuthorizeUrl(String) authorizeUrl} and the service provider calls us back.
+	 * Internally, exchanges the authorized request token for an access token, then stores the awarded access token with the member account.
+	 * This access token identifies the connection between the member account and this service provider.
+	 * <p>
+	 * This method completes the OAuth-based account connection process.
+	 * {@link #getServiceOperations(Long)} may now be called to get and invoke the service provider's API.
+	 * The requestToken required during the connection handshake is no longer valid and cannot be reused.
 	 * @param accountId the member account identifier
-	 * @param requestToken the token obtained at the beginning of the connection process
-	 * @param verifier the verifier returned in the provider callback following connection authorization (may be null for some providers).
+	 * @param requestToken the OAuth request token that was authorized by the member.
 	 */
-	void connect(Long accountId, OAuthToken requestToken, String verifier);
+	void connect(Long accountId, AuthorizedRequestToken requestToken);
 
 	/**
 	 * Records an existing connection between a member account and this service provider.

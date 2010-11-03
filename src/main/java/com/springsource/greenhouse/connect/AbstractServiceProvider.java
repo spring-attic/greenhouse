@@ -83,8 +83,8 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 		return parameters.getAuthorizeUrl().expand(requestToken).toString();
 	}
 
-	public void connect(Long accountId, OAuthToken requestToken, String verifier) {
-		OAuthToken accessToken = getAccessToken(requestToken, verifier);
+	public void connect(Long accountId, AuthorizedRequestToken requestToken) {
+		OAuthToken accessToken = getAccessToken(requestToken);
 		S serviceOperations = createServiceOperations(accessToken);
 		String providerAccountId = fetchProviderAccountId(serviceOperations);
 		connectionRepository.addConnection(accountId, getName(), accessToken, providerAccountId, buildProviderProfileUrl(providerAccountId, serviceOperations));
@@ -177,8 +177,8 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 		return new OAuth10aServiceImpl(new HMACSha1SignatureService(), new TimestampServiceImpl(), new BaseStringExtractorImpl(), new HeaderExtractorImpl(), new TokenExtractorImpl(), new TokenExtractorImpl(), config);
 	}
 
-	private OAuthToken getAccessToken(OAuthToken requestToken, String verifier) {
-		Token accessToken = getOAuthService().getAccessToken(new Token(requestToken.getValue(), requestToken.getSecret()), new Verifier(verifier));
+	private OAuthToken getAccessToken(AuthorizedRequestToken requestToken) {
+		Token accessToken = getOAuthService().getAccessToken(new Token(requestToken.getValue(), requestToken.getSecret()), new Verifier(requestToken.getVerifier()));
 		return new OAuthToken(accessToken.getToken(), accessToken.getSecret());
 	}
 
