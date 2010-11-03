@@ -47,7 +47,6 @@ public class App {
 	 * The assigned key that identifies the client app and allows it to use the server API.
 	 * Must be presented by the client app when establishing a connection.
 	 * Should only be known to the application's development team and not shared with others.
-	 * @return
 	 */
 	public String getApiKey() {
 		return apiKey;
@@ -56,7 +55,6 @@ public class App {
 	/**
 	 * The assigned secret used for signature verification between the client and server.
 	 * Only used for OAuth 1.0-based client applications.
-	 * @return
 	 */
 	public String getSecret() {
 		return secret;

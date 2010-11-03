@@ -37,8 +37,6 @@ import com.springsource.greenhouse.utils.ImageUtils;
  * This flag is used when constructing the pictureUrl when {@link AccountMapper mapping} Account and Profile objects. 
  * @author Keith Donald
  * @author Craig Walls
- * @see Account
- * @see Profile
  */
 @Service
 public class FileStorageProfilePictureService implements ProfilePictureService {

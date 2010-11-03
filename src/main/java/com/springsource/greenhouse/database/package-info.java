@@ -1,5 +1,5 @@
 /**
- * Defines the Greenhouse DataSource configuration along with several data access support classes. 
+ * Defines the Greenhouse database configuration and database upgrade policy.
  */
 package com.springsource.greenhouse.database;
 

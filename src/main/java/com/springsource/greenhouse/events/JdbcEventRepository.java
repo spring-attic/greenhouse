@@ -27,12 +27,12 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.JoinRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.database.JoinRowMapper;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
 import com.springsource.greenhouse.utils.SubResourceReference;

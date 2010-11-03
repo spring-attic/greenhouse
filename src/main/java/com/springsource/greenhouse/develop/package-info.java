@@ -1,5 +1,5 @@
 /**
- * Allows Developers to connect their client applications with a server-side API using OAuth.
+ * Lets developers connect their apps to a server-side API securely with OAuth.
  */
 package com.springsource.greenhouse.develop;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.springsource.greenhouse.database;
+package org.springframework.jdbc.core;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
