@@ -90,7 +90,7 @@ public class BaseDatabaseUpgrader {
 	}
 
 	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
-		upgrader.addChangeSet(singletonChangeSet("2", databaseResource("upgrade/474.sql")));
+		upgrader.addChangeSet(singletonChangeSet("2", databaseResource("upgrade/475.sql")));
 	}
 	
 }
