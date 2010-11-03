@@ -65,7 +65,7 @@ public final class FlashMap {
 	 * Set the 'message' attribute to a info {@link Message} that renders the info text. 
 	 */
 	public static void setInfoMessage(String info) {
-		put(MESSAGE_ATTRIBUTE, new Message(MessageType.iNFO, info));
+		put(MESSAGE_ATTRIBUTE, new Message(MessageType.INFO, info));
 	}
 
 	/**
@@ -87,53 +87,6 @@ public final class FlashMap {
 	 */
 	public static void setSuccessMessage(String success) {
 		put(MESSAGE_ATTRIBUTE, new Message(MessageType.SUCCESS, success));
-	}
-
-	/**
-	 * A message to display to the user.
-	 * Has a type indicating the kind of message.
-	 * @author Keith Donald
-	 */
-	public static final class Message {
-		
-		private final MessageType type;
-		
-		private final String text;
-
-		/**
-		 * Creates a new Message of a certain type consisting of the text provided.
-		 */
-		public Message(MessageType type, String text) {
-			this.type = type;
-			this.text = text;
-		}
-
-		/**
-		 * The type of message; such as info, warning, error, or success.
-		 */
-		public MessageType getType() {
-			return type;
-		}
-
-		/**
-		 * The info text.
-		 */
-		public String getText() {
-			return text;
-		}
-		
-		public String toString() {
-			return type + ": " + text;
-		}
-	
-	}
-	
-	/**
-	 * Enumeration of Message types.
-	 * @author Keith Donald
-	 */
-	public static enum MessageType {
-		iNFO, SUCCESS, WARNING, ERROR
 	}
 
 	private static HttpServletRequest getRequest(RequestAttributes requestAttributes) {

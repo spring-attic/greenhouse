@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <c:if test="${not empty message}">
-	<div class="${message.type}">${message.text}</div>
+	<div class="${message.type.cssClass}">${message.text}</div>
 </c:if>
 
 <form id="resetPassword" method="post">

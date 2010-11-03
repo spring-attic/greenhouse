@@ -6,7 +6,7 @@
 <h2>Invite friends to the Greenhouse</h2>
 
 <c:if test="${not empty message}">
-<div class="${message.type}">${message.text}</div>
+<div class="${message.type.cssClass}">${message.text}</div>
 </c:if>
 		
 <ul class="listings">

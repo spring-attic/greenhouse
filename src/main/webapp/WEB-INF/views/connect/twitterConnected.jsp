@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 
 <c:if test="${not empty message}">
-<div class="${message.type}">${message.text}</div>
+<div class="${message.type.cssClass}">${message.text}</div>
 </c:if>
 
 <form id="disconnect" action="<c:url value="/connect/twitter"/>" method="post">

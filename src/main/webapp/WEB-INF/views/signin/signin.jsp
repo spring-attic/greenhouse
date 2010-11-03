@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/spring-social/facebook/tags" prefix="facebook" %>
 
 <c:if test="${not empty message}">
-	<div class="${message.type}">${message.text}</div>
+	<div class="${message.type.cssClass}">${message.text}</div>
 </c:if>
 
 <form id="signin" action="<c:url value="/signin/authenticate" />" method="post">

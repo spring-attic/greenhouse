@@ -1,4 +1,4 @@
-div.INFO,div.SUCCESS,div.WARNING,div.ERROR {
+div.info,div.success,div.warning,div.error {
 	border: 1px solid;
 	margin: 10px 0px;
 	padding: 15px 10px 15px 50px;
@@ -6,34 +6,34 @@ div.INFO,div.SUCCESS,div.WARNING,div.ERROR {
 	background-position: 10px center;
 }
 
-div.INFO {
+div.info {
 	color: #00529B;
 	background-color: #BDE5F8;
 	background-image: url('info.png');
 }
 
-div.SUCCESS {
+div.success {
 	color: #4F8A10;
 	background-color: #DFF2BF;
 	background-image: url('success.png');
 }
 
-div.WARNING {
+div.warning {
 	color: #9F6000;
 	background-color: #FEEFB3;
 	background-image: url('warning.png');
 }
 
-div.ERROR {
+div.error {
 	color: #D8000C;
 	background-color: #FFBABA;
 	background-image: url('error.png');
 }
 
-span.SUCCESS {
+span.success {
 	color: #4F8A10;
 }
 
-span.ERROR {
+span.error {
 	color: #D8000C;
 }
