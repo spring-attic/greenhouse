@@ -881,4 +881,3 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 	'#roo', 'web', 2, 3);
 insert into EventSessionLeader (event, session, leader) values (2, 1, 86);
 insert into EventSessionLeader (event, session, leader) values (2, 1, 20);
-

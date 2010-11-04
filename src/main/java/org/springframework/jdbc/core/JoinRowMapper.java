@@ -37,14 +37,14 @@ import org.springframework.dao.DataAccessException;
 public abstract class JoinRowMapper<R, I>  {
 	
 	/**
-	 * Return a RowMapper that maps exactly one root object R, where there may be multiple R rows for each child in a join with a one-to-many relationship.
+	 * Return a {@link RowMapper} that maps exactly one root object R, where there may be multiple R rows for each child in a join with a one-to-many relationship.
 	 */
 	public RowMapper<R> single() {
 		return singleMapper;
 	}
 
 	/**
-	 * Return a ResultSetExtractor that 1..n root objects R into a List where there may be multiple R rows for each joined child.
+	 * Return a {@link ResultSetExtractor} that 1..n root objects R into a List where there may be multiple R rows for each joined child.
 	 */
 	public ResultSetExtractor<List<R>> list() {
 		return listMapper;

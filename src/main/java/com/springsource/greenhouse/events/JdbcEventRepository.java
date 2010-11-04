@@ -41,7 +41,7 @@ import com.springsource.greenhouse.utils.SubResourceReference;
 @Repository
 public class JdbcEventRepository implements EventRepository {
 
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 
 	@Inject
 	public JdbcEventRepository(JdbcTemplate jdbcTemplate) {
