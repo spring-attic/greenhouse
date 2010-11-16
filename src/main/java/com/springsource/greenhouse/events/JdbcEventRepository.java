@@ -17,7 +17,6 @@ package com.springsource.greenhouse.events;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +27,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.JoinRowMapper;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,11 +49,11 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<Event> findUpcomingEvents(Long afterMillis) {
-		return jdbcTemplate.query(SELECT_UPCOMING_EVENTS, eventMapper, new Date(afterMillis != null ? afterMillis : System.currentTimeMillis()));
+		return jdbcTemplate.query(SELECT_UPCOMING_EVENTS, eventMapper.list(), new Date(afterMillis != null ? afterMillis : System.currentTimeMillis()));
 	}
 	
 	public Event findEventBySlug(String groupSlug, Integer year, Integer month, String slug) {
-		return jdbcTemplate.queryForObject(SELECT_EVENT_BY_SLUG, eventMapper, groupSlug, year, month, slug);
+		return jdbcTemplate.queryForObject(SELECT_EVENT_BY_SLUG, eventMapper.single(), groupSlug, year, month, slug);
 	}
 
 	public String findEventSearchString(Long eventId) {
@@ -67,19 +64,20 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject("select (select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id) || ' ' || hashtag from EventSession where event = ? and id = ?", String.class, eventId, eventId, sessionId);
 	}
 
+	@Transactional
 	public List<EventSession> findSessionsOnDay(Long eventId, LocalDate day, Long attendeeId) {
-		// TODO do not hardcode this
-		DateTime dayStart = day.toDateTimeAtStartOfDay(DateTimeZone.forID("America/Chicago"));
+		DateTimeZone eventTimeZone = DateTimeZone.forID(jdbcTemplate.queryForObject("select timezone from Event where id = ?", String.class, eventId));
+		DateTime dayStart = day.toDateTimeAtStartOfDay(eventTimeZone);
 		DateTime dayEnd = dayStart.plusDays(1);
-		return jdbcTemplate.query(SELECT_SESSIONS_ON_DAY, eventSessionsExtractor, attendeeId, eventId, dayStart.toDate(), dayEnd.toDate());
+		return jdbcTemplate.query(SELECT_SESSIONS_ON_DAY, eventSessionMapper.list(), attendeeId, eventId, dayStart.toDate(), dayEnd.toDate());
 	}
 
 	public List<EventSession> findEventFavorites(Long eventId, Long attendeeId) {
-		return jdbcTemplate.query(SELECT_EVENT_FAVORITES, eventSessionsExtractor, attendeeId, eventId);
+		return jdbcTemplate.query(SELECT_EVENT_FAVORITES, eventSessionMapper.list(), attendeeId, eventId);
 	}
 
 	public List<EventSession> findAttendeeFavorites(Long eventId, Long attendeeId) {
-		return jdbcTemplate.query(SELECT_ATTENDEE_FAVORITES, eventSessionsExtractor, attendeeId, eventId);
+		return jdbcTemplate.query(SELECT_ATTENDEE_FAVORITES, eventSessionMapper.list(), attendeeId, eventId);
 	}
 
 	@Transactional
@@ -116,38 +114,30 @@ public class JdbcEventRepository implements EventRepository {
 		return new Date().after(endTime);
 	}
 
-	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
-		public Event mapRow(ResultSet rs, int row) throws SQLException {
-			return new JoinRowMapper<Event, Long>() {
-				protected Long mapId(ResultSet rs) throws SQLException {
-					return rs.getLong("id");
-				}
-				protected Event mapRoot(Long id, ResultSet rs) throws SQLException {
-					return new Event(id, rs.getString("title"), DateTimeZone.forID(rs.getString("timeZone")), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
-							rs.getString("slug"), rs.getString("description"), rs.getString("hashtag"), new ResourceReference<String>(rs.getString("groupSlug"), rs.getString("groupName")));
-				}
-				protected void addChild(Event event, ResultSet rs) throws SQLException {
-					event.addVenue(new Venue(rs.getLong("venueId"), rs.getString("venueName"), rs.getString("venuePostalAddress"), 
-							new Location(rs.getDouble("venueLatitude"), rs.getDouble("venueLongitude")), rs.getString("venueLocationHint")));
-				}
-			}.map(rs);
+	private final JoinRowMapper<Event, Long> eventMapper = new JoinRowMapper<Event, Long>() {
+		protected Long mapId(ResultSet rs) throws SQLException {
+			return rs.getLong("id");
+		}
+		protected Event mapRoot(Long id, ResultSet rs) throws SQLException {
+			return new Event(id, rs.getString("title"), DateTimeZone.forID(rs.getString("timeZone")), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
+					rs.getString("slug"), rs.getString("description"), rs.getString("hashtag"), new ResourceReference<String>(rs.getString("groupSlug"), rs.getString("groupName")));
+		}
+		protected void addChild(Event event, ResultSet rs) throws SQLException {
+			event.addVenue(new Venue(rs.getLong("venueId"), rs.getString("venueName"), rs.getString("venuePostalAddress"), 
+					new Location(rs.getDouble("venueLatitude"), rs.getDouble("venueLongitude")), rs.getString("venueLocationHint")));
 		}
 	};
 
-	private ResultSetExtractor<List<EventSession>> eventSessionsExtractor = new ResultSetExtractor<List<EventSession>>() {
-		public List<EventSession> extractData(ResultSet rs) throws SQLException {
-			return new JoinRowMapper<EventSession, Integer>() {
-				protected Integer mapId(ResultSet rs) throws SQLException {
-					return rs.getInt("id");
-				}
-				protected EventSession mapRoot(Integer id, ResultSet rs) throws SQLException {
-					return new EventSession(id, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
-							rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), new SubResourceReference<Long, Integer>(rs.getLong("venue"), rs.getInt("room"), rs.getString("roomName")), rs.getBoolean("favorite"));
-				}
-				protected void addChild(EventSession session, ResultSet rs) throws SQLException {
-					session.addLeader(new EventSessionLeader(rs.getString("name")));					
-				}
-			}.mapInto(new ArrayList<EventSession>(), rs);
+	private final JoinRowMapper<EventSession, Integer> eventSessionMapper = new JoinRowMapper<EventSession, Integer>() {
+		protected Integer mapId(ResultSet rs) throws SQLException {
+			return rs.getInt("id");
+		}
+		protected EventSession mapRoot(Integer id, ResultSet rs) throws SQLException {
+			return new EventSession(id, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
+					rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), new SubResourceReference<Long, Integer>(rs.getLong("venue"), rs.getInt("room"), rs.getString("roomName")), rs.getBoolean("favorite"));
+		}
+		protected void addChild(EventSession session, ResultSet rs) throws SQLException {
+			session.addLeader(new EventSessionLeader(rs.getString("name")));					
 		}
 	};
 	

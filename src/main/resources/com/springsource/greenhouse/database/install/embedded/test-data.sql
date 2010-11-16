@@ -850,3 +850,35 @@ insert into EventSession (event, id, title, startTime, endTime, description, has
 	'"CouchDB is built of the Web. IÕve never seen software that so completely embraces the philosophies behind HTTP." Jacob Kaplan-Moss, Django Developer',
 	'#couchdb', 'grf', 1, 9);
 insert into EventSessionLeader (event, session, leader) values (1, 116, 56);
+
+
+
+-- Upcoming Event Data: Devoxx 2010
+insert into Venue (name, postalAddress, latitude, longitude, locationHint, createdBy) values ('Metropolis Antwerp', 'Groenendaallaan 394 2030 Antwerp Belgium', 51.245833, 4.417888, 'Business center on the right when arriving at the Groenendaalpoort', 1);
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 1, 'Room 4', 500, '');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 2, 'Room 5', 500, '');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 3, 'Room 8', 500, '');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 4, 'Room 9', 500, '');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 5, 'BOF 1', 70, '');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 6, 'BOF 2', 70, '');
+
+insert into MemberGroup (name, slug, description, hashtag, leader) values ('Devoxx', 'devoxx', 'Premier European Java conference series', '#devoxx', 1);
+
+insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('Devoxx 2010', 'CET', '2010-11-15 9:00:00Z', '2010-11-19 13:50:00Z', 'javaholics', 'The conference for Javaholics', 2);
+insert into EventVenue (event, venue) values (2, 2);
+
+insert into EventTrack (event, code, name, chair) values (2, 'core', 'Java Core (SE/EE)', 1);
+insert into EventTrack (event, code, name, chair) values (2, 'web', 'Web Frameworks', 1);
+insert into EventTrack (event, code, name, chair) values (2, 'lang', 'New Languages on the JVM', 1);
+insert into EventTrack (event, code, name, chair) values (2, 'met', 'Methodology', 1);
+
+insert into Leader (name) values ('Ben Alex');
+insert into Leader (name) values ('Matt Raible');
+insert into Leader (name) values ('Oliver Gierke');
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 1, 'Extreme Productivity with Spring Roo', '2010-11-15 12:30:00Z', '2010-11-15 15:30:00Z',
+	'Delight your customers and impress your colleagues by delivering enterprise Spring applications faster than ever before. In this session we''ll introduce Spring Roo, an open source tool that makes it easy to build applications using the Java language, standards and technologies you already know.',
+	'#roo', 'web', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 1, 86);
+insert into EventSessionLeader (event, session, leader) values (2, 1, 20);
+

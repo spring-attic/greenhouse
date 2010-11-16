@@ -17,7 +17,11 @@ package org.springframework.jdbc.core;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import org.springframework.dao.DataAccessException;
 
 /**
  * An abstract template for row mapping operations that map multiple rows to a single object.
@@ -30,36 +34,20 @@ import java.util.Collection;
  * @param <R> the root, or aggregate, entity type
  * @param <I> the root's id property type
  */
-public abstract class JoinRowMapper<R, I> {
-
+public abstract class JoinRowMapper<R, I>  {
+	
 	/**
-	 * Map a single root object R, where there may be multiple R rows for each child in a join with a one-to-many relationship.
+	 * Return a RowMapper that maps exactly one root object R, where there may be multiple R rows for each child in a join with a one-to-many relationship.
 	 */
-	public R map(ResultSet rs) throws SQLException {
-		R root = mapRoot(mapId(rs), rs);
-		addChild(root, rs);
-		while (rs.next()) {
-			addChild(root, rs);			
-		}
-		return root;
+	public RowMapper<R> single() {
+		return singleMapper;
 	}
 
 	/**
-	 * Map root objects R into Collection<C> where there may be multiple R rows for each joined child.
+	 * Return a ResultSetExtractor that 1..n root objects R into a List where there may be multiple R rows for each joined child.
 	 */
-	public <C extends Collection<R>> C mapInto(C collection, ResultSet rs) throws SQLException {
-		R root = null;
-		I previousId = null;
-		while (rs.next()) {
-			I id = mapId(rs);
-			if (!id.equals(previousId)) {
-				root = mapRoot(id, rs);
-				collection.add(root);
-			}
-			addChild(root, rs);
-			previousId = id;
-		}
-		return collection;
+	public ResultSetExtractor<List<R>> list() {
+		return listMapper;
 	}
 
 	// subclassing hooks
@@ -79,4 +67,43 @@ public abstract class JoinRowMapper<R, I> {
 	 */
 	protected abstract void addChild(R root, ResultSet rs) throws SQLException;
 
+	// internal helpers
+	
+	private final RowMapper<R> singleMapper = new RowMapper<R> () {
+		public R mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return map(rs);
+		}
+	};
+	
+	private final ResultSetExtractor<List<R>> listMapper = new ResultSetExtractor<List<R>>() {
+		public List<R> extractData(ResultSet rs) throws SQLException, DataAccessException {
+			return mapInto(new ArrayList<R>(), rs);
+		}		
+	};
+	
+	private R map(ResultSet rs) throws SQLException {
+		I id = mapId(rs);
+		R root = mapRoot(id, rs);
+		addChild(root, rs);
+		while (rs.next() && mapId(rs).equals(id)) {
+			addChild(root, rs);
+		}
+		return root;
+	}
+
+	private <C extends Collection<R>> C mapInto(C collection, ResultSet rs) throws SQLException {
+		R root = null;
+		I previousId = null;
+		while (rs.next()) {
+			I id = mapId(rs);
+			if (!id.equals(previousId)) {
+				root = mapRoot(id, rs);
+				collection.add(root);
+			}
+			addChild(root, rs);
+			previousId = id;
+		}
+		return collection;
+	}
+	
 }
