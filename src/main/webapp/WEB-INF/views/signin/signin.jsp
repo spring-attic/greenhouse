@@ -13,13 +13,13 @@
   		<c:if test="${signinError}">
   		<div class="error">
   			Your sign in information was incorrect.
-  			Please try again<c:if test="${!currentDevice.mobileBrowser}"> or <a href="<c:url value="/signup" />">sign up</a></c:if>.
+  			Please try again<c:if test="${!currentDevice.mobile}"> or <a href="<c:url value="/signup" />">sign up</a></c:if>.
   		</div>
  	 	</c:if>
 	</div>
 	<fieldset>
 		<label for="login">Username or Email</label>
-		<input id="login" name="j_username" type="text" size="25" <c:if test="${currentDevice.apple}">autocorrect="off" autocapitalize="off"</c:if> <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />
+		<input id="login" name="j_username" type="text" size="25" autocorrect="off" autocapitalize="off" <c:if test="${not empty signinErrorMessage}">value="${SPRING_SECURITY_LAST_USERNAME}"</c:if> />
 		<label for="password">Password</label>
 		<input id="password" name="j_password" type="password" size="25" />	
 	</fieldset>
@@ -27,7 +27,7 @@
 	<p><a href="<c:url value="/reset" />">Forgot your password?</a></p>
 </form>
 
-<c:if test="${!currentDevice.mobileBrowser}">
+<c:if test="${!currentDevice.mobile}">
 <div id="fb-root"></div>	
 <form id="fb_signin" action="<c:url value="/signin/facebook" />" method="post">
 <%-- Unfortunately, offline access is the only way to get an access token that doesn't expire. 

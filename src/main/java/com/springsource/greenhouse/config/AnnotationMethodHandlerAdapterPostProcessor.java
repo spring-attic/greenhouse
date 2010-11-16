@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.MethodParameter;
 import org.springframework.format.datetime.joda.JodaTimeContextHolder;
-import org.springframework.mobile.mvc.DeviceWebArgumentResolver;
+import org.springframework.mobile.device.mvc.DeviceWebArgumentResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.facebook.FacebookWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;

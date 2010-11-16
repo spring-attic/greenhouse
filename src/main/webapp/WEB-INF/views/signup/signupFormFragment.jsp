@@ -7,7 +7,7 @@
 		<form:input path="firstName" />
 		<form:label path="lastName">Last Name <form:errors path="lastName" cssClass="error" /></form:label>
 		<form:input path="lastName" />
-		<form:label path="email">Email (never shared, used for correspondance) <form:errors path="email" cssClass="error" /></form:label>
+		<form:label path="email">Email (never shared, used for correspondence) <form:errors path="email" cssClass="error" /></form:label>
 		<form:input path="email" />	
 		<form:label path="confirmEmail">Confirm Email <form:errors path="confirmEmail" cssClass="error" /></form:label>
 		<form:input path="confirmEmail" />	

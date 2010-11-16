@@ -48,14 +48,12 @@ insert into EventTrack (event, code, name, description, chair) values (1, 'gra',
 insert into EventTrack (event, code, name, description, chair) values (1, 'grf', 'Grails and Griffon', 'Combining Griffon and Grails for rapid desktop development', 1);
 
 insert into Leader (name) values ('Rod Johnson');
-
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 1, 'Opening Keynote', '2011-10-20 00:30:00Z', '2011-10-20 01:45:00Z',
 	'Rod kicks off #s2gx with a bang.', '#opener', null, 1, 10);
 insert into EventSessionLeader (event, session, leader) values (1, 1, 1);
 
 
 insert into Leader (name) values ('Juergen Hoeller');
-
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (1, 2, 'What''s new in Spring Framework 3.1?', '2011-10-20 13:30:00Z', '2011-10-20 15:00:00Z',
 	'Spring 3.0 established itself as a powerful basis for next-generation application design. Spring 3.1 adds dedicated conversation management facilities and many further improvements in Spring MVC, as well as explicit support for Servlet 3.0 and Tomcat 7 features. In this session, we will focus on selected key themes of Spring 3.1 in the context of modern web applications.',
 	'#spr3.1', 'spr', 1, 3);
@@ -861,16 +859,19 @@ insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 3, 'R
 insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 4, 'Room 9', 500, '');
 insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 5, 'BOF 1', 70, '');
 insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 6, 'BOF 2', 70, '');
+insert into VenueRoom (venue, id, name, capacity, locationHint) values (2, 7, 'Room 6', 500, '');
 
-insert into MemberGroup (name, slug, description, hashtag, leader) values ('Devoxx', 'devoxx', 'Premier European Java conference series', '#devoxx', 1);
+insert into MemberGroup (name, slug, description, hashtag, leader) values ('Devoxx', 'devoxx', 'Premier European Java conference series.', '#devoxx', 1);
 
-insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('Devoxx 2010', 'CET', '2010-11-15 9:00:00Z', '2010-11-19 13:50:00Z', 'javaholics', 'The conference for Javaholics', 2);
+insert into Event (title, timeZone, startTime, endTime, slug, description, memberGroup) values ('Devoxx 2010', 'CET', '2010-11-15 7:00:00Z', '2010-11-19 11:50:00Z', 'javaholics', 'The conference for Javaholics.', 2);
 insert into EventVenue (event, venue) values (2, 2);
 
 insert into EventTrack (event, code, name, chair) values (2, 'core', 'Java Core (SE/EE)', 1);
 insert into EventTrack (event, code, name, chair) values (2, 'web', 'Web Frameworks', 1);
+insert into EventTrack (event, code, name, chair) values (2, 'sec', 'Architecture/Security', 1);
 insert into EventTrack (event, code, name, chair) values (2, 'lang', 'New Languages on the JVM', 1);
 insert into EventTrack (event, code, name, chair) values (2, 'met', 'Methodology', 1);
+insert into EventTrack (event, code, name, chair) values (2, 'part', 'Partner', 1);
 
 insert into Leader (name) values ('Ben Alex');
 insert into Leader (name) values ('Matt Raible');
@@ -878,6 +879,88 @@ insert into Leader (name) values ('Oliver Gierke');
 
 insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 1, 'Extreme Productivity with Spring Roo', '2010-11-15 12:30:00Z', '2010-11-15 15:30:00Z',
 	'Delight your customers and impress your colleagues by delivering enterprise Spring applications faster than ever before. In this session we''ll introduce Spring Roo, an open source tool that makes it easy to build applications using the Java language, standards and technologies you already know.',
-	'#roo', 'web', 2, 3);
-insert into EventSessionLeader (event, session, leader) values (2, 1, 86);
-insert into EventSessionLeader (event, session, leader) values (2, 1, 20);
+	'#spring', 'web', 2, 3);
+insert into EventSessionLeader (event, session, leader, rank) values (2, 1, 86, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (2, 1, 20, 2);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 2, 'Groovy Update, Ecosystem, and Skyrocketing to the Cloud with AppEngine and Gaelyk!', '2010-11-15 12:30:00Z', '2010-11-15 15:30:00Z',
+	'Guillaume Laforge, the Groovy project lead, will guide you through all the latest and greatest innovations in the language: new AST transformations, new APIs, and more, to make you a more productive Java developer. Some glimpses of what the future holds for Groovy will also be unveiled. Then, Guillaume will update you about the great active and rich ecosystem around Groovy, with many useful libraries for testing, build, code quality, and for building desktop and web applications. And we''ll finish our whirlwind tour of the Groovy world diving into a gem in this ecosystem: Gaelyk, or how to skyrocket Groovy into the cloud, on Google App Engine!',
+	'#groovy', 'lang', 2, 2);
+insert into EventSessionLeader (event, session, leader) values (2, 2, 8);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 3, 'Spring Developer Tools to Push your Productivity', '2010-11-15 15:45:00Z', '2010-11-15 16:15:00Z',
+	'Spring started off to greatly increase the developer productivity; and as you all know successfully delivered on that promise. But there is more SpringSource can do to make your life as a developer more productive. In this session, we will demo current state-of-art developer tools for Spring such as Spring Roo, Spring IDE and Spring Insight. We will explain how these free tools can help you along the build-run-manage lifecycle of your application and prepare you for the cloud adventure.',
+	'#spring', 'core', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 3, 30);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 4, 'Increasing Developer Productivity with Mylyn', '2010-11-15 16:25:00Z', '2010-11-15 16:55:00Z',
+	'The Mylyn plugin is contained in a lot of Eclipse distributions but quite undiscovered amongst developers nevertheless. Having that said there is an enormous amount of productivity gain to be discovered in this area to free developers from technical and organizational bonds and thus make every single individual more productive.  The talk presents key advantages using Mylyn demoing the tool and focuses on the main topics of Mylyn: task orientation, productivity and traceability.',
+	'#myln', 'met', 2, 1);
+insert into EventSessionLeader (event, session, leader) values (2, 4, 88);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 5, 'Groovy/Grails Get Together', '2010-11-15 18:00:00Z', '2010-11-15 19:00:00Z',
+	'Get together for the Groovy and Grails developers.',
+	'#groovy', 'lang', 2, 5);
+insert into EventSessionLeader (event, session, leader, rank) values (2, 5, 8, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (2, 5, 42, 2);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 6, 'Spring BOF', '2010-11-15 19:00:00Z', '2010-11-15 20:00:00Z',
+	'The informal Spring BOF.',
+	'#spring', 'core', 2, 5);
+insert into EventSessionLeader (event, session, leader, rank) values (2, 6, 86, 1);
+insert into EventSessionLeader (event, session, leader, rank) values (2, 6, 30, 2);
+insert into EventSessionLeader (event, session, leader, rank) values (2, 6, 20, 3);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 7, 'Groovy/Grails Development in Eclipse', '2010-11-16 15:45:00Z', '2010-11-16 16:15:00Z',
+	'Come and see the latest developments in Groovy and Grails tooling for Eclipse. We''ll look at the great Groovy editing experience based around a sophisticated inferencing engine, and also how support is now in place for many of the standard Eclipse features that developers are so used to when working with their Java code: formatting, refactoring, javadoc, task tags, debugging (incl. hotswap). Building on Groovy we''ll then look at the latest Grails development features (including plugin management, navigation, gsp editing, local plugin support).',
+	'#groovy', 'lang', 2, 2);
+insert into EventSessionLeader (event, session, leader) values (2, 7, 30);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 8, 'Spring 3 Java Config', '2010-11-17 12:15:00Z', '2010-11-17 12:30:00Z',
+	'Part of Spring 3, JavaConfig provides a flexible, non-invasive option for configuring applications inside the Spring IoC container using JVM-based languages such as Java or Groovy. This session will explore the features offered by JavaConfig, what makes it stand out from other annotation-based configurations and what it takes to integrate it immediately into an existing application whether for wiring up one''s own components, custom APIs or third-party libraries.',
+	'#spring', 'sec', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 8, 24);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 9, 'Groovy Code Generation', '2010-11-17 12:15:00Z', '2010-11-17 12:30:00Z',
+	'This talk is about why AST transformations are important, what you can do with them, and where the language world is headed.  We''ll dive into some of the useful Groovy annotations and libraries being written that harness AST transformations, such as the Spock Testing framework, GContracts for Design by Contract in Groovy, and the new Groovy 1.8 features.',
+	'#groovy', 'lang', 2, 4);
+insert into EventSessionLeader (event, session, leader) values (2, 9, 17);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 10, 'Spring 3.1 Themes and Trends', '2010-11-17 15:40:00Z', '2010-11-17 16:40:00Z',
+	'Spring 3.1 continues Spring''s mission with a focus on next-generation web applications. The key themes include conversation management and comprehensive support for Servlet 3.0 and JSF 2.0. This talk presents Spring 3 as a modern annotation-oriented application framework in the world of Java EE 6 and RIA. General component model trends will be discussed along with selected Spring 3.1 feature highlights in the web space.',
+	'#spring', 'core', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 10, 2);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 11, 'Improve the Performance of your Spring App', '2010-11-17 16:50:00Z', '2010-11-17 17:50:00Z',
+	'A pragmatic look on how to achieve easy gains in a Spring application through caching. This session will analyze the usual bottlenecks found in common application stacks and ways to address them. Various caching patterns will be discussed, with focus not just on performance but also scalability.',
+	'#spring', 'core', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 11, 24);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 12, 'Comparing JVM Web Frameworks', '2010-11-18 9:50:00Z', '2010-11-18 10:50:00Z',
+	'The rise of Java Web Frameworks has come and gone, yet many are still widely used today. This session looks at the top JVM web frameworks and compares their pros and cons.  Frameworks included: Struts 2, Spring MVC, Wicket, JSF, Tapestry, GWT, Grails and Rails.',
+	'#web', 'web', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 12, 87);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 13, 'Grails 1.3 Update', '2010-11-18 11:00:00Z', '2010-11-18 12:00:00Z',
+	'Grails provides a dynamic and agile development framework for web applications that is based on the most stable and productive open source libraries, including the Spring framework. This session will describe the latest features available in the new Grails 1.3 release and will describe the roadmap for upcoming releases.',
+	'#grails', 'web', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 13, 42);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 14, 'Standard DI with @Inject and JSR-330', '2010-11-18 12:15:00Z', '2010-11-18 12:30:00Z',
+	'Backed by the authors of popular DI frameworks such as Google Guice, Spring and Pico container, JSR-330 or "Dependency Injection for Java" standardizes a set of annotations and a type-safe API to make injectable classes portable across frameworks. This presentation will give attendees a quick tour of the new javax.inject package and an overview of its usage in both Java EE 6 (of which it is a part of) and Java SE.',
+	'#inject', 'sec', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 14, 24);
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, track, venue, room) values (2, 15, 'Modern Application Development with Spring Incorporating Social, Mobile and Cloud', '2010-11-18 14:10:00Z', '2010-11-18 15:10:00Z',
+	'Modern applications need to be easy to use, data rich, provide access anywhere and anytime, and enable collaboration with other people. This session will cover the latest extensions to the immensely popular Spring framework that are designed to address modern application requirements.',
+	'#spring', 'part', 2, 7);
+insert into EventSessionLeader (event, session, leader) values (2, 15, 81);
+
+
+insert into EventSession (event, id, title, startTime, endTime, description, hashtag, venue, room) values (2, 16, 'The Future of Java Discussion Panel', '2010-11-19 8:30:00Z', '2010-11-19 9:30:00Z',
+	'Lets discuss the future of Java, the language, platform, eco-system, community with input from Oracle, Google, SpringSource, a JCP member, a JUG leader and functional language expert. The discussion panel will be moderated by our JavaPosse friends: Dick Wall and Joe Nuxoll.',
+	'#future', 2, 3);
+insert into EventSessionLeader (event, session, leader) values (2, 16, 2);
