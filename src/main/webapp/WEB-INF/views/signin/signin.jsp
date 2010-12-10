@@ -27,6 +27,18 @@
 	<p><a href="<c:url value="/reset" />">Forgot your password?</a></p>
 </form>
 
+<script>
+	function signInWithFacebook() {
+		FB.getLoginStatus(function(response) {
+	        if (response.session) {
+	    		$('#fb_signin').submit();
+	        }
+	      });
+
+	}
+</script>
+
+
 <c:if test="${!currentDevice.mobile}">
 <div id="fb-root"></div>	
 <form id="fb_signin" action="<c:url value="/signin/facebook" />" method="post">
@@ -36,7 +48,7 @@
 	few hours and the user will have to authenticate again. Asking for offline access allows
 	the token to be long-lived, but has the unfortunate side-effect of communicating that the
 	app may access their information even if they're not logged in. --%>
-	<fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Sign in with Facebook</fb:login-button>
+	<fb:login-button perms="email,publish_stream,offline_access" onlogin="signInWithFacebook();" v="2" length="long">Sign in with Facebook</fb:login-button>
 </form>
 </c:if>
 

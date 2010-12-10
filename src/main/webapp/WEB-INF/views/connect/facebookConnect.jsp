@@ -7,13 +7,24 @@
 	<div class="${message.type.cssClass}">${message.text}</div>
 </c:if>
 
+<script>
+	function signInWithFacebook() {
+		FB.getLoginStatus(function(response) {
+	        if (response.session) {
+	    		$('#fb_signin').submit();
+	        }
+	      });
+
+	}
+</script>
+
 <form id="fb_signin" action="<c:url value="/connect/facebook" />" method="post">
 	<div class="formInfo">
 		<h2>Connect to Facebook</h2>
 		<p>Click the button to connect your Greenhouse account with your Facebook account.</p>
 	</div>
 	<div id="fb-root"></div>	
-	<p><fb:login-button perms="email,publish_stream,offline_access" onlogin="$('#fb_signin').submit();" v="2" length="long">Connect to Facebook</fb:login-button></p>
+	<p><fb:login-button perms="email,publish_stream,offline_access" onlogin="signInWithFacebook();" v="2" length="long">Connect to Facebook</fb:login-button></p>
 	<fieldset class="checkbox">
 		<label for="postToWall"><input id="postToWall" type="checkbox" name="postToWall" /> Post a link to my Greenhouse profile on my wall after connecting</label>
 	</fieldset>
