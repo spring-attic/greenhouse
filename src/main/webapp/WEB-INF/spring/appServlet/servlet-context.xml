@@ -25,7 +25,7 @@
 		<beans:bean class="com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor" />
 		<beans:bean class="com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor" />
 		<beans:bean class="com.springsource.greenhouse.home.UserLocationHandlerInterceptor" />
-		<beans:bean class="org.springframework.mobile.device.mvc.DeviceResolverHandlerInterceptor" />
+		<beans:bean class="org.springframework.mobile.device.DeviceResolverHandlerInterceptor" />
 	</interceptors>
 		
 	<!-- Maps view names to Tiles Definitions -->
