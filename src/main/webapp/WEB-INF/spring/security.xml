@@ -8,7 +8,7 @@
 	<http use-expressions="true">
 		<!-- Authentication policy -->
 		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="authenticationFailureHandler" />
-		<logout logout-url="/signout" /> <!--delete-cookies="JSESSIONID" 3.1.0 ONLY -->
+		<logout logout-url="/signout" /> <!-- delete-cookies="JSESSIONID" 3.1 only -->
 		<!-- Authorization policy TODO replace with @Secured on @Controllers? -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/favicon.ico" access="permitAll" />

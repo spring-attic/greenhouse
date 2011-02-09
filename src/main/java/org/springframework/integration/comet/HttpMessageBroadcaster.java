@@ -34,7 +34,7 @@ import org.atmosphere.cpr.DefaultBroadcaster;
 import org.springframework.http.HttpHeaders;
 import org.springframework.integration.Message;
 import org.springframework.integration.MessagingException;
-import org.springframework.integration.http.DefaultHttpHeaderMapper;
+import org.springframework.integration.http.support.DefaultHttpHeaderMapper;
 import org.springframework.integration.mapping.HeaderMapper;
 import org.springframework.integration.support.MessageBuilder;
 

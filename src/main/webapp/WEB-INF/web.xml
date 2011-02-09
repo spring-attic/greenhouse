@@ -11,7 +11,7 @@
 	
 	<!-- Sets the default profile to use in the absence of any profiles set at deployment time. -->
 	<context-param>
-		<param-name>spring.profile.default</param-name>
+		<param-name>spring.profiles.default</param-name>
 		<param-value>embedded</param-value>
 	</context-param>
 
