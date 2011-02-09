@@ -15,16 +15,14 @@
  */
 package com.springsource.greenhouse.connect.providers;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.social.facebook.FacebookAccessToken;
 import org.springframework.social.facebook.FacebookLink;
 import org.springframework.social.facebook.FacebookOperations;
-import org.springframework.social.facebook.FacebookUserId;
+import org.springframework.social.facebook.web.FacebookAccessToken;
+import org.springframework.social.facebook.web.FacebookUserId;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,12 +92,13 @@ public class FacebookConnectController {
 	}
 	
 	private void useFacebookProfilePicture(FacebookOperations api, Account account, String facebookUserId) {
-		try {
-			byte[] imageBytes = api.getProfilePicture(facebookUserId);
-	        profilePictureService.saveProfilePicture(account.getId(), imageBytes);
-		} catch (IOException e) {
-			FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
-		}
+		// TODO uncomment when available in Spring Social
+		// try {
+			//String pictureUrl = api.getProfilePictureUrl();
+	        //profilePictureService.saveProfilePicture(account.getId(), pictureUrl);
+		//} catch (IOException e) {
+		//	FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
+		//}
 	}
 	
 }

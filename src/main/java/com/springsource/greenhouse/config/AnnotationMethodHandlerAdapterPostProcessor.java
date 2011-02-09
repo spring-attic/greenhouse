@@ -23,7 +23,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.format.datetime.joda.JodaTimeContextHolder;
 import org.springframework.mobile.device.DeviceWebArgumentResolver;
 import org.springframework.security.core.Authentication;
-import org.springframework.social.facebook.FacebookWebArgumentResolver;
+import org.springframework.social.facebook.web.FacebookWebArgumentResolver;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;

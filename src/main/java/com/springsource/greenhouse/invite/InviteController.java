@@ -21,8 +21,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.social.facebook.FacebookUserId;
-import org.springframework.social.facebook.FacebookWebArgumentResolver;
+import org.springframework.social.facebook.web.FacebookUserId;
+import org.springframework.social.facebook.web.FacebookWebArgumentResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

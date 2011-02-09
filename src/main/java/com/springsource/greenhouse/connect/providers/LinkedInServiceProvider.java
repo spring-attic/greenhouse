@@ -20,8 +20,8 @@ import org.springframework.social.linkedin.LinkedInTemplate;
 
 import com.springsource.greenhouse.connect.AbstractServiceProvider;
 import com.springsource.greenhouse.connect.AccountConnectionRepository;
-import com.springsource.greenhouse.connect.ServiceProviderParameters;
 import com.springsource.greenhouse.connect.OAuthToken;
+import com.springsource.greenhouse.connect.ServiceProviderParameters;
 
 /**
  * LinkedIn ServiceProvider implementation.
