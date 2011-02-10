@@ -43,16 +43,16 @@ public class FacebookConnectController {
 
 	private final ServiceProvider<FacebookOperations> facebookProvider;
 	
-	private final ProfilePictureService profilePictureService;
+	// private final ProfilePictureService profilePictureService;
 
 	@Inject
 	public FacebookConnectController(ServiceProvider<FacebookOperations> facebookProvider, ProfilePictureService profilePictureService) {
 		this.facebookProvider = facebookProvider;
-		this.profilePictureService = profilePictureService;
+		// this.profilePictureService = profilePictureService;
 	}
 	
 	@RequestMapping(value="/connect/facebook", method=RequestMethod.GET)
-	public String connectView(Account account, @FacebookUserId String facebookUserId, Model model) {
+	public String connectView(Account account, @FacebookUserId(required=false) String facebookUserId, Model model) {
 		if (facebookProvider.isConnected(account.getId())) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "connect/facebookConnected";
