@@ -41,7 +41,7 @@
 		<script type="text/javascript" src="<c:url value="/resources/${script}" />"></script>	
 	</c:forEach>
 	<script type="text/javascript">
-		$.cookie('Greenhouse.timeZoneOffset', new Date().getTimezoneOffset() / 60 * -1);
+		$.cookie('Greenhouse.timeZoneOffset', new Date().getTimezoneOffset() * 60000);
 	</script>
 </body>
 </html>

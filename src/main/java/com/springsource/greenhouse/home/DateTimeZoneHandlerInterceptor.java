@@ -54,10 +54,10 @@ public class DateTimeZoneHandlerInterceptor implements HandlerInterceptor {
 	// interna helpers
 	
 	private DateTimeZone getTimeZone(HttpServletRequest request) {
-		Integer hoursOffset = getHoursOffset(request);
-		if (hoursOffset != null) {
+		Integer millisOffset = getMillisOffset(request);
+		if (millisOffset != null) {
 			try {
-				return DateTimeZone.forOffsetHours(hoursOffset);
+				return DateTimeZone.forOffsetMillis(millisOffset);
 			} catch (IllegalArgumentException e) {
 				return DateTimeZone.getDefault();
 			}
@@ -66,7 +66,7 @@ public class DateTimeZoneHandlerInterceptor implements HandlerInterceptor {
 		}
 	}
 	
-	private Integer getHoursOffset(HttpServletRequest request) {
+	private Integer getMillisOffset(HttpServletRequest request) {
 		Cookie cookie = WebUtils.getCookie(request, "Greenhouse.timeZoneOffset");
 		if (cookie != null ) {
 			return Integer.valueOf(cookie.getValue());
