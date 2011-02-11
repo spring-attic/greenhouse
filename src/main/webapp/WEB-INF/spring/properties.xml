@@ -12,7 +12,7 @@
 		<!-- Defaults if no placeholder is present -->
 		<property name="properties">
 			<!-- Note: these default values are expected only to apply to the 'embedded' profile, but are currently applied across all profiles -->
-			<!-- In practice this is OK, since these values are override-able by values in the externalized classpath:application.properties file. 
+			<!-- In practice this is OK, since these values are override-able by values in the externalized classpath:application.properties file. -->
 			<!-- However, it would be better to use conditional property definition once it is available in Spring 3.1 -->
 			<props>
 				<prop key="application.url">http://localhost:8080/greenhouse</prop>
