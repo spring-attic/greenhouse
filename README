@@ -1,0 +1,6 @@
+Greenhouse Reference Application
+--------------------------------
+
+To build simply execute 'mvn install' and deploy the resulting .war to any Servlet 2.5 >, such as Tomcat.
+
+By default, the app will run in 'embedded' mode which does not require any external setup.
