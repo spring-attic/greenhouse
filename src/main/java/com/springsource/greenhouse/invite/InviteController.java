@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.social.facebook.web.FacebookUserId;
+import org.springframework.social.facebook.web.FacebookCookieValue;
 import org.springframework.social.facebook.web.FacebookWebArgumentResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,7 +60,7 @@ public class InviteController {
 	 * The FacebookUserID obtained from a cookie via {@link FacebookWebArgumentResolver} is exported to the model so the member Facebook's login status can be determined.
 	 */
 	@RequestMapping(value="/invite", method=RequestMethod.GET)
-	public void invitePage(@FacebookUserId(required=false) String facebookUserId, Model model) {
+	public void invitePage(@FacebookCookieValue("uid") String facebookUserId, Model model) {
 		model.addAttribute("facebookUserId", facebookUserId);
 	}
 	

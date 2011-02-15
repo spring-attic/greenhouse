@@ -21,8 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.social.facebook.FacebookLink;
 import org.springframework.social.facebook.FacebookOperations;
-import org.springframework.social.facebook.web.FacebookAccessToken;
-import org.springframework.social.facebook.web.FacebookUserId;
+import org.springframework.social.facebook.web.FacebookCookieValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +51,7 @@ public class FacebookConnectController {
 	}
 	
 	@RequestMapping(value="/connect/facebook", method=RequestMethod.GET)
-	public String connectView(Account account, @FacebookUserId(required=false) String facebookUserId, Model model) {
+	public String connectView(Account account, @FacebookCookieValue("uid") String facebookUserId, Model model) {
 		if (facebookProvider.isConnected(account.getId())) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "connect/facebookConnected";
@@ -62,7 +61,7 @@ public class FacebookConnectController {
 	}
 	
 	@RequestMapping(value="/connect/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(Account account, @FacebookAccessToken String accessToken, @FacebookUserId String facebookUserId,
+	public String connectAccountToFacebook(Account account, @FacebookCookieValue("access_token") String accessToken, @FacebookCookieValue("uid") String facebookUserId,
 			@RequestParam(required=false, defaultValue="false") boolean postToWall, @RequestParam(required=false, defaultValue="false") boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
 			facebookProvider.addConnection(account.getId(), accessToken, facebookUserId);

@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookProfile;
 import org.springframework.social.facebook.FacebookTemplate;
-import org.springframework.social.facebook.web.FacebookAccessToken;
+import org.springframework.social.facebook.web.FacebookCookieValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,7 +58,7 @@ public class FacebookSigninController {
 	 * Notifies the user if the access token is invalid.
 	 */
 	@RequestMapping(value="/signin/facebook", method=RequestMethod.POST)
-	public String signin(@FacebookAccessToken String accessToken) {
+	public String signin(@FacebookCookieValue("access_token") String accessToken) {
 		try {
 			Account account = facebookProvider.findAccountByConnection(accessToken);
 			AccountUtils.signin(account);
