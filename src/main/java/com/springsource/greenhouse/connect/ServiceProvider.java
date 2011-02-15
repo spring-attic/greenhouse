@@ -50,6 +50,13 @@ public interface ServiceProvider<S> {
 	 * The term "API key" is derived from the OAuth 2 specification. 
 	 */
 	String getApiKey();
+
+	/**
+	 * The api key secret.
+	 * Available as a public property to support signature verification against an api key submitted by a client.
+	 * This helps ensure the api key actually came from the service provider.
+	 */
+	String getSecret();
 	
 	/**
 	 * An alternate identifier for the local application in the remote service provider's system.

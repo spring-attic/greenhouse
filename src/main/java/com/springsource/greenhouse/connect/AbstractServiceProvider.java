@@ -67,6 +67,10 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 	public String getApiKey() {
 		return parameters.getApiKey();
 	}
+	
+	public String getSecret() {
+		return parameters.getSecret();
+	}
 
 	public Long getAppId() {
 		return parameters.getAppId();
@@ -150,13 +154,6 @@ public abstract class AbstractServiceProvider<S> implements ServiceProvider<S> {
 	 */
 	protected abstract String buildProviderProfileUrl(String providerAccountId, S serviceOperations);
 
-	/**
-	 * The {@link #getApiKey() apiKey} secret.
-	 */
-	protected String getSecret() {
-		return parameters.getSecret();
-	}
-	
 	// internal helpers
 	
 	private OAuthService getOAuthService() {
