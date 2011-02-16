@@ -23,6 +23,12 @@
 	
 	<bean class="org.springframework.social.web.connect.ConnectController">
 		<constructor-arg value="${application.secureUrl}" />
+		<property name="interceptors">
+			<list>
+				<bean class="com.springsource.greenhouse.connect.providers.TwitterConnectInterceptor" />
+				<bean class="com.springsource.greenhouse.connect.providers.FacebookConnectInterceptor" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean class="org.springframework.social.facebook.web.FacebookSigninController">

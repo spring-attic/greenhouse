@@ -15,14 +15,15 @@
  */
 package com.springsource.greenhouse.connect.providers;
 
+import org.springframework.social.connect.ServiceProvider;
+import org.springframework.social.connect.ServiceProviderConnection;
 import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.social.twitter.TwitterApi;
+import org.springframework.social.web.connect.ConnectInterceptor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.ConnectInterceptor;
-import com.springsource.greenhouse.connect.ServiceProvider;
 
 /**
  * Supports posting a tweet on behalf of the user after connecting to Twitter.
@@ -30,20 +31,23 @@ import com.springsource.greenhouse.connect.ServiceProvider;
  */
 public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterApi> {
 
+	@Override
 	public void preConnect(ServiceProvider<TwitterApi> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAMETER))) {
 			request.setAttribute(POST_TWEET_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}
 	}
 
-	public void postConnect(ServiceProvider<TwitterApi> provider, Account account, WebRequest request) {
-		if (request.getAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
-			try {
-				provider.getServiceOperations(account.getId()).updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());
-			} catch (DuplicateTweetException e) {
-			}
-			request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);
+	@Override
+	public void postConnect(ServiceProvider<TwitterApi> provider, ServiceProviderConnection<TwitterApi> connection,
+			WebRequest request) {
+		try {
+			// relies on AccountExposingHandlerInterceptor to have put the account in the request.
+			Account account = (Account) request.getAttribute("account", WebRequest.SCOPE_REQUEST);
+			connection.getServiceApi().updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());
+		} catch (DuplicateTweetException e) {
 		}
+		request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 	}
 	
 	private static final String POST_TWEET_PARAMETER = "postTweet";
