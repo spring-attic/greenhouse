@@ -17,9 +17,7 @@
 	<fieldset class="checkbox">
 		<label for="postToWall"><input id="postToWall" type="checkbox" name="postToWall" /> Post a link to my Greenhouse profile on my wall after connecting</label>
 	</fieldset>
-	<%-- 
 	<fieldset class="checkbox">
 		<label for="useProfilePicture"><input id="useProfilePicture" type="checkbox" name="useProfilePicture" /> Use my Facebook profile picture as my Greenhouse profile picture</label>
 	</fieldset>
-	--%>
 </form>

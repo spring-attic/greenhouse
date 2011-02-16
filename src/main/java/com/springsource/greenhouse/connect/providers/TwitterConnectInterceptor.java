@@ -41,13 +41,15 @@ public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterApi>
 	@Override
 	public void postConnect(ServiceProvider<TwitterApi> provider, ServiceProviderConnection<TwitterApi> connection,
 			WebRequest request) {
-		try {
-			// relies on AccountExposingHandlerInterceptor to have put the account in the request.
-			Account account = (Account) request.getAttribute("account", WebRequest.SCOPE_REQUEST);
-			connection.getServiceApi().updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());
-		} catch (DuplicateTweetException e) {
+		if (request.getAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
+			try {
+				// relies on AccountExposingHandlerInterceptor to have put the account in the request.
+				Account account = (Account) request.getAttribute("account", WebRequest.SCOPE_REQUEST);
+				connection.getServiceApi().updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());
+			} catch (DuplicateTweetException e) {
+			}
+			request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		}
-		request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 	}
 	
 	private static final String POST_TWEET_PARAMETER = "postTweet";
