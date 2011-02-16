@@ -28,8 +28,8 @@
 	<bean class="org.springframework.social.facebook.web.FacebookSigninController">
 		<constructor-arg ref="connectionRepository" />
 		<constructor-arg ref="signinGateway" />
-		<constructor-arg value="#{facebookProvider.apiKey}" />
-		<constructor-arg value="#{facebookProvider.appSecret}" />
+		<constructor-arg value="#{facebookProvider.clientId}" />
+		<constructor-arg value="#{facebookProvider.clientSecret}" />
 	</bean>
 	
 	<bean id="signinGateway" class="com.springsource.greenhouse.signin.AccountAsPrincipalSigninGateway" />

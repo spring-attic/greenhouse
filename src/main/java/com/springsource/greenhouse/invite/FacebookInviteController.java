@@ -21,7 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.social.connect.ServiceProvider;
-import org.springframework.social.facebook.FacebookOperations;
+import org.springframework.social.facebook.FacebookApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +38,7 @@ import com.springsource.greenhouse.account.Account;
 @Controller
 public class FacebookInviteController {
 
-	private final ServiceProvider<FacebookOperations> facebookProvider;
+	private final ServiceProvider<FacebookApi> facebookProvider;
 	
 	/**
 	 * Construct the FacebookInviteController.
@@ -46,7 +46,7 @@ public class FacebookInviteController {
 	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
 	 */
 	@Inject
-	public FacebookInviteController(ServiceProvider<FacebookOperations> facebookProvider) {
+	public FacebookInviteController(ServiceProvider<FacebookApi> facebookProvider) {
 		this.facebookProvider = facebookProvider;
 	}
 	

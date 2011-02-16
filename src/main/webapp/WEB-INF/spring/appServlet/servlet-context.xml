@@ -16,8 +16,8 @@
 		<argument-resolvers>
 			<beans:bean class="org.springframework.mobile.device.DeviceWebArgumentResolver" />
 			<beans:bean class="org.springframework.social.facebook.web.FacebookWebArgumentResolver">
-				<beans:constructor-arg value="#{facebookProvider.apiKey}" />
-				<beans:constructor-arg value="#{facebookProvider.appSecret}" />				
+				<beans:constructor-arg value="#{facebookProvider.clientId}" />
+				<beans:constructor-arg value="#{facebookProvider.clientSecret}" />				
 			</beans:bean>
 			<beans:bean class="com.springsource.greenhouse.config.AccountWebArgumentResolver" />
 			<beans:bean class="com.springsource.greenhouse.config.DateTimeZoneWebArgumentResolver" />

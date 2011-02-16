@@ -15,34 +15,34 @@
  */
 package com.springsource.greenhouse.connect.providers;
 
-import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.twitter.TwitterApi;
 import org.springframework.social.twitter.TwitterTemplate;
 
 import com.springsource.greenhouse.connect.AbstractServiceProvider;
 import com.springsource.greenhouse.connect.AccountConnectionRepository;
-import com.springsource.greenhouse.connect.ServiceProviderParameters;
 import com.springsource.greenhouse.connect.OAuthToken;
+import com.springsource.greenhouse.connect.ServiceProviderParameters;
 
 /**
  * Twitter ServiceProvider implementation.
  * @author Keith Donald
  * @author Craig Walls
  */
-public final class TwitterServiceProvider extends AbstractServiceProvider<TwitterOperations> {
+public final class TwitterServiceProvider extends AbstractServiceProvider<TwitterApi> {
 	
 	public TwitterServiceProvider(ServiceProviderParameters parameters, AccountConnectionRepository connectionRepository) {
 		super(parameters, connectionRepository);
 	}
 
-	protected TwitterOperations createServiceOperations(OAuthToken accessToken) {
+	protected TwitterApi createServiceOperations(OAuthToken accessToken) {
 		return accessToken != null ? new TwitterTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret()) : new TwitterTemplate();
 	}
 
-	protected String fetchProviderAccountId(TwitterOperations twitter) {
+	protected String fetchProviderAccountId(TwitterApi twitter) {
 		return twitter.getProfileId();
 	}
 
-	protected String buildProviderProfileUrl(String screenName, TwitterOperations twitter) {
+	protected String buildProviderProfileUrl(String screenName, TwitterApi twitter) {
 		return "http://www.twitter.com/" + screenName;
 	}
 	

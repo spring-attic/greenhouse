@@ -83,7 +83,7 @@ public class GroupsController {
 		return metadata;		
 	}
 	
-	@Value("#{facebookProvider.apiKey}")
+	@Value("#{facebookProvider.clientId}")
 	private String facebookAppId;
 
 }

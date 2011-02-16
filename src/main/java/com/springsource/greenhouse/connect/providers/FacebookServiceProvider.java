@@ -15,36 +15,36 @@
  */
 package com.springsource.greenhouse.connect.providers;
 
-import org.springframework.social.facebook.FacebookOperations;
+import org.springframework.social.facebook.FacebookApi;
 import org.springframework.social.facebook.FacebookTemplate;
 
 import com.springsource.greenhouse.connect.AbstractServiceProvider;
 import com.springsource.greenhouse.connect.AccountConnectionRepository;
-import com.springsource.greenhouse.connect.ServiceProviderParameters;
 import com.springsource.greenhouse.connect.OAuthToken;
+import com.springsource.greenhouse.connect.ServiceProviderParameters;
 
 /**
  * Facebook ServiceProvider implementation.
  * @author Keith Donald
  */
-public final class FacebookServiceProvider extends AbstractServiceProvider<FacebookOperations> {
+public final class FacebookServiceProvider extends AbstractServiceProvider<FacebookApi> {
 	
 	public FacebookServiceProvider(ServiceProviderParameters parameters, AccountConnectionRepository connectionRepository) {
 		super(parameters, connectionRepository);
 	}
 
-	protected FacebookOperations createServiceOperations(OAuthToken accessToken) {
+	protected FacebookApi createServiceOperations(OAuthToken accessToken) {
 		if (accessToken == null) {
 			throw new IllegalStateException("Cannot access Facebook without an access token");
 		}
 		return new FacebookTemplate(accessToken.getValue());
 	}
 
-	protected String fetchProviderAccountId(FacebookOperations facebook) {
+	protected String fetchProviderAccountId(FacebookApi facebook) {
 		return facebook.getProfileId();
 	}
 
-	protected String buildProviderProfileUrl(String facebookId, FacebookOperations facebook) {
+	protected String buildProviderProfileUrl(String facebookId, FacebookApi facebook) {
 		return "http://www.facebook.com/profile.php?id=" + facebookId;
 	}
 

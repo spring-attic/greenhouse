@@ -78,7 +78,7 @@ public class MembersController {
 		return metadata;		
 	}
 	
-	@Value("#{facebookProvider.apiKey}")
+	@Value("#{facebookProvider.clientId}")
 	private String facebookAppId; 
 
 }

@@ -16,27 +16,27 @@
 package com.springsource.greenhouse.connect.providers;
 
 import org.springframework.social.twitter.DuplicateTweetException;
-import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.twitter.TwitterApi;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.ServiceProvider;
 import com.springsource.greenhouse.connect.ConnectInterceptor;
+import com.springsource.greenhouse.connect.ServiceProvider;
 
 /**
  * Supports posting a tweet on behalf of the user after connecting to Twitter.
  * @author Keith Donald
  */
-public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterOperations> {
+public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterApi> {
 
-	public void preConnect(ServiceProvider<TwitterOperations> provider, WebRequest request) {
+	public void preConnect(ServiceProvider<TwitterApi> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAMETER))) {
 			request.setAttribute(POST_TWEET_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}
 	}
 
-	public void postConnect(ServiceProvider<TwitterOperations> provider, Account account, WebRequest request) {
+	public void postConnect(ServiceProvider<TwitterApi> provider, Account account, WebRequest request) {
 		if (request.getAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
 			try {
 				provider.getServiceOperations(account.getId()).updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());

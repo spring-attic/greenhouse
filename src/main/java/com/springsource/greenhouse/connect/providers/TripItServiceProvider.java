@@ -15,7 +15,7 @@
  */
 package com.springsource.greenhouse.connect.providers;
 
-import org.springframework.social.tripit.TripItOperations;
+import org.springframework.social.tripit.TripItApi;
 import org.springframework.social.tripit.TripItTemplate;
 
 import com.springsource.greenhouse.connect.AbstractServiceProvider;
@@ -27,24 +27,24 @@ import com.springsource.greenhouse.connect.ServiceProviderParameters;
  * TripIt ServiceProvider implementation.
  * @author Craig Walls
  */
-public final class TripItServiceProvider extends AbstractServiceProvider<TripItOperations> {
+public final class TripItServiceProvider extends AbstractServiceProvider<TripItApi> {
 	
 	public TripItServiceProvider(ServiceProviderParameters parameters, AccountConnectionRepository connectionRepository) {
 		super(parameters, connectionRepository);
 	}
 
-	protected TripItOperations createServiceOperations(OAuthToken accessToken) {
+	protected TripItApi createServiceOperations(OAuthToken accessToken) {
 		if (accessToken == null) {
 			throw new IllegalStateException("Cannot access TripIt without an access token");
 		}
 		return new TripItTemplate(getApiKey(), getSecret(), accessToken.getValue(), accessToken.getSecret());
 	}
 
-	protected String fetchProviderAccountId(TripItOperations tripIt) {
+	protected String fetchProviderAccountId(TripItApi tripIt) {
 		return tripIt.getProfileId();
 	}
 
-	protected String buildProviderProfileUrl(String tripItId, TripItOperations tripIt) {
+	protected String buildProviderProfileUrl(String tripItId, TripItApi tripIt) {
 		return tripIt.getProfileUrl();
 	}
 	

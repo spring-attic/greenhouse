@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.social.facebook.FacebookLink;
-import org.springframework.social.facebook.FacebookOperations;
+import org.springframework.social.facebook.FacebookApi;
 import org.springframework.social.facebook.web.FacebookCookieValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,12 +40,12 @@ import com.springsource.greenhouse.members.ProfilePictureService;
 @Controller
 public class FacebookConnectController {
 
-	private final ServiceProvider<FacebookOperations> facebookProvider;
+	private final ServiceProvider<FacebookApi> facebookProvider;
 	
 	// private final ProfilePictureService profilePictureService;
 
 	@Inject
-	public FacebookConnectController(ServiceProvider<FacebookOperations> facebookProvider, ProfilePictureService profilePictureService) {
+	public FacebookConnectController(ServiceProvider<FacebookApi> facebookProvider, ProfilePictureService profilePictureService) {
 		this.facebookProvider = facebookProvider;
 		// this.profilePictureService = profilePictureService;
 	}
@@ -67,7 +67,7 @@ public class FacebookConnectController {
 			@RequestParam(required=false, defaultValue="false") boolean postToWall, @RequestParam(required=false, defaultValue="false") boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
 			facebookProvider.addConnection(account.getId(), accessToken, facebookUserId);
-			FacebookOperations api = facebookProvider.getServiceOperations(account.getId());
+			FacebookApi api = facebookProvider.getServiceOperations(account.getId());
 			if (postToWall) {
 				postToWall(api, account);
 			}
@@ -87,12 +87,12 @@ public class FacebookConnectController {
 	
 	// internal helpers
 	
-	private void postToWall(FacebookOperations api, Account account) {
+	private void postToWall(FacebookApi api, Account account) {
 		api.updateStatus("Join me at the Greenhouse!", new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.",
 			"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 	}
 	
-	private void useFacebookProfilePicture(FacebookOperations api, Account account, String facebookUserId) {
+	private void useFacebookProfilePicture(FacebookApi api, Account account, String facebookUserId) {
 		// TODO uncomment when available in Spring Social
 		// try {
 			//String pictureUrl = api.getProfilePictureUrl();

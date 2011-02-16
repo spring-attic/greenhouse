@@ -1,11 +1,7 @@
 package com.springsource.greenhouse.connect;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -16,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.security.encrypt.StringEncryptor;
-import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.twitter.TwitterApi;
 
 import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.ProfileReference;
@@ -30,7 +26,7 @@ public class JdbcAccountConnectionRepositoryTest {
 
 	private JdbcTemplate jdbcTemplate;
 
-	private ServiceProvider<TwitterOperations> serviceProvider;
+	private ServiceProvider<TwitterApi> serviceProvider;
 
 	private JdbcServiceProviderFactory providerFactory;
 
@@ -41,7 +37,7 @@ public class JdbcAccountConnectionRepositoryTest {
 		StringEncryptor encryptor = new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed");
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		providerFactory = new JdbcServiceProviderFactory(jdbcTemplate, encryptor, accountMapper);
-		serviceProvider = providerFactory.getServiceProvider("twitter", TwitterOperations.class);
+		serviceProvider = providerFactory.getServiceProvider("twitter", TwitterApi.class);
 	}
 
 	@After
@@ -56,7 +52,7 @@ public class JdbcAccountConnectionRepositoryTest {
 		assertFalse(serviceProvider.isConnected(2L));
 		serviceProvider.addConnection(2L, "accessToken", "kdonald");
 		assertTrue(serviceProvider.isConnected(2L));
-		TwitterOperations api = serviceProvider.getServiceOperations(2L);
+		TwitterApi api = serviceProvider.getServiceOperations(2L);
 		assertNotNull(api);
 		assertNotNull(serviceProvider.findAccountByConnection("accessToken"));
 	}
@@ -73,13 +69,13 @@ public class JdbcAccountConnectionRepositoryTest {
 
 	@Test
 	public void getApi() {
-		TwitterOperations api = serviceProvider.getServiceOperations(1L);
+		TwitterApi api = serviceProvider.getServiceOperations(1L);
 		assertNotNull(api);
 	}
 
 	@Test
 	public void getApiNotConnected() {
-		TwitterOperations api = serviceProvider.getServiceOperations(2L);
+		TwitterApi api = serviceProvider.getServiceOperations(2L);
 		assertNotNull(api);
 	}
 

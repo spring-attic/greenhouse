@@ -20,10 +20,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.social.connect.ServiceProvider;
-import org.springframework.social.facebook.FacebookOperations;
-import org.springframework.social.linkedin.LinkedInOperations;
-import org.springframework.social.tripit.TripItOperations;
-import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.facebook.FacebookApi;
+import org.springframework.social.linkedin.LinkedInApi;
+import org.springframework.social.tripit.TripItApi;
+import org.springframework.social.twitter.TwitterApi;
 
 import com.springsource.greenhouse.account.Account;
 
@@ -44,7 +44,8 @@ public class ServiceProvidersApiConfiguration {
 	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
-	public TwitterOperations twitter(ServiceProvider<TwitterOperations> twitterProvider, @Value("#{request.getAttribute('account')}") Account account) {
+	public TwitterApi twitter(ServiceProvider<TwitterApi> twitterProvider,
+			@Value("#{request.getAttribute('account')}") Account account) {
 		return twitterProvider.getConnections(account).get(0).getServiceApi();
 	}
 
@@ -55,7 +56,8 @@ public class ServiceProvidersApiConfiguration {
 	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
-	public FacebookOperations facebook(ServiceProvider<FacebookOperations> facebookProvider, @Value("#{request.getAttribute('account')}") Account account) {
+	public FacebookApi facebook(ServiceProvider<FacebookApi> facebookProvider,
+			@Value("#{request.getAttribute('account')}") Account account) {
 		return facebookProvider.getConnections(account).get(0).getServiceApi();
 	}
 
@@ -66,7 +68,8 @@ public class ServiceProvidersApiConfiguration {
 	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
-	public LinkedInOperations linkedIn(ServiceProvider<LinkedInOperations> linkedInProvider, @Value("#{request.getAttribute('account')}") Account account) {
+	public LinkedInApi linkedIn(ServiceProvider<LinkedInApi> linkedInProvider,
+			@Value("#{request.getAttribute('account')}") Account account) {
 		return linkedInProvider.getConnections(account).get(0).getServiceApi();
 	}
 
@@ -77,7 +80,8 @@ public class ServiceProvidersApiConfiguration {
 	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
-	public TripItOperations tripIt(ServiceProvider<TripItOperations> tripItProvider, @Value("#{request.getAttribute('account')}") Account account) {
+	public TripItApi tripIt(ServiceProvider<TripItApi> tripItProvider,
+			@Value("#{request.getAttribute('account')}") Account account) {
 		return tripItProvider.getConnections(account).get(0).getServiceApi();
 	}
 

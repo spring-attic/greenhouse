@@ -27,7 +27,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.social.twitter.SearchResults;
-import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.twitter.TwitterApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,10 +48,10 @@ public class EventsController {
 	
 	private final EventRepository eventRepository;
 	
-	private final TwitterOperations twitterApi;
+	private final TwitterApi twitterApi;
 		
 	@Inject
-	public EventsController(EventRepository eventRepository, TwitterOperations twitterApi) {
+	public EventsController(EventRepository eventRepository, TwitterApi twitterApi) {
 		this.eventRepository = eventRepository;
 		this.twitterApi = twitterApi;
 	}

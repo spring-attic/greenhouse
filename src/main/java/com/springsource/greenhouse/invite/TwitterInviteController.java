@@ -20,7 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.social.connect.ServiceProvider;
-import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.twitter.TwitterApi;
 import org.springframework.social.twitter.connect.TwitterServiceProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +38,7 @@ import com.springsource.greenhouse.account.Account;
 @Controller
 public class TwitterInviteController {
 	
-	private ServiceProvider<TwitterOperations> twitterProvider;
+	private ServiceProvider<TwitterApi> twitterProvider;
 	
 	@Inject
 	public TwitterInviteController(TwitterServiceProvider twitterProvider) {

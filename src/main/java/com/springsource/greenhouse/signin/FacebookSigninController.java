@@ -17,7 +17,7 @@ package com.springsource.greenhouse.signin;
 
 import javax.inject.Inject;
 
-import org.springframework.social.facebook.FacebookOperations;
+import org.springframework.social.facebook.FacebookApi;
 import org.springframework.social.facebook.FacebookProfile;
 import org.springframework.social.facebook.FacebookTemplate;
 import org.springframework.social.facebook.web.FacebookCookieValue;
@@ -40,12 +40,12 @@ import com.springsource.greenhouse.connect.ServiceProvider;
 // @Controller
 public class FacebookSigninController {
 
-	private final ServiceProvider<FacebookOperations> facebookProvider;
+	private final ServiceProvider<FacebookApi> facebookProvider;
 
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public FacebookSigninController(ServiceProvider<FacebookOperations> facebookProvider, AccountRepository accountRepository) {
+	public FacebookSigninController(ServiceProvider<FacebookApi> facebookProvider, AccountRepository accountRepository) {
 		this.facebookProvider = facebookProvider;
 		this.accountRepository = accountRepository;
 	}
