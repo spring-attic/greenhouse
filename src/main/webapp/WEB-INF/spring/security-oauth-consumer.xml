@@ -4,38 +4,10 @@
 	xmlns:social="http://www.springframework.org/schema/spring-social"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/spring-social http://www.springframework.org/schema/social/spring-social-1.0.xsd">
-
-	<!-- Loads ServiceProviders by name -->
-	<bean id="serviceProviderFactory" class="com.springsource.greenhouse.connect.JdbcServiceProviderFactory" />
-
-	<!-- Twitter -->
-	<bean id="twitterProvider" parent="serviceProvider">
-		<constructor-arg value="twitter" />
-	</bean>
-
-	<!-- Facebook -->
-	<bean id="facebookProvider" parent="serviceProvider">
-		<constructor-arg value="facebook" />
-	</bean>
-
-	<!-- LinkedIn -->
-	<bean id="linkedInProvider" parent="serviceProvider">
-		<constructor-arg value="linkedin" />
-	</bean>
-
-	<!-- TripIt -->	
-	<bean id="tripItProvider" parent="serviceProvider">
-		<constructor-arg value="tripit" />
-	</bean>
 	
 	<!-- Exposes ServiceProvider APIs as request-scoped beans -->
 	<bean class="com.springsource.greenhouse.config.ServiceProvidersApiConfiguration" />
 
-	<!-- Common serviceProvider parent -->
-	<bean abstract="true" id="serviceProvider" factory-bean="serviceProviderFactory" factory-method="getServiceProvider" />
-				
-				
-				
 				
 	<!-- Configure a connection repository through which account-to-provider connections will be stored --> 
 	<bean id="connectionRepository" class="org.springframework.social.connect.jdbc.JdbcConnectionRepository">
@@ -51,7 +23,8 @@
 							 client-secret="3461TFWV52VJuppKeaWMi8lKOxXMZtYLPGISq4nJ5s" />
 			
 	<!-- Configure a Facebook service provider -->
-	<social:service-provider class="org.springframework.social.facebook.connect.FacebookServiceProvider"
+	<social:service-provider id="facebookProvider"
+							 class="org.springframework.social.facebook.connect.FacebookServiceProvider"
 							 client-key="21aa96c8bc23259d0dd2ab99e496c306" 
 							 client-secret="f9f627194d471fb915dfbc856d347288" />
 
@@ -59,5 +32,10 @@
 	<social:service-provider class="org.springframework.social.linkedin.connect.LinkedInServiceProvider" 
 							 client-key="elcLPr8RxIXifjn5RKwaTNxKPap4dYrr9ANuJ-abZNkTjbT3mSOVT7IhSfsF27XP" 
 							 client-secret="QiMWSBRBBM43wFuqpn8XtXqdfLB6A0TJUQslBjtuQAwYCOcIdvRaotT9c50I72pk" />
+
+	<!-- Configure a TripIt service provider -->
+	<social:service-provider class="org.springframework.social.tripit.connect.TripItServiceProvider" 
+							 client-key="739681c719f545d13d2376552d182b47c79b1d35" 
+							 client-secret="b6287a592afb3eccefb9261ee87c96d3b5f39286" />
 							 
 </beans>

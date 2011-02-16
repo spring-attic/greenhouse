@@ -21,7 +21,6 @@ import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.social.facebook.FacebookProfile;
 import org.springframework.social.facebook.FacebookTemplate;
 import org.springframework.social.facebook.web.FacebookCookieValue;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.flash.FlashMap;
@@ -38,7 +37,7 @@ import com.springsource.greenhouse.connect.ServiceProvider;
  * @author Keith Donald
  * @author Craig Walls
  */
-@Controller
+// @Controller
 public class FacebookSigninController {
 
 	private final ServiceProvider<FacebookOperations> facebookProvider;

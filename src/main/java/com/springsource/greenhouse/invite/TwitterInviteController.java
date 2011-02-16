@@ -19,7 +19,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.social.connect.ServiceProvider;
 import org.springframework.social.twitter.TwitterOperations;
+import org.springframework.social.twitter.connect.TwitterServiceProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -28,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.ServiceProvider;
 
 /**
  * UI Controller for the Twitter invite page.
@@ -40,7 +41,7 @@ public class TwitterInviteController {
 	private ServiceProvider<TwitterOperations> twitterProvider;
 	
 	@Inject
-	public TwitterInviteController(ServiceProvider<TwitterOperations> twitterProvider) {
+	public TwitterInviteController(TwitterServiceProvider twitterProvider) {
 		this.twitterProvider = twitterProvider;
 	}
 	
@@ -50,7 +51,7 @@ public class TwitterInviteController {
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		String twitterId = twitterProvider.getProviderAccountId(account.getId());	
+		String twitterId = twitterProvider.getConnections(account).get(0).getServiceApi().getProfileId();
 		if (twitterId != null) {			
 			model.addAttribute("username", twitterId);
 		}
@@ -66,8 +67,9 @@ public class TwitterInviteController {
 	// TODO: consider making a Get request instead of a Post since there are no side effects
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> screenNames = twitterProvider.getServiceOperations(account.getId()).getFriends(username);
-			model.addAttribute("friends", twitterProvider.findMembersConnectedTo(screenNames));
+			List<String> screenNames = twitterProvider.getConnections(account).get(0).getServiceApi()
+					.getFriends(username);
+			// model.addAttribute("friends", twitterProvider.findMembersConnectedTo(screenNames));
 		}
 		return "invite/twitterFriends";
 	}

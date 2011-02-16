@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.social.connect.ServiceProvider;
 import org.springframework.social.facebook.FacebookOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.connect.ServiceProvider;
 
 /**
  * UI Controller for inviting Facebook friends to join our community.
@@ -58,8 +58,8 @@ public class FacebookInviteController {
 	@RequestMapping(value="/invite/facebook", method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
 		if (facebookProvider.isConnected(account.getId())) {
-			List<String> providerAccountIds = facebookProvider.getServiceOperations(account.getId()).getFriendIds();
-			model.addAttribute("friends", facebookProvider.findMembersConnectedTo(providerAccountIds));
+			List<String> providerAccountIds = facebookProvider.getConnections(account).get(0).getServiceApi().getFriendIds();
+			// model.addAttribute("friends", facebookProvider.findMembersConnectedTo(providerAccountIds));
 		} else {
 			model.addAttribute("friends", Collections.emptySet());
 		}
