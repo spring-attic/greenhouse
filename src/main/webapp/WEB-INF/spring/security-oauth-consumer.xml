@@ -19,23 +19,23 @@
 
 	<!-- Configure a Twitter service provider -->
 	<social:service-provider class="org.springframework.social.twitter.connect.TwitterServiceProvider" 
-							 client-key="${twitter.clientKey}" 
-							 client-secret="${twitter.clientSecret}" />
+							 app-key="${twitter.clientKey}" 
+							 app-secret="${twitter.clientSecret}" />
 			
 	<!-- Configure a Facebook service provider -->
 	<social:service-provider id="facebookProvider"
 							 class="org.springframework.social.facebook.connect.FacebookServiceProvider"
-							 client-key="${facebook.clientKey}" 
-							 client-secret="${facebook.clientSecret}" />
+							 app-key="${facebook.clientKey}" 
+							 app-secret="${facebook.clientSecret}" />
 
 	<!-- Configure a LinkedIn service provider -->
 	<social:service-provider class="org.springframework.social.linkedin.connect.LinkedInServiceProvider" 
-							 client-key="${linkedin.clientKey}" 
-							 client-secret="${linkedin.clientSecret}" />
+							 app-key="${linkedin.clientKey}" 
+							 app-secret="${linkedin.clientSecret}" />
 
 	<!-- Configure a TripIt service provider -->
 	<social:service-provider class="org.springframework.social.tripit.connect.TripItServiceProvider" 
-							 client-key="${tripit.clientKey}" 
-							 client-secret="${tripit.clientSecret}" />
+							 app-key="${tripit.clientKey}" 
+							 app-secret="${tripit.clientSecret}" />
 							 
 </beans>
