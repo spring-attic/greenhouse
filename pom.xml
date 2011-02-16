@@ -47,6 +47,14 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+		<!-- TODO: Sync up Spring Security with 3.1.0.RC1 once S2OAuth is compatible with 3.1.0.RC1 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>3.1.0.RC1</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -120,6 +128,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-config</artifactId>
+        	<version>${org.springframework.social-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook</artifactId>
         	<version>${org.springframework.social-version}</version>
 		</dependency>
@@ -138,7 +151,12 @@
 			<artifactId>spring-social-tripit</artifactId>
         	<version>${org.springframework.social-version}</version>
 		</dependency>						
-
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-web</artifactId>
+        	<version>${org.springframework.social-version}</version>
+		</dependency>	
+		
 		<!-- Aspect J -->
 		<dependency>
 			<groupId>org.aspectj</groupId>

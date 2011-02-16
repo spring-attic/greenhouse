@@ -31,5 +31,4 @@
 	</script>
 </fb:serverfbml>
 
-<s:eval expression="@facebookProvider.apiKey" var="apiKey" />
-<facebook:init apiKey="${apiKey}"/>
+<facebook:init />

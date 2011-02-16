@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	xmlns:social="http://www.springframework.org/schema/spring-social"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/spring-social http://www.springframework.org/schema/social/spring-social-1.0.xsd">
 
 	<!-- Loads ServiceProviders by name -->
 	<bean id="serviceProviderFactory" class="com.springsource.greenhouse.connect.JdbcServiceProviderFactory" />
@@ -32,4 +34,30 @@
 	<!-- Common serviceProvider parent -->
 	<bean abstract="true" id="serviceProvider" factory-bean="serviceProviderFactory" factory-method="getServiceProvider" />
 				
+				
+				
+				
+	<!-- Configure a connection repository through which account-to-provider connections will be stored --> 
+	<bean id="connectionRepository" class="org.springframework.social.connect.jdbc.JdbcConnectionRepository">
+		<constructor-arg ref="dataSource" />
+		<constructor-arg>
+			<bean class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText" />
+		</constructor-arg>
+	</bean>
+
+	<!-- Configure a Twitter service provider -->
+	<social:service-provider class="org.springframework.social.twitter.connect.TwitterServiceProvider" 
+							 client-key="kqAm0GiPCT2owEtyTLPsug" 
+							 client-secret="3461TFWV52VJuppKeaWMi8lKOxXMZtYLPGISq4nJ5s" />
+			
+	<!-- Configure a Facebook service provider -->
+	<social:service-provider class="org.springframework.social.facebook.connect.FacebookServiceProvider"
+							 client-key="21aa96c8bc23259d0dd2ab99e496c306" 
+							 client-secret="f9f627194d471fb915dfbc856d347288" />
+
+	<!-- Configure a LinkedIn service provider -->
+	<social:service-provider class="org.springframework.social.linkedin.connect.LinkedInServiceProvider" 
+							 client-key="elcLPr8RxIXifjn5RKwaTNxKPap4dYrr9ANuJ-abZNkTjbT3mSOVT7IhSfsF27XP" 
+							 client-secret="QiMWSBRBBM43wFuqpn8XtXqdfLB6A0TJUQslBjtuQAwYCOcIdvRaotT9c50I72pk" />
+							 
 </beans>

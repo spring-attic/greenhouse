@@ -9,5 +9,4 @@
 <div id="fb-root"></div>
 <fb:like></fb:like>
 
-<s:eval expression="@facebookProvider.apiKey" var="apiKey" />
-<facebook:init apiKey="${apiKey}"/>
+<facebook:init />
