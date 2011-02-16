@@ -1,5 +1,5 @@
 /**
- * Establishes connections between local member Accounts and remote ServiceProviders such as Twitter and Facebook.
+ * Greenhouse-specific connection support classes
  */
 package com.springsource.greenhouse.connect;
 

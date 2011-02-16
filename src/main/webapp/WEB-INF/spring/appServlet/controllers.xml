@@ -25,8 +25,8 @@
 		<constructor-arg value="${application.secureUrl}" />
 		<property name="interceptors">
 			<list>
-				<bean class="com.springsource.greenhouse.connect.providers.TwitterConnectInterceptor" />
-				<bean class="com.springsource.greenhouse.connect.providers.FacebookConnectInterceptor" />
+				<bean class="com.springsource.greenhouse.connect.TwitterConnectInterceptor" />
+				<bean class="com.springsource.greenhouse.connect.FacebookConnectInterceptor" />
 			</list>
 		</property>
 	</bean>

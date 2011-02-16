@@ -25,9 +25,9 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenServi
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
-import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.develop.AppConnection;
 import com.springsource.greenhouse.develop.AppRepository;
+import com.springsource.greenhouse.develop.NoSuchAccountConnectionException;
 
 /**
  * Adapts the {@link OAuthSessionManager} API to the Spring Security {@link OAuthProviderTokenServices}.

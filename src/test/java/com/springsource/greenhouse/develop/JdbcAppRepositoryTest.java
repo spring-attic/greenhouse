@@ -16,7 +16,6 @@ import org.springframework.security.encrypt.SearchableStringEncryptor;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAppRepositoryTest {

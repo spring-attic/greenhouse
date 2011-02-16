@@ -28,7 +28,6 @@ import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
 import org.springframework.security.encrypt.StringEncryptor;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.utils.SlugUtils;
 
 /**

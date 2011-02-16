@@ -17,7 +17,6 @@ package com.springsource.greenhouse.develop;
 
 import java.util.List;
 
-import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 
 /**
  * Data access interface for managing client Applications and the member account connections established with them.

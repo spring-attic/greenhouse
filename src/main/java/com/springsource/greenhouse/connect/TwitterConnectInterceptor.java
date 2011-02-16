@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.springsource.greenhouse.connect.providers;
+package com.springsource.greenhouse.connect;
 
 import org.springframework.social.connect.ServiceProvider;
 import org.springframework.social.connect.ServiceProviderConnection;

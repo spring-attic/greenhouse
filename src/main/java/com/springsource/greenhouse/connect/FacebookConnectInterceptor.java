@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.connect.providers;
+package com.springsource.greenhouse.connect;
 
 import java.io.IOException;
 

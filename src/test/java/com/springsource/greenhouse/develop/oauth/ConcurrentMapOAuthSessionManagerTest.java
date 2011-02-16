@@ -14,11 +14,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.encrypt.SearchableStringEncryptor;
 
-import com.springsource.greenhouse.connect.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppConnection;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
+import com.springsource.greenhouse.develop.NoSuchAccountConnectionException;
 import com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager;
 import com.springsource.greenhouse.develop.oauth.InvalidRequestTokenException;
 import com.springsource.greenhouse.develop.oauth.OAuthSession;

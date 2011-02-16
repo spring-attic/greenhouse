@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.springsource.greenhouse.connect;
+package com.springsource.greenhouse.develop;
+
+import com.springsource.greenhouse.account.AccountException;
 
 /**
- * Factory for obtaining ServiceProviders by name.
+ * Indicates no connection exists between a member and a service provider with the submitted access token.
  * @author Keith Donald
  */
-public interface ServiceProviderFactory {
-	
-	/**
-	 * Get the ServiceProvider identified by the provided name.
-	 */
-	ServiceProvider<?> getServiceProvider(String name);
+@SuppressWarnings("serial")
+public final class NoSuchAccountConnectionException extends AccountException {
 
-	/**
-	 * Get a strongly-typed reference to the ServiceProvider identified by the provided name.
-	 */
-	<S> ServiceProvider<S> getServiceProvider(String name, Class<S> serviceType);
+	private String accessToken;
+	
+	public NoSuchAccountConnectionException(String accessToken) {
+		super("invalid access token");
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
 
 }
