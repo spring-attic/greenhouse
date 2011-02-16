@@ -58,7 +58,7 @@ public class FacebookInviteController {
 	@RequestMapping(value="/invite/facebook", method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
 		if (facebookProvider.isConnected(account.getId())) {
-			List<String> providerAccountIds = facebookProvider.getConnections(account).get(0).getServiceApi().getFriendIds();
+			List<String> providerAccountIds = facebookProvider.getConnections(account.getId()).get(0).getServiceApi().getFriendIds();
 			// model.addAttribute("friends", facebookProvider.findMembersConnectedTo(providerAccountIds));
 		} else {
 			model.addAttribute("friends", Collections.emptySet());

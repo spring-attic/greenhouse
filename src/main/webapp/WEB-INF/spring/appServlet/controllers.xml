@@ -23,6 +23,9 @@
 	
 	<bean class="org.springframework.social.web.connect.ConnectController">
 		<constructor-arg value="${application.secureUrl}" />
+		<constructor-arg>
+			<bean class="com.springsource.greenhouse.connect.GreenhouseAccountIdExtractor" />
+		</constructor-arg>
 		<property name="interceptors">
 			<list>
 				<bean class="com.springsource.greenhouse.connect.TwitterConnectInterceptor" />

@@ -51,7 +51,7 @@ public class TwitterInviteController {
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		String twitterId = twitterProvider.getConnections(account).get(0).getServiceApi().getProfileId();
+		String twitterId = twitterProvider.getConnections(account.getId()).get(0).getServiceApi().getProfileId();
 		if (twitterId != null) {			
 			model.addAttribute("username", twitterId);
 		}
@@ -67,7 +67,7 @@ public class TwitterInviteController {
 	// TODO: consider making a Get request instead of a Post since there are no side effects
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {
-			List<String> screenNames = twitterProvider.getConnections(account).get(0).getServiceApi()
+			List<String> screenNames = twitterProvider.getConnections(account.getId()).get(0).getServiceApi()
 					.getFriends(username);
 			// model.addAttribute("friends", twitterProvider.findMembersConnectedTo(screenNames));
 		}
