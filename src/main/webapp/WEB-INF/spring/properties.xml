@@ -18,6 +18,19 @@
 				<prop key="application.url">http://localhost:8080/greenhouse</prop>
 				<prop key="application.secureUrl">http://localhost:8080/greenhouse</prop>
 				<prop key="application.secureChannel">http</prop>
+				
+				<!-- Service provider keys/secrets -->
+				<prop key="twitter.clientKey">kqAm0GiPCT2owEtyTLPsug</prop>
+				<prop key="twitter.clientSecret">3461TFWV52VJuppKeaWMi8lKOxXMZtYLPGISq4nJ5s</prop>
+
+				<prop key="facebook.clientKey">21aa96c8bc23259d0dd2ab99e496c306</prop>
+				<prop key="facebook.clientSecret">f9f627194d471fb915dfbc856d347288</prop>
+
+				<prop key="linkedin.clientKey">elcLPr8RxIXifjn5RKwaTNxKPap4dYrr9ANuJ-abZNkTjbT3mSOVT7IhSfsF27XP</prop>
+				<prop key="linkedin.clientSecret">QiMWSBRBBM43wFuqpn8XtXqdfLB6A0TJUQslBjtuQAwYCOcIdvRaotT9c50I72pk</prop>
+
+				<prop key="tripit.clientKey">739681c719f545d13d2376552d182b47c79b1d35</prop>
+				<prop key="tripit.clientSecret">b6287a592afb3eccefb9261ee87c96d3b5f39286</prop>
 			</props>
 		</property>
 	</bean>

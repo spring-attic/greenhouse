@@ -19,23 +19,23 @@
 
 	<!-- Configure a Twitter service provider -->
 	<social:service-provider class="org.springframework.social.twitter.connect.TwitterServiceProvider" 
-							 client-key="kqAm0GiPCT2owEtyTLPsug" 
-							 client-secret="3461TFWV52VJuppKeaWMi8lKOxXMZtYLPGISq4nJ5s" />
+							 client-key="${twitter.clientKey}" 
+							 client-secret="${twitter.clientSecret}" />
 			
 	<!-- Configure a Facebook service provider -->
 	<social:service-provider id="facebookProvider"
 							 class="org.springframework.social.facebook.connect.FacebookServiceProvider"
-							 client-key="21aa96c8bc23259d0dd2ab99e496c306" 
-							 client-secret="f9f627194d471fb915dfbc856d347288" />
+							 client-key="${facebook.clientKey}" 
+							 client-secret="${facebook.clientSecret}" />
 
 	<!-- Configure a LinkedIn service provider -->
 	<social:service-provider class="org.springframework.social.linkedin.connect.LinkedInServiceProvider" 
-							 client-key="elcLPr8RxIXifjn5RKwaTNxKPap4dYrr9ANuJ-abZNkTjbT3mSOVT7IhSfsF27XP" 
-							 client-secret="QiMWSBRBBM43wFuqpn8XtXqdfLB6A0TJUQslBjtuQAwYCOcIdvRaotT9c50I72pk" />
+							 client-key="${linkedin.clientKey}" 
+							 client-secret="${linkedin.clientSecret}" />
 
 	<!-- Configure a TripIt service provider -->
 	<social:service-provider class="org.springframework.social.tripit.connect.TripItServiceProvider" 
-							 client-key="739681c719f545d13d2376552d182b47c79b1d35" 
-							 client-secret="b6287a592afb3eccefb9261ee87c96d3b5f39286" />
+							 client-key="${tripit.clientKey}" 
+							 client-secret="${tripit.clientSecret}" />
 							 
 </beans>
