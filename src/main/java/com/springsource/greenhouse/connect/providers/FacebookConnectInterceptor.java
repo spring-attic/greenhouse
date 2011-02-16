@@ -24,9 +24,14 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 
 	private final ProfilePictureService profilePictureService;
 
+	private final RestTemplate restTemplate;
+
 	@Inject
 	public FacebookConnectInterceptor(ProfilePictureService profilePictureService) {
 		this.profilePictureService = profilePictureService;
+		restTemplate = new RestTemplate();
+		// the default connection factory doesn't follow redirects, which the image request returns
+		restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
 	}
 
 	@Override
@@ -54,12 +59,7 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 	private void postToWall(FacebookApi facebook, Account account, WebRequest request) {
 		if (request.getAttribute(POST_TO_WALL_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
 			try {
-				facebook.updateStatus(
-						"Join me at the Greenhouse!",
-						new FacebookLink(
-								account.getProfileUrl(),
-								"Greenhouse",
-								"Where Spring developers hang out.",
+				facebook.updateStatus("Join me at the Greenhouse!",new FacebookLink(account.getProfileUrl(), "Greenhouse","Where Spring developers hang out.",
 					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 			} catch (DuplicateTweetException e) {
 			}
@@ -78,10 +78,7 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 	}
 
 	private byte[] getProfilePicture(String profileId) {
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
-		ResponseEntity<byte[]> imageBytes = restTemplate.getForEntity(PROFILE_LARGE_PICTURE_URL, byte[].class,
-				profileId);
+		ResponseEntity<byte[]> imageBytes = restTemplate.getForEntity(PROFILE_LARGE_PICTURE_URL, byte[].class, profileId);
 		return imageBytes.getBody();
 	}
 
