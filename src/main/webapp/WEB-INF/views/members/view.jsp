@@ -14,4 +14,5 @@
 	<fb:like></fb:like>
 </div>
 <div id="fb-root"></div>	
-<facebook:init />
+<s:eval expression="@facebookProvider.apiKey" var="apiKey" />
+<facebook:init apiKey="${apiKey}"/>

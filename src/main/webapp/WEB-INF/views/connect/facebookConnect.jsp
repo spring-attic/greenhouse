@@ -33,4 +33,5 @@
 	</fieldset>
 </form>
 
-<facebook:init />
+<s:eval expression="@facebookProvider.apiKey" var="apiKey" />
+<facebook:init apiKey="${apiKey}"/>

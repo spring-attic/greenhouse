@@ -51,7 +51,7 @@ public class FacebookConnectController {
 	}
 	
 	@RequestMapping(value="/connect/facebook", method=RequestMethod.GET)
-	public String connectView(Account account, @FacebookCookieValue("uid") String facebookUserId, Model model) {
+	public String connectView(Account account, @FacebookCookieValue(value="uid", required=false) String facebookUserId, Model model) {
 		if (facebookProvider.isConnected(account.getId())) {
 			model.addAttribute("facebookUserId", facebookUserId);
 			return "connect/facebookConnected";
@@ -61,7 +61,9 @@ public class FacebookConnectController {
 	}
 	
 	@RequestMapping(value="/connect/facebook", method=RequestMethod.POST) 
-	public String connectAccountToFacebook(Account account, @FacebookCookieValue("access_token") String accessToken, @FacebookCookieValue("uid") String facebookUserId,
+	public String connectAccountToFacebook(Account account,
+			@FacebookCookieValue(value = "access_token", required = false) String accessToken,
+			@FacebookCookieValue(value = "uid", required = false) String facebookUserId,
 			@RequestParam(required=false, defaultValue="false") boolean postToWall, @RequestParam(required=false, defaultValue="false") boolean useProfilePicture) {
 		if (facebookUserId != null && accessToken != null) {
 			facebookProvider.addConnection(account.getId(), accessToken, facebookUserId);
