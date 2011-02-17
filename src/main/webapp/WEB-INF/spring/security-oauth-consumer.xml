@@ -18,24 +18,31 @@
 	</bean>
 
 	<!-- Configure a Twitter service provider -->
-	<social:service-provider class="org.springframework.social.twitter.connect.TwitterServiceProvider" 
-							 app-key="${twitter.clientKey}" 
-							 app-secret="${twitter.clientSecret}" />
-			
+	<bean class="org.springframework.social.twitter.connect.TwitterServiceProvider">
+		<constructor-arg value="${twitter.clientKey}" />
+		<constructor-arg value="${twitter.clientSecret}" />
+		<constructor-arg ref="connectionRepository" />
+	</bean>
+	
 	<!-- Configure a Facebook service provider -->
-	<social:service-provider id="facebookProvider"
-							 class="org.springframework.social.facebook.connect.FacebookServiceProvider"
-							 app-key="${facebook.clientKey}" 
-							 app-secret="${facebook.clientSecret}" />
+	<bean id="facebookProvider" class="org.springframework.social.facebook.connect.FacebookServiceProvider">
+		<constructor-arg value="${facebook.clientKey}" />
+		<constructor-arg value="${facebook.clientSecret}" />
+		<constructor-arg ref="connectionRepository" />
+	</bean>
 
 	<!-- Configure a LinkedIn service provider -->
-	<social:service-provider class="org.springframework.social.linkedin.connect.LinkedInServiceProvider" 
-							 app-key="${linkedin.clientKey}" 
-							 app-secret="${linkedin.clientSecret}" />
+	<bean class="org.springframework.social.linkedin.connect.LinkedInServiceProvider">
+		<constructor-arg value="${linkedin.clientKey}" />
+		<constructor-arg value="${linkedin.clientSecret}" />
+		<constructor-arg ref="connectionRepository" />
+	</bean>
 
 	<!-- Configure a TripIt service provider -->
-	<social:service-provider class="org.springframework.social.tripit.connect.TripItServiceProvider" 
-							 app-key="${tripit.clientKey}" 
-							 app-secret="${tripit.clientSecret}" />
+	<bean class="org.springframework.social.tripit.connect.TripItServiceProvider">
+		<constructor-arg value="${tripit.clientKey}" />
+		<constructor-arg value="${tripit.clientSecret}" />
+		<constructor-arg ref="connectionRepository" />
+	</bean>
 							 
 </beans>
