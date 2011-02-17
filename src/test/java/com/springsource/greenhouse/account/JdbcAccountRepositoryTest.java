@@ -1,6 +1,9 @@
 package com.springsource.greenhouse.account;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -64,6 +67,12 @@ public class JdbcAccountRepositoryTest {
 	@Test
 	public void findById() {
 		assertExpectedAccount(accountRepository.findById(1L));
+	}
+
+	@Test
+	public void findProfileReferencesByIds() {
+		List<ProfileReference> references = accountRepository.findProfileReferencesByIds(Arrays.asList(1L, 2L));
+		System.out.println("-->" + references.size());
 	}
 
 	@Test

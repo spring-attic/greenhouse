@@ -15,12 +15,16 @@
  */
 package com.springsource.greenhouse.invite;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.social.connect.ServiceProvider;
+import org.springframework.social.connect.support.ConnectionRepository;
 import org.springframework.social.twitter.TwitterApi;
+import org.springframework.social.twitter.TwitterTemplate;
 import org.springframework.social.twitter.connect.TwitterServiceProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.ProfileReference;
 
 /**
  * UI Controller for the Twitter invite page.
@@ -39,10 +45,15 @@ import com.springsource.greenhouse.account.Account;
 public class TwitterInviteController {
 	
 	private ServiceProvider<TwitterApi> twitterProvider;
+	private final ConnectionRepository connectionRepository;
+	private final AccountRepository accountRepository;
 	
 	@Inject
-	public TwitterInviteController(TwitterServiceProvider twitterProvider) {
+	public TwitterInviteController(TwitterServiceProvider twitterProvider, ConnectionRepository connectionRepository,
+			AccountRepository accountRepository) {
 		this.twitterProvider = twitterProvider;
+		this.connectionRepository = connectionRepository;
+		this.accountRepository = accountRepository;
 	}
 	
 	/**
@@ -51,9 +62,11 @@ public class TwitterInviteController {
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Account account, Model model) {
-		String twitterId = twitterProvider.getConnections(account.getId()).get(0).getServiceApi().getProfileId();
-		if (twitterId != null) {			
-			model.addAttribute("username", twitterId);
+		if (twitterProvider.isConnected(account.getId())) {
+			String twitterId = twitterProvider.getConnections(account.getId()).get(0).getServiceApi().getProfileId();
+			if (twitterId != null) {
+				model.addAttribute("username", twitterId);
+			}
 		}
 	}
 
@@ -66,12 +79,21 @@ public class TwitterInviteController {
 	// TODO: progressive enhancement: redirect to a full results page if web request is not an ajax request
 	// TODO: consider making a Get request instead of a Post since there are no side effects
 	public String findFriends(@RequestParam String username, Account account, Model model) {
-		if (StringUtils.hasText(username)) {
-			List<String> screenNames = twitterProvider.getConnections(account.getId()).get(0).getServiceApi()
-					.getFriends(username);
-			// model.addAttribute("friends", twitterProvider.findMembersConnectedTo(screenNames));
+		if (StringUtils.hasText(username)) {			
+			TwitterApi twitter = new TwitterTemplate(); // Don't need to be connected to ask for someone's list of friends
+			List<String> screenNames = twitter.getFriends(username);
+			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(accountIds(screenNames));
+			model.addAttribute("friends", profileReferences);
 		}
 		return "invite/twitterFriends";
 	}
-	
+
+	private List<Long> accountIds(List<String> screenNames) {
+		List<Serializable> matches = connectionRepository.findAccountIdsForProviderAccountIds("twitter", screenNames);
+		List<Long> accountIds = new ArrayList<Long>();
+		for (Serializable match : matches) {
+			accountIds.add(Long.valueOf(String.valueOf(match)));
+		}
+		return accountIds;
+	}
 }

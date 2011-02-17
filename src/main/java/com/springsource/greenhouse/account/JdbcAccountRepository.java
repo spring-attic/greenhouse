@@ -17,12 +17,16 @@ package com.springsource.greenhouse.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.encrypt.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +79,14 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	public Account findById(Long id) {
 		return jdbcTemplate.queryForObject(AccountMapper.SELECT_ACCOUNT + " where id = ?", accountMapper, id);
+	}
+
+	public List<ProfileReference> findProfileReferencesByIds(List<Long> accountIds) {
+		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+		Map<String, Object> params = new HashMap<String, Object>(2, 1);
+		params.put("accountIds", accountIds);
+		return namedTemplate.query(AccountMapper.SELECT_ACCOUNT_REFERENCE + " where id in ( :accountIds )", params,
+				accountMapper.getReferenceMapper());
 	}
 
 	public Account findBySignin(String signin) throws SignInNotFoundException {

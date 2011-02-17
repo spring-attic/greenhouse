@@ -15,12 +15,15 @@
  */
 package com.springsource.greenhouse.invite;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.social.connect.ServiceProvider;
+import org.springframework.social.connect.support.ConnectionRepository;
 import org.springframework.social.facebook.FacebookApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.account.ProfileReference;
 
 /**
  * UI Controller for inviting Facebook friends to join our community.
@@ -39,6 +44,8 @@ import com.springsource.greenhouse.account.Account;
 public class FacebookInviteController {
 
 	private final ServiceProvider<FacebookApi> facebookProvider;
+	private final ConnectionRepository connectionRepository;
+	private final AccountRepository accountRepository;
 	
 	/**
 	 * Construct the FacebookInviteController.
@@ -46,8 +53,10 @@ public class FacebookInviteController {
 	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
 	 */
 	@Inject
-	public FacebookInviteController(ServiceProvider<FacebookApi> facebookProvider) {
+	public FacebookInviteController(ServiceProvider<FacebookApi> facebookProvider, ConnectionRepository connectionRepository, AccountRepository accountRepository) {
 		this.facebookProvider = facebookProvider;
+		this.connectionRepository = connectionRepository;
+		this.accountRepository = accountRepository;
 	}
 	
 	/**
@@ -58,8 +67,9 @@ public class FacebookInviteController {
 	@RequestMapping(value="/invite/facebook", method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
 		if (facebookProvider.isConnected(account.getId())) {
-			List<String> providerAccountIds = facebookProvider.getConnections(account.getId()).get(0).getServiceApi().getFriendIds();
-			// model.addAttribute("friends", facebookProvider.findMembersConnectedTo(providerAccountIds));
+			List<String> facebookIds = facebookProvider.getConnections(account.getId()).get(0).getServiceApi().getFriendIds();
+			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(accountIds(facebookIds));
+			model.addAttribute("friends", profileReferences);
 		} else {
 			model.addAttribute("friends", Collections.emptySet());
 		}
@@ -85,4 +95,12 @@ public class FacebookInviteController {
 		return "redirect:/invite";
 	}
 
+	private List<Long> accountIds(List<String> screenNames) {
+		List<Serializable> matches = connectionRepository.findAccountIdsForProviderAccountIds("twitter", screenNames);
+		List<Long> accountIds = new ArrayList<Long>();
+		for (Serializable match : matches) {
+			accountIds.add(Long.valueOf(String.valueOf(match)));
+		}
+		return accountIds;
+	}
 }

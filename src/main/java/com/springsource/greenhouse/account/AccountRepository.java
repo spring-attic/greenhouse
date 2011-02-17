@@ -15,6 +15,8 @@
  */
 package com.springsource.greenhouse.account;
 
+import java.util.List;
+
 /**
  * Manages member Account information.
  * @author Keith Donald
@@ -53,8 +55,12 @@ public interface AccountRepository {
 	Account findById(Long accountId);
 
 	/**
-	 * Find an Account by an eligible sign-in name.
-	 * The sign-in name may be an account username, or an account email address, if that email address is unique.
+	 * Find all Accounts for the given set of IDs.
+	 */
+	List<ProfileReference> findProfileReferencesByIds(List<Long> accountIds);
+
+	/**
+	 * Find an Account by an eligible sign-in name. The sign-in name may be an account username, or an account email address, if that email address is unique.
 	 * @throws SignInNotFoundException an Account could not be found with the provided signin name
 	 */
 	Account findBySignin(String signin) throws SignInNotFoundException;

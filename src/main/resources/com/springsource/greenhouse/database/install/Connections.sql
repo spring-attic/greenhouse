@@ -4,5 +4,6 @@ create table Connection (id identity,
 						 accessToken varchar not null,                                   
 						 secret varchar, 
 						 refreshToken varchar,
+						 providerAccountId varchar,
 						 primary key (id));
 create unique index AccessToken on Connection(accountId, providerId, accessToken);
