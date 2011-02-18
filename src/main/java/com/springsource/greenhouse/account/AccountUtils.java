@@ -44,6 +44,14 @@ public final class AccountUtils {
 		return new UsernamePasswordAuthenticationToken(account, null, (Collection<GrantedAuthority>)null);		
 	}
 	
+	/**
+	 * Get the currently authenticated Account principal.
+	 */
+	public static Account getCurrentAccount() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication != null ? (Account) authentication.getPrincipal() : null;
+	}
+	
 	private AccountUtils() {
 	}
 }

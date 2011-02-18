@@ -17,8 +17,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.encrypt.NoOpPasswordEncoder;
-import org.springframework.security.encrypt.SearchableStringEncryptor;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.oauth.provider.token.InvalidOAuthTokenException;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
@@ -44,7 +44,7 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(ConcurrentMapOAuthSessionManagerTest.class).getDatabase();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
-		AppRepository appRepository = new JdbcAppRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"));				
+		AppRepository appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.queryableText("secret", "5b8bd7612cdab5ed"));				
 		OAuthSessionManager sessionManager = new ConcurrentMapOAuthSessionManager(appRepository);
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		AccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), accountMapper);

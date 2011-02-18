@@ -20,7 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
 import com.google.common.collect.MapMaker;
 import com.springsource.greenhouse.develop.AppConnection;
@@ -40,12 +41,12 @@ public class ConcurrentMapOAuthSessionManager implements OAuthSessionManager {
 
 	private final AppRepository appRepository;
 	
-	private final SecureRandomStringKeyGenerator keyGenerator = new SecureRandomStringKeyGenerator();
+	private final StringKeyGenerator keyGenerator = KeyGenerators.string();
 
 	@Inject
 	public ConcurrentMapOAuthSessionManager(AppRepository appRepository) {
 		this.appRepository = appRepository;
-		sessions = new MapMaker().softValues().expiration(2, TimeUnit.MINUTES).makeMap();
+		sessions = new MapMaker().softValues().expireAfterWrite(2, TimeUnit.MINUTES).makeMap();
 	}
 	
 	public OAuthSession newOAuthSession(String apiKey, String callbackUrl) {

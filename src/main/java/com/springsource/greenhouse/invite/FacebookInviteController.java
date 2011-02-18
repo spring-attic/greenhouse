@@ -44,7 +44,9 @@ import com.springsource.greenhouse.account.ProfileReference;
 public class FacebookInviteController {
 
 	private final ServiceProvider<FacebookApi> facebookProvider;
+	
 	private final ConnectionRepository connectionRepository;
+	
 	private final AccountRepository accountRepository;
 	
 	/**
@@ -96,6 +98,7 @@ public class FacebookInviteController {
 	}
 
 	private List<Long> accountIds(List<String> screenNames) {
+		// TODO This is not pretty
 		List<Serializable> matches = connectionRepository.findAccountIdsForProviderAccountIds("twitter", screenNames);
 		List<Long> accountIds = new ArrayList<Long>();
 		for (Serializable match : matches) {

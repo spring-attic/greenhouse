@@ -16,13 +16,13 @@
 		<intercept-url pattern="/groups/**" access="permitAll" />
 		<intercept-url pattern="/pubsub/**" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
-		<intercept-url pattern="/signup" access="permitAll" requires-channel="${application.secureChannel}" />
-		<intercept-url pattern="/signin" access="permitAll" requires-channel="${application.secureChannel}" />
-		<intercept-url pattern="/signin/facebook" access="permitAll" requires-channel="${application.secureChannel}" />
-		<intercept-url pattern="/reset" access="permitAll" requires-channel="${application.secureChannel}" />
-		<!-- TODO this would probably be better mapped to simply /invite?token={token} but not able to vary security policy here based on presence of a request parameter.  Consider @Secured on @Controller. -->		
-		<intercept-url pattern="/invite/accept" access="permitAll" requires-channel="${application.secureChannel}" />		
-		<intercept-url pattern="/**" access="isAuthenticated()" requires-channel="${application.secureChannel}" />
+		<intercept-url pattern="/signup" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />	
+		<intercept-url pattern="/signin" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
+		<intercept-url pattern="/signin/facebook" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
+		<intercept-url pattern="/reset" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
+		<!-- TODO this would probably be better mapped to simply /invite?token={token} but not able to vary security policy here based on presence of a request parameter.  Consider @Secured on @Controller. -->               
+		<intercept-url pattern="/invite/accept" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />           
+		<intercept-url pattern="/**" access="isAuthenticated()" requires-channel="#{environment['application.secureChannel']}" />
 	</http>
 
 	<authentication-manager alias="authenticationManager">
@@ -34,29 +34,31 @@
 	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
 
 	<beans:bean id="accountMapper" class="com.springsource.greenhouse.account.AccountMapper">
-		<beans:constructor-arg value="${application.url}/members/{profileKey}" />		
+		<beans:constructor-arg value="#{environment['application.url']}/members/{profileKey}" />		
 	</beans:bean>
 	
 	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
 
 	<beans:import resource="security-oauth-provider.xml" />
-	
-	<beans:import resource="security-oauth-consumer.xml" />
+
+	<beans:bean class="com.springsource.greenhouse.config.connect.ConnectionRepositoryConfig" />	
+	<beans:bean class="com.springsource.greenhouse.config.connect.ServiceProviderConfig" />
+	<beans:bean class="com.springsource.greenhouse.config.connect.ServiceApiConfig" />
 	
 	<!-- Profile-specific beans -->
 		
 	<beans:beans profile="embedded">
-		<beans:bean id="passwordEncoder" class="org.springframework.security.encrypt.NoOpPasswordEncoder" factory-method="getInstance" />		
-		<beans:bean id="stringEncryptor" class="org.springframework.security.encrypt.NoOpStringEncryptor" factory-method="getInstance" />
+		<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder" factory-method="getInstance" />		
+		<beans:bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText" />
 	</beans:beans>
 
 	<beans:beans profile="standard">
-		<beans:bean id="passwordEncoder" class="org.springframework.security.encrypt.StandardPasswordEncoder">
-			<beans:constructor-arg value="${security.encryptPassword}" />
+		<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+			<beans:constructor-arg value="${environment['security.encryptPassword']}" />
 		</beans:bean>
-		<beans:bean id="stringEncryptor" class="org.springframework.security.encrypt.SearchableStringEncryptor">
-			<beans:constructor-arg value="${security.encryptPassword}" />
-			<beans:constructor-arg value="${security.encryptSalt}" />
+		<beans:bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="queryableText">
+			<beans:constructor-arg value="${environment['security.encryptPassword']}" />
+			<beans:constructor-arg value="${environment['security.encryptSalt']}" />
 		</beans:bean>		
 	</beans:beans>
 

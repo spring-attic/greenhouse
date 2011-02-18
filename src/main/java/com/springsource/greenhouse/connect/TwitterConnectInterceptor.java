@@ -23,7 +23,7 @@ import org.springframework.social.web.connect.ConnectInterceptor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
-import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountUtils;
 
 /**
  * Supports posting a tweet on behalf of the user after connecting to Twitter.
@@ -31,21 +31,16 @@ import com.springsource.greenhouse.account.Account;
  */
 public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterApi> {
 
-	@Override
 	public void preConnect(ServiceProvider<TwitterApi> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAMETER))) {
 			request.setAttribute(POST_TWEET_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}
 	}
 
-	@Override
-	public void postConnect(ServiceProvider<TwitterApi> provider, ServiceProviderConnection<TwitterApi> connection,
-			WebRequest request) {
+	public void postConnect(ServiceProvider<TwitterApi> provider, ServiceProviderConnection<TwitterApi> connection, WebRequest request) {
 		if (request.getAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
 			try {
-				// relies on AccountExposingHandlerInterceptor to have put the account in the request.
-				Account account = (Account) request.getAttribute("account", WebRequest.SCOPE_REQUEST);
-				connection.getServiceApi().updateStatus("Join me at the Greenhouse! " + account.getProfileUrl());
+				connection.getServiceApi().updateStatus("Join me at the Greenhouse! " + AccountUtils.getCurrentAccount().getProfileUrl());
 			} catch (DuplicateTweetException e) {
 			}
 			request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);

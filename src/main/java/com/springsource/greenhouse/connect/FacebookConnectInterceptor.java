@@ -4,13 +4,11 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
 import org.springframework.social.connect.ServiceProvider;
 import org.springframework.social.connect.ServiceProviderConnection;
 import org.springframework.social.facebook.FacebookApi;
 import org.springframework.social.facebook.FacebookLink;
-import org.springframework.social.twitter.DuplicateTweetException;
 import org.springframework.social.web.connect.ConnectInterceptor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
@@ -18,8 +16,14 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.flash.FlashMap;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountUtils;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
+/**
+ * Supports posting to the wall on behalf of the user after connecting to Facebook.
+ * Also supports using the user's Facebook profile picture as their local profile picture.
+ * @author Keith Donald
+ */
 public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookApi> {
 
 	private final ProfilePictureService profilePictureService;
@@ -34,7 +38,6 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 		restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
 	}
 
-	@Override
 	public void preConnect(ServiceProvider<FacebookApi> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TO_WALL_PARAMETER))) {
 			request.setAttribute(POST_TO_WALL_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
@@ -44,25 +47,19 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 		}
 	}
 
-	@Override
-	public void postConnect(ServiceProvider<FacebookApi> provider, ServiceProviderConnection<FacebookApi> connection,
-			WebRequest request) {
-
-		// relies on AccountExposingHandlerInterceptor to have put the account in the request.
-		Account account = (Account) request.getAttribute("account", WebRequest.SCOPE_REQUEST);
-
+	public void postConnect(ServiceProvider<FacebookApi> provider, ServiceProviderConnection<FacebookApi> connection, WebRequest request) {
 		FacebookApi facebook = connection.getServiceApi();
+		Account account = AccountUtils.getCurrentAccount();
 		postToWall(facebook, account, request);
 		useFacebookProfileImage(facebook, account, request);
 	}
 
+	// internal helpers
+	
 	private void postToWall(FacebookApi facebook, Account account, WebRequest request) {
 		if (request.getAttribute(POST_TO_WALL_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
-			try {
-				facebook.updateStatus("Join me at the Greenhouse!",new FacebookLink(account.getProfileUrl(), "Greenhouse","Where Spring developers hang out.",
-					"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
-			} catch (DuplicateTweetException e) {
-			}
+			facebook.updateStatus("Join me at the Greenhouse!", new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.",
+				"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 			request.removeAttribute(POST_TO_WALL_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		}
 	}
@@ -74,14 +71,13 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 			} catch (IOException e) {
 				FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
 			}
+			request.removeAttribute(USE_FACEBOOK_IMAGE_ATTRIBUTE, WebRequest.SCOPE_SESSION);			
 		}
 	}
 
 	private byte[] getProfilePicture(String profileId) {
-		ResponseEntity<byte[]> imageBytes = restTemplate.getForEntity(PROFILE_LARGE_PICTURE_URL, byte[].class, profileId);
-		return imageBytes.getBody();
+		return restTemplate.getForEntity(PROFILE_LARGE_PICTURE_URL, byte[].class, profileId).getBody();
 	}
-
 
 	private static final String POST_TO_WALL_PARAMETER = "postToWall";
 

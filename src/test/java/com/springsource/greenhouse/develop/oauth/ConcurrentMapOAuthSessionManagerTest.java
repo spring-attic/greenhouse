@@ -12,16 +12,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.security.encrypt.SearchableStringEncryptor;
+import org.springframework.security.crypto.encrypt.Encryptors;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppConnection;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
 import com.springsource.greenhouse.develop.NoSuchAccountConnectionException;
-import com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager;
-import com.springsource.greenhouse.develop.oauth.InvalidRequestTokenException;
-import com.springsource.greenhouse.develop.oauth.OAuthSession;
 
 public class ConcurrentMapOAuthSessionManagerTest {
 
@@ -34,7 +31,7 @@ public class ConcurrentMapOAuthSessionManagerTest {
 	@Before
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
-		appRepository = new JdbcAppRepository(new JdbcTemplate(db), new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"));		
+		appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.queryableText("secret", "5b8bd7612cdab5ed"));		
 		sessionManager = new ConcurrentMapOAuthSessionManager(appRepository);
 	}
 

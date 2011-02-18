@@ -24,8 +24,9 @@ import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
-import org.springframework.security.encrypt.StringEncryptor;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.utils.SlugUtils;
@@ -42,15 +43,14 @@ public class JdbcAppRepository implements AppRepository {
 
 	private JdbcTemplate jdbcTemplate;
 	
-	private StringEncryptor encryptor;
+	private TextEncryptor encryptor;
 	
-	private SecureRandomStringKeyGenerator keyGenerator;
+	private StringKeyGenerator keyGenerator = KeyGenerators.string();
 
 	@Inject
-	public JdbcAppRepository(JdbcTemplate jdbcTemplate, StringEncryptor encryptor) {
+	public JdbcAppRepository(JdbcTemplate jdbcTemplate, TextEncryptor encryptor) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.encryptor = encryptor;
-		this.keyGenerator = new SecureRandomStringKeyGenerator();
 	}
 
 	public List<AppSummary> findAppSummaries(Long accountId) {

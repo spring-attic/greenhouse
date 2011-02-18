@@ -14,7 +14,8 @@
 	 
 	<!-- Spring Security OAuth 1.0 Provider Configuration -->	
 	<oauth:provider consumer-details-service-ref="oauthConsumerDetails" token-services-ref="oauthProviderTokenServices"
-		request-token-url="/oauth/request_token" authenticate-token-url="/oauth/authorize" authentication-failed-url="/oauth/confirm_access" access-token-url="/oauth/access_token" require10a="false" />
+		request-token-url="/oauth/request_token" authenticate-token-url="/oauth/authorize"
+		authentication-failed-url="/oauth/confirm_access" access-token-url="/oauth/access_token" require10a="false" />
 
 	<!-- ConsumerDetailsService that constructs ConsumerDetails objects from Apps loaded by the AppRepository -->			
 	<bean id="oauthConsumerDetails" class="com.springsource.greenhouse.develop.oauth.AppConsumerDetailsService" />

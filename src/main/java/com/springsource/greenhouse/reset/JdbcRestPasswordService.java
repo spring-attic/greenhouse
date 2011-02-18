@@ -19,8 +19,8 @@ import javax.inject.Inject;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
-import org.springframework.security.encrypt.StringKeyGenerator;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +44,7 @@ public class JdbcRestPasswordService implements ResetPasswordService {
 	
 	private final ResetPasswordMailer mailer;
 	
-	private final StringKeyGenerator tokenGenerator = new SecureRandomStringKeyGenerator();
+	private final StringKeyGenerator tokenGenerator = KeyGenerators.string();
 	
 	@Inject
 	public JdbcRestPasswordService(JdbcTemplate jdbcTemplate, AccountRepository accountRepository, ResetPasswordMailer mailer) {

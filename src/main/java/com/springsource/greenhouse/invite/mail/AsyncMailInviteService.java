@@ -24,8 +24,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.encrypt.SecureRandomStringKeyGenerator;
-import org.springframework.security.encrypt.StringKeyGenerator;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.templating.LocalStringTemplate;
 import org.springframework.templating.ResourceStringTemplateFactory;
@@ -103,6 +103,6 @@ public class AsyncMailInviteService implements MailInviteService {
 
 	private final StringTemplateFactory textTemplateFactory = new ResourceStringTemplateFactory(new ClassPathResource("invite-text.st", getClass()));
 
-	private final StringKeyGenerator tokenGenerator = new SecureRandomStringKeyGenerator();
+	private final StringKeyGenerator tokenGenerator = KeyGenerators.string();
 	
 }

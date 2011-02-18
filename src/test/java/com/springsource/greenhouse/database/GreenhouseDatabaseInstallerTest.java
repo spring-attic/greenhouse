@@ -5,7 +5,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-import com.springsource.greenhouse.database.BaseDatabaseUpgrader;
+import com.springsource.greenhouse.config.database.BaseDatabaseUpgrader;
 
 public class GreenhouseDatabaseInstallerTest {
 

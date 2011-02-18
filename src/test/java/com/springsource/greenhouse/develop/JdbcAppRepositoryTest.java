@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.security.encrypt.SearchableStringEncryptor;
+import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ public class JdbcAppRepositoryTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		appRepository = new JdbcAppRepository(jdbcTemplate, new SearchableStringEncryptor("secret", "5b8bd7612cdab5ed"));
+		appRepository = new JdbcAppRepository(jdbcTemplate, Encryptors.queryableText("secret", "5b8bd7612cdab5ed"));
 	}
 
 	@After
