@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 the original author or authors.
+ * Copyright 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,20 @@ import org.springframework.context.annotation.ComponentScanSpec;
 import org.springframework.context.annotation.Feature;
 import org.springframework.context.annotation.FeatureConfiguration;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
+import org.springframework.core.type.filter.TypeFilter;
 
 @FeatureConfiguration
 public class ComponentScanFeatureConfig {
 
 	@Feature
 	public ComponentScanSpec componentScanSpec() {
-		Pattern configPackage = Pattern.compile("com\\.springsource\\.greenhouse\\.config.*");
-		return new ComponentScanSpec("com.springsource.greenhouse").excludeFilters(new RegexPatternTypeFilter(configPackage));
+		return new ComponentScanSpec("com.springsource.greenhouse").excludeFilters(configPackage());
+	}
+
+	// internal helpers
+	
+	private TypeFilter configPackage() {
+		return new RegexPatternTypeFilter(Pattern.compile("com\\.springsource\\.greenhouse\\.config.*"));
 	}
 	
 }
