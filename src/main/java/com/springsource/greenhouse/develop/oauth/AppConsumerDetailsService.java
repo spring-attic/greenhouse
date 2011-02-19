@@ -26,6 +26,7 @@ import org.springframework.security.oauth.common.signature.SharedConsumerSecret;
 import org.springframework.security.oauth.common.signature.SignatureSecret;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
+import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.develop.App;
 import com.springsource.greenhouse.develop.AppRepository;
@@ -36,6 +37,7 @@ import com.springsource.greenhouse.develop.InvalidApiKeyException;
  * Allows an AppRepository to serve as the source for OAuth Consumers known to the Spring Security OAuth provider.
  * @author Keith Donald
  */
+@Service
 public class AppConsumerDetailsService implements ConsumerDetailsService {
 
 	private final AppRepository appRepository;

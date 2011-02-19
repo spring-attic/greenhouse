@@ -9,7 +9,4 @@
 	<!-- Enables annotation-driven asynchronous tasks e.g. @Async -->	
 	<annotation-driven mode="aspectj" executor="taskExecutor" />
 
-	<!-- Worker thread pool -->
-	<executor id="taskExecutor" />
-
 </beans:beans>

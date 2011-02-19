@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
+import org.springframework.stereotype.Service;
 
 import com.google.common.collect.MapMaker;
 import com.springsource.greenhouse.develop.AppConnection;
@@ -35,6 +36,7 @@ import com.springsource.greenhouse.develop.InvalidApiKeyException;
  * @author Keith Donald
  * @see MapMaker
  */
+@Service
 public class ConcurrentMapOAuthSessionManager implements OAuthSessionManager {
 
 	private final ConcurrentMap<String, StandardOAuthSession> sessions;

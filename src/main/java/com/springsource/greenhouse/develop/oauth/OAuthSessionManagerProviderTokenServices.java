@@ -22,6 +22,7 @@ import org.springframework.security.oauth.provider.token.InvalidOAuthTokenExcept
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
+import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
@@ -34,6 +35,7 @@ import com.springsource.greenhouse.develop.NoSuchAccountConnectionException;
  * Allows for the {@link OAuthSessionManager} to be used with Spring Security OAuth-based Provider to store OAuth request state and establish OAuth connections.
  * @author Keith Donald
  */
+@Service
 public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTokenServices {
 	
 	private OAuthSessionManager sessionManager;

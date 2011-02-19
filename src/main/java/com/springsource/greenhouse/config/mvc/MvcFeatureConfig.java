@@ -4,8 +4,9 @@ import javax.inject.Inject;
 
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Feature;
-import org.springframework.context.annotation.FeatureConfiguration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.format.datetime.joda.JodaTimeContextHolder;
@@ -23,7 +24,10 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
 import com.springsource.greenhouse.utils.Location;
 
-@FeatureConfiguration
+//commented out until SPR-7975 is resolved: @FeatureConfiguration
+// @Configuration and @ImportResource are temporary
+@Configuration
+@ImportResource("com/springsource/greenhouse/config/mvc/mvc-features.xml")
 public class MvcFeatureConfig {
 	
 	@Inject

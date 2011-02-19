@@ -433,10 +433,14 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
+				<directory>src/main/java</directory>
 			</resource>
-		</resources>	
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/java</directory>
+			</testResource>
+		</testResources>	
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

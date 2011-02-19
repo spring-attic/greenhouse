@@ -20,8 +20,10 @@ import java.sql.SQLException;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.FileStorage;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
 
 /**
@@ -31,6 +33,7 @@ import org.springframework.web.util.UriTemplate;
  * Also capable of mapping AccountReference objects, for generating links to public user profile without exposing private user data.
  * @author Keith Donald
  */
+@Component
 public class AccountMapper implements RowMapper<Account> {
 
 	/**
@@ -53,7 +56,7 @@ public class AccountMapper implements RowMapper<Account> {
 	 * @param profileUrlTemplate The profile URL template for generating public user profile links
 	 */
 	@Inject
-	public AccountMapper(FileStorage pictureStorage, String profileUrlTemplate) {
+	public AccountMapper(FileStorage pictureStorage, @Value("#{environment['application.url']}/members/{profileKey}") String profileUrlTemplate) {
 		this(new PictureUrlMapper(new PictureUrlFactory(pictureStorage), PictureSize.SMALL), profileUrlTemplate);
 	}
 

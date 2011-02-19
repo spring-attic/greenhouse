@@ -7,7 +7,7 @@
 
 	<http use-expressions="true">
 		<!-- Authentication policy -->
-		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="authenticationFailureHandler" />
+		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="redirectingAuthenticationFailureHandler" />
 		<logout logout-url="/signout" /> <!-- delete-cookies="JSESSIONID" 3.1 only -->
 		<!-- Authorization policy TODO replace with @Secured on @Controllers? -->
 		<intercept-url pattern="/" access="permitAll" />
@@ -28,38 +28,5 @@
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider ref="usernamePasswordAuthenticationProvider" />
 	</authentication-manager>
-
-	<beans:bean id="usernamePasswordAuthenticationProvider" class="com.springsource.greenhouse.account.UsernamePasswordAuthenticationProvider" />
-
-	<beans:bean id="authenticationFailureHandler" class="com.springsource.greenhouse.signin.RedirectingAuthenticationFailureHandler" />
-
-	<beans:bean id="accountMapper" class="com.springsource.greenhouse.account.AccountMapper">
-		<beans:constructor-arg value="#{environment['application.url']}/members/{profileKey}" />		
-	</beans:bean>
-	
-	<beans:bean id="accountRepository" class="com.springsource.greenhouse.account.JdbcAccountRepository" />
-
-	<beans:import resource="security-oauth-provider.xml" />
-
-	<beans:bean class="com.springsource.greenhouse.config.connect.ConnectionRepositoryConfig" />	
-	<beans:bean class="com.springsource.greenhouse.config.connect.ServiceProviderConfig" />
-	<beans:bean class="com.springsource.greenhouse.config.connect.ServiceApiConfig" />
-	
-	<!-- Profile-specific beans -->
-		
-	<beans:beans profile="embedded">
-		<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder" factory-method="getInstance" />		
-		<beans:bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText" />
-	</beans:beans>
-
-	<beans:beans profile="standard">
-		<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
-			<beans:constructor-arg value="${environment['security.encryptPassword']}" />
-		</beans:bean>
-		<beans:bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="queryableText">
-			<beans:constructor-arg value="${environment['security.encryptPassword']}" />
-			<beans:constructor-arg value="${environment['security.encryptSalt']}" />
-		</beans:bean>		
-	</beans:beans>
 
 </beans:beans>

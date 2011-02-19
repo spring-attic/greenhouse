@@ -8,7 +8,7 @@ import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
 
 @Configuration
-public class ViewConfiguration {
+public class ViewConfig {
 
 	@Bean
 	public ViewResolver viewResolver() {

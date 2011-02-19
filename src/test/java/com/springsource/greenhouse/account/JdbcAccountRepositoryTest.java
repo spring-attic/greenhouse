@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountRepositoryTest {
 

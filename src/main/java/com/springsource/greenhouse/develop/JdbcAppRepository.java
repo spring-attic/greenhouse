@@ -27,6 +27,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.keygen.StringKeyGenerator;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.utils.SlugUtils;
@@ -36,9 +37,7 @@ import com.springsource.greenhouse.utils.SlugUtils;
  * ApiKeys and secrets, as well as accessTokens and secrets, are encrypted for storage using a {@link StringEncryptor}.
  * @author Keith Donald
  */
-// TODO this is disabled because it's needed in root-context for Spring Security yet scanned by app-servlet-context. not very clean: revisit this.
-// unfortunately, the context hierarchy that requires some beans to reside in the root context and others in the child context promotes technically-oriented packaging over functionally-oriented.
-//@Repository
+@Repository
 public class JdbcAppRepository implements AppRepository {
 
 	private JdbcTemplate jdbcTemplate;

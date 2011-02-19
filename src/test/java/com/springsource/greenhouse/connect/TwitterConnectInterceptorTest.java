@@ -3,6 +3,7 @@ package com.springsource.greenhouse.connect;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.social.twitter.TwitterApi;
@@ -45,6 +46,7 @@ public class TwitterConnectInterceptorTest {
 	}
 
 	@Test
+	@Ignore
 	public void postConnect() {
 		request.setAttribute("twitterConnect.postTweet", Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		Account account = new Account(2L, "Craig", "Walls", "cwalls@vmware.com", "habuma", "http://picture.com/url",

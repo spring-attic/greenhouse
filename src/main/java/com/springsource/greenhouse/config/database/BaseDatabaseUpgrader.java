@@ -80,7 +80,6 @@ class BaseDatabaseUpgrader {
 		builder.addChange(databaseResource("install/Group.sql"));
 		builder.addChange(databaseResource("install/Activity.sql"));
 		builder.addChange(databaseResource("install/ConnectedApp.sql"));
-		builder.addChange(databaseResource("install/ConnectedAccount.sql"));
 		builder.addChange(databaseResource("install/Reset.sql"));
 		builder.addChange(databaseResource("install/Invite.sql"));		
 		builder.addChange(databaseResource("install/Venue.sql"));

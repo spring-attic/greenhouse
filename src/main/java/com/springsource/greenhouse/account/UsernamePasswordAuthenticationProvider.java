@@ -25,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 
 /**
  * Adapts {@link AccountRepository#authenticate(String, String)} to the SpringSecurity AuthenticationProvider SPI.
@@ -32,6 +33,7 @@ import org.springframework.security.core.GrantedAuthority;
  * The authenticated Account is treated as the {@link Authentication#getPrincipal() Authentication Principal}.
  * @author Keith Donald
  */
+@Service
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
 	private AccountRepository accountRepository;

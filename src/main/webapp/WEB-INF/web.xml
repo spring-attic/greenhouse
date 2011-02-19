@@ -94,7 +94,7 @@
 
 	<!-- Handles Comet requests -->
 	<servlet>
-		<servlet-name>cometServlet</servlet-name>
+		<servlet-name>comet</servlet-name>
 		<servlet-class>org.atmosphere.cpr.MeteorServlet</servlet-class>
 		<init-param>
 			<param-name>org.atmosphere.servlet</param-name>
@@ -112,15 +112,11 @@
 			<param-name>org.atmosphere.cpr.broadcasterCacheClass</param-name>
 			<param-value>org.atmosphere.cache.HeaderBroadcasterCache</param-value>
 		</init-param>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/cometServlet/servlet-context.xml</param-value>
-		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>cometServlet</servlet-name>
+		<servlet-name>comet</servlet-name>
 		<url-pattern>/pubsub/*</url-pattern>
 	</servlet-mapping>
 

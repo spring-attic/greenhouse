@@ -29,7 +29,7 @@ import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 @Profile("embedded")
 public class EmbeddedDataSourceConfig {
 
-	@Bean
+	@Bean(destroyMethod="shutdown")
 	public DataSource dataSource() {
 		EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
 		factory.setDatabaseName("greenhouse");

@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ClassUtils;
 
@@ -30,6 +31,7 @@ import com.springsource.greenhouse.utils.Location;
  * An ActionRepository that records Action information in a relational database using the JDBC API.
  * @author Keith Donald
  */
+@Repository
 public class JdbcActionRepository implements ActionRepository {
 
 	private final JdbcTemplate jdbcTemplate;
