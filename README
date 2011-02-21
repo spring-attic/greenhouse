@@ -1,6 +1,30 @@
 Greenhouse Reference Application
 --------------------------------
+Greenhouse is a Java web application built for the Spring community that has two primary goals:
+1. Serve as a open-source, public-facing reference and driver for Spring technology,
+   including Spring MVC, Security, Integration, and the new Spring Social and Mobile projects.
+2. Help foster and support our passionate application developer community through the development of useful community services.
 
-To build simply execute 'mvn install' and deploy the resulting .war to any Servlet 2.5 >, such as Tomcat.
+Features
+- Extensive use of Spring Framework, Spring MVC, Spring Social, Spring Mobile, Spring Security, and Spring Integration projects.
+- An OAuth-based "App Framework" that allows Developers to develop new client apps for which users may establish Account->App connections.
+- The ability to connect your local Greenhouse Account to Twitter, Facebook, LinkedIn, and TripIt ServiceProviders.
+- Member Sign Up, Sign In, and Reset Password Modules.
+- A Member Invite Module allowing you to invite your Facebook friends and email contacts.
+- A Member Badge (Award) System that rewards members for community participation.
+- A mobile web version of the app that can be used across multiple smartphone platforms.
+- A Group Event Management Module that powered SpringOne2gx Chicago; and in the future may power Spring events world-wide.
+- Numerous Spring Framework contributions in the areas of Data (S3 File Storage and RDMS Migrations), Web (Email Templating, Flash Map, sComet).
+- An agile Continuous Deployment CI Process
 
+Building and Running from the Command Line
+------------------------------------------
+To build, simply execute 'mvn install' and deploy the resulting .war to any Servlet 2.5 >, such as Tomcat.
 By default, the app will run in 'embedded' mode which does not require any external setup.
+
+Building and Running from a Maven/Java Dynamic Web-project-capable IDE, such as Eclipse/SpringSource Tool Suite:
+------------------------------------------
+Simply import the project into your IDE and deploy the project to your IDE's embedded servlet container.
+
+Enjoy!
+The Greenhouse Development Team
