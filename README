@@ -7,14 +7,15 @@ Greenhouse is a Java web application built for the Spring community that has two
 
 Features
 - Extensive use of Spring Framework, Spring MVC, Spring Social, Spring Mobile, Spring Security, and Spring Integration projects.
-- An OAuth-based "App Framework" that allows Developers to develop new client apps for which users may establish Account->App connections.
+- An OAuth-based App Catalog that allows Developers to develop new client apps for which users may establish Account->App connections.
 - The ability to connect your local Greenhouse Account to Twitter, Facebook, LinkedIn, and TripIt ServiceProviders.
 - Member Sign Up, Sign In, and Reset Password Modules.
 - A Member Invite Module allowing you to invite your Facebook friends and email contacts.
 - A Member Badge (Award) System that rewards members for community participation.
 - A mobile web version of the app that can be used across multiple smartphone platforms.
-- A Group Event Management Module that powered SpringOne2gx Chicago; and in the future may power Spring events world-wide.
-- Numerous Spring Framework contributions in the areas of Data (S3 File Storage and RDMS Migrations), Web (Email Templating, Flash Map, sComet).
+- A Group Event Management Module for powering Spring events, such as conferences and user group meetings.
+- Numerous Spring Framework contributions in the areas of:
+  Data (S3 File Storage and RDMS Migrations), Web (Email Templating, Flash Map, Comet).
 - An agile Continuous Deployment CI Process
 
 Building and Running from the Command Line
