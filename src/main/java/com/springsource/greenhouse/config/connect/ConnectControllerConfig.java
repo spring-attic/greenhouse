@@ -18,20 +18,23 @@ package com.springsource.greenhouse.config.connect;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Provider;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.social.connect.support.ConnectionRepository;
+import org.springframework.social.facebook.connect.FacebookServiceProvider;
 import org.springframework.social.facebook.web.FacebookSigninController;
 import org.springframework.social.web.connect.ConnectController;
 import org.springframework.social.web.connect.ConnectInterceptor;
-import org.springframework.social.web.connect.SignInControllerGateway;
+import org.springframework.social.web.signin.SignInService;
 
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.connect.FacebookConnectInterceptor;
 import com.springsource.greenhouse.connect.TwitterConnectInterceptor;
 import com.springsource.greenhouse.members.ProfilePictureService;
-import com.springsource.greenhouse.signin.AccountSigninGateway;
+import com.springsource.greenhouse.signin.AccountSignInService;
 
 @Configuration
 public class ConnectControllerConfig {
@@ -48,11 +51,10 @@ public class ConnectControllerConfig {
 	}
 	
 	@Bean
-	public FacebookSigninController facebookSigninController(@Value("#{environment['facebook.appId']}") String appId,
-			@Value("#{environment['facebook.appSecret']}") String appSecret,
+	public FacebookSigninController facebookSigninController(Provider<FacebookServiceProvider> serviceProviderLocator,
 			ConnectionRepository connectionRepository, AccountRepository accountRepository) {
-		SignInControllerGateway signinGateway = new AccountSigninGateway(accountRepository);
-		return new FacebookSigninController(connectionRepository, signinGateway, appId, appSecret);
+		SignInService signinService = new AccountSignInService(accountRepository);
+		return new FacebookSigninController(serviceProviderLocator, connectionRepository, signinService);
 	}
 	
 }

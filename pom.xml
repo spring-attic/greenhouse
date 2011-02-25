@@ -349,13 +349,7 @@
 		<dependency>
 			<groupId>org.atmosphere</groupId>
 			<artifactId>atmosphere-runtime</artifactId>
-			<version>0.6.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.atmosphere</groupId>
-					<artifactId>atmosphere-compat-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>0.6.5</version>
 		</dependency>
 
 		<!-- Scribe OAuth 1.0 Consumer API -->
