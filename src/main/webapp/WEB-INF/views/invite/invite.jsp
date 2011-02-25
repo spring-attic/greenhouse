@@ -28,7 +28,8 @@
 	</li>	
 </ul>
 
-<facebook:init />
+<s:eval expression="@facebookProvider.appId" var="appId" />
+<facebook:init appId="${appId}" />
 <script>
 if(FB) {
 	FB.requireSessionThenGoTo = function(url) {

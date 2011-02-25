@@ -13,5 +13,7 @@
 	</ul>
 	<fb:like></fb:like>
 </div>
-<div id="fb-root"></div>	
-<facebook:init />
+<div id="fb-root"></div>
+
+<s:eval expression="@facebookProvider.appId" var="appId" />
+<facebook:init appId="${appId}" />

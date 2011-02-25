@@ -52,4 +52,5 @@
 </form>
 </c:if>
 
-<facebook:init/>
+<s:eval expression="@facebookProvider.appId" var="appId" />
+<facebook:init appId="${appId}" />

@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.account;
 
 import java.io.Serializable;
+import java.security.Principal;
 
 import org.springframework.web.util.UriTemplate;
 
@@ -26,7 +27,7 @@ import org.springframework.web.util.UriTemplate;
  * @author Keith Donald
  */
 @SuppressWarnings("serial")
-public class Account implements Serializable {
+public class Account implements Serializable, Principal {
 	
 	private final Long id;
 	
@@ -126,4 +127,9 @@ public class Account implements Serializable {
 		return username != null ? username : id.toString(); 
 	}
 	
+	// implementing Principal
+	
+	public String getName() {
+		return id.toString();
+	}
 }
