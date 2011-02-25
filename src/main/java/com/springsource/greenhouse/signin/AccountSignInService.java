@@ -12,7 +12,7 @@ import com.springsource.greenhouse.account.AccountUtils;
 
 public class AccountSignInService implements SignInService {
 
-	private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
 
 	@Inject
 	public AccountSignInService(AccountRepository accountRepository) {
@@ -20,7 +20,7 @@ public class AccountSignInService implements SignInService {
 	}
 
 	public void signIn(Serializable accountId) {
-		Account account = accountRepository.findById(Long.valueOf(String.valueOf(accountId)));
+		Account account = accountRepository.findById((Long) accountId);
 		AccountUtils.signin(account);
 	}
 

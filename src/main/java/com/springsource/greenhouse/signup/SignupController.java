@@ -18,12 +18,16 @@ package com.springsource.greenhouse.signup;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.springframework.social.web.signin.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.WebRequest;
 
+import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
+import com.springsource.greenhouse.signup.SignupHelper.SignupCallback;
 
 /**
  * UI Controller for signing up new members.
@@ -53,11 +57,15 @@ public class SignupController {
 	 * Redirects the new member to the application home page on successful sign-in.
 	 */
 	@RequestMapping(value="/signup", method=RequestMethod.POST)
-	public String signup(@Valid SignupForm form, BindingResult formBinding) {
+	public String signup(@Valid SignupForm form, BindingResult formBinding, final WebRequest request) {
 		if (formBinding.hasErrors()) {
 			return null;
 		}
-		boolean result = signupHelper.signup(form, formBinding);
+		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
+			public void postCreateAccount(Account account) {
+				ProviderSignInUtils.handleConnectPostSignUp(account.getId(), request);
+			}
+		});
 		return result ? "redirect:/" : null;
 	}
 }

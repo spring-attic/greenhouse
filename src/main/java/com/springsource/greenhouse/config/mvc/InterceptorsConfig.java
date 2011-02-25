@@ -15,11 +15,24 @@
  */
 package com.springsource.greenhouse.config.mvc;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Feature;
+import org.springframework.context.annotation.FeatureConfiguration;
+import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
+import org.springframework.web.servlet.config.MvcInterceptors;
 
-@Configuration
-@ImportResource("com/springsource/greenhouse/config/mvc/mvc-interceptors.xml")
+import com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor;
+import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
+import com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor;
+
+@FeatureConfiguration
 public class InterceptorsConfig {
 
+	@Feature
+	public MvcInterceptors interceptors() {
+		return new MvcInterceptors().globalInterceptors(new AccountExposingHandlerInterceptor(),
+				new DateTimeZoneHandlerInterceptor(),
+				new UserLocationHandlerInterceptor(),
+				new DeviceResolverHandlerInterceptor());
+	}
+	
 }
