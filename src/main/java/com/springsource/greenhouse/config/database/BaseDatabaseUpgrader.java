@@ -84,7 +84,7 @@ class BaseDatabaseUpgrader {
 		builder.addChange(databaseResource("install/Invite.sql"));		
 		builder.addChange(databaseResource("install/Venue.sql"));
 		builder.addChange(databaseResource("install/Event.sql"));
-		builder.addChange(databaseResource("install/Connections.sql"));
+		builder.addChange(databaseResource("install/Connection.sql"));
 		addInstallChanges(builder);
 		upgrader.addChangeSet(builder.getChangeSet());
 	}

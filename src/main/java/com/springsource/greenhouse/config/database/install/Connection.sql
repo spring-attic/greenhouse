@@ -1,5 +1,5 @@
 create table Connection (id identity,
-						 accountId varchar not null,
+						 accountId bigint not null,
 						 providerId varchar not null,
 						 accessToken varchar not null,                                   
 						 secret varchar, 

@@ -53,7 +53,7 @@ public class ConnectControllerConfig {
 	@Bean
 	public FacebookSigninController facebookSigninController(Provider<FacebookServiceProvider> serviceProviderLocator,
 			ConnectionRepository connectionRepository, AccountRepository accountRepository) {
-		SignInService signinService = new AccountSignInService(accountRepository);
+		SignInService<Long> signinService = new AccountSignInService(accountRepository);
 		return new FacebookSigninController(serviceProviderLocator, connectionRepository, signinService);
 	}
 	
