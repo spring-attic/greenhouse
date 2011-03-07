@@ -1,4 +1,5 @@
 /*
+ /*
  * Copyright 2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,12 +28,18 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.JoinRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springsource.greenhouse.develop.AppForm;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
+import com.springsource.greenhouse.utils.SlugUtils;
 import com.springsource.greenhouse.utils.SubResourceReference;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 /**
  * EventRepository implementation that stores Event data in a relational database using the JDBC API.
@@ -107,7 +114,22 @@ public class JdbcEventRepository implements EventRepository {
 		return newAvgRating;
 	}
 	
+	@Transactional
+	public String createEvent(Long accountId, EventsForm form) {
+		String slug = createSlug(form.getTitle());
+		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime(), form.getEndTime(), form.getTimeZone());
+		Long eventId = jdbcTemplate.queryForLong("call identity()");
+		return slug;
+	}
+
+	public EventsForm getNewEventForm() {
+		return new EventsForm();
+	}
+	
 	// internal helpers
+	
+	private String createSlug(String eventName) {
+		return SlugUtils.toSlug(eventName);}
 
 	private boolean isSessionEnded(Long eventId, Integer sessionId) {
 		Date endTime = jdbcTemplate.queryForObject("select endTime from EventSession where event = ? and id = ?", Date.class, eventId, sessionId);
@@ -141,11 +163,26 @@ public class JdbcEventRepository implements EventRepository {
 		}
 	};
 	
+	private RowMapper<EventsForm> eventFormMapper = new RowMapper<EventsForm>() {
+		public EventsForm mapRow(ResultSet rs, int rowNum) throws SQLException {
+			EventsForm form = new EventsForm();
+			form.setTitle(rs.getString("Title"));
+			form.setDescription(rs.getString("Description"));
+			form.setStartTime(rs.getDate("Start Time"));
+			form.setEndTime(rs.getDate("End Time"));
+			form.setTimeZone(rs.getString("Time Zone"));
+			return form;
+		}
+	};
+
+	
 	private static final String SELECT_EVENT = "select e.id, e.title, e.timeZone, e.startTime, e.endTime, e.slug, e.description, g.hashtag, g.slug as groupSlug, g.name as groupName, " + 
 		"v.id as venueId, v.name as venueName, v.postalAddress as venuePostalAddress, v.latitude as venueLatitude, v.longitude as venueLongitude, v.locationHint as venueLocationHint from Event e " + 
 		"inner join MemberGroup g on e.memberGroup = g.id " + 
 		"inner join EventVenue ev on e.id = ev.event " + 
 		"inner join Venue v on ev.venue = v.id";
+	
+	private static final String INSERT_EVENT = "insert into event (Title, slug, description, StartDate, EndDate, TimeZone) values (?, ?, ?, ?, ?, ?)";
 	
 	private static final String SELECT_UPCOMING_EVENTS = SELECT_EVENT + " where e.endTime > ? order by e.startTime";
 
