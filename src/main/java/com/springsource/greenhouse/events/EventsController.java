@@ -191,12 +191,12 @@ public class EventsController {
 	* Register a new Event for the developer.
 	*/
 	@RequestMapping(value="/events", method=RequestMethod.POST)
-	public String create(@Valid EventsForm form, BindingResult bindingResult, Event event) {
+	public String create(@Valid EventsForm form, BindingResult bindingResult, Account account) {
 	if (bindingResult.hasErrors()) {
 	return "events/new";
 	}
-
-	return "redirect:/events" + eventRepository.createEvent(event.getId(), form);
+	eventRepository.createEvent(account.getId(), form);
+	return "redirect:/events";
 
 	}
 
