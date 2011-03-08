@@ -121,11 +121,11 @@ public class JdbcEventRepository implements EventRepository {
 		String slug = createSlug(form.getTitle());
 		int membergroup = 1;
 		String timezone = "America/Chicago";
-		LocalDate starttime = new LocalDate(2012,05,17);
-		LocalDate endtime = new LocalDate(2012,05,22);
+		//LocalDate starttime = new LocalDate(2012,05,17);
+		//LocalDate endtime = new LocalDate(2012,05,22);
 		//String title = "new conference";
 		//String desc = "this is a description";
-		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), starttime.toString(), endtime.toString(), timezone, membergroup);
+		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), timezone , membergroup);
 		jdbcTemplate.update(INSERT_VENUE);
 		// Long eventId = jdbcTemplate.queryForLong("call identity()");
 		return slug;
@@ -182,7 +182,7 @@ public class JdbcEventRepository implements EventRepository {
 		}
 	};*/
 	
-	private RowMapper<EventsForm> eventFormMapper = new RowMapper<EventsForm>() {
+/*	private RowMapper<EventsForm> eventFormMapper = new RowMapper<EventsForm>() {
 		public EventsForm mapRow(ResultSet rs, int rowNum) throws SQLException {
 			EventsForm form = new EventsForm();
 			form.setTitle(rs.getString("Title"));
@@ -193,7 +193,7 @@ public class JdbcEventRepository implements EventRepository {
 			return form;
 		}
 	};
-
+*/
 	
 	private static final String SELECT_EVENT = "select e.id, e.title, e.timeZone, e.startTime, e.endTime, e.slug, e.description, g.hashtag, g.slug as groupSlug, g.name as groupName, " + 
 		"v.id as venueId, v.name as venueName, v.postalAddress as venuePostalAddress, v.latitude as venueLatitude, v.longitude as venueLongitude, v.locationHint as venueLocationHint from Event e " + 

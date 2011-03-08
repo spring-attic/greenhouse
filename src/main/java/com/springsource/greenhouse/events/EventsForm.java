@@ -32,13 +32,13 @@ public class EventsForm {
 	private String title;
 	
 	
-	private String timezone;
+	private DateTimeZone timezone;
 	
-	
-	private Date startTime;
+	@NotEmpty
+	private String startTime;
 
-	
-	private Date endTime;
+	@NotEmpty
+	private String endTime;
 
 	@NotEmpty
 	private String description;
@@ -57,34 +57,34 @@ public class EventsForm {
 	/**
 	 * The time zone the conference takes place in.
 	 */
-	public String getTimeZone() {
+	public DateTimeZone getTimeZone() {
 		return timezone;
 	}
 
-	public void setTimeZone(String timezone) {
+	public void setTimeZone(DateTimeZone timezone) {
 		this.timezone = timezone;
 	}
 
 	/**
 	 * The start time of the conference.
 	 */
-	public Date getStartTime() {
-		return startTime;
+	public DateTime getStartTime() {
+		return new DateTime(startTime);
 	}
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setStartTime(DateTime startTime) {
+		this.startTime = startTime.toString();
 	}
 
 	/**
 	 * The end time of the conference.
 	 */
-	public Date getEndTime() {
-		return endTime;
+	public DateTime getEndTime() {
+		return new DateTime(endTime);
 	}
 
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public void setEndTime(DateTime endTime) {
+		this.endTime = endTime.toString();
 	}
 	
 	/**

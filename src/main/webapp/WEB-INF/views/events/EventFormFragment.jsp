@@ -8,26 +8,18 @@
 		<label>Time Zone</label>
 		<select>
 			<option value="">Select One</option>
-				<option value="1">Pacific</option>
-				<option value="2">Mountain</option>
-				<option value="3">Central</option>
-				<option value="4">Eastern</option>
+				<option value="America/Chicago">America/Chicago</option>
+				<option value="Mountain">Mountain</option>
+				<option value="Central">Central</option>
+				<option value="Easter">Eastern</option>
 			</select>
-				
+
 		<form:label path="startTime">Start Date<form:errors path="startTime" cssClass="error" /></form:label>
-		<input id="starttime" type="text">
+		<form:input path="startTime" />
 		<form:label path="endTime">End Date<form:errors path="endTime" cssClass="error" /></form:label>
-		<input id="endtime" type="text">
+		<form:input path="endTime" />
 		
 		<form:label path="description">Description</form:label>
 		<form:textarea cols="55" rows="8" path="description" />
 	</fieldset>
 	
-	<script type="text/javascript">
-	
-		$(document).ready(function() {
-			$("#starttime").datepicker({clickInput:true});
-			$("#endtime").datepicker({clickInput:true});
-		});
-	
-	</script>
