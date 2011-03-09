@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.events.EventsForm;
+import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.utils.Location;
 
 /**
@@ -183,7 +183,7 @@ public class EventsController {
 	}
 	
 	@RequestMapping(value="/events/new", method=RequestMethod.GET)
-	public EventsForm NewForm() {
+	public EventForm NewForm() {
 	return eventRepository.getNewEventForm();
 	}
 
@@ -191,7 +191,7 @@ public class EventsController {
 	* Register a new Event for the developer.
 	*/
 	@RequestMapping(value="/events", method=RequestMethod.POST)
-	public String create(@Valid EventsForm form, BindingResult bindingResult, Account account) {
+	public String create(@Valid EventForm form, BindingResult bindingResult, Account account) {
 	if (bindingResult.hasErrors()) {
 	return "events/new";
 	}

@@ -26,7 +26,7 @@ import org.joda.time.DateTimeZone;
  * Model backing the "Register New Event" form.
  * @author Matt Downs
  */
-public class EventsForm {
+public class EventForm {
 	
 	@NotEmpty
 	private String title;
@@ -57,11 +57,11 @@ public class EventsForm {
 	/**
 	 * The time zone the conference takes place in.
 	 */
-	public DateTimeZone getTimeZone() {
+	public DateTimeZone getTimezone() {
 		return timezone;
 	}
 
-	public void setTimeZone(DateTimeZone timezone) {
+	public void setTimezone(DateTimeZone timezone) {
 		this.timezone = timezone;
 	}
 
@@ -71,6 +71,8 @@ public class EventsForm {
 	public DateTime getStartTime() {
 		return new DateTime(startTime);
 	}
+
+
 
 	public void setStartTime(DateTime startTime) {
 		this.startTime = startTime.toString();

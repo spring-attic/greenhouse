@@ -33,7 +33,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.events.Event;
-import com.springsource.greenhouse.events.EventsForm;
+import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
 import com.springsource.greenhouse.utils.SlugUtils;
@@ -117,7 +117,7 @@ public class JdbcEventRepository implements EventRepository {
 	}
 	
 	@Transactional
-	public String createEvent(Long accountId, EventsForm form) {
+	public String createEvent(Long accountId, EventForm form) {
 		String slug = createSlug(form.getTitle());
 		int membergroup = 1;
 		String timezone = "America/Chicago";
@@ -135,8 +135,8 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject(SELECT_EVENT_FORM, eventFormMapper, accountId, slug);
 	}*/
 	
-	public EventsForm getNewEventForm() {
-		return new EventsForm();
+	public EventForm getNewEventForm() {
+		return new EventForm();
 	}
 	
 	// internal helpers

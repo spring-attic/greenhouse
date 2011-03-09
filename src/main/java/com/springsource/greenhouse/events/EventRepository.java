@@ -105,9 +105,9 @@ public interface EventRepository {
 	 */
 	Float rate(Long eventId, Integer sessionId, Long attendeeId, Rating rating) throws RatingPeriodClosedException;
 	
-	String createEvent(Long accountId, EventsForm form);
+	String createEvent(Long accountId, EventForm form);
 	
-	EventsForm getNewEventForm();
+	EventForm getNewEventForm();
 	
 	
 }
