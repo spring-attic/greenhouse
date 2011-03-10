@@ -182,10 +182,17 @@ public class EventsController {
 		return "events/list";
 	}
 	
-	@RequestMapping(value="/events/new", method=RequestMethod.GET)
+	@RequestMapping(value="/events/new", method=RequestMethod.GET) 
+	public EventForm NewForm(Model model) { 
+	Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
+	model.addAttribute("timezoneList", timezoneList); 
+	return eventRepository.getNewEventForm(); 
+	}
+	
+/*	@RequestMapping(value="/events/new", method=RequestMethod.GET)
 	public EventForm NewForm() {
 	return eventRepository.getNewEventForm();
-	}
+	}*/
 
 	/**
 	* Register a new Event for the developer.
