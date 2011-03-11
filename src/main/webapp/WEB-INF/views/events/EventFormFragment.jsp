@@ -6,14 +6,14 @@
 	<fieldset>
 		<form:label path="title">Title <form:errors path="title" cssClass="error" /></form:label>
 		<form:input path="title" />
-		<form:label path="timezone">Time Zone</form:label>
-		<form:select path="timezone"> 
-			<form:option value="">Select One</form:option> 
-				<c:forEach var="tz" items="${timezoneList}"> 
-					<form:option value="${tz}">${tz}</form:option> 
-				</c:forEach> 
-		</form:select> 
 		
+		<form:label path="tz">Time Zone</form:label>
+			<form:select path="tz">
+			<form:option value="">Select One</form:option>
+			<c:forEach var="zones" items="${timezoneList}">
+			<form:option value="${zones}">${zones}</form:option>
+			</c:forEach>
+		</form:select> 
 		<form:label path="startDate">Start Date<form:errors path="startDate" cssClass="error" /></form:label>
 		<div class="multiple">
 		<table>

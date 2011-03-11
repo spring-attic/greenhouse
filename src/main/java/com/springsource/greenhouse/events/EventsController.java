@@ -15,6 +15,7 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;

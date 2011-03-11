@@ -120,13 +120,13 @@ public class JdbcEventRepository implements EventRepository {
 	public String createEvent(Long accountId, EventForm form) {
 		String slug = createSlug(form.getTitle());
 		int membergroup = 1;
-		String timezone = "America/Chicago";
+		//String timezone = "America/Chicago";
 		//LocalDate starttime = new LocalDate(2012,05,17);
 		//LocalDate endtime = new LocalDate(2012,05,22);
 		//String title = "new conference";
 		//String desc = "this is a description";
-		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), timezone , membergroup);
-		jdbcTemplate.update(INSERT_VENUE);
+		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone().toString() , membergroup);
+		jdbcTemplate.update(INSERT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), 1);
 		// Long eventId = jdbcTemplate.queryForLong("call identity()");
 		return slug;
 	}
@@ -204,7 +204,8 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String INSERT_EVENT = "insert into event (Title, slug, description, starttime, endtime, TimeZone, membergroup) values (?, ?, ?, ?, ?, ?, ?)";
 	
 	//FOR TESTING
-	private static final String INSERT_VENUE = "insert into eventvenue (event, venue) values (3,1)";
+	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
+	private static final String INSERT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
 	
 	
 	private static final String SELECT_UPCOMING_EVENTS = SELECT_EVENT + " where e.endTime > ? order by e.startTime";

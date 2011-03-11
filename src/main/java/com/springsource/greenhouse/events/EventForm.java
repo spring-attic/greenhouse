@@ -15,6 +15,12 @@
  */
 package com.springsource.greenhouse.events;
 import java.util.Date;
+
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Past;
+
+
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -26,6 +32,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  * Model backing the "Register New Event" form.
  * @author Matt Downs
  */
+
 public class EventForm {
 
 	@NotEmpty
@@ -33,14 +40,19 @@ public class EventForm {
 
 	private DateTimeZone timezone;
 	
+	private String tz;
+	
 	private DateTime startTime;
+	
 	
 	private DateTime endTime;
 	@NotEmpty
 	private String description;
 	
 	@DateTimeFormat(pattern="M/dd/yy")
+
 	private LocalDate startDate;
+	
 	
 	@DateTimeFormat(pattern="M/dd/yy")
 	private LocalDate endDate;
@@ -71,12 +83,20 @@ public class EventForm {
 	 * The time zone the conference takes place in.
 	 */
 	public DateTimeZone getTimezone() {
+		timezone = DateTimeZone.forID(tz);
 		return timezone;
 	}
 	public void setTimezone(DateTimeZone timezone) {
 		this.timezone = timezone;
 	}
 	
+	
+	public String getTz() {
+		return tz;
+	}
+	public void setTz(String tz) {
+		this.tz = tz;
+	}
 	/**
 	 * The start time of the conference.
 	 */
