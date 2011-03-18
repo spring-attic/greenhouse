@@ -17,8 +17,6 @@ package com.springsource.greenhouse.members;
 
 import java.util.List;
 
-import com.springsource.greenhouse.account.PictureSize;
-
 /**
  * Data access interface for public member profiles.
  * @author Keith Donald
@@ -43,6 +41,4 @@ public interface ProfileRepository {
 	 */
 	List<ConnectedProfile> findConnectedProfiles(Long accountId);
 
-	String findProfilePictureUrl(String profileKey, PictureSize size);
-	
 }

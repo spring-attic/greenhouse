@@ -30,7 +30,7 @@ public class JdbcAppRepositoryTest {
 	public void setup() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
 		jdbcTemplate = new JdbcTemplate(db);
-		appRepository = new JdbcAppRepository(jdbcTemplate, Encryptors.queryableText("secret", "5b8bd7612cdab5ed"));
+		appRepository = new JdbcAppRepository(jdbcTemplate, Encryptors.noOpText());
 	}
 
 	@After

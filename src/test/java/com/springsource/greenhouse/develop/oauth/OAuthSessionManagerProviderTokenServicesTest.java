@@ -44,7 +44,7 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(ConcurrentMapOAuthSessionManagerTest.class).getDatabase();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(db);
-		AppRepository appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.queryableText("secret", "5b8bd7612cdab5ed"));				
+		AppRepository appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.noOpText());				
 		OAuthSessionManager sessionManager = new ConcurrentMapOAuthSessionManager(appRepository);
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		AccountRepository accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), accountMapper);

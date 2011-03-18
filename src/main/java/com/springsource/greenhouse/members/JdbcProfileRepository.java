@@ -72,16 +72,6 @@ public class JdbcProfileRepository implements ProfileRepository {
 		}, accountId);
 	}
 
-	public String findProfilePictureUrl(String profileKey, PictureSize size) {
-		Long accountId = getAccountId(profileKey);
-		PictureUrlMapper pictureUrlMapper = new PictureUrlMapper(pictureUrlFactory, size);
-		if (accountId != null) {
-			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where id = ?", String.class, pictureUrlMapper, accountId);
-		} else {
-			return jdbcTemplate.queryForObject(SELECT_PROFILE_PIC + " where username = ?", String.class, pictureUrlMapper, accountId);			
-		}
-	}
-	
 	// internal helpers
 	
 	private Profile findByUsername(String username) {
@@ -107,8 +97,6 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, gender, pictureSet from Member";
 
-	private static final String SELECT_PROFILE_PIC = "select id, gender, pictureSet from Member";
-	
 	private static final String SELECT_CONNECTED_PROFILES = "select p.displayName, c.profileUrl from AccountConnection c inner join ServiceProvider p on c.provider = p.name where member = ? order by displayName";
 
 }

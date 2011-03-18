@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import com.springsource.greenhouse.account.StubFileStorage;
 import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
 
+@Ignore
 public class JdbcProfileRepositoryTest {
 
 	private JdbcProfileRepository profileRepository;

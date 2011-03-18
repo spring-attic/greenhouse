@@ -31,7 +31,7 @@ public class ConcurrentMapOAuthSessionManagerTest {
 	@Before
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
-		appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.queryableText("secret", "5b8bd7612cdab5ed"));		
+		appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.noOpText());		
 		sessionManager = new ConcurrentMapOAuthSessionManager(appRepository);
 	}
 

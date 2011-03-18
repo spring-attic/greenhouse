@@ -24,7 +24,7 @@ public class AppConsumerDetailsServiceTest {
 	@Before
 	public void setUp() {
 		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(ConcurrentMapOAuthSessionManagerTest.class).getDatabase();
-		AppRepository appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.queryableText("secret", "5b8bd7612cdab5ed"));
+		AppRepository appRepository = new JdbcAppRepository(new JdbcTemplate(db), Encryptors.noOpText());
 		consumerDetailsService = new AppConsumerDetailsService(appRepository);
 	}
 
