@@ -20,11 +20,4 @@ $(document).ready(function() {
 		}
 	}
 
-	/* transport can be : long-polling, streaming or websocket */
-	$.atmosphere.subscribe(basePath + '/pubsub/recent/notifications', activityNotificationHandler,
-		$.atmosphere.request = {
-			transport : "long-polling",
-			headers : { "Accept" : "application/json" }
-		}
-	);
 });
