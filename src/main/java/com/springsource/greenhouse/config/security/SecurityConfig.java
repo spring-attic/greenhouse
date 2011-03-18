@@ -20,8 +20,8 @@ import org.springframework.context.annotation.ImportResource;
 
 @Configuration
 @ImportResource({
-	"com/springsource/greenhouse/config/security/security.xml",
-	"com/springsource/greenhouse/config/security/security-oauth-provider.xml"
+	"classpath:com/springsource/greenhouse/config/security/security.xml",
+	"classpath:com/springsource/greenhouse/config/security/security-oauth-provider.xml"
 })
 public class SecurityConfig {
 

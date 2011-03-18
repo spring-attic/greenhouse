@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -37,7 +36,6 @@ public class AppConsumerDetailsServiceTest {
 	}
 
 	@Test
-	@Ignore
 	public void loadConsumerDetails() {
 		ConsumerDetails details = consumerDetailsService.loadConsumerByConsumerKey("123456789");
 		assertEquals("Greenhouse for the iPhone", details.getConsumerName());

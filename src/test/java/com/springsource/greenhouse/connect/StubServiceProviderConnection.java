@@ -8,18 +8,13 @@ public class StubServiceProviderConnection<S> implements ServiceProviderConnecti
 
 	public StubServiceProviderConnection(S serviceApi) {
 		this.serviceApi = serviceApi;
-
 	}
 
-	@Override
 	public S getServiceApi() {
 		return serviceApi;
 	}
 
-	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

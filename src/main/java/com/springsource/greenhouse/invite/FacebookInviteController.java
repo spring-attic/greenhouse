@@ -15,15 +15,12 @@
  */
 package com.springsource.greenhouse.invite;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.social.connect.ServiceProvider;
-import org.springframework.social.connect.support.ConnectionRepository;
 import org.springframework.social.facebook.FacebookApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,8 +42,6 @@ public class FacebookInviteController {
 
 	private final ServiceProvider<FacebookApi> facebookProvider;
 	
-	private final ConnectionRepository connectionRepository;
-	
 	private final AccountRepository accountRepository;
 	
 	/**
@@ -55,9 +50,8 @@ public class FacebookInviteController {
 	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
 	 */
 	@Inject
-	public FacebookInviteController(ServiceProvider<FacebookApi> facebookProvider, ConnectionRepository connectionRepository, AccountRepository accountRepository) {
+	public FacebookInviteController(ServiceProvider<FacebookApi> facebookProvider, AccountRepository accountRepository) {
 		this.facebookProvider = facebookProvider;
-		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
 	}
 	
@@ -69,8 +63,7 @@ public class FacebookInviteController {
 	@RequestMapping(value="/invite/facebook", method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
 		if (facebookProvider.isConnected(account.getId())) {
-			List<String> facebookIds = facebookProvider.getConnections(account.getId()).get(0).getServiceApi().getFriendIds();
-			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(accountIds(facebookIds));
+			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(account.getId()));
 			model.addAttribute("friends", profileReferences);
 		} else {
 			model.addAttribute("friends", Collections.emptySet());
@@ -97,13 +90,8 @@ public class FacebookInviteController {
 		return "redirect:/invite";
 	}
 
-	private List<Long> accountIds(List<String> screenNames) {
-		// TODO This is not pretty
-		List<Serializable> matches = connectionRepository.findAccountIdsForProviderAccountIds("twitter", screenNames);
-		List<Long> accountIds = new ArrayList<Long>();
-		for (Serializable match : matches) {
-			accountIds.add(Long.valueOf(String.valueOf(match)));
-		}
-		return accountIds;
+	private List<Long> friendAccountIds(Long accountId) {
+		// TODO implement once supported by Spring Social
+		return Collections.emptyList();
 	}
 }

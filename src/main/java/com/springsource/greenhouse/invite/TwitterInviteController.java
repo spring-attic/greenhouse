@@ -15,16 +15,13 @@
  */
 package com.springsource.greenhouse.invite;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.social.connect.ServiceProvider;
-import org.springframework.social.connect.support.ConnectionRepository;
 import org.springframework.social.twitter.TwitterApi;
-import org.springframework.social.twitter.TwitterTemplate;
 import org.springframework.social.twitter.connect.TwitterServiceProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,15 +41,13 @@ import com.springsource.greenhouse.account.ProfileReference;
 @Controller
 public class TwitterInviteController {
 	
-	private ServiceProvider<TwitterApi> twitterProvider;
-	private final ConnectionRepository connectionRepository;
+	private final ServiceProvider<TwitterApi> twitterProvider;
+
 	private final AccountRepository accountRepository;
 	
 	@Inject
-	public TwitterInviteController(TwitterServiceProvider twitterProvider, ConnectionRepository connectionRepository,
-			AccountRepository accountRepository) {
+	public TwitterInviteController(TwitterServiceProvider twitterProvider, AccountRepository accountRepository) {
 		this.twitterProvider = twitterProvider;
-		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
 	}
 	
@@ -80,20 +75,15 @@ public class TwitterInviteController {
 	// TODO: consider making a Get request instead of a Post since there are no side effects
 	public String findFriends(@RequestParam String username, Account account, Model model) {
 		if (StringUtils.hasText(username)) {			
-			TwitterApi twitter = new TwitterTemplate(); // Don't need to be connected to ask for someone's list of friends
-			List<String> screenNames = twitter.getFriends(username);
-			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(accountIds(screenNames));
+			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(username));
 			model.addAttribute("friends", profileReferences);
 		}
 		return "invite/twitterFriends";
 	}
-
-	private List<Long> accountIds(List<String> screenNames) {
-		List<Serializable> matches = connectionRepository.findAccountIdsForProviderAccountIds("twitter", screenNames);
-		List<Long> accountIds = new ArrayList<Long>();
-		for (Serializable match : matches) {
-			accountIds.add(Long.valueOf(String.valueOf(match)));
-		}
-		return accountIds;
+	
+	private List<Long> friendAccountIds(String username) {
+		// TODO implement once supported by Spring Social
+		return Collections.emptyList();
 	}
+
 }

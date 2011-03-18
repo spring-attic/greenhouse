@@ -22,7 +22,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
-@ImportResource("com/springsource/greenhouse/config/task-annotation-driven.xml")
+@ImportResource("classpath:com/springsource/greenhouse/config/task-annotation-driven.xml")
 public class TaskConfig {
 
 	@Bean

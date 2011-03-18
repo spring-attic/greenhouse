@@ -103,7 +103,7 @@ public class AsyncHttpRequestHandlingMessageAdapter extends AbstractEndpoint
 					if (log.isInfoEnabled()) {
 						log.info("Broadcasting message "+message.toString()+" to "+broadcaster.getAtmosphereResources().size()+ " suspended resources.");
 					}
-					Future<Object> future = broadcaster.broadcast(broadcastMessages);
+					Future<List<HttpBroadcastMessage>> future = broadcaster.broadcast(broadcastMessages);
 					if (future != null) {
 						future.get();
 					}

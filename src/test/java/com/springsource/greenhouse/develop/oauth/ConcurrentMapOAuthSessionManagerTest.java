@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -44,7 +43,6 @@ public class ConcurrentMapOAuthSessionManagerTest {
 	}
 
 	@Test
-	@Ignore
 	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, NoSuchAccountConnectionException {
 		executeOAuthSessionLifecycle(2);
 	}
@@ -103,4 +101,5 @@ public class ConcurrentMapOAuthSessionManagerTest {
 			assertFalse(secret.equals(connection.getSecret()));
 		}
 	}
+	
 }

@@ -73,11 +73,11 @@ public final class Invitee {
 		if (inviteeString == null || inviteeString.length() == 0) {
 			throw new IllegalArgumentException("The Invitee string to parse cannot be null or empty");
 		}
-		String[] pieces = inviteeString.split("[<>]");
+		String[] pieces = inviteeString.trim().split("[<>]");
 		if (pieces.length == 1) {
 			return new Invitee(pieces[0]);	
 		} else if (pieces.length == 2) {
-			String[] name = pieces[0].split(" ");
+			String[] name = pieces[0].trim().split(" ");
 			String email = pieces[1];
 			if (name.length == 1) {
 				if (name[0].length() == 0) {

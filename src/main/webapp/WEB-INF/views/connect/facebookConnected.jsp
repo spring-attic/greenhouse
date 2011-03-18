@@ -14,8 +14,6 @@
 			Click the button if you wish to disconnect.
 		</p>
 	</div>
-	<button type="submit" onclick="FB.logout(function(response) { return true; } );">Disconnect</button>	
+	<button type="submit">Disconnect</button>	
 	<input type="hidden" name="_method" value="DELETE" />
 </form>
-
-<facebook:init />

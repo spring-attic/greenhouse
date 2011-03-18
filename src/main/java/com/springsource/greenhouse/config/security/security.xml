@@ -2,13 +2,13 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
 	<http use-expressions="true">
 		<!-- Authentication policy -->
 		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="redirectingAuthenticationFailureHandler" />
-		<logout logout-url="/signout" /> <!-- delete-cookies="JSESSIONID" 3.1 only -->
+		<logout logout-url="/signout" delete-cookies="JSESSIONID" />
 		<!-- Authorization policy TODO replace with @Secured on @Controllers? -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/favicon.ico" access="permitAll" />
