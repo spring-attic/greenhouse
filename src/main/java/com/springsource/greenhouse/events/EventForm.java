@@ -31,7 +31,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 /**
  * Model backing the "Register New Event" form.
- * @author Matt Downs
+ * @author UA Team
  */
 
 public class EventForm {
@@ -41,10 +41,7 @@ public class EventForm {
 
 	private DateTimeZone timezone;
 	
-	private String tz;
-	
 	private DateTime startTime;
-	
 	
 	private DateTime endTime;
 	
@@ -52,7 +49,6 @@ public class EventForm {
 	
 	@DateTimeFormat(pattern="M/dd/yy")
 	private LocalDate startDate;
-	
 	
 	@DateTimeFormat(pattern="M/dd/yy")
 	private LocalDate endDate;
@@ -63,13 +59,16 @@ public class EventForm {
 	@NotNull
 	private Integer startMinute;
 	
-	@NotNull
+	@NotEmpty
 	private String startAmPm;
 	
+	@NotNull
 	private Integer endHour;
 	
+	@NotNull
 	private Integer endMinute;
 	
+	@NotEmpty
 	private String endAmPm;
 	
 	/**
@@ -85,30 +84,22 @@ public class EventForm {
 	/**
 	 * The time zone the conference takes place in.
 	 */
-	public DateTimeZone getTimezone() {
-		timezone = DateTimeZone.forID(tz);
-		return timezone;
+	public String getTimezone() {
+		return timezone != null ? timezone.getID() : "";
 	}
-	public void setTimezone(DateTimeZone timezone) {
-		this.timezone = timezone;
+	public void setTimezone(String tz) {
+		this.timezone = DateTimeZone.forID(tz);
 	}
 	
-	
-	public String getTz() {
-		return tz;
-	}
-	public void setTz(String tz) {
-		this.tz = tz;
-	}
 	/**
 	 * The start time of the conference.
 	 */
 	public DateTime getStartTime() {
 		if (startAmPm.compareTo("AM") == 0) {
-		return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour, startMinute, 0, 0, getTimezone());
+		return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour, startMinute, 0, 0, timezone);
 		}
 		else {
-			return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour+12, startMinute, 0, 0, getTimezone());
+			return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour+12, startMinute, 0, 0, timezone);
 		}
 	}
 
@@ -121,10 +112,10 @@ public class EventForm {
 	 */
 	public DateTime getEndTime() {
 		if (endAmPm.compareTo("AM") == 0) {
-		return endTime  = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour, endMinute, 0, 0, getTimezone());
+		return endTime  = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour, endMinute, 0, 0, timezone);
 		}
 		else {
-			return endTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour+12, endMinute, 0, 0, getTimezone());
+			return endTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour+12, endMinute, 0, 0, timezone);
 		}
 	}
 	

@@ -120,12 +120,7 @@ public class JdbcEventRepository implements EventRepository {
 	public String createEvent(Long accountId, EventForm form) {
 		String slug = createSlug(form.getTitle());
 		int membergroup = 1;
-		//String timezone = "America/Chicago";
-		//LocalDate starttime = new LocalDate(2012,05,17);
-		//LocalDate endtime = new LocalDate(2012,05,22);
-		//String title = "new conference";
-		//String desc = "this is a description";
-		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone().toString() , membergroup);
+		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone() , membergroup);
 		jdbcTemplate.update(INSERT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), 1);
 		// Long eventId = jdbcTemplate.queryForLong("call identity()");
 		return slug;

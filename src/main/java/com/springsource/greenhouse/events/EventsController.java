@@ -15,7 +15,6 @@
  */
 package com.springsource.greenhouse.events;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -199,9 +198,11 @@ public class EventsController {
 	* Register a new Event for the developer.
 	*/
 	@RequestMapping(value="/events", method=RequestMethod.POST)
-	public String create(@Valid EventForm form, BindingResult bindingResult, Account account) {
+	public String create(@Valid EventForm form, BindingResult bindingResult, Account account, Model model) {
 	if (bindingResult.hasErrors()) {
-	return "events/new";
+		Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
+		model.addAttribute("timezoneList", timezoneList); 
+		return "events/new";
 	}
 	eventRepository.createEvent(account.getId(), form);
 	return "redirect:/events";

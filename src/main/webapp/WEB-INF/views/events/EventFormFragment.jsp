@@ -7,8 +7,8 @@
 		<form:label path="title">Title <form:errors path="title" cssClass="error" /></form:label>
 		<form:input path="title" />
 		
-		<form:label path="tz">Time Zone</form:label>
-			<form:select path="tz">
+		<form:label path="timezone">Time Zone</form:label>
+			<form:select path="timezone">
 			<form:option value="">Select One</form:option>
 			<c:forEach var="zones" items="${timezoneList}">
 			<form:option value="${zones}">${zones}</form:option>
