@@ -17,6 +17,7 @@ package com.springsource.greenhouse.events;
 import java.util.Date;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
 
@@ -46,21 +47,23 @@ public class EventForm {
 	
 	
 	private DateTime endTime;
-	@NotEmpty
+	
 	private String description;
 	
 	@DateTimeFormat(pattern="M/dd/yy")
-
 	private LocalDate startDate;
 	
 	
 	@DateTimeFormat(pattern="M/dd/yy")
 	private LocalDate endDate;
 	
+	@NotNull
 	private Integer startHour;
 	
+	@NotNull
 	private Integer startMinute;
 	
+	@NotNull
 	private String startAmPm;
 	
 	private Integer endHour;
@@ -102,10 +105,10 @@ public class EventForm {
 	 */
 	public DateTime getStartTime() {
 		if (startAmPm.compareTo("AM") == 0) {
-		return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour, startMinute, 0, 0, timezone);
+		return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour, startMinute, 0, 0, getTimezone());
 		}
 		else {
-			return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour+12, startMinute, 0, 0, timezone);
+			return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour+12, startMinute, 0, 0, getTimezone());
 		}
 	}
 
@@ -118,10 +121,10 @@ public class EventForm {
 	 */
 	public DateTime getEndTime() {
 		if (endAmPm.compareTo("AM") == 0) {
-		return endTime  = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour, endMinute, 0, 0, timezone);
+		return endTime  = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour, endMinute, 0, 0, getTimezone());
 		}
 		else {
-			return endTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour+12, endMinute, 0, 0, timezone);
+			return endTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour+12, endMinute, 0, 0, getTimezone());
 		}
 	}
 	

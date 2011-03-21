@@ -14,7 +14,7 @@
 			<form:option value="${zones}">${zones}</form:option>
 			</c:forEach>
 		</form:select> 
-		<form:label path="startDate">Start Date<form:errors path="startDate" cssClass="error" /></form:label>
+		<form:label path="startDate">Start Date <form:errors path="startDate" cssClass="error" /><form:errors path="startHour" cssClass="error" /></form:label>
 		<div class="multiple">
 		<table>
 		<tr>
@@ -86,7 +86,7 @@
 		
 		</table>
 		</div>
-		<form:label path="endDate">End Date<form:errors path="endDate" cssClass="error" /></form:label>
+		<form:label path="endDate">End Date <form:errors path="endDate" cssClass="error" /></form:label>
 		<div class="multiple">
 		<table>
 		<tr>
