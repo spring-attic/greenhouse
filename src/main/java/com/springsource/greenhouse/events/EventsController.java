@@ -15,9 +15,11 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -30,6 +32,7 @@ import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.utils.Location;
 
 /**
@@ -179,4 +183,29 @@ public class EventsController {
 		return "events/list";
 	}
 	
+	@RequestMapping(value="/events/new", method=RequestMethod.GET) 
+	public EventForm NewForm(Model model) { 
+	Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
+	model.addAttribute("timezoneList", timezoneList); 
+	return eventRepository.getNewEventForm(); 
+	}
+	
+/*	@RequestMapping(value="/events/new", method=RequestMethod.GET)
+	public EventForm NewForm() {
+	return eventRepository.getNewEventForm();
+	}*/
+
+	/**
+	* Register a new Event for the developer.
+	*/
+	@RequestMapping(value="/events", method=RequestMethod.POST)
+	public String create(@Valid EventForm form, BindingResult bindingResult, Account account) {
+	if (bindingResult.hasErrors()) {
+	return "events/new";
+	}
+	eventRepository.createEvent(account.getId(), form);
+	return "redirect:/events";
+
+	}
+
 }
