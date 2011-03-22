@@ -188,11 +188,6 @@ public class EventsController {
 	model.addAttribute("timezoneList", timezoneList); 
 	return eventRepository.getNewEventForm(); 
 	}
-	
-/*	@RequestMapping(value="/events/new", method=RequestMethod.GET)
-	public EventForm NewForm() {
-	return eventRepository.getNewEventForm();
-	}*/
 
 	/**
 	* Register a new Event for the developer.
