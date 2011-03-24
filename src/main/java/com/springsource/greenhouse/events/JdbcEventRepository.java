@@ -115,27 +115,21 @@ public class JdbcEventRepository implements EventRepository {
 		jdbcTemplate.update("update EventSession set rating = ? where event = ? and id = ?", newAvgRating, eventId, sessionId);
 		return newAvgRating;
 	}
-	
+   
 	@Transactional
 	public String createEvent(Long accountId, EventForm form) {
 		String slug = createSlug(form.getTitle());
 		int membergroup = 1;
 		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone() , membergroup);
 		jdbcTemplate.update(INSERT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), 1);
-		// Long eventId = jdbcTemplate.queryForLong("call identity()");
 		return slug;
 	}
-	
-/*	public EventsForm getEventForm(Long accountId, String slug) {
-		return jdbcTemplate.queryForObject(SELECT_EVENT_FORM, eventFormMapper, accountId, slug);
-	}*/
 	
 	public EventForm getNewEventForm() {
 		return new EventForm();
 	}
 	
 	// internal helpers
-	
 	private String createSlug(String eventName) {
 		return SlugUtils.toSlug(eventName);}
 
@@ -171,25 +165,6 @@ public class JdbcEventRepository implements EventRepository {
 		}
 	};
 	
-/*	private RowMapper<Event> eventMapper = new RowMapper<Event>() {
-		public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
-			return new Event(appSummaryMapper.mapRow(rs, rowNum), encryptor.decrypt(rs.getString("apiKey")), encryptor.decrypt(rs.getString("secret")), rs.getString("callbackUrl"));
-		}
-	};*/
-	
-/*	private RowMapper<EventsForm> eventFormMapper = new RowMapper<EventsForm>() {
-		public EventsForm mapRow(ResultSet rs, int rowNum) throws SQLException {
-			EventsForm form = new EventsForm();
-			form.setTitle(rs.getString("Title"));
-			form.setDescription(rs.getString("Description"));
-			form.setStartTime(rs.getDate("Start Time"));
-			form.setEndTime(rs.getDate("End Time"));
-			form.setTimeZone(rs.getString("Time Zone"));
-			return form;
-		}
-	};
-*/
-	
 	private static final String SELECT_EVENT = "select e.id, e.title, e.timeZone, e.startTime, e.endTime, e.slug, e.description, g.hashtag, g.slug as groupSlug, g.name as groupName, " + 
 		"v.id as venueId, v.name as venueName, v.postalAddress as venuePostalAddress, v.latitude as venueLatitude, v.longitude as venueLongitude, v.locationHint as venueLocationHint from Event e " + 
 		"inner join MemberGroup g on e.memberGroup = g.id " + 
@@ -201,7 +176,6 @@ public class JdbcEventRepository implements EventRepository {
 	//FOR TESTING
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
 	private static final String INSERT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
-	
 	
 	private static final String SELECT_UPCOMING_EVENTS = SELECT_EVENT + " where e.endTime > ? order by e.startTime";
 

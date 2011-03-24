@@ -181,7 +181,9 @@ public class EventsController {
 		model.addAttribute(eventRepository.findUpcomingEvents(new DateTime(timeZone).getMillis()));
 		return "events/list";
 	}
-	
+	/**
+	 *  Renders the event form for the user.
+	 */
 	@RequestMapping(value="/events/new", method=RequestMethod.GET) 
 	public EventForm NewForm(Model model) { 
 	Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
@@ -201,7 +203,5 @@ public class EventsController {
 	}
 	eventRepository.createEvent(account.getId(), form);
 	return "redirect:/events";
-
 	}
-
 }

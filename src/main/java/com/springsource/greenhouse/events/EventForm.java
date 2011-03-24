@@ -133,100 +133,82 @@ public class EventForm {
 		this.description = description;
 	}
 	/**
-	 * @return the startDate
+	 * The StartDate of the event.
 	 */
 	public LocalDate getStartDate() {
 		return startDate;
 	}
-	/**
-	 * @param startDate the startDate to set
-	 */
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 	/**
-	 * @return the endDate
+	 * The EndDate of the event.
 	 */
 	public LocalDate getEndDate() {
 		return endDate;
 	}
-	/**
-	 * @param endDate the endDate to set
-	 */
+	
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 	/**
-	 * @return the startHour
+	 * The StartHour for the event.
 	 */
 	public Integer getStartHour() {
 		return startHour;
 	}
-	/**
-	 * @param startHour the startHour to set
-	 */
+	
 	public void setStartHour(Integer startHour) {
 		this.startHour = startHour;
 	}
 	/**
-	 * @return the startMinute
+	 * The StartMinute for the event.
 	 */
 	public Integer getStartMinute() {
 		return startMinute;
 	}
-	/**
-	 * @param startMinute the startMinute to set
-	 */
+	
 	public void setStartMinute(Integer startMinute) {
 		this.startMinute = startMinute;
 	}
 	/**
-	 * @return the startAmPm
+	 * The startAmPm for the event.
 	 */
 	public String getStartAmPm() {
 		return startAmPm;
 	}
-	/**
-	 * @param startAmPm the startAmPm to set
-	 */
+	
 	public void setStartAmPm(String startAmPm) {
 		this.startAmPm = startAmPm;
 	}
 	/**
-	 * @return the endHour
+	 * The endHour for the event.
 	 */
 	public Integer getEndHour() {
 		return endHour;
 	}
-	/**
-	 * @param endHour the endHour to set
-	 */
+	
 	public void setEndHour(Integer endHour) {
 		this.endHour = endHour;
 	}
 	/**
-	 * @return the endMinute
+	 * The endMinute for the event.
 	 */
 	public Integer getEndMinute() {
 		return endMinute;
 	}
-	/**
-	 * @param endMinute the endMinute to set
-	 */
+	
 	public void setEndMinute(Integer endMinute) {
 		this.endMinute = endMinute;
 	}
 	/**
-	 * @return the endAmPm
+	 * The endAmPm for the event.
 	 */
 	public String getEndAmPm() {
 		return endAmPm;
 	}
-	/**
-	 * @param endAmPm the endAmPm to set
-	 */
+	
 	public void setEndAmPm(String endAmPm) {
 		this.endAmPm = endAmPm;
 	}
-
 }
