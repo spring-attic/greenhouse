@@ -120,13 +120,26 @@ public class JdbcEventRepository implements EventRepository {
 	public String createEvent(Long accountId, EventForm form) {
 		String slug = createSlug(form.getTitle());
 		int membergroup = 1;
+		double latit = 3.2;
+		double longit = 4.5;
 		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone() , membergroup);
-		jdbcTemplate.update(INSERT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), 1);
+		jdbcTemplate.update(INSERT_VENUE, form.getVenueName(), form.getVenueAddress(), latit, longit, form.getLocationHint(), membergroup);
+		jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), 3);
 		return slug;
 	}
 	
 	public EventForm getNewEventForm() {
 		return new EventForm();
+	}
+	
+	public String[] selectVenueNames() {
+		int num = jdbcTemplate.queryForInt(SELECT_NUM_VENUE);
+		String[] names = new String[num];
+		for (int i=1; i<=num; i++){
+			names[i-1] = jdbcTemplate.queryForObject(SELECT_VENUE, String.class, i);
+		}
+		//names = jdbcTemplate.queryForObject("SELECT NAME FROM VENUE", String[].class);
+		return names;
 	}
 	
 	// internal helpers
@@ -173,9 +186,16 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String INSERT_EVENT = "insert into event (Title, slug, description, starttime, endtime, TimeZone, membergroup) values (?, ?, ?, ?, ?, ?, ?)";
 	
+	private static final String INSERT_VENUE = "insert into venue (Name, postaladdress, latitude, longitude, locationhint, createdby) values (?, ?, ?, ?, ?, ?)";
+	
 	//FOR TESTING
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
-	private static final String INSERT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
+	private static final String INSERT_EVENT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
+	
+	
+	private static final String SELECT_VENUE_NAMES = "SELECT NAME FROM VENUE";
+	private static final String SELECT_VENUE = "SELECT NAME FROM VENUE where ID  = ?";
+	private static final String SELECT_NUM_VENUE = "SELECT MAX(ID) FROM VENUE";
 	
 	private static final String SELECT_UPCOMING_EVENTS = SELECT_EVENT + " where e.endTime > ? order by e.startTime";
 

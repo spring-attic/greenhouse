@@ -8,9 +8,9 @@
 		<form:input path="title" />
 		
 		<form:label path="timezone">Time Zone</form:label>
-			<form:select path="timezone">
+		<form:select path="timezone">
 			<form:option value="">Select One</form:option>
-			<c:forEach var="zones" items="${timezoneList}">
+				<c:forEach var="zones" items="${timezoneList}">
 			<form:option value="${zones}">${zones}</form:option>
 			</c:forEach>
 		</form:select> 
@@ -101,16 +101,21 @@
 		</div>
 		<form:label path="description">Description</form:label>
 		<form:textarea cols="55" rows="8" path="description" />
-	</fieldset>
-	
-	
+		
+		<jsp:include page="venueFragment.jsp" />
+		
+		</fieldset>
+		
+		
+		
+		
 		<script type="text/javascript">
-	
+		
 		$(document).ready(function() {
 			$("#startDate").datepicker({clickInput:true});
 			$("#endDate").datepicker({clickInput:true});
 		});
 	
-	</script>
+		</script>
 	
 	

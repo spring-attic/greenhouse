@@ -41,6 +41,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.utils.Location;
+import com.springsource.greenhouse.events.EventRepository;
+import com.springsource.greenhouse.events.JdbcEventRepository;
 
 /**
  * UI Controller for Event actions.
@@ -60,7 +62,6 @@ public class EventsController {
 	}
 	
 	// for web service (JSON) clients
-	
 	/**
 	 * Write the list of upcoming events to the body of the response.
 	 * Only matches 'GET /events' requests for JSON content; a 404 is sent otherwise.
@@ -188,9 +189,13 @@ public class EventsController {
 	public EventForm NewForm(Model model) { 
 	Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
 	model.addAttribute("timezoneList", timezoneList); 
+	String venueList[] = eventRepository.selectVenueNames();
+	model.addAttribute("venueList", venueList);
 	return eventRepository.getNewEventForm(); 
+	
+	
 	}
-
+	
 	/**
 	* Register a new Event for the developer.
 	*/
@@ -201,7 +206,10 @@ public class EventsController {
 		model.addAttribute("timezoneList", timezoneList); 
 		return "events/new";
 	}
+	
 	eventRepository.createEvent(account.getId(), form);
 	return "redirect:/events";
 	}
-}
+
+
+	}

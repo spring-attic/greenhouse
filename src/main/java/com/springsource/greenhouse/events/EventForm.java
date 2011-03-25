@@ -37,6 +37,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 public class EventForm {
 
 	@NotEmpty
+	
 	private String title;
 
 	private DateTimeZone timezone;
@@ -70,6 +71,14 @@ public class EventForm {
 	
 	@NotEmpty
 	private String endAmPm;
+	
+	private String venue;
+	
+	private String venueName;
+	
+	private String venueAddress;
+	
+	private String locationHint;
 	
 	/**
 	 * The title of the event.
@@ -211,4 +220,30 @@ public class EventForm {
 	public void setEndAmPm(String endAmPm) {
 		this.endAmPm = endAmPm;
 	}
+	public String getVenue() {
+		return venue;
+	}
+	public void setVenue(String venue) {
+		this.venue = venue;
+	}
+	public String getVenueName() {
+		return venueName;
+	}
+	public void setVenueName(String venueName) {
+		this.venueName = venueName;
+	}
+	public String getVenueAddress() {
+		return venueAddress;
+	}
+	public void setVenueAddress(String venueAddress) {
+		this.venueAddress = venueAddress;
+	}
+	public String getLocationHint() {
+		return locationHint;
+	}
+	public void setLocationHint(String locationHint) {
+		this.locationHint = locationHint;
+	}
+	
+	
 }
