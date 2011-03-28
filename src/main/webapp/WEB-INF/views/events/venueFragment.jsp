@@ -3,8 +3,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://www.joda.org/joda/time/tags" prefix="joda" %>
 
-<form:label path="venue">Select Venue</form:label>
-		<form:select path="venue">
+<form:label path="venueID">Select Venue</form:label>
+		<form:select path="venueID">
 				<form:option value="">Add New Venue</form:option>
 					<c:forEach var="venues" items="${venueList}">
 				<form:option value="${venues}">${venues}</form:option>

@@ -72,7 +72,7 @@ public class EventForm {
 	@NotEmpty
 	private String endAmPm;
 	
-	private String venue;
+	private Integer venueID;
 	
 	private String venueName;
 	
@@ -220,11 +220,12 @@ public class EventForm {
 	public void setEndAmPm(String endAmPm) {
 		this.endAmPm = endAmPm;
 	}
-	public String getVenue() {
-		return venue;
+
+	public Integer getVenueID() {
+		return venueID;
 	}
-	public void setVenue(String venue) {
-		this.venue = venue;
+	public void setVenueID(Integer venueID) {
+		this.venueID = venueID;
 	}
 	public String getVenueName() {
 		return venueName;

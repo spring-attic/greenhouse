@@ -124,7 +124,7 @@ public class JdbcEventRepository implements EventRepository {
 		double longit = 4.5;
 		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone() , membergroup);
 		jdbcTemplate.update(INSERT_VENUE, form.getVenueName(), form.getVenueAddress(), latit, longit, form.getLocationHint(), membergroup);
-		jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), 3);
+		jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), jdbcTemplate.queryForInt(SELECT_VENUE_ID));
 		return slug;
 	}
 	
@@ -190,6 +190,7 @@ public class JdbcEventRepository implements EventRepository {
 	
 	//FOR TESTING
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
+	private static final String SELECT_VENUE_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM VENUE)";
 	private static final String INSERT_EVENT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
 	
 	
