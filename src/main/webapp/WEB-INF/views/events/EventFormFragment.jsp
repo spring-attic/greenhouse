@@ -112,10 +112,11 @@
 		<script type="text/javascript">
 		
 		$(document).ready(function() {
+			var name = new String;
 			$("#startDate").datepicker({clickInput:true});
 			$("#endDate").datepicker({clickInput:true});
 		});
-	
+
 		</script>
 	
 	

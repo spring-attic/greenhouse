@@ -15,7 +15,7 @@
 		<p>Create an Event to display on Greenhouse.</p>  		
 	</div>
 	
-	<jsp:include page="eventFormFragment.jsp" />
+	<jsp:include page="EventFormFragment.jsp" />
 	
 	<p><button type="submit">Create Event</button></p>
 </form:form>

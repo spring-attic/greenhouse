@@ -111,4 +111,8 @@ public interface EventRepository {
 	
 	public String[] selectVenueNames();
 	
+	public String[] selectVenueAddresses();
+	
+	public String[] selectVenueLocationHints();
+	
 }

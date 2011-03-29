@@ -187,13 +187,15 @@ public class EventsController {
 	 */
 	@RequestMapping(value="/events/new", method=RequestMethod.GET) 
 	public EventForm NewForm(Model model) { 
-	Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
-	model.addAttribute("timezoneList", timezoneList); 
-	String venueList[] = eventRepository.selectVenueNames();
-	model.addAttribute("venueList", venueList);
-	return eventRepository.getNewEventForm(); 
-	
-	
+		Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
+		model.addAttribute("timezoneList", timezoneList); 
+		String venueList[] = eventRepository.selectVenueNames();
+		model.addAttribute("venueList", venueList);
+		String addressList[] = eventRepository.selectVenueAddresses();
+		model.addAttribute("addressList", addressList);
+		String hintsList[] = eventRepository.selectVenueLocationHints();
+		model.addAttribute("hintsList", hintsList);
+		return eventRepository.getNewEventForm(); 
 	}
 	
 	/**
@@ -204,6 +206,12 @@ public class EventsController {
 	if (bindingResult.hasErrors()) {
 		Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
 		model.addAttribute("timezoneList", timezoneList); 
+		String venueList[] = eventRepository.selectVenueNames();
+		model.addAttribute("venueList", venueList);
+		String addressList[] = eventRepository.selectVenueAddresses();
+		model.addAttribute("addressList", addressList);
+		String hintsList[] = eventRepository.selectVenueLocationHints();
+		model.addAttribute("hintsList", hintsList);
 		return "events/new";
 	}
 	

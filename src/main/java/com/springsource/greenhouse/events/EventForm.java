@@ -73,9 +73,9 @@ public class EventForm {
 	private String endAmPm;
 	
 	private Integer venueID;
-	
+	@NotEmpty
 	private String venueName;
-	
+	@NotEmpty
 	private String venueAddress;
 	
 	private String locationHint;
