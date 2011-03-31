@@ -15,6 +15,7 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -200,9 +201,10 @@ public class EventsController {
 	
 	/**
 	* Register a new Event for the developer.
+	 * @throws IOException 
 	*/
 	@RequestMapping(value="/events", method=RequestMethod.POST)
-	public String create(@Valid EventForm form, BindingResult bindingResult, Account account, Model model) {
+	public String create(@Valid EventForm form, BindingResult bindingResult, Account account, Model model) throws IOException {
 	if (bindingResult.hasErrors()) {
 		Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
 		model.addAttribute("timezoneList", timezoneList); 

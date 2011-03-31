@@ -15,6 +15,7 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.joda.time.LocalDate;
@@ -105,7 +106,7 @@ public interface EventRepository {
 	 */
 	Float rate(Long eventId, Integer sessionId, Long attendeeId, Rating rating) throws RatingPeriodClosedException;
 	
-	String createEvent(Long accountId, EventForm form);
+	String createEvent(Long accountId, EventForm form) throws IOException;
 	
 	EventForm getNewEventForm();
 	

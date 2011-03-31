@@ -16,6 +16,7 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -28,20 +29,16 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.JoinRowMapper;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventForm;
+import com.springsource.greenhouse.events.GeoLocation;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
 import com.springsource.greenhouse.utils.SlugUtils;
 import com.springsource.greenhouse.utils.SubResourceReference;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 
 /**
  * EventRepository implementation that stores Event data in a relational database using the JDBC API.
@@ -117,14 +114,13 @@ public class JdbcEventRepository implements EventRepository {
 	}
    
 	@Transactional
-	public String createEvent(Long accountId, EventForm form) {
+	public String createEvent(Long accountId, EventForm form) throws IOException {
 		String slug = createSlug(form.getTitle());
 		int membergroup = 1;
-		double latit = 3.2;
-		double longit = 4.5;
 		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone() , membergroup);
 		if (form.getVenueID() == null){
-			jdbcTemplate.update(INSERT_VENUE, form.getVenueName(), form.getVenueAddress(), latit, longit, form.getLocationHint(), membergroup);
+			GeoLocation loc = GeoLocation.getGeoLocation(form.getVenueAddress());
+			jdbcTemplate.update(INSERT_VENUE, form.getVenueName(), form.getVenueAddress(), loc.toLatitude(), loc.toLongitude(), form.getLocationHint(), membergroup);
 			jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), jdbcTemplate.queryForInt(SELECT_VENUE_ID));
 		} else {
 			jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), form.getVenueID());
@@ -142,7 +138,6 @@ public class JdbcEventRepository implements EventRepository {
 		for (int i=1; i<=num; i++){
 			names[i-1] = jdbcTemplate.queryForObject(SELECT_VENUE, String.class, i);
 		}
-		//names = jdbcTemplate.queryForObject("SELECT NAME FROM VENUE", String[].class);
 		return names;
 	}
 	
@@ -210,16 +205,18 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String INSERT_VENUE = "insert into venue (Name, postaladdress, latitude, longitude, locationhint, createdby) values (?, ?, ?, ?, ?, ?)";
 	
-	//FOR TESTING
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
+	
 	private static final String SELECT_VENUE_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM VENUE)";
+	
 	private static final String INSERT_EVENT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
 	
-	
-	//private static final String SELECT_VENUE_NAMES = "SELECT NAME FROM VENUE";
 	private static final String SELECT_VENUE = "SELECT NAME FROM VENUE where ID  = ?";
+	
 	private static final String SELECT_VENUE_ADDRESSES = "SELECT POSTALADDRESS FROM VENUE where ID  = ?";
+	
 	private static final String SELECT_VENUE_LOCATIONHINTS = "SELECT LOCATIONHINT FROM VENUE where ID  = ?";
+	
 	private static final String SELECT_NUM_VENUE = "SELECT MAX(ID) FROM VENUE";
 	
 	private static final String SELECT_UPCOMING_EVENTS = SELECT_EVENT + " where e.endTime > ? order by e.startTime";

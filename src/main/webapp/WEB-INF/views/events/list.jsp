@@ -4,7 +4,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/dates" prefix="d" %>
 
 <h2>Upcoming Events </h2>
-<h4><a href="<c:url value="/events/new" />">Create an Event</a></h4>
+
 
 <c:if test="${not empty eventList}">
 <dl class="listings">
@@ -27,3 +27,4 @@
 
 </c:if>
 
+<h4 align="center"><a href="<c:url value="/events/new" />">Create an Event</a></h4>
