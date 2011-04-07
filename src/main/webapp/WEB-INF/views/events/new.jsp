@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<c:url var="actionUrl" value="/events" />
+<c:url var="actionUrl" value="/events"/>
 <form:form action="${actionUrl}" method="post" modelAttribute="eventForm">
 	<div class="formInfo">
 		<h2>Create Event</h2>

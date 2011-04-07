@@ -221,5 +221,19 @@ public class EventsController {
 	return "redirect:/events";
 	}
 
-
+	@RequestMapping(value="/groups/NewSession", method=RequestMethod.GET) 
+	public EventSessionForm NewSessionForm(Model model) {
+		
+		return eventRepository.getNewSessionForm();
+		
 	}
+	
+	@RequestMapping(value="/groups/NewSession", method=RequestMethod.POST) 
+	public String create (@Valid EventSessionForm form, BindingResult bindingResult, Account account, Model model)throws IOException {
+	return "groups/NewSession";
+	}
+	
+	
+	}
+
+	

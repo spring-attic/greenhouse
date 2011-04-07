@@ -110,6 +110,8 @@ public interface EventRepository {
 	
 	EventForm getNewEventForm();
 	
+	EventSessionForm getNewSessionForm();
+	
 	public String[] selectVenueNames();
 	
 	public String[] selectVenueAddresses();

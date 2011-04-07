@@ -131,6 +131,17 @@ public class JdbcEventRepository implements EventRepository {
 	public EventForm getNewEventForm() {
 		return new EventForm();
 	}
+	public EventSessionForm getNewSessionForm(){
+		return new EventSessionForm();
+	}
+	public String[] selectSpeakerNames() {
+		int num = jdbcTemplate.queryForInt(SELECT_NUM_LEADER);
+		String[] names = new String[num];
+		for (int i=1; i<=num; i++){
+			names[i-1] = jdbcTemplate.queryForObject(SELECT_LEADER, String.class, i);
+		}
+		return names;
+	}
 	
 	public String[] selectVenueNames() {
 		int num = jdbcTemplate.queryForInt(SELECT_NUM_VENUE);
@@ -213,11 +224,15 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String SELECT_VENUE = "SELECT NAME FROM VENUE where ID  = ?";
 	
+	private static final String SELECT_LEADER= "SELECT NAME FROM LEADER where ID  = ?";
+	
 	private static final String SELECT_VENUE_ADDRESSES = "SELECT POSTALADDRESS FROM VENUE where ID  = ?";
 	
 	private static final String SELECT_VENUE_LOCATIONHINTS = "SELECT LOCATIONHINT FROM VENUE where ID  = ?";
 	
 	private static final String SELECT_NUM_VENUE = "SELECT MAX(ID) FROM VENUE";
+	
+	private static final String SELECT_NUM_LEADER= "SELECT MAX(ID) FROM LEADER";
 	
 	private static final String SELECT_UPCOMING_EVENTS = SELECT_EVENT + " where e.endTime > ? order by e.startTime";
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
-
+import com.springsource.greenhouse.utils.Location;
 public class GeoLocation {
 	
 	private final static String ENCODING = "UTF-8";
@@ -17,7 +17,7 @@ public class GeoLocation {
 		this.lon = lon;
 		this.lat = lat;
 	}
-	
+
 	public String toString () { return "Lat: "+lat+", Lon: "+lon; }
 	
 	public Double toLongitude () { return new Double(lon); }
