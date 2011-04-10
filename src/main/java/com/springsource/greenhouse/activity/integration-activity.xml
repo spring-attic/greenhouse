@@ -37,5 +37,7 @@
 	  	
 	<!-- RecentActivity Channel Adapter -->
 	<publish-subscribe-channel id="recentActivity" />
+	
+	<logging-channel-adapter channel="recentActivity" />
 			
 </beans:beans>
