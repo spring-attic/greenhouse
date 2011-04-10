@@ -61,7 +61,7 @@ public class AsyncMailInviteService implements MailInviteService {
 	 * @param acceptUriTemplate a template for generating the URL the invitee should visit to accept the invite; defaults to a secure application URL e.g. https://host/invite/accept?token={token}
 	 */
 	@Inject
-	public AsyncMailInviteService(MailSender mailSender, InviteRepository inviteRepository, @Value("${application.secureUrl}/invite/accept?token={token}") String acceptUriTemplate) {
+	public AsyncMailInviteService(MailSender mailSender, InviteRepository inviteRepository, @Value("#{environment['application.secureUrl']}/invite/accept?token={token}") String acceptUriTemplate) {
 		this.mailSender = mailSender;
 		this.inviteRepository = inviteRepository;
 		this.acceptUriTemplate = new UriTemplate(acceptUriTemplate);

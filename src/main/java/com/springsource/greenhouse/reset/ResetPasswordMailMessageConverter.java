@@ -40,7 +40,7 @@ public final class ResetPasswordMailMessageConverter implements Converter<ResetP
 	private final UriTemplate resetUriTemplate;
 	
 	@Inject
-	public ResetPasswordMailMessageConverter(@Value("${application.secureUrl}/reset?token={token}") String resetUriTemplate) {
+	public ResetPasswordMailMessageConverter(@Value("#{environment['application.secureUrl']}/reset?token={token}") String resetUriTemplate) {
 		this.resetUriTemplate = new UriTemplate(resetUriTemplate);
 	}
 	
