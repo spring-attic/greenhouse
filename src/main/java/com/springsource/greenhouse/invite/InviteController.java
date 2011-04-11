@@ -60,7 +60,7 @@ public class InviteController {
 	 * The FacebookUserID obtained from a cookie via {@link FacebookWebArgumentResolver} is exported to the model so the member Facebook's login status can be determined.
 	 */
 	@RequestMapping(value="/invite", method=RequestMethod.GET)
-	public void invitePage(@FacebookCookieValue(value = "uid", required = false) String facebookUserId, Model model) {
+	public void invitePage(@FacebookCookieValue(value="uid", required=false) String facebookUserId, Model model) {
 		model.addAttribute("facebookUserId", facebookUserId);
 	}
 	

@@ -41,7 +41,7 @@
 	</logger>
 
 	<logger name="org.springframework.integration">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<!-- Root Logger -->

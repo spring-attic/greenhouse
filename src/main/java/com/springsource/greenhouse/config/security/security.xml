@@ -9,7 +9,7 @@
 		<!-- Authentication policy -->
 		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="redirectingAuthenticationFailureHandler" />
 		<logout logout-url="/signout" delete-cookies="JSESSIONID" />
-		<!-- Authorization policy TODO replace with @Secured on @Controllers? -->
+		<!-- Authorization policy definition: TODO consider replacing with @Secured on @Controllers -->
 		<intercept-url pattern="/" access="permitAll" />
 		<intercept-url pattern="/favicon.ico" access="permitAll" />
 		<intercept-url pattern="/members/**" access="permitAll" />
