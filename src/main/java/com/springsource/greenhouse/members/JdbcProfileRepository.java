@@ -67,15 +67,20 @@ public class JdbcProfileRepository implements ProfileRepository {
 	public List<ConnectedProfile> findConnectedProfiles(Long accountId) {
 		return jdbcTemplate.query(SELECT_CONNECTED_PROFILES, new RowMapper<ConnectedProfile>() {
 			public ConnectedProfile mapRow(ResultSet rs, int row) throws SQLException {
-				return new ConnectedProfile(rs.getString("displayName"), rs.getString("profileUrl"));
+				String displayName = displayNameFor(rs.getString("providerId"));
+				return new ConnectedProfile(displayName, rs.getString("profileUrl"));
 			}
-		}, accountId);
+		}, accountId.toString());
 	}
 
 	// internal helpers
 	
 	private Profile findByUsername(String username) {
 		return jdbcTemplate.queryForObject(SELECT_PROFILE + " where username = ?", profileMapper, username);
+	}
+	
+	private String displayNameFor(String providerId) {
+		return providerId;
 	}
 	
 	private class ProfileMapper implements RowMapper<Profile> {
@@ -97,6 +102,6 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, gender, pictureSet from Member";
 
-	private static final String SELECT_CONNECTED_PROFILES = "select p.displayName, c.profileUrl from AccountConnection c inner join ServiceProvider p on c.provider = p.name where member = ? order by displayName";
+	private static final String SELECT_CONNECTED_PROFILES = "select providerId, profileUrl from ServiceProviderConnection where localUserId = ? order by providerId";
 
 }

@@ -60,8 +60,7 @@ public class MembersController {
 	public String profileView(@PathVariable String profileKey, Model model) {
 		Profile profile = profileRepository.findById(profileKey);
 		model.addAttribute(profile);
-		// TODO commented out until AccountConnection table is sorted
-		//model.addAttribute("connectedProfiles", profileRepository.findConnectedProfiles(profile.getAccountId()));
+		model.addAttribute("connectedProfiles", profileRepository.findConnectedProfiles(profile.getAccountId()));
 		model.addAttribute("metadata", buildFacebookOpenGraphMetadata(profile));
 		model.addAttribute("facebookAppId", facebookAppId);
 		return "members/view";
