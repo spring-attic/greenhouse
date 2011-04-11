@@ -26,8 +26,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.social.twitter.SearchResults;
 import org.springframework.social.twitter.TwitterApi;
+import org.springframework.social.twitter.types.SearchResults;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,7 +83,7 @@ public class EventsController {
 	@RequestMapping(value="/events/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults tweets(@PathVariable Long eventId,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findEventSearchString(eventId);
-		return searchString != null && searchString.length() > 0 ? twitterApi.search(searchString, page, pageSize) : null;
+		return searchString != null && searchString.length() > 0 ? twitterApi.searchOperations().search(searchString, page, pageSize) : null;
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class EventsController {
 	 */
 	@RequestMapping(value="/events/{eventId}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postTweet(@PathVariable Long eventId, @RequestParam String status, Location currentLocation) {
-		twitterApi.updateStatus(status);
+		twitterApi.timelineOperations().updateStatus(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
@@ -102,7 +102,7 @@ public class EventsController {
 	@RequestMapping(value="/events/{eventId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postRetweet(@PathVariable Long eventId, @RequestParam Long tweetId) {
-		twitterApi.retweet(tweetId);
+		twitterApi.timelineOperations().retweet(tweetId);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
@@ -146,7 +146,7 @@ public class EventsController {
 	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findSessionSearchString(eventId, sessionId);
-		return searchString != null && searchString.length() > 0 ? twitterApi.search(searchString, page, pageSize) : null;
+		return searchString != null && searchString.length() > 0 ? twitterApi.searchOperations().search(searchString, page, pageSize) : null;
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class EventsController {
 	 */
 	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.POST)
 	public ResponseEntity<String> postSessionTweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam String status, Location currentLocation) {
-		twitterApi.updateStatus(status);
+		twitterApi.timelineOperations().updateStatus(status);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
@@ -164,7 +164,7 @@ public class EventsController {
 	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/retweet", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> postSessionRetweet(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam Long tweetId) {
-		twitterApi.retweet(tweetId);
+		twitterApi.timelineOperations().retweet(tweetId);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	

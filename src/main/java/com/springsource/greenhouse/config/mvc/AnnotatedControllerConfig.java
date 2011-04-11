@@ -52,15 +52,10 @@ import org.springframework.web.method.annotation.support.RequestParamMapMethodAr
 import org.springframework.web.method.annotation.support.RequestParamMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor;
 import org.springframework.web.servlet.handler.MappedInterceptor;
-import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMethodAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMethodExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMethodMapping;
 import org.springframework.web.servlet.mvc.method.annotation.support.HttpEntityMethodProcessor;
 import org.springframework.web.servlet.mvc.method.annotation.support.PathVariableMethodArgumentResolver;
@@ -69,7 +64,6 @@ import org.springframework.web.servlet.mvc.method.annotation.support.ServletCook
 import org.springframework.web.servlet.mvc.method.annotation.support.ServletModelAttributeMethodProcessor;
 import org.springframework.web.servlet.mvc.method.annotation.support.ServletRequestMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.support.ServletResponseMethodArgumentResolver;
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor;
@@ -121,37 +115,6 @@ public class AnnotatedControllerConfig {
 		return factory;
 	}
 
-	// interception-related
-	 
-	@Bean
-	public HandlerExceptionResolver annotatedControllerExceptionResolver() {
-		RequestMappingHandlerMethodExceptionResolver exceptionResolver = new RequestMappingHandlerMethodExceptionResolver();
-		exceptionResolver.setMessageConverters(messageConverters());
-		exceptionResolver.setOrder(0);
-		return exceptionResolver;
-	}
-
-	@Bean
-	public HandlerExceptionResolver responseStatusExceptionResolver() {
-		ResponseStatusExceptionResolver exceptionResolver = new ResponseStatusExceptionResolver();
-		exceptionResolver.setOrder(1);
-		return exceptionResolver;
-	}
-
-	@Bean
-	public HandlerExceptionResolver defaultHandlerExceptionResolver() {
-		DefaultHandlerExceptionResolver exceptionResolver = new DefaultHandlerExceptionResolver();
-		exceptionResolver.setOrder(2);
-		return exceptionResolver;
-	}
-
-	@Bean
-	public MultipartResolver multipartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setMaxUploadSize(500000);
-		return multipartResolver;
-	}
-	
 	// subclassing hooks
 	
 	protected HttpMessageConverter<?>[] messageConverters() {

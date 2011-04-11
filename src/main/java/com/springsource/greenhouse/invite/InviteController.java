@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.facebook.web.FacebookCookieValue;
 import org.springframework.social.facebook.web.FacebookWebArgumentResolver;
 import org.springframework.stereotype.Controller;
@@ -62,6 +63,7 @@ public class InviteController {
 	@RequestMapping(value="/invite", method=RequestMethod.GET)
 	public void invitePage(@FacebookCookieValue(value="uid", required=false) String facebookUserId, Model model) {
 		model.addAttribute("facebookUserId", facebookUserId);
+		model.addAttribute("facebookAppId", facebookAppId);		
 	}
 	
 	/**
@@ -107,4 +109,7 @@ public class InviteController {
 		return null;
 	}
 
+	@Value("#{environment['facebook.appId']}")
+	private String facebookAppId;
+	
 }

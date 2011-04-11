@@ -15,5 +15,4 @@
 </div>
 <div id="fb-root"></div>
 
-<s:eval expression="@facebookProvider.appId" var="appId" />
-<facebook:init appId="${appId}" />
+<facebook:init appId="${facebookAppId}" />

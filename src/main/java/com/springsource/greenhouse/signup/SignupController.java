@@ -63,7 +63,7 @@ public class SignupController {
 		}
 		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
 			public void postCreateAccount(Account account) {
-				ProviderSignInUtils.handleConnectPostSignUp(account.getId(), request);
+				ProviderSignInUtils.handleConnectPostSignUp(request);
 			}
 		});
 		return result ? "redirect:/" : null;

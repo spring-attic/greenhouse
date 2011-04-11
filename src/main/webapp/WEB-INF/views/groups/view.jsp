@@ -9,5 +9,4 @@
 <div id="fb-root"></div>
 <fb:like></fb:like>
 
-<s:eval expression="@facebookProvider.appId" var="appId" />
-<facebook:init appId="${appId}" />
+<facebook:init appId="${facebookAppId}" />

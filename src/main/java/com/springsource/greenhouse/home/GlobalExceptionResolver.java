@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.social.AccountNotConnectedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,9 +47,7 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
 		
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 		try {
-			if (ex instanceof AccountNotConnectedException) {
-				return handleAccountNotConnectedException((AccountNotConnectedException) ex, request, response, handler);
-			} else if (ex instanceof EmptyResultDataAccessException) {
+			if (ex instanceof EmptyResultDataAccessException) {
 				return handleEmptyResultDataAccessException((EmptyResultDataAccessException) ex, request, response, handler);
 			}
 		} catch (Exception e) {
@@ -66,12 +63,6 @@ public class GlobalExceptionResolver implements HandlerExceptionResolver {
 
 	// internal helpers
 	
-	private ModelAndView handleAccountNotConnectedException(AccountNotConnectedException ex,
-			HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
-		return new ModelAndView();
-	}
-
 	private ModelAndView handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
 			HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		response.sendError(HttpServletResponse.SC_NOT_FOUND);

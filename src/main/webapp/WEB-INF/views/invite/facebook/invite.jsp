@@ -31,5 +31,4 @@
 	</script>
 </fb:serverfbml>
 
-<s:eval expression="@facebookProvider.appId" var="appId" />
-<facebook:init appId="${appId}" />
+<facebook:init appId="${facebookAppId}" />

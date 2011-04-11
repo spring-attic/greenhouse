@@ -15,13 +15,18 @@
  */
 package com.springsource.greenhouse.invite;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
-import org.springframework.social.connect.ServiceProvider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
 import org.springframework.social.facebook.FacebookApi;
+import org.springframework.social.facebook.types.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +45,9 @@ import com.springsource.greenhouse.account.ProfileReference;
 @Controller
 public class FacebookInviteController {
 
-	private final ServiceProvider<FacebookApi> facebookProvider;
+	private final Provider<FacebookApi> facebookApiProvider;
+	
+	private final MultiUserServiceProviderConnectionRepository connectionRepository;
 	
 	private final AccountRepository accountRepository;
 	
@@ -50,8 +57,9 @@ public class FacebookInviteController {
 	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
 	 */
 	@Inject
-	public FacebookInviteController(ServiceProvider<FacebookApi> facebookProvider, AccountRepository accountRepository) {
-		this.facebookProvider = facebookProvider;
+	public FacebookInviteController(Provider<FacebookApi> facebookApiProvider, MultiUserServiceProviderConnectionRepository connectionRepository, AccountRepository accountRepository) {
+		this.facebookApiProvider = facebookApiProvider;
+		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
 	}
 	
@@ -62,12 +70,14 @@ public class FacebookInviteController {
 	 */
 	@RequestMapping(value="/invite/facebook", method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
-		if (facebookProvider.isConnected(account.getId())) {
-			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(account.getId()));
+		FacebookApi facebookApi = facebookApiProvider.get();
+		if (facebookApi != null) {
+			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(account.getId(), facebookApi));
 			model.addAttribute("friends", profileReferences);
 		} else {
 			model.addAttribute("friends", Collections.emptySet());
 		}
+		model.addAttribute("facebookAppId", facebookAppId);
 	}
 	
 	/**
@@ -90,8 +100,26 @@ public class FacebookInviteController {
 		return "redirect:/invite";
 	}
 
-	private List<Long> friendAccountIds(Long accountId) {
-		// TODO implement once supported by Spring Social
-		return Collections.emptyList();
+	// internal helpers
+	
+	private List<Long> friendAccountIds(Long accountId, FacebookApi facebookApi) {
+		List<Reference> friends = facebookApi.friendOperations().getFriends();
+		if (friends.isEmpty()) {
+			return Collections.emptyList();
+		}
+		List<String> providerUserIds = new ArrayList<String>(friends.size());
+		for (Reference friend : friends) {
+			providerUserIds.add(friend.getId());
+		}
+		Set<String> localUserIds = connectionRepository.findLocalUserIdsConnectedTo("facebook", providerUserIds);
+		List<Long> friendAccountIds = new ArrayList<Long>(localUserIds.size());
+		for (String localUserId : localUserIds) {
+			friendAccountIds.add(Long.valueOf(localUserId));
+		}
+		return friendAccountIds;
 	}
+	
+	@Value("#{environment['facebook.appId']}")
+	private String facebookAppId;
+	
 }

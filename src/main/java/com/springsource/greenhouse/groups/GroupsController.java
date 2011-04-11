@@ -55,7 +55,8 @@ public class GroupsController {
 	public String groupView(@PathVariable String groupKey, Model model) {
 		Group group = groupRepository.findGroupBySlug(groupKey);
 		model.addAttribute(group);		
-		model.addAttribute("metadata", buildOpenGraphMetadata(group));		
+		model.addAttribute("metadata", buildOpenGraphMetadata(group));
+		model.addAttribute("facebookAppId", facebookAppId);
 		return "groups/view";
 	}
 

@@ -15,14 +15,14 @@
  */
 package com.springsource.greenhouse.invite;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.springframework.social.connect.ServiceProvider;
+import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
 import org.springframework.social.twitter.TwitterApi;
-import org.springframework.social.twitter.connect.TwitterServiceProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.ProfileReference;
 
@@ -41,13 +40,16 @@ import com.springsource.greenhouse.account.ProfileReference;
 @Controller
 public class TwitterInviteController {
 	
-	private final ServiceProvider<TwitterApi> twitterProvider;
+	private final TwitterApi twitterApi;
+	
+	private final MultiUserServiceProviderConnectionRepository connectionRepository;
 
 	private final AccountRepository accountRepository;
 	
 	@Inject
-	public TwitterInviteController(TwitterServiceProvider twitterProvider, AccountRepository accountRepository) {
-		this.twitterProvider = twitterProvider;
+	public TwitterInviteController(TwitterApi twitterApi, MultiUserServiceProviderConnectionRepository connectionRepository, AccountRepository accountRepository) {
+		this.twitterApi = twitterApi;
+		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
 	}
 	
@@ -56,12 +58,9 @@ public class TwitterInviteController {
 	 * Puts the user's twitter screen name in the model to pre-populate the friend finder form.
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
-	public void friendFinder(Account account, Model model) {
-		if (twitterProvider.isConnected(account.getId())) {
-			String twitterId = twitterProvider.getConnections(account.getId()).get(0).getServiceApi().getProfileId();
-			if (twitterId != null) {
-				model.addAttribute("username", twitterId);
-			}
+	public void friendFinder(Model model) {
+		if (twitterApi.isAuthorizedForUser()) {
+			model.addAttribute("username", twitterApi.userOperations().getScreenName());
 		}
 	}
 
@@ -71,9 +70,9 @@ public class TwitterInviteController {
 	 * If JavaScript has been disabled, should re-render the entire invite page with the results populated.
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.POST)
-	// TODO: progressive enhancement: redirect to a full results page if web request is not an ajax request
-	// TODO: consider making a Get request instead of a Post since there are no side effects
-	public String findFriends(@RequestParam String username, Account account, Model model) {
+	public String findFriends(@RequestParam String username, Model model) {
+		// TODO: progressive enhancement: redirect to a full results page if web request is not an ajax request
+		// TODO: consider making a Get request instead of a Post since there are no side effects
 		if (StringUtils.hasText(username)) {			
 			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(username));
 			model.addAttribute("friends", profileReferences);
@@ -82,8 +81,17 @@ public class TwitterInviteController {
 	}
 	
 	private List<Long> friendAccountIds(String username) {
-		// TODO implement once supported by Spring Social
-		return Collections.emptyList();
+		List<Long> friendIds = twitterApi.friendOperations().getFriendIds(username);
+		List<String> providerUserIds = new ArrayList<String>(friendIds.size());
+		for (Object friendId : friendIds) {
+			providerUserIds.add(friendId.toString());
+		}
+		Set<String> localUserIds = connectionRepository.findLocalUserIdsConnectedTo("twitter", providerUserIds);
+		List<Long> friendAccountIds = new ArrayList<Long>(localUserIds.size());
+		for (String localUserId : localUserIds) {
+			friendAccountIds.add(Long.valueOf(localUserId));
+		}
+		return friendAccountIds;		
 	}
 
 }

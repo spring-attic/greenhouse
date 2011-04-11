@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.springsource.greenhouse.signin;
+package com.springsource.greenhouse.connect;
 
 import javax.inject.Inject;
 
-import org.springframework.social.facebook.web.FacebookSigninController;
 import org.springframework.social.web.signin.SignInService;
+import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
@@ -29,7 +29,8 @@ import com.springsource.greenhouse.account.AccountUtils;
  * @author Keith Donald
  * @see FacebookSigninController
  */
-public class AccountSignInService implements SignInService<Long> {
+@Service
+public class AccountSignInService implements SignInService {
 
 	private final AccountRepository accountRepository;
 
@@ -38,8 +39,8 @@ public class AccountSignInService implements SignInService<Long> {
 		this.accountRepository = accountRepository;
 	}
 
-	public void signIn(Long accountId) {
-		Account account = accountRepository.findById(accountId);
+	public void signIn(String userId) {
+		Account account = accountRepository.findById(Long.valueOf(userId));
 		AccountUtils.signin(account);
 	}
 

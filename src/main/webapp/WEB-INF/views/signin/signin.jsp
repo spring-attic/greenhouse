@@ -27,30 +27,8 @@
 	<p><a href="<c:url value="/reset" />">Forgot your password?</a></p>
 </form>
 
-<script>
-	function signInWithFacebook() {
-		FB.getLoginStatus(function(response) {
-	        if (response.session) {
-	    		$('#fb_signin').submit();
-	        }
-	      });
-
-	}
-</script>
-
-
 <c:if test="${!currentDevice.mobile}">
-<div id="fb-root"></div>	
 <form id="fb_signin" action="<c:url value="/signin/facebook" />" method="post">
-<%-- Unfortunately, offline access is the only way to get an access token that doesn't expire. 
-	Facebook currently doesn't implement the refresh_token fragment of section 3.5.1 of the
-	OAuth 2 specification. So, if you get a regular access token, it will expire after a
-	few hours and the user will have to authenticate again. Asking for offline access allows
-	the token to be long-lived, but has the unfortunate side-effect of communicating that the
-	app may access their information even if they're not logged in. --%>
-	<fb:login-button perms="email,publish_stream,offline_access" onlogin="signInWithFacebook();" v="2" length="long">Sign in with Facebook</fb:login-button>
+	<button type="submit"><img src="<c:url value="/resources/social/facebook/sign-in-with-facebook.png"/>" /></button>
 </form>
 </c:if>
-
-<s:eval expression="@facebookProvider.appId" var="appId" />
-<facebook:init appId="${appId}" />
