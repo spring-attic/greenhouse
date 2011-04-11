@@ -84,7 +84,7 @@ public class AnnotatedControllerConfig {
 	private ConfigurableWebApplicationContext context;
 
 	@Bean
-	public HandlerMapping annotatedHandlerMethodMapping() {
+	public HandlerMapping annotatedControllerMapping() {
 		RequestMappingHandlerMethodMapping handlerMapping = new RequestMappingHandlerMethodMapping();
 		handlerMapping.setMappedInterceptors(mappedInterceptors());
 		handlerMapping.setOrder(1);
@@ -92,7 +92,7 @@ public class AnnotatedControllerConfig {
 	}
 
 	@Bean
-	public RequestMappingHandlerMethodAdapter annotatedControllerMethodAdapter() {
+	public RequestMappingHandlerMethodAdapter annotatedControllerAdapter() {
 		RequestMappingHandlerMethodAdapter handlerAdapter = new RequestMappingHandlerMethodAdapter();
 
 		ConfigurableWebBindingInitializer bindingInitializer = new ConfigurableWebBindingInitializer();
@@ -171,7 +171,8 @@ public class AnnotatedControllerConfig {
 		argumentResolvers.add(new AccountHandlerMethodArgumentResolver());
 		argumentResolvers.add(new DateTimeZoneHandlerMethodArgumentResolver());
 		argumentResolvers.add(new LocationHandlerMethodArgumentResolver());
-		argumentResolvers.add(new FacebookHandlerMethodArgumentResolver(getEnvironment().getProperty("facebook.appId"), getEnvironment().getProperty("facebook.appSecret")));
+		argumentResolvers.add(new FacebookHandlerMethodArgumentResolver(getEnvironment().getProperty("facebook.appId"),
+				getEnvironment().getProperty("facebook.appSecret")));
 		argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());
 	}
 
