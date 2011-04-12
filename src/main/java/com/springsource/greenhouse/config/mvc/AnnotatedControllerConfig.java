@@ -21,7 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.joda.time.DateTimeZone;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -43,27 +42,13 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.support.ErrorsMethodArgumentResolver;
-import org.springframework.web.method.annotation.support.ExpressionValueMethodArgumentResolver;
-import org.springframework.web.method.annotation.support.ModelMethodProcessor;
-import org.springframework.web.method.annotation.support.RequestHeaderMapMethodArgumentResolver;
-import org.springframework.web.method.annotation.support.RequestHeaderMethodArgumentResolver;
-import org.springframework.web.method.annotation.support.RequestParamMapMethodArgumentResolver;
-import org.springframework.web.method.annotation.support.RequestParamMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor;
-import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMethodAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMethodMapping;
-import org.springframework.web.servlet.mvc.method.annotation.support.HttpEntityMethodProcessor;
-import org.springframework.web.servlet.mvc.method.annotation.support.PathVariableMethodArgumentResolver;
-import org.springframework.web.servlet.mvc.method.annotation.support.RequestResponseBodyMethodProcessor;
-import org.springframework.web.servlet.mvc.method.annotation.support.ServletCookieValueMethodArgumentResolver;
-import org.springframework.web.servlet.mvc.method.annotation.support.ServletModelAttributeMethodProcessor;
-import org.springframework.web.servlet.mvc.method.annotation.support.ServletRequestMethodArgumentResolver;
-import org.springframework.web.servlet.mvc.method.annotation.support.ServletResponseMethodArgumentResolver;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor;
@@ -80,7 +65,7 @@ public class AnnotatedControllerConfig {
 	@Bean
 	public HandlerMapping annotatedControllerMapping() {
 		RequestMappingHandlerMethodMapping handlerMapping = new RequestMappingHandlerMethodMapping();
-		handlerMapping.setMappedInterceptors(mappedInterceptors());
+		handlerMapping.setInterceptors(interceptors());
 		handlerMapping.setOrder(1);
 		return handlerMapping;
 	}
@@ -95,7 +80,7 @@ public class AnnotatedControllerConfig {
 		handlerAdapter.setWebBindingInitializer(bindingInitializer);
 		
 		handlerAdapter.setMessageConverters(messageConverters());
-		handlerAdapter.setHandlerMethodArgumentResolvers(handlerMethodArgumentResolvers());
+		handlerAdapter.setCustomArgumentResolvers(customArgumentResolvers());
 		return handlerAdapter;
 	}
 
@@ -117,68 +102,34 @@ public class AnnotatedControllerConfig {
 
 	// subclassing hooks
 	
-	protected HttpMessageConverter<?>[] messageConverters() {
+	protected List<HttpMessageConverter<?>> messageConverters() {
 		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>(1);
 		converters.add(new MappingJacksonHttpMessageConverter());
-		return converters.toArray(new HttpMessageConverter<?>[converters.size()]);
+		return converters;
 	}
 
-	protected HandlerMethodArgumentResolver[] handlerMethodArgumentResolvers() {
+	protected List<HandlerMethodArgumentResolver> customArgumentResolvers() {
 		List<HandlerMethodArgumentResolver> argumentResolvers = new ArrayList<HandlerMethodArgumentResolver>();
-		addCustomHandlerMethodResolvers(argumentResolvers);
-		addStandardHandlerMethodResolvers(argumentResolvers);
-		return argumentResolvers.toArray(new HandlerMethodArgumentResolver[argumentResolvers.size()]);
-	}
-	
-	protected void addCustomHandlerMethodResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(new AccountHandlerMethodArgumentResolver());
 		argumentResolvers.add(new DateTimeZoneHandlerMethodArgumentResolver());
 		argumentResolvers.add(new LocationHandlerMethodArgumentResolver());
-		argumentResolvers.add(new FacebookHandlerMethodArgumentResolver(getEnvironment().getProperty("facebook.appId"),
-				getEnvironment().getProperty("facebook.appSecret")));
+		argumentResolvers.add(new FacebookHandlerMethodArgumentResolver(getEnvironment().getProperty("facebook.appId"), getEnvironment().getProperty("facebook.appSecret")));
 		argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());
+		return argumentResolvers;
 	}
-
+	
 	// internal helpers
 
-	private MappedInterceptor[] mappedInterceptors() {
-		return new MappedInterceptor[] {
-			new MappedInterceptor(null, new ConversionServiceExposingInterceptor(conversionService())),
-			new MappedInterceptor(null, new AccountExposingHandlerInterceptor()),
-			new MappedInterceptor(null, new DateTimeZoneHandlerInterceptor()),
-			new MappedInterceptor(null, new UserLocationHandlerInterceptor()),
-			new MappedInterceptor(null, new DeviceResolverHandlerInterceptor())
+	private HandlerInterceptor[] interceptors() {
+		return new HandlerInterceptor[] {
+			new ConversionServiceExposingInterceptor(conversionService()),
+			new AccountExposingHandlerInterceptor(),
+			new DateTimeZoneHandlerInterceptor(),
+			new UserLocationHandlerInterceptor(),
+			new DeviceResolverHandlerInterceptor()
 		};
 	}
-	
-	private void addStandardHandlerMethodResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		// Annotation-based resolvers
-		argumentResolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
-		argumentResolvers.add(new RequestParamMapMethodArgumentResolver());
-		argumentResolvers.add(new PathVariableMethodArgumentResolver(getBeanFactory()));
-		argumentResolvers.add(new ServletModelAttributeMethodProcessor(false));
-		argumentResolvers.add(new RequestResponseBodyMethodProcessor(messageConverters()));
-		argumentResolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));
-		argumentResolvers.add(new RequestHeaderMapMethodArgumentResolver());
-		argumentResolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));
-		argumentResolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));
 
-		// Type-based resolvers
-		argumentResolvers.add(new ServletRequestMethodArgumentResolver());
-		argumentResolvers.add(new ServletResponseMethodArgumentResolver());
-		argumentResolvers.add(new HttpEntityMethodProcessor(messageConverters()));
-		argumentResolvers.add(new ModelMethodProcessor());
-		argumentResolvers.add(new ErrorsMethodArgumentResolver());
-		
-		// Default-mode resolution
-		argumentResolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));
-		argumentResolvers.add(new ServletModelAttributeMethodProcessor(true));
-	}
-
-	private ConfigurableBeanFactory getBeanFactory() {
-		return context.getBeanFactory();
-	}
-	
 	private Environment getEnvironment() {
 		return context.getEnvironment();
 	}
