@@ -28,7 +28,10 @@
 </form>
 
 <c:if test="${!currentDevice.mobile}">
-<form id="fb_signin" action="<c:url value="/signin/facebook" />" method="post">
-	<button type="submit"><img src="<c:url value="/resources/social/facebook/sign-in-with-facebook.png"/>" /></button>
+<form id="facebook_signin" action="<c:url value="/signin/facebook" />" method="post">
+	<button type="submit">Sign in with Facebook</button>
+</form>
+<form id="twitter_signin" action="<c:url value="/signin/twitter" />" method="post">
+	<button type="submit">Sign in with Twitter</button>
 </form>
 </c:if>

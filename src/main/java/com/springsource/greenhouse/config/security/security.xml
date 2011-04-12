@@ -18,7 +18,7 @@
 		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/signup" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />	
 		<intercept-url pattern="/signin" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
-		<intercept-url pattern="/signin/facebook" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
+		<intercept-url pattern="/signin/*" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
 		<intercept-url pattern="/reset" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
 		<!-- TODO this would probably be better mapped to simply /invite?token={token} but not able to vary security policy here based on presence of a request parameter.  Consider @Secured on @Controller. -->               
 		<intercept-url pattern="/invite/accept" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />           
