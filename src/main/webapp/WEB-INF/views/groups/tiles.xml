@@ -12,4 +12,8 @@
 		<put-attribute name="content" value="/WEB-INF/views/groups/view.jsp" />
 	</definition>
 	
+	<definition name="groups/NewSession" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewSession.jsp"/>
+ 	</definition>
+	
 </tiles-definitions>

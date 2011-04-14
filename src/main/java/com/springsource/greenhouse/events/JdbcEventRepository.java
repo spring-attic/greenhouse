@@ -1,4 +1,5 @@
 /*
+ /*
  * Copyright 2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,7 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -30,8 +32,12 @@ import org.springframework.jdbc.core.JoinRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springsource.greenhouse.events.Event;
+import com.springsource.greenhouse.events.EventForm;
+import com.springsource.greenhouse.events.GeoLocation;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
+import com.springsource.greenhouse.utils.SlugUtils;
 import com.springsource.greenhouse.utils.SubResourceReference;
 
 /**
@@ -106,8 +112,67 @@ public class JdbcEventRepository implements EventRepository {
 		jdbcTemplate.update("update EventSession set rating = ? where event = ? and id = ?", newAvgRating, eventId, sessionId);
 		return newAvgRating;
 	}
+   
+	@Transactional
+	public String createEvent(Long accountId, EventForm form) throws IOException {
+		String slug = createSlug(form.getTitle());
+		int membergroup = 1;
+		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone() , membergroup);
+		if (form.getVenueID() == null){
+			GeoLocation loc = GeoLocation.getGeoLocation(form.getVenueAddress());
+			jdbcTemplate.update(INSERT_VENUE, form.getVenueName(), form.getVenueAddress(), loc.toLatitude(), loc.toLongitude(), form.getLocationHint(), membergroup);
+			jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), jdbcTemplate.queryForInt(SELECT_VENUE_ID));
+		} else {
+			jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), form.getVenueID());
+		}
+		return slug;
+	}
+	
+	public EventForm getNewEventForm() {
+		return new EventForm();
+	}
+	public EventSessionForm getNewSessionForm(){
+		return new EventSessionForm();
+	}
+	public String[] selectSpeakerNames() {
+		int num = jdbcTemplate.queryForInt(SELECT_NUM_LEADER);
+		String[] names = new String[num];
+		for (int i=1; i<=num; i++){
+			names[i-1] = jdbcTemplate.queryForObject(SELECT_LEADER, String.class, i);
+		}
+		return names;
+	}
+	
+	public String[] selectVenueNames() {
+		int num = jdbcTemplate.queryForInt(SELECT_NUM_VENUE);
+		String[] names = new String[num];
+		for (int i=1; i<=num; i++){
+			names[i-1] = jdbcTemplate.queryForObject(SELECT_VENUE, String.class, i);
+		}
+		return names;
+	}
+	
+	public String[] selectVenueAddresses() {
+		int num = jdbcTemplate.queryForInt(SELECT_NUM_VENUE);
+		String[] adds = new String[num];
+		for (int i=1; i<=num; i++){
+			adds[i-1] = jdbcTemplate.queryForObject(SELECT_VENUE_ADDRESSES, String.class, i);
+		}
+		return adds;
+	}
+	
+	public String[] selectVenueLocationHints() {
+		int num = jdbcTemplate.queryForInt(SELECT_NUM_VENUE);
+		String[] hints = new String[num];
+		for (int i=1; i<=num; i++){
+			hints[i-1] = jdbcTemplate.queryForObject(SELECT_VENUE_LOCATIONHINTS, String.class, i);
+		}
+		return hints;
+	}
 	
 	// internal helpers
+	private String createSlug(String eventName) {
+		return SlugUtils.toSlug(eventName);}
 
 	private boolean isSessionEnded(Long eventId, Integer sessionId) {
 		Date endTime = jdbcTemplate.queryForObject("select endTime from EventSession where event = ? and id = ?", Date.class, eventId, sessionId);
@@ -146,6 +211,28 @@ public class JdbcEventRepository implements EventRepository {
 		"inner join MemberGroup g on e.memberGroup = g.id " + 
 		"inner join EventVenue ev on e.id = ev.event " + 
 		"inner join Venue v on ev.venue = v.id";
+	
+	private static final String INSERT_EVENT = "insert into event (Title, slug, description, starttime, endtime, TimeZone, membergroup) values (?, ?, ?, ?, ?, ?, ?)";
+	
+	private static final String INSERT_VENUE = "insert into venue (Name, postaladdress, latitude, longitude, locationhint, createdby) values (?, ?, ?, ?, ?, ?)";
+	
+	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
+	
+	private static final String SELECT_VENUE_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM VENUE)";
+	
+	private static final String INSERT_EVENT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
+	
+	private static final String SELECT_VENUE = "SELECT NAME FROM VENUE where ID  = ?";
+	
+	private static final String SELECT_LEADER= "SELECT NAME FROM LEADER where ID  = ?";
+	
+	private static final String SELECT_VENUE_ADDRESSES = "SELECT POSTALADDRESS FROM VENUE where ID  = ?";
+	
+	private static final String SELECT_VENUE_LOCATIONHINTS = "SELECT LOCATIONHINT FROM VENUE where ID  = ?";
+	
+	private static final String SELECT_NUM_VENUE = "SELECT MAX(ID) FROM VENUE";
+	
+	private static final String SELECT_NUM_LEADER= "SELECT MAX(ID) FROM LEADER";
 	
 	private static final String SELECT_UPCOMING_EVENTS = SELECT_EVENT + " where e.endTime > ? order by e.startTime";
 

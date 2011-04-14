@@ -15,9 +15,11 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -30,6 +32,7 @@ import org.springframework.social.twitter.TwitterApi;
 import org.springframework.social.twitter.types.SearchResults;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +40,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.utils.Location;
+import com.springsource.greenhouse.events.EventRepository;
+import com.springsource.greenhouse.events.JdbcEventRepository;
 
 /**
  * UI Controller for Event actions.
@@ -57,7 +63,6 @@ public class EventsController {
 	}
 	
 	// for web service (JSON) clients
-	
 	/**
 	 * Write the list of upcoming events to the body of the response.
 	 * Only matches 'GET /events' requests for JSON content; a 404 is sent otherwise.
@@ -178,5 +183,57 @@ public class EventsController {
 		model.addAttribute(eventRepository.findUpcomingEvents(new DateTime(timeZone).getMillis()));
 		return "events/list";
 	}
+	/**
+	 *  Renders the event form for the user.
+	 */
+	@RequestMapping(value="/events/new", method=RequestMethod.GET) 
+	public EventForm NewForm(Model model) { 
+		Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
+		model.addAttribute("timezoneList", timezoneList); 
+		String venueList[] = eventRepository.selectVenueNames();
+		model.addAttribute("venueList", venueList);
+		String addressList[] = eventRepository.selectVenueAddresses();
+		model.addAttribute("addressList", addressList);
+		String hintsList[] = eventRepository.selectVenueLocationHints();
+		model.addAttribute("hintsList", hintsList);
+		return eventRepository.getNewEventForm(); 
+	}
 	
-}
+	/**
+	* Register a new Event for the developer.
+	 * @throws IOException 
+	*/
+	@RequestMapping(value="/events", method=RequestMethod.POST)
+	public String create(@Valid EventForm form, BindingResult bindingResult, Account account, Model model) throws IOException {
+	if (bindingResult.hasErrors()) {
+		Object timezoneList[] = DateTimeZone.getAvailableIDs().toArray();
+		model.addAttribute("timezoneList", timezoneList); 
+		String venueList[] = eventRepository.selectVenueNames();
+		model.addAttribute("venueList", venueList);
+		String addressList[] = eventRepository.selectVenueAddresses();
+		model.addAttribute("addressList", addressList);
+		String hintsList[] = eventRepository.selectVenueLocationHints();
+		model.addAttribute("hintsList", hintsList);
+		return "events/new";
+	}
+	
+	eventRepository.createEvent(account.getId(), form);
+	return "redirect:/events";
+	}
+
+	@RequestMapping(value="/groups/NewSession", method=RequestMethod.GET) 
+	public EventSessionForm NewSessionForm(Model model) {
+		
+		return eventRepository.getNewSessionForm();
+		
+	}
+	
+	@RequestMapping(value="/groups/NewSession", method=RequestMethod.POST) 
+	public String create (@Valid EventSessionForm form, BindingResult bindingResult, Account account, Model model)throws IOException {
+	return "groups/NewSession";
+	}
+	
+	
+	}
+
+	
