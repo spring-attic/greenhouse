@@ -59,8 +59,10 @@ public class TwitterInviteController {
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Model model) {
-		if (twitterApi.isAuthorizedForUser()) {
+		try {
 			model.addAttribute("username", twitterApi.userOperations().getScreenName());
+		} catch (IllegalStateException e) {
+			// this is not clean but necessary since there's no way to determine if the TwitterApi is authorized for a user
 		}
 	}
 
