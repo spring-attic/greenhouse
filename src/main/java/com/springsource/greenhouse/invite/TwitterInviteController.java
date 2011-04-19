@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.invite;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,10 +60,8 @@ public class TwitterInviteController {
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Model model) {
-		try {
+		if (twitterApi.isAuthorizedForUser()) {
 			model.addAttribute("username", twitterApi.userOperations().getScreenName());
-		} catch (IllegalStateException e) {
-			// this is not clean but necessary since there's no way to determine if the TwitterApi is authorized for a user
 		}
 	}
 
@@ -84,7 +83,7 @@ public class TwitterInviteController {
 	
 	private List<Long> friendAccountIds(String username) {
 		List<Long> friendIds = twitterApi.friendOperations().getFriendIds(username);
-		List<String> providerUserIds = new ArrayList<String>(friendIds.size());
+		Set<String> providerUserIds = new HashSet<String>(friendIds.size());
 		for (Object friendId : friendIds) {
 			providerUserIds.add(friendId.toString());
 		}

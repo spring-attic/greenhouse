@@ -17,6 +17,7 @@ package com.springsource.greenhouse.invite;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -107,7 +108,7 @@ public class FacebookInviteController {
 		if (friends.isEmpty()) {
 			return Collections.emptyList();
 		}
-		List<String> providerUserIds = new ArrayList<String>(friends.size());
+		Set<String> providerUserIds = new HashSet<String>(friends.size());
 		for (Reference friend : friends) {
 			providerUserIds.add(friend.getId());
 		}
