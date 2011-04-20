@@ -29,6 +29,7 @@ public class EventTrackForm {
 
 	private String description;
 	
+	@NotEmpty
 	private String code;
 	
 	/**
