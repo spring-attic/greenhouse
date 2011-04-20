@@ -27,10 +27,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
 import org.springframework.social.connect.ServiceProviderConnectionFactoryLocator;
 import org.springframework.social.connect.ServiceProviderConnectionRepository;
-import org.springframework.social.web.connect.ConnectController;
-import org.springframework.social.web.connect.ConnectInterceptor;
-import org.springframework.social.web.signin.ProviderSignInController;
-import org.springframework.social.web.signin.SignInService;
+import org.springframework.social.connect.signin.web.ProviderSignInController;
+import org.springframework.social.connect.signin.web.SignInService;
+import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.connect.web.ConnectInterceptor;
 
 import com.springsource.greenhouse.connect.FacebookConnectInterceptor;
 import com.springsource.greenhouse.connect.TwitterConnectInterceptor;

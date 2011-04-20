@@ -26,8 +26,8 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
-import org.springframework.social.facebook.FacebookApi;
-import org.springframework.social.facebook.types.Reference;
+import org.springframework.social.facebook.api.FacebookApi;
+import org.springframework.social.facebook.api.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
