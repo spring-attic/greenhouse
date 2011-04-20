@@ -16,13 +16,14 @@
 package com.springsource.greenhouse.invite;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
-import org.springframework.social.twitter.TwitterApi;
+import org.springframework.social.twitter.api.TwitterApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -82,7 +83,7 @@ public class TwitterInviteController {
 	
 	private List<Long> friendAccountIds(String username) {
 		List<Long> friendIds = twitterApi.friendOperations().getFriendIds(username);
-		List<String> providerUserIds = new ArrayList<String>(friendIds.size());
+		Set<String> providerUserIds = new HashSet<String>(friendIds.size());
 		for (Object friendId : friendIds) {
 			providerUserIds.add(friendId.toString());
 		}

@@ -17,6 +17,7 @@ package com.springsource.greenhouse.invite;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,8 +26,8 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
-import org.springframework.social.facebook.FacebookApi;
-import org.springframework.social.facebook.types.Reference;
+import org.springframework.social.facebook.api.FacebookApi;
+import org.springframework.social.facebook.api.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,7 +108,7 @@ public class FacebookInviteController {
 		if (friends.isEmpty()) {
 			return Collections.emptyList();
 		}
-		List<String> providerUserIds = new ArrayList<String>(friends.size());
+		Set<String> providerUserIds = new HashSet<String>(friends.size());
 		for (Reference friend : friends) {
 			providerUserIds.add(friend.getId());
 		}

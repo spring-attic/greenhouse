@@ -23,9 +23,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.social.connect.ServiceProviderConnection;
 import org.springframework.social.connect.ServiceProviderConnectionRepository;
-import org.springframework.social.facebook.FacebookApi;
-import org.springframework.social.twitter.TwitterApi;
-import org.springframework.social.twitter.TwitterTemplate;
+import org.springframework.social.facebook.api.FacebookApi;
+import org.springframework.social.twitter.api.TwitterApi;
+import org.springframework.social.twitter.api.impl.TwitterTemplate;
 
 @Configuration
 public class ServiceApisConfig {

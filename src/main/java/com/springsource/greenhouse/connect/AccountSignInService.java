@@ -17,7 +17,7 @@ package com.springsource.greenhouse.connect;
 
 import javax.inject.Inject;
 
-import org.springframework.social.web.signin.SignInService;
+import org.springframework.social.connect.signin.web.SignInService;
 import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.account.Account;

@@ -18,7 +18,7 @@ package com.springsource.greenhouse.signup;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
-import org.springframework.social.web.signin.ProviderSignInUtils;
+import org.springframework.social.connect.signin.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
