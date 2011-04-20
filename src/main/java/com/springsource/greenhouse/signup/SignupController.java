@@ -18,6 +18,7 @@ package com.springsource.greenhouse.signup;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.springframework.social.connect.ServiceProviderUserProfile;
 import org.springframework.social.connect.signin.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -47,8 +48,9 @@ public class SignupController {
 	 * Render a signup form to the person as HTML in their web browser.
 	 */
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
-	public SignupForm signupForm() {
-		return new SignupForm();
+	public SignupForm signupForm(WebRequest request) {
+		ServiceProviderUserProfile providerUser = ProviderSignInUtils.getUserProfile(request);
+		return providerUser != null ? SignupForm.fromProviderUser(providerUser) : new SignupForm();
 	}
 
 	/**
