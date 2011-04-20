@@ -129,11 +129,10 @@ public class JdbcEventRepository implements EventRepository {
 	}
 	
 	@Transactional
-	public String createTrack(Long accountId, EventTrackForm form) {
-		int event = 1;
+	public String createTrack(Long accountId, Event event, EventTrackForm form) {
 		String slug = "slug";
 		int chair = 1;
-		jdbcTemplate.update(INSERT_TRACK, event, form.getCode(), form.getName(), form.getDescription(), chair);
+		jdbcTemplate.update(INSERT_TRACK, event.getId(), form.getCode(), form.getName(), form.getDescription(), chair);
 		return slug;
 	}
 	

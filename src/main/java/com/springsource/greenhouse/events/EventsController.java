@@ -231,16 +231,25 @@ public class EventsController {
 	return "groups/NewSession";
 	}
 	
-	@RequestMapping(value="/groups/NewTrack", method=RequestMethod.GET) 
-	public EventTrackForm NewTrackForm(Model model) {
-		return eventRepository.getNewTrackForm();
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/new", method=RequestMethod.GET, headers="Accept=text/html") 
+	public String NewTrackForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
+		model.addAttribute(eventRepository.getNewTrackForm());
+		//return eventRepository.getNewTrackForm();
+		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		model.addAttribute(event);
+		return "groups/event/newtrack";
 	}
 	
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/NewTrack", method=RequestMethod.POST) 
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks", method=RequestMethod.POST) 
 	public String create (@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @Valid EventTrackForm form, BindingResult bindingResult, Account account, Model model) {
-
-		eventRepository.createTrack(account.getId(), form);
-		return "redirect:/groups/{group}/events/{year}/{month}/{slug}/NewTrack";
+		if (bindingResult.hasErrors()) {
+			Event event = eventRepository.findEventBySlug(group, year, month, slug);
+			model.addAttribute(event);
+			return "groups/event/newtrack";
+		}
+		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		eventRepository.createTrack(account.getId(), event, form);
+		return "redirect:/groups/" + event.getGroupSlug() + "/events/" + event.getStartTime().getYear() + "/" + event.getStartTime().getMonthOfYear() + "/" + event.getSlug();
 	}
 	
 	

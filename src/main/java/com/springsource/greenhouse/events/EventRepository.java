@@ -108,7 +108,7 @@ public interface EventRepository {
 	
 	String createEvent(Long accountId, EventForm form) throws IOException;
 	
-	String createTrack(Long accountId, EventTrackForm form);
+	String createTrack(Long accountId, Event event, EventTrackForm form);
 	
 	EventForm getNewEventForm();
 	

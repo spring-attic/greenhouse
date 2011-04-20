@@ -16,7 +16,7 @@
 		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewSession.jsp"/>
  	</definition>
 	
-	<definition name="groups/NewTrack" extends="page">
+	<definition name="groups/event/newtrack" extends="page">
 		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewTrack.jsp"/>
  	</definition>
  	
