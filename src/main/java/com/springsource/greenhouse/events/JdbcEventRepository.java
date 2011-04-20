@@ -128,11 +128,23 @@ public class JdbcEventRepository implements EventRepository {
 		return slug;
 	}
 	
+	@Transactional
+	public String createTrack(Long accountId, EventTrackForm form) {
+		int event = 1;
+		String slug = "slug";
+		int chair = 1;
+		jdbcTemplate.update(INSERT_TRACK, event, form.getCode(), form.getName(), form.getDescription(), chair);
+		return slug;
+	}
+	
 	public EventForm getNewEventForm() {
 		return new EventForm();
 	}
 	public EventSessionForm getNewSessionForm(){
 		return new EventSessionForm();
+	}
+	public EventTrackForm getNewTrackForm(){
+		return new EventTrackForm();
 	}
 	public String[] selectSpeakerNames() {
 		int num = jdbcTemplate.queryForInt(SELECT_NUM_LEADER);
@@ -215,6 +227,8 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String INSERT_EVENT = "insert into event (Title, slug, description, starttime, endtime, TimeZone, membergroup) values (?, ?, ?, ?, ?, ?, ?)";
 	
 	private static final String INSERT_VENUE = "insert into venue (Name, postaladdress, latitude, longitude, locationhint, createdby) values (?, ?, ?, ?, ?, ?)";
+	
+	private static final String INSERT_TRACK = "insert into eventtrack (event, code, name, description, chair) values (?, ?, ?, ?, ?)";
 	
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
 	

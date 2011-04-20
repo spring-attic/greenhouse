@@ -223,14 +223,24 @@ public class EventsController {
 
 	@RequestMapping(value="/groups/NewSession", method=RequestMethod.GET) 
 	public EventSessionForm NewSessionForm(Model model) {
-		
 		return eventRepository.getNewSessionForm();
-		
 	}
 	
 	@RequestMapping(value="/groups/NewSession", method=RequestMethod.POST) 
 	public String create (@Valid EventSessionForm form, BindingResult bindingResult, Account account, Model model)throws IOException {
 	return "groups/NewSession";
+	}
+	
+	@RequestMapping(value="/groups/NewTrack", method=RequestMethod.GET) 
+	public EventTrackForm NewTrackForm(Model model) {
+		return eventRepository.getNewTrackForm();
+	}
+	
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/NewTrack", method=RequestMethod.POST) 
+	public String create (@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @Valid EventTrackForm form, BindingResult bindingResult, Account account, Model model) {
+
+		eventRepository.createTrack(account.getId(), form);
+		return "redirect:/groups/{group}/events/{year}/{month}/{slug}/NewTrack";
 	}
 	
 	

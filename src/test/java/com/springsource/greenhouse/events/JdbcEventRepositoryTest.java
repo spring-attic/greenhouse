@@ -18,6 +18,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.utils.Location;
+import com.springsource.greenhouse.events.EventTrackForm;
 
 public class JdbcEventRepositoryTest {
 
@@ -111,6 +112,14 @@ public class JdbcEventRepositoryTest {
 		assertEquals(new Float(3.5), rating);
 	}
 
+	@Test
+	public void createTrack();
+	{
+	EventTrackForm.setName = "test";
+	EventTrackForm.setDescription = "";
+	EventTrackForm.setCode ="";
+	}
+	
 	// internal helpers
 	
 	private void assertMobile(EventSession session, boolean favorite) {
