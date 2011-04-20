@@ -29,7 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public final class AccountUtils {
 
 	/**
-	 * Programatically sign-in the member holding the provided Account.
+	 * Programmatically sign-in the member holding the provided Account.
 	 * Sets the Account in the SecurityContext, which will associate this Account with the user Session.
 	 */
 	public static void signin(Account account) {
@@ -49,7 +49,11 @@ public final class AccountUtils {
 	 */
 	public static Account getCurrentAccount() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return authentication != null ? (Account) authentication.getPrincipal() : null;
+		if (authentication == null) {
+			return null;
+		}
+		Object principal = authentication.getPrincipal();
+		return principal instanceof Account ? (Account) principal : null;
 	}
 	
 	private AccountUtils() {

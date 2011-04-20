@@ -15,12 +15,9 @@
  */
 package com.springsource.greenhouse.config.connect;
 
-import java.security.Principal;
-
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -36,6 +33,9 @@ import org.springframework.social.facebook.connect.FacebookServiceProviderConnec
 import org.springframework.social.linkedin.connect.LinkedInServiceProviderConnectionFactory;
 import org.springframework.social.tripit.connect.TripItServiceProviderConnectionFactory;
 import org.springframework.social.twitter.connect.TwitterServiceProviderConnectionFactory;
+
+import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountUtils;
 
 @Configuration
 public class ConnectFrameworkConfig {
@@ -66,11 +66,12 @@ public class ConnectFrameworkConfig {
 
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
-	public ServiceProviderConnectionRepository connectionRepository(@Value("#{request.userPrincipal}") Principal principal) {
-		if (principal == null) {
-			throw new IllegalStateException("Unable to get a ServiceProviderConnectionRepository: no user logged in");
+	public ServiceProviderConnectionRepository connectionRepository() {
+		Account account = AccountUtils.getCurrentAccount();
+		if (account == null) {
+			throw new IllegalStateException("Unable to get a ServiceProviderConnectionRepository: no user signed in");
 		}
-		return multiUserConnectionRepository().createConnectionRepository(principal.getName());
+		return multiUserConnectionRepository().createConnectionRepository(account.getName());
 	}
 	
 }

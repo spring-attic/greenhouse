@@ -72,7 +72,7 @@ public class SignupController {
 			return null;
 		}
 		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
-			public void postCreateAccount(Account account) {
+			public void postSignup(Account account) {
 				ProviderUserSignInUtils.handlePostSignUp(request);
 			}
 		});

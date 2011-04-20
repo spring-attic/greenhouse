@@ -62,6 +62,9 @@ public class SignupHelper {
 			Account account = createAccount(form.createPerson(),callback);
 			gateway.signedUp(account);
 			AccountUtils.signin(account);
+			if (callback != null) {
+				callback.postSignup(account);
+			}
 			return true;
 		} catch (EmailAlreadyOnFileException e) {
 			formBinding.rejectValue("email", "account.duplicateEmail", "already on file");
@@ -73,11 +76,7 @@ public class SignupHelper {
 	
 	@Transactional
 	private Account createAccount(Person person, SignupCallback callback) throws EmailAlreadyOnFileException {
-		Account account = accountRepository.createAccount(person);
-		if (callback != null) {
-			callback.postCreateAccount(account);
-		}
-		return account;
+		return accountRepository.createAccount(person);
 	}
 	
 	/**
@@ -85,7 +84,7 @@ public class SignupHelper {
 	 */
 	public interface SignupCallback {
 		
-		void postCreateAccount(Account account);
+		void postSignup(Account account);
 		
 	}
 
