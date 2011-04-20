@@ -18,13 +18,16 @@ package com.springsource.greenhouse.signup;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
-import org.springframework.social.connect.ServiceProviderUserProfile;
-import org.springframework.social.connect.signin.web.ProviderSignInUtils;
+import org.springframework.social.connect.ServiceProviderConnection;
+import org.springframework.social.connect.signin.web.ProviderUserSignInUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.flash.Message;
+import org.springframework.web.flash.MessageType;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
@@ -49,8 +52,13 @@ public class SignupController {
 	 */
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public SignupForm signupForm(WebRequest request) {
-		ServiceProviderUserProfile providerUser = ProviderSignInUtils.getUserProfile(request);
-		return providerUser != null ? SignupForm.fromProviderUser(providerUser) : new SignupForm();
+		ServiceProviderConnection<?> connection = ProviderUserSignInUtils.getConnection(request);
+		if (connection != null) {
+			request.setAttribute("message", new Message(MessageType.INFO, "Your " + StringUtils.capitalize(connection.getKey().getProviderId()) + " account is not associated with a Greenhouse account. If you're new, please sign up."), WebRequest.SCOPE_REQUEST);
+			return SignupForm.fromProviderUser(connection.fetchUserProfile());
+		} else {
+			return new SignupForm();
+		}
 	}
 
 	/**
@@ -65,7 +73,7 @@ public class SignupController {
 		}
 		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
 			public void postCreateAccount(Account account) {
-				ProviderSignInUtils.handleConnectPostSignUp(request);
+				ProviderUserSignInUtils.handlePostSignUp(request);
 			}
 		});
 		return result ? "redirect:/" : null;
