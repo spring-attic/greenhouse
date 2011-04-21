@@ -411,6 +411,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>${java-version}</source>
 					<target>${java-version}</target>
@@ -563,11 +564,11 @@
 	</pluginRepositories>
 
 	<distributionManagement>
-		<!-- Temporary until we publish to another release repository -->
+		<!-- Temporary until we have a need to publish to a remote release repository -->
 		<snapshotRepository>
-			<id>local</id>
-			<name>local</name>
-			<url>file://${user.home}/.m2/repository</url>
+			<id>localPublish</id>
+			<name>localPublish</name>
+			<url>file://${user.home}/local-maven-publish-repository</url>
 		</snapshotRepository>
 	</distributionManagement>
 	
