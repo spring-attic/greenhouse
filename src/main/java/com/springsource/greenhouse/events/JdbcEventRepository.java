@@ -27,11 +27,13 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.JoinRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.events.GeoLocation;
@@ -129,10 +131,14 @@ public class JdbcEventRepository implements EventRepository {
 	}
 	
 	@Transactional
-	public String createTrack(Long accountId, Event event, EventTrackForm form) {
-		String slug = "slug";
+	public String createTrack(Long accountId, Event event, EventTrackForm form) throws DuplicateKeyException {
+		String slug = event.getSlug();
 		int chair = 1;
+		try {
 		jdbcTemplate.update(INSERT_TRACK, event.getId(), form.getCode(), form.getName(), form.getDescription(), chair);
+		} catch (DuplicateKeyException e) {
+			throw new DuplicateKeyException(form.getCode());
+		}
 		return slug;
 	}
 	
@@ -180,6 +186,15 @@ public class JdbcEventRepository implements EventRepository {
 		}
 		return hints;
 	}
+	
+//	public String[] selectTracks(Long event) {
+//		int num = jdbcTemplate.queryForInt(SELECT_NUM_TRACK);
+//		String[] tracks = new String[num];
+//		for (int i=1; i<=num; i++){
+//			tracks[i-1] = jdbcTemplate.queryForObject(SELECT_TRACKS, String.class, i);
+//		}
+//		return tracks;
+//	}
 	
 	// internal helpers
 	private String createSlug(String eventName) {
@@ -237,6 +252,8 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String SELECT_VENUE = "SELECT NAME FROM VENUE where ID  = ?";
 	
+	//private static final String SELECT_TRACKS = "SELECT NAME FROM EVENTTRACK where EVENT  = ?";
+	
 	private static final String SELECT_LEADER= "SELECT NAME FROM LEADER where ID  = ?";
 	
 	private static final String SELECT_VENUE_ADDRESSES = "SELECT POSTALADDRESS FROM VENUE where ID  = ?";
@@ -244,6 +261,8 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String SELECT_VENUE_LOCATIONHINTS = "SELECT LOCATIONHINT FROM VENUE where ID  = ?";
 	
 	private static final String SELECT_NUM_VENUE = "SELECT MAX(ID) FROM VENUE";
+	
+	//private static final String SELECT_NUM_TRACK = "SELECT COUNT(1) FROM EVENTTRACK";
 	
 	private static final String SELECT_NUM_LEADER= "SELECT MAX(ID) FROM LEADER";
 	

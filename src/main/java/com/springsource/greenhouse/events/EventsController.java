@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
 import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.events.EventRepository;
@@ -216,7 +218,10 @@ public class EventsController {
 		model.addAttribute("hintsList", hintsList);
 		return "events/new";
 	}
-	
+	if (form.getStartTime().getMillis() >= form.getEndTime().getMillis()){
+		bindingResult.rejectValue("endDate", "start date must be before end date", "start date must be before end date");
+		return "events/new";
+	}
 	eventRepository.createEvent(account.getId(), form);
 	return "redirect:/events";
 	}
@@ -248,8 +253,15 @@ public class EventsController {
 			return "groups/event/newtrack";
 		}
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		try {
 		eventRepository.createTrack(account.getId(), event, form);
-		return "redirect:/groups/" + event.getGroupSlug() + "/events/" + event.getStartTime().getYear() + "/" + event.getStartTime().getMonthOfYear() + "/" + event.getSlug();
+		} catch (DuplicateKeyException e){
+			bindingResult.rejectValue("code", "code already exists for this event", "code already exists for this event");
+			model.addAttribute(event);
+			return "groups/event/newtrack";
+		}
+
+		return "redirect:/groups/" + group + "/events/" + year + "/" + month + "/" + slug;
 	}
 	
 	

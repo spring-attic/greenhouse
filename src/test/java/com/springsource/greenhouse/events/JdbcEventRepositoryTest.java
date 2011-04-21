@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.utils.Location;
@@ -112,13 +113,16 @@ public class JdbcEventRepositoryTest {
 		assertEquals(new Float(3.5), rating);
 	}
 
-	@Test
-	public void createTrack();
-	{
-	EventTrackForm.setName = "test";
-	EventTrackForm.setDescription = "";
-	EventTrackForm.setCode ="";
-	}
+    @Test
+    @Transactional
+    public void createTrack(){
+        EventTrackForm form = new EventTrackForm();
+        Event event = new Event(2L, null, null, null, null, null, null, null, null);
+        form.setName("Track1");
+        form.setCode("trk");
+        form.setDescription("This is a description of track1");
+        eventRepository.createTrack(2L, event, form);
+    }
 	
 	// internal helpers
 	

@@ -66,6 +66,8 @@ public class GroupsController {
 	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}", method=RequestMethod.GET, headers="Accept=text/html")
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		//String trackList[] = eventRepository.selectTracks(event.getId());
+		//model.addAttribute("trackList", trackList);
 		model.addAttribute(event);
 		return "groups/event";
 	}	
