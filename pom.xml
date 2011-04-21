@@ -483,9 +483,15 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>tomcat-maven-plugin</artifactId>
-				<version>1.1</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+			</plugin>			
+			<!-- Tomcat 7 Plugin -->
+			<plugin>
+				<groupId>com.googlecode.t7mp</groupId>
+				<artifactId>maven-t7-plugin</artifactId>
+				<version>0.9.7-scanner-SNAPSHOT</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -561,6 +567,13 @@
 			<url>http://maven.springframework.org/milestone</url>
 			<snapshots><enabled>false</enabled></snapshots>
 		</pluginRepository>
+		<!-- For Tomcat plugin -->
+		<pluginRepository>
+			<id>sonatype-oss-repository</id>
+			<name>Sonatype Public OSS Repository</name>
+			<url>https://oss.sonatype.org/content/groups/public/</url>
+			<snapshots><enabled>true</enabled></snapshots>
+		</pluginRepository>		
 	</pluginRepositories>
 
 	<distributionManagement>
