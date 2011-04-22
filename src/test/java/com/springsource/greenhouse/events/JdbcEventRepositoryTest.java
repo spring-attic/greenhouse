@@ -124,6 +124,26 @@ public class JdbcEventRepositoryTest {
         eventRepository.createTrack(2L, event, form);
     }
 	
+    @Test
+    @Transactional
+    public void createSession(){
+    	Event event = new Event(2L, null, null, null, null, null, null, null, null);
+    	EventSessionForm form = new EventSessionForm();
+    	form.setTitle("Cool");
+    	form.setStartDate(new LocalDate(2012,8,20));
+    	form.setStartHour(6);
+    	form.setStartMinute(00);
+    	form.setStartAmPm("PM");
+    	form.setEndDate(new LocalDate(2012,9,20));
+    	form.setEndHour(7);
+    	form.setEndMinute(00);
+    	form.setEndAmPm("PM");
+    	form.setDescription("google");
+    	form.setLeaderID(2);
+    
+    	eventRepository.createSession(2L, event, form);
+   	}
+    
 	// internal helpers
 	
 	private void assertMobile(EventSession session, boolean favorite) {

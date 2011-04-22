@@ -108,6 +108,8 @@ public interface EventRepository {
 	
 	String createEvent(Long accountId, EventForm form) throws IOException;
 	
+	void createSession(Long accountId, Event event, EventSessionForm form );
+	
 	String createTrack(Long accountId, Event event, EventTrackForm form);
 	
 	EventForm getNewEventForm();
@@ -115,6 +117,8 @@ public interface EventRepository {
 	EventSessionForm getNewSessionForm();
 	
 	EventTrackForm getNewTrackForm();
+	
+	public String[] selectSpeakerNames();
 	
 	public String[] selectVenueNames();
 	

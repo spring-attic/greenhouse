@@ -5,7 +5,7 @@
 
 
 <fieldset>
-<form:label path="title">Title </form:label>
+<form:label path="title">Title <form:errors path="title" cssClass="error" /></form:label>
 		<form:input path="title" />
 		
 
@@ -94,15 +94,9 @@
 		
 		</table>
 		</div>
-		<form:label path="description">Description</form:label>
+		<form:label path="description">Description <form:errors path="description" cssClass="error" /></form:label>
 		<form:textarea cols="55" rows="8" path="description" />
 		
-		<form:label path="name">Event Speaker</form:label>
-		<form:select path="name">
-				<form:option value="">Session Speaker</form:option>
-				<form:option value="Keith Donald" />
-				
-			</form:select>
 			<jsp:include page="sessionFragment.jsp" />
 		</fieldset>
 		

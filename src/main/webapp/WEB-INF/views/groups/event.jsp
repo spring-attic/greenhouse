@@ -13,16 +13,22 @@
 	<dd><c:out value="${event.location}" /></dd>
 	<dt>Description</dt>
 	<dd><c:out value="${event.description}" escapeXml="true" /></dd>
-	<s:url value="/groups/{group}/events/{year}/{month}/{slug}/tracks/new" var="eventUrl">
+	<s:url value="/groups/{group}/events/{year}/{month}/{slug}/tracks/new" var="tracksUrl">
+		<s:param name="group" value="${event.groupSlug}" />
+		<s:param name="year" value="${event.startTime.year}" />
+		<s:param name="month" value="${event.startTime.monthOfYear}" />
+		<s:param name="slug" value="${event.slug}" />
+	</s:url>
+	<s:url value="/groups/{group}/events/{year}/{month}/{slug}/sessions/new" var="sessionsUrl">
 		<s:param name="group" value="${event.groupSlug}" />
 		<s:param name="year" value="${event.startTime.year}" />
 		<s:param name="month" value="${event.startTime.monthOfYear}" />
 		<s:param name="slug" value="${event.slug}" />
 	</s:url>
 	<h4 align="center">
-		<a href="${eventUrl}">Add a Track</a><br/>
+		<a href="${tracksUrl}">Add a Track</a><br/>
+		<a href="${sessionsUrl}">Create a Session</a>
 	</h4>
-	<h4 align="center"><a href="<c:url value="/groups/NewSession" />">Create a Session</a></h4>
 </dl>
 <p>
 	Grab the Greenhouse mobile client to follow this Event as it happens.

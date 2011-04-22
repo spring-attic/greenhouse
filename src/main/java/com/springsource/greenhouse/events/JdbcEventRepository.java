@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -130,6 +131,14 @@ public class JdbcEventRepository implements EventRepository {
 		return slug;
 	}
 	
+	public void createSession(Long accountId, Event event, EventSessionForm form) {
+		int venue = 1;
+		int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
+		id = id +1;
+		jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
+		jdbcTemplate.update(INSERT_LEADER , event.getId(), id, form.getLeaderID());
+	}
+		
 	@Transactional
 	public String createTrack(Long accountId, Event event, EventTrackForm form) throws DuplicateKeyException {
 		String slug = event.getSlug();
@@ -244,7 +253,15 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String INSERT_TRACK = "insert into eventtrack (event, code, name, description, chair) values (?, ?, ?, ?, ?)";
 	
+	private static final String INSERT_SESSION = "insert into eventsession (event, id, title, description, starttime, endtime, venue) values (?, ?, ?, ?, ?, ?, ?)";
+		
+	private static final String INSERT_LEADER = "insert into eventsessionleader (event, session, leader) values (?, ?, ?)";
+	
+	//private static final String SELECT_LEADER_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM LEADER)";
+
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
+	
+	private static final String SELECT_SESSION_ID = "SELECT MAX(ID) FROM EVENTSESSION WHERE EVENT = ?";
 	
 	private static final String SELECT_VENUE_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM VENUE)";
 	

@@ -11,9 +11,9 @@ import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class EventSessionForm {
+	
 	@NotEmpty
 	private String title;
-	
 	
     private DateTime startTime;
 	
@@ -47,10 +47,7 @@ public class EventSessionForm {
 	@NotEmpty
 	private String endAmPm;
 	
-	private String venueName;
-	
-	private String name;
-	
+	@NotNull
 	private Integer leaderID;
 	
 	
@@ -183,18 +180,7 @@ public class EventSessionForm {
 	public String getHashtag() {
 		return hashtag;
 	}
-	public String getVenueName() {
-		return venueName;
-	}
-	public void setVenueName(String venueName) {
-		this.venueName = venueName;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+	
 	public void setHashtag(String hashtag) {
 	this.hashtag = hashtag;
 	}
