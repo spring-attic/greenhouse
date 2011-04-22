@@ -37,7 +37,6 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 public class EventForm {
 
 	@NotEmpty
-	
 	private String title;
 
 	private DateTimeZone timezone;
