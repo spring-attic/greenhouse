@@ -36,14 +36,14 @@ public class ServiceApisConfig {
 	@Bean
 	@Scope(value="request")	
 	public FacebookApi facebookApi() {
-		ServiceProviderConnection<FacebookApi> connection = connectionRepository.findConnectionByServiceApi(FacebookApi.class);
+		ServiceProviderConnection<FacebookApi> connection = connectionRepository.findPrimaryConnectionToServiceApi(FacebookApi.class);
 		return connection != null ? connection.getServiceApi() : null;
 	}
 
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	public TwitterApi twitterApi() {
-		ServiceProviderConnection<TwitterApi> connection = connectionRepository.findConnectionByServiceApi(TwitterApi.class);
+		ServiceProviderConnection<TwitterApi> connection = connectionRepository.findPrimaryConnectionToServiceApi(TwitterApi.class);
 		return connection != null ? connection.getServiceApi() : new TwitterTemplate();
 	}
 	
