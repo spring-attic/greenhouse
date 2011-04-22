@@ -21,6 +21,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
+import org.springframework.social.connect.ServiceProviderUserProfile;
 
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.Gender;
@@ -165,5 +166,18 @@ public class SignupForm {
 	 */
 	public Person createPerson() {
 		return new Person(firstName, lastName, email, password, gender, new LocalDate(year, month, day));
+	}
+
+	/**
+	 * Factory method that creates a pre-populated SignupForm from a ServiceProviderUser model obtained from a provider user sign-in attempt.
+	 * @param providerUser the providerUser model
+	 */
+	public static SignupForm fromProviderUser(ServiceProviderUserProfile providerUser) {
+		SignupForm form = new SignupForm();
+		form.setFirstName(providerUser.getFirstName());
+		form.setLastName(providerUser.getLastName());
+		form.setEmail(providerUser.getEmail());
+		form.setConfirmEmail(providerUser.getEmail());
+		return form;
 	}
 }

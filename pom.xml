@@ -338,13 +338,6 @@
 			</exclusions>			
 		</dependency>
 		
-		<!-- Comet -->
-		<dependency>
-			<groupId>org.atmosphere</groupId>
-			<artifactId>atmosphere-runtime</artifactId>
-			<version>0.7</version>
-		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -418,6 +411,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>${java-version}</source>
 					<target>${java-version}</target>
@@ -489,9 +483,15 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>tomcat-maven-plugin</artifactId>
-				<version>1.0-beta-1</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+			</plugin>			
+			<!-- Tomcat 7 Plugin -->
+			<plugin>
+				<groupId>com.googlecode.t7mp</groupId>
+				<artifactId>maven-t7-plugin</artifactId>
+				<version>0.9.7-scanner-SNAPSHOT</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -567,14 +567,21 @@
 			<url>http://maven.springframework.org/milestone</url>
 			<snapshots><enabled>false</enabled></snapshots>
 		</pluginRepository>
+		<!-- For Tomcat plugin -->
+		<pluginRepository>
+			<id>sonatype-oss-repository</id>
+			<name>Sonatype Public OSS Repository</name>
+			<url>https://oss.sonatype.org/content/groups/public/</url>
+			<snapshots><enabled>true</enabled></snapshots>
+		</pluginRepository>		
 	</pluginRepositories>
 
 	<distributionManagement>
-		<!-- Temporary until we publish to another release repository -->
+		<!-- Temporary until we have a need to publish to a remote release repository -->
 		<snapshotRepository>
-			<id>local</id>
-			<name>local</name>
-			<url>file://${user.home}/.m2/repository</url>
+			<id>localPublish</id>
+			<name>localPublish</name>
+			<url>file://${user.home}/local-maven-publish-repository</url>
 		</snapshotRepository>
 	</distributionManagement>
 	

@@ -95,7 +95,7 @@ public class InviteController {
 			return form(token, model);
 		}
 		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
-			public void postCreateAccount(Account account) {
+			public void postSignup(Account account) {
 				inviteRepository.markInviteAccepted(token, account);
 			}
 		});
