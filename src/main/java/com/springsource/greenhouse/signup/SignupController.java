@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.springframework.social.connect.ServiceProviderConnection;
-import org.springframework.social.connect.signin.web.ProviderUserSignInUtils;
+import org.springframework.social.connect.signin.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -52,7 +52,7 @@ public class SignupController {
 	 */
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public SignupForm signupForm(WebRequest request) {
-		ServiceProviderConnection<?> connection = ProviderUserSignInUtils.getConnection(request);
+		ServiceProviderConnection<?> connection = ProviderSignInUtils.getConnection(request);
 		if (connection != null) {
 			request.setAttribute("message", new Message(MessageType.INFO, "Your " + StringUtils.capitalize(connection.getKey().getProviderId()) + " account is not associated with a Greenhouse account. If you're new, please sign up."), WebRequest.SCOPE_REQUEST);
 			return SignupForm.fromProviderUser(connection.fetchUserProfile());
@@ -73,7 +73,7 @@ public class SignupController {
 		}
 		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
 			public void postSignup(Account account) {
-				ProviderUserSignInUtils.handlePostSignUp(request);
+				ProviderSignInUtils.handlePostSignUp(request);
 			}
 		});
 		return result ? "redirect:/" : null;

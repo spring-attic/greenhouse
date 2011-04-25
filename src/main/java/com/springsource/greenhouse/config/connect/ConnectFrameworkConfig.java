@@ -21,7 +21,6 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
@@ -65,7 +64,7 @@ public class ConnectFrameworkConfig {
 	}
 
 	@Bean
-	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)
+	@Scope(value="request")
 	public ServiceProviderConnectionRepository connectionRepository() {
 		Account account = AccountUtils.getCurrentAccount();
 		if (account == null) {
