@@ -85,7 +85,7 @@ class BaseDatabaseUpgrader {
 		builder.addChange(databaseResource("install/Invite.sql"));		
 		builder.addChange(databaseResource("install/Venue.sql"));
 		builder.addChange(databaseResource("install/Event.sql"));
-		builder.addChange(new ClassPathResource("JdbcServiceProviderConnectionRepositorySchema.sql", JdbcMultiUserServiceProviderConnectionRepository.class));
+		builder.addChange(new ClassPathResource("JdbcMultiUserServiceProviderConnectionRepository.sql", JdbcMultiUserServiceProviderConnectionRepository.class));
 		addInstallChanges(builder);
 		upgrader.addChangeSet(builder.getChangeSet());
 	}

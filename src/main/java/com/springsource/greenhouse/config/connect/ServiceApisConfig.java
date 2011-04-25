@@ -15,8 +15,6 @@
  */
 package com.springsource.greenhouse.config.connect;
 
-import javax.inject.Inject;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -30,20 +28,17 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 @Configuration
 public class ServiceApisConfig {
 
-	@Inject
-	private ServiceProviderConnectionRepository connectionRepository;
-	
 	@Bean
 	@Scope(value="request")	
-	public FacebookApi facebookApi() {
-		ServiceProviderConnection<FacebookApi> connection = connectionRepository.findConnectionByServiceApi(FacebookApi.class);
+	public FacebookApi facebookApi(ServiceProviderConnectionRepository connectionRepository) {
+		ServiceProviderConnection<FacebookApi> connection = connectionRepository.findPrimaryConnectionToServiceApi(FacebookApi.class);
 		return connection != null ? connection.getServiceApi() : null;
 	}
 
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
-	public TwitterApi twitterApi() {
-		ServiceProviderConnection<TwitterApi> connection = connectionRepository.findConnectionByServiceApi(TwitterApi.class);
+	public TwitterApi twitterApi(ServiceProviderConnectionRepository connectionRepository) {
+		ServiceProviderConnection<TwitterApi> connection = connectionRepository.findPrimaryConnectionToServiceApi(TwitterApi.class);
 		return connection != null ? connection.getServiceApi() : new TwitterTemplate();
 	}
 	
