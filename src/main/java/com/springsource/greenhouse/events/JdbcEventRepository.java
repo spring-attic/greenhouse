@@ -31,13 +31,16 @@ import org.joda.time.LocalDate;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.JoinRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
+import com.springsource.greenhouse.develop.AppForm;
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.events.GeoLocation;
+import com.springsource.greenhouse.groups.Group;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
 import com.springsource.greenhouse.utils.SlugUtils;
@@ -65,6 +68,14 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject(SELECT_EVENT_BY_SLUG, eventMapper.single(), groupSlug, year, month, slug);
 	}
 
+	public EventTrack findTrackByCode(String trackcode, Long eventId) {
+		return jdbcTemplate.queryForObject(SELECT_TRACK_BY_CODE, eventTrackMapper.single(), trackcode, eventId);
+	}
+	
+	public EventSession findSessionById(Integer sessionId, Long eventId) {
+		return jdbcTemplate.queryForObject(SELECT_SESSION_BY_ID, eventSessionMapper.single(), sessionId, eventId);
+	}
+	
 	public String findEventSearchString(Long eventId) {
 		return jdbcTemplate.queryForObject("select g.hashtag from Event e, MemberGroup g where e.id = ? and e.memberGroup = g.id", String.class, eventId);
 	}
@@ -160,6 +171,16 @@ public class JdbcEventRepository implements EventRepository {
 	public EventTrackForm getNewTrackForm(){
 		return new EventTrackForm();
 	}
+	
+	public EventTrackForm getTrackForm(Long eventId, String trackcode) {
+		return jdbcTemplate.queryForObject(SELECT_TRACK_FORM, trackFormMapper, eventId, trackcode);
+	}
+	
+	public String updateTrack(Event event, EventTrackForm form, String originalcode) {
+		jdbcTemplate.update(UPDATE_TRACK_FORM, form.getName(), form.getCode(), form.getDescription(), event.getId(), originalcode);
+		return form.getCode();
+	}
+	
 	public String[] selectSpeakerNames() {
 		int num = jdbcTemplate.queryForInt(SELECT_NUM_LEADER);
 		String[] names = new String[num];
@@ -205,6 +226,14 @@ public class JdbcEventRepository implements EventRepository {
 //		return tracks;
 //	}
 	
+	public List<EventTrack> selectEventTracks(Long eventId) {
+		return jdbcTemplate.query(SELECT_EVENT_TRACKS, eventTrackMapper.list(), eventId);
+	}
+	
+	public List<EventSession> selectEventSessions(Long eventId) {
+		return jdbcTemplate.query(SELECT_EVENT_SESSIONS, eventSessionMapper.list(), eventId);
+	}
+	
 	// internal helpers
 	private String createSlug(String eventName) {
 		return SlugUtils.toSlug(eventName);}
@@ -241,6 +270,35 @@ public class JdbcEventRepository implements EventRepository {
 		}
 	};
 	
+	private final JoinRowMapper<EventTrack, String> eventTrackMapper = new JoinRowMapper<EventTrack, String>() {
+		protected String mapId(ResultSet rs) throws SQLException {
+			return rs.getString("code");
+		}
+		protected EventTrack mapRoot(String code, ResultSet rs) throws SQLException {
+			return new EventTrack(code, rs.getString("name"), rs.getString("description"));
+		}
+		protected void addChild(EventTrack track, ResultSet rs) throws SQLException {
+			//track.addLeader(new EventSessionLeader(rs.getString("name")));					
+		}
+	};
+	
+	private final RowMapper<EventTrack> trackMapper = new RowMapper<EventTrack>() {
+		public EventTrack mapRow(ResultSet rs, int row) throws SQLException {
+			EventTrack track = new EventTrack(rs.getString("code"), rs.getString("name"), rs.getString("description"));
+			return track;
+		}
+	};
+	
+	private RowMapper<EventTrackForm> trackFormMapper = new RowMapper<EventTrackForm>() {
+		public EventTrackForm mapRow(ResultSet rs, int rowNum) throws SQLException {
+			EventTrackForm form = new EventTrackForm();
+			form.setCode("code");
+			form.setName(rs.getString("name"));
+			form.setDescription(rs.getString("description"));
+			return form;
+		}
+	};
+	
 	private static final String SELECT_EVENT = "select e.id, e.title, e.timeZone, e.startTime, e.endTime, e.slug, e.description, g.hashtag, g.slug as groupSlug, g.name as groupName, " + 
 		"v.id as venueId, v.name as venueName, v.postalAddress as venuePostalAddress, v.latitude as venueLatitude, v.longitude as venueLongitude, v.locationHint as venueLocationHint from Event e " + 
 		"inner join MemberGroup g on e.memberGroup = g.id " + 
@@ -269,7 +327,9 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String SELECT_VENUE = "SELECT NAME FROM VENUE where ID  = ?";
 	
-	//private static final String SELECT_TRACKS = "SELECT NAME FROM EVENTTRACK where EVENT  = ?";
+	private static final String SELECT_EVENT_TRACKS = "SELECT CODE, NAME, DESCRIPTION FROM EVENTTRACK where EVENT  = ?";
+	
+	//private static final String SELECT_EVENT_SESSIONS = "SELECT ID, STARTTIME, ENDTIME, TITLE, DESCRIPTION, HASHTAG, RATING, VENUE, ROOM FROM EVENTSESSION where EVENT  = ?";
 	
 	private static final String SELECT_LEADER= "SELECT NAME FROM LEADER where ID  = ?";
 	
@@ -287,7 +347,27 @@ public class JdbcEventRepository implements EventRepository {
 
 	private static final String SELECT_EVENT_BY_SLUG = SELECT_EVENT + " where g.slug = ? and extract(year from e.startTime) = ? and extract(month from e.startTime) = ? and e.slug = ?";
 
+	private static final String SELECT_TRACK_BY_CODE = "select code, name, description from EVENTTRACK where code = ? and event = ?";
+	
 	private static final String SELECT_FROM_EVENT_SESSION = "select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, s.venue, s.room, r.name as roomName, (f.attendee is not null) as favorite, l.name from EventSession s ";
+	
+	private static final String SELECT_TRACK_FORM = "select name, code, description from EVENTTRACK where event = ? and code = ?";
+	
+	private static final String UPDATE_TRACK_FORM = "update EVENTTRACK set name = ?, code = ?, description = ? where event = ? and code = ?";
+	
+	private static final String SELECT_EVENT_SESSIONS = SELECT_FROM_EVENT_SESSION +
+		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session " +
+		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
+		"inner join Leader l on sl.leader = l.id " + 
+		"where s.event = ?";
+	
+	private static final String SELECT_SESSION_BY_ID = SELECT_FROM_EVENT_SESSION +
+		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session " +
+		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
+		"inner join Leader l on sl.leader = l.id " + 
+		"where s.id = ? and s.event = ?";
 	
 	private static final String SELECT_SESSIONS_ON_DAY = SELECT_FROM_EVENT_SESSION +
 		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +

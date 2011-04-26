@@ -60,6 +60,27 @@ public class JdbcEventRepositoryTest {
 	}
 	
 	@Test
+	public void findTrackByCode() {
+		Event event = eventRepository.findEventBySlug("s2gx", 2010, 10, "chicago");
+		assertNotNull(event);
+		assertEquals("SpringOne2gx", event.getTitle());
+		String trackcode = "spr";
+		EventTrack track = eventRepository.findTrackByCode(trackcode, event.getId());
+		assertNotNull(track);
+		assertEquals("Essential Spring", track.getName());
+		assertEquals("Spring techniques and technologies applicable to most classes of applications", track.getDescription());
+	}
+	
+	@Test
+	public void selectEventSessions() {
+		Event event = eventRepository.findEventBySlug("s2gx", 2010, 10, "chicago");
+		assertNotNull(event);
+		assertEquals("SpringOne2gx", event.getTitle());
+		List<EventSession> sessions = eventRepository.selectEventSessions(event.getId());
+		assertNotNull(sessions);
+	}
+	
+	@Test
 	public void findEventSearchString() {
 		assertEquals("#s2gx", eventRepository.findEventSearchString(1L));
 	}

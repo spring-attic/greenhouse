@@ -16,6 +16,7 @@
 package com.springsource.greenhouse.groups;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -30,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventRepository;
+import com.springsource.greenhouse.events.EventSession;
+import com.springsource.greenhouse.events.EventTrack;
 
 /**
  * UI Controller for managing groups.
@@ -66,9 +69,13 @@ public class GroupsController {
 	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}", method=RequestMethod.GET, headers="Accept=text/html")
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		//String trackList[] = eventRepository.selectTracks(event.getId());
-		//model.addAttribute("trackList", trackList);
 		model.addAttribute(event);
+		List<EventTrack> trackList = eventRepository.selectEventTracks(event.getId());
+		model.addAttribute("trackList", trackList);
+		List<EventSession> sessionList = eventRepository.selectEventSessions(event.getId());
+		//Long lo = (long) 1;
+		//List<EventSession> sessionList = eventRepository.findSessionsOnDay(event.getId(), event.getEndTime().toLocalDate(), lo);
+		model.addAttribute("sessionList", sessionList);
 		return "groups/event";
 	}	
 

@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
+import com.springsource.greenhouse.develop.AppForm;
 import com.springsource.greenhouse.events.EventForm;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.events.EventRepository;
@@ -284,7 +285,53 @@ public class EventsController {
 		return "redirect:/groups/" + group + "/events/" + year + "/" + month + "/" + slug;
 	}
 	
-
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/{trackcode}", method=RequestMethod.GET, headers="Accept=text/html") 
+	public String viewTrack(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, Account account, Model model) {
+		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		EventTrack track = eventRepository.findTrackByCode(trackcode, event.getId());
+		model.addAttribute("track", track);
+		model.addAttribute("event", event);
+		return "groups/event/track";
 	}
+
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/sessions/{sessionid}", method=RequestMethod.GET, headers="Accept=text/html") 
+	public String viewTrack(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable Integer sessionid, Account account, Model model) {
+		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		EventSession session = eventRepository.findSessionById(sessionid, event.getId());
+		String roomName = session.getRoom().getLabel();
+		model.addAttribute("event", event);
+		model.addAttribute("session", session);
+		model.addAttribute("roomName", roomName);
+		return "groups/event/session";
+	}
+	
+	@RequestMapping(value="/greenhouse/groups/{group}/events/{year}/{month}/{slug}/tracks/edit/{trackcode}", method=RequestMethod.GET, headers="Accept=text/html")
+	public String editForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, Account account, Model model) {
+		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		model.addAttribute(eventRepository.getTrackForm(event.getId(), trackcode));
+		model.addAttribute("event", event);
+		model.addAttribute("trackcode", trackcode);
+		return "groups/event/track/edit";
+	}
+	
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/{trackcode}", method=RequestMethod.PUT)
+	public String update(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, @Valid EventTrackForm form, BindingResult bindingResult, Account account, Model model) {
+		if (bindingResult.hasErrors()) {
+			Event event = eventRepository.findEventBySlug(group, year, month, slug);
+			model.addAttribute(event);			
+			return "groups/event/track/edit";
+		}
+		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		try {
+		eventRepository.updateTrack(event, form, trackcode);
+		} catch (DuplicateKeyException e){
+			bindingResult.rejectValue("code", "code already exists for this event", "code already exists for this event");
+			model.addAttribute(event);
+			return "groups/event/track/edit";
+		}
+		return "redirect:/groups/" + group + "/events/" + year + "/" + month + "/" + slug + "tracks/" + eventRepository.updateTrack(event, form, trackcode);
+	}
+
+}
 
 

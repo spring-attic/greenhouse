@@ -13,6 +13,32 @@
 	<dd><c:out value="${event.location}" /></dd>
 	<dt>Description</dt>
 	<dd><c:out value="${event.description}" escapeXml="true" /></dd>
+	<dt>Sessions:</dt>
+	<dd>
+	<c:forEach var="sessions" items="${sessionList}">
+	<s:url value="/groups/{group}/events/{year}/{month}/{slug}/sessions/{sessionid}" var="sessionEditUrl">
+		<s:param name="group" value="${event.groupSlug}" />
+		<s:param name="year" value="${event.startTime.year}" />
+		<s:param name="month" value="${event.startTime.monthOfYear}" />
+		<s:param name="slug" value="${event.slug}" />
+		<s:param name="sessionid" value="${sessions.id}" />
+	</s:url>
+	<div><a href="${sessionEditUrl}"><c:out value="${sessions.title}" escapeXml="true" /></a></div>
+	</c:forEach>
+	</dd>
+	<dt>Tracks:</dt>
+	<dd>
+	<c:forEach var="tracks" items="${trackList}">
+	<s:url value="/groups/{group}/events/{year}/{month}/{slug}/tracks/{trackcode}" var="trackViewUrl">
+		<s:param name="group" value="${event.groupSlug}" />
+		<s:param name="year" value="${event.startTime.year}" />
+		<s:param name="month" value="${event.startTime.monthOfYear}" />
+		<s:param name="slug" value="${event.slug}" />
+		<s:param name="trackcode" value="${tracks.code}" />
+	</s:url>
+	<div><a href="${trackViewUrl}"><c:out value="${tracks.name}" escapeXml="true" /></a></div>
+	</c:forEach>
+	</dd>
 	<s:url value="/groups/{group}/events/{year}/{month}/{slug}/tracks/new" var="tracksUrl">
 		<s:param name="group" value="${event.groupSlug}" />
 		<s:param name="year" value="${event.startTime.year}" />
@@ -27,7 +53,7 @@
 	</s:url>
 	<h4 align="center">
 		<a href="${tracksUrl}">Add a Track</a><br/>
-		<a href="${sessionsUrl}">Create a Session</a>
+		<a href="${sessionsUrl}">Add a Session</a>
 	</h4>
 </dl>
 <p>

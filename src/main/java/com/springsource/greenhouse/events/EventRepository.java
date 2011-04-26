@@ -126,6 +126,16 @@ public interface EventRepository {
 	
 	public String[] selectVenueLocationHints();
 	
-	//public String[] selectTracks(Long event);
+	public List<EventTrack> selectEventTracks(Long event);
+	
+	public EventTrack findTrackByCode(String trackcode, Long eventId);
+
+	public EventSession findSessionById(Integer sessionId, Long eventId);
+	
+	public List<EventSession> selectEventSessions(Long eventId);
+
+	Object getTrackForm(Long eventId, String trackcode);
+
+	String updateTrack(Event event, EventTrackForm form, String trackcode);
 	
 }

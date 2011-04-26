@@ -19,5 +19,17 @@
  	<definition name="groups/event/newsession" extends="page">
 		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewSession.jsp"/>
 	</definition>
+	
+	 <definition name="groups/event/track" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/track.jsp"/>
+	</definition>
+	
+	<definition name="groups/event/session" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/session.jsp"/>
+	</definition>
+
+	<definition name="groups/event/track/edit" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/editTrack.jsp"/>
+	</definition>
 
 </tiles-definitions>
