@@ -16,7 +16,7 @@
 
 <fieldset>
 
-<form:label path="name">Name <form:errors path="name" cssClass="error" /></form:label>
+<form:label path="name">Room Name <form:errors path="name" cssClass="error" /></form:label>
 		<form:input path="name" />
 		
 <form:label path ="capacity">Capacity <form:errors path="capacity" cssClass="error" /></form:label>
