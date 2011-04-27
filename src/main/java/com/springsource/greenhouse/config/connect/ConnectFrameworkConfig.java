@@ -23,15 +23,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
-import org.springframework.social.connect.ServiceProviderConnectionFactoryLocator;
-import org.springframework.social.connect.ServiceProviderConnectionRepository;
-import org.springframework.social.connect.jdbc.JdbcMultiUserServiceProviderConnectionRepository;
-import org.springframework.social.connect.support.MapServiceProviderConnectionFactoryRegistry;
-import org.springframework.social.facebook.connect.FacebookServiceProviderConnectionFactory;
-import org.springframework.social.linkedin.connect.LinkedInServiceProviderConnectionFactory;
-import org.springframework.social.tripit.connect.TripItServiceProviderConnectionFactory;
-import org.springframework.social.twitter.connect.TwitterServiceProviderConnectionFactory;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
+import org.springframework.social.tripit.connect.TripItConnectionFactory;
+import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountUtils;
@@ -49,28 +49,28 @@ public class ConnectFrameworkConfig {
 	private Environment environment;
 	
 	@Bean
-	public ServiceProviderConnectionFactoryLocator connectionFactoryLocator() {
-		MapServiceProviderConnectionFactoryRegistry registry = new MapServiceProviderConnectionFactoryRegistry();
-		registry.addConnectionFactory(new TwitterServiceProviderConnectionFactory(environment.getProperty("twitter.consumerKey"), environment.getProperty("twitter.consumerSecret")));
-		registry.addConnectionFactory(new FacebookServiceProviderConnectionFactory(environment.getProperty("facebook.appId"), environment.getProperty("facebook.appSecret")));
-		registry.addConnectionFactory(new LinkedInServiceProviderConnectionFactory(environment.getProperty("linkedin.consumerKey"), environment.getProperty("linkedin.consumerSecret")));		
-		registry.addConnectionFactory(new TripItServiceProviderConnectionFactory(environment.getProperty("tripit.consumerKey"), environment.getProperty("tripit.consumerSecret")));
+	public ConnectionFactoryLocator connectionFactoryLocator() {
+		ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
+		registry.addConnectionFactory(new TwitterConnectionFactory(environment.getProperty("twitter.consumerKey"), environment.getProperty("twitter.consumerSecret")));
+		registry.addConnectionFactory(new FacebookConnectionFactory(environment.getProperty("facebook.appId"), environment.getProperty("facebook.appSecret")));
+		registry.addConnectionFactory(new LinkedInConnectionFactory(environment.getProperty("linkedin.consumerKey"), environment.getProperty("linkedin.consumerSecret")));		
+		registry.addConnectionFactory(new TripItConnectionFactory(environment.getProperty("tripit.consumerKey"), environment.getProperty("tripit.consumerSecret")));
 		return registry;
 	}
 	
 	@Bean
-	public MultiUserServiceProviderConnectionRepository multiUserConnectionRepository() {
-		return new JdbcMultiUserServiceProviderConnectionRepository(dataSource, connectionFactoryLocator(), textEncryptor);
+	public UsersConnectionRepository usersConnectionRepository() {
+		return new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator(), textEncryptor);
 	}
 
 	@Bean
 	@Scope(value="request")
-	public ServiceProviderConnectionRepository connectionRepository() {
+	public ConnectionRepository connectionRepository() {
 		Account account = AccountUtils.getCurrentAccount();
 		if (account == null) {
-			throw new IllegalStateException("Unable to get a ServiceProviderConnectionRepository: no user signed in");
+			throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
 		}
-		return multiUserConnectionRepository().createConnectionRepository(account.getName());
+		return usersConnectionRepository().createConnectionRepository(account.getName());
 	}
 	
 }

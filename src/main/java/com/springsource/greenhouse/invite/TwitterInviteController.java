@@ -22,7 +22,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.twitter.api.TwitterApi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,12 +43,12 @@ public class TwitterInviteController {
 	
 	private final TwitterApi twitterApi;
 	
-	private final MultiUserServiceProviderConnectionRepository connectionRepository;
+	private final UsersConnectionRepository connectionRepository;
 
 	private final AccountRepository accountRepository;
 	
 	@Inject
-	public TwitterInviteController(TwitterApi twitterApi, MultiUserServiceProviderConnectionRepository connectionRepository, AccountRepository accountRepository) {
+	public TwitterInviteController(TwitterApi twitterApi, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
 		this.twitterApi = twitterApi;
 		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
@@ -87,9 +87,9 @@ public class TwitterInviteController {
 		for (Object friendId : friendIds) {
 			providerUserIds.add(friendId.toString());
 		}
-		Set<String> localUserIds = connectionRepository.findLocalUserIdsConnectedTo("twitter", providerUserIds);
-		List<Long> friendAccountIds = new ArrayList<Long>(localUserIds.size());
-		for (String localUserId : localUserIds) {
+		Set<String> userIds = connectionRepository.findUserIdsConnectedTo("twitter", providerUserIds);
+		List<Long> friendAccountIds = new ArrayList<Long>(userIds.size());
+		for (String localUserId : userIds) {
 			friendAccountIds.add(Long.valueOf(localUserId));
 		}
 		return friendAccountIds;		

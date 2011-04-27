@@ -19,8 +19,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.social.connect.ServiceProviderConnection;
-import org.springframework.social.connect.ServiceProviderConnectionRepository;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.FacebookApi;
 import org.springframework.social.twitter.api.TwitterApi;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
@@ -30,16 +30,16 @@ public class ServiceApisConfig {
 
 	@Bean
 	@Scope(value="request")	
-	public FacebookApi facebookApi(ServiceProviderConnectionRepository connectionRepository) {
-		ServiceProviderConnection<FacebookApi> connection = connectionRepository.findPrimaryConnectionToServiceApi(FacebookApi.class);
-		return connection != null ? connection.getServiceApi() : null;
+	public FacebookApi facebookApi(ConnectionRepository connectionRepository) {
+		Connection<FacebookApi> connection = connectionRepository.findPrimaryConnectionToApi(FacebookApi.class);
+		return connection != null ? connection.getApi() : null;
 	}
 
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
-	public TwitterApi twitterApi(ServiceProviderConnectionRepository connectionRepository) {
-		ServiceProviderConnection<TwitterApi> connection = connectionRepository.findPrimaryConnectionToServiceApi(TwitterApi.class);
-		return connection != null ? connection.getServiceApi() : new TwitterTemplate();
+	public TwitterApi twitterApi(ConnectionRepository connectionRepository) {
+		Connection<TwitterApi> connection = connectionRepository.findPrimaryConnectionToApi(TwitterApi.class);
+		return connection != null ? connection.getApi() : new TwitterTemplate();
 	}
 	
 }
