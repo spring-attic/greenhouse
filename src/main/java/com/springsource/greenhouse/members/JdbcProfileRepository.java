@@ -102,6 +102,6 @@ public class JdbcProfileRepository implements ProfileRepository {
 
 	private static final String SELECT_PROFILE = "select id, (firstName || ' ' || lastName) as displayName, gender, pictureSet from Member";
 
-	private static final String SELECT_CONNECTED_PROFILES = "select providerId, profileUrl from ServiceProviderConnection where localUserId = ? order by providerId";
+	private static final String SELECT_CONNECTED_PROFILES = "select providerId, profileUrl from UserConnection where userId = ? order by providerId";
 
 }

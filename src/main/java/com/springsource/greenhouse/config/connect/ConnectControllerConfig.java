@@ -24,9 +24,9 @@ import javax.inject.Provider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
-import org.springframework.social.connect.ServiceProviderConnectionFactoryLocator;
-import org.springframework.social.connect.ServiceProviderConnectionRepository;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.signin.web.ProviderSignInController;
 import org.springframework.social.connect.signin.web.SignInService;
 import org.springframework.social.connect.web.ConnectController;
@@ -43,8 +43,8 @@ public class ConnectControllerConfig {
 	private Environment environment;
 	
 	@Bean
-	public ConnectController connectController(ServiceProviderConnectionFactoryLocator connectionFactoryLocator, 
-			Provider<ServiceProviderConnectionRepository> connectionRepositoryProvider, ProfilePictureService profilePictureService) {
+	public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator, 
+			Provider<ConnectionRepository> connectionRepositoryProvider, ProfilePictureService profilePictureService) {
 		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator, connectionRepositoryProvider);
 		List<ConnectInterceptor<?>> interceptors = new ArrayList<ConnectInterceptor<?>>();
 		interceptors.add(new FacebookConnectInterceptor(profilePictureService));
@@ -54,9 +54,9 @@ public class ConnectControllerConfig {
 	}
 	
 	@Bean
-	public ProviderSignInController providerUserSignInController(Provider<ServiceProviderConnectionFactoryLocator> connectionFactoryLocator,
-			MultiUserServiceProviderConnectionRepository usersConnectionRepository, Provider<ServiceProviderConnectionRepository> connectionRepositoryProvider, SignInService signInService) {
-		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocator, usersConnectionRepository, connectionRepositoryProvider, signInService);
+	public ProviderSignInController providerSignInController(Provider<ConnectionFactoryLocator> connectionFactoryLocatorProvider,
+			UsersConnectionRepository usersConnectionRepository, Provider<ConnectionRepository> connectionRepositoryProvider, SignInService signInService) {
+		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocatorProvider, usersConnectionRepository, connectionRepositoryProvider, signInService);
 	}
 	
 	private String getSecureUrl() {

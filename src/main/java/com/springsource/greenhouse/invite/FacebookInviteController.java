@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.social.connect.MultiUserServiceProviderConnectionRepository;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.facebook.api.FacebookApi;
 import org.springframework.social.facebook.api.Reference;
 import org.springframework.stereotype.Controller;
@@ -48,7 +48,7 @@ public class FacebookInviteController {
 
 	private final Provider<FacebookApi> facebookApiProvider;
 	
-	private final MultiUserServiceProviderConnectionRepository connectionRepository;
+	private final UsersConnectionRepository connectionRepository;
 	
 	private final AccountRepository accountRepository;
 	
@@ -58,7 +58,7 @@ public class FacebookInviteController {
 	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
 	 */
 	@Inject
-	public FacebookInviteController(Provider<FacebookApi> facebookApiProvider, MultiUserServiceProviderConnectionRepository connectionRepository, AccountRepository accountRepository) {
+	public FacebookInviteController(Provider<FacebookApi> facebookApiProvider, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
 		this.facebookApiProvider = facebookApiProvider;
 		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
@@ -112,9 +112,9 @@ public class FacebookInviteController {
 		for (Reference friend : friends) {
 			providerUserIds.add(friend.getId());
 		}
-		Set<String> localUserIds = connectionRepository.findLocalUserIdsConnectedTo("facebook", providerUserIds);
-		List<Long> friendAccountIds = new ArrayList<Long>(localUserIds.size());
-		for (String localUserId : localUserIds) {
+		Set<String> userIds = connectionRepository.findUserIdsConnectedTo("facebook", providerUserIds);
+		List<Long> friendAccountIds = new ArrayList<Long>(userIds.size());
+		for (String localUserId : userIds) {
 			friendAccountIds.add(Long.valueOf(localUserId));
 		}
 		return friendAccountIds;

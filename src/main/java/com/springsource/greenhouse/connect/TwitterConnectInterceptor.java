@@ -15,8 +15,8 @@
  */
 package com.springsource.greenhouse.connect;
 
-import org.springframework.social.connect.ServiceProviderConnection;
-import org.springframework.social.connect.ServiceProviderConnectionFactory;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.social.twitter.api.TwitterApi;
 import org.springframework.util.StringUtils;
@@ -30,15 +30,15 @@ import com.springsource.greenhouse.account.AccountUtils;
  */
 public class TwitterConnectInterceptor implements ConnectInterceptor<TwitterApi> {
 
-	public void preConnect(ServiceProviderConnectionFactory<TwitterApi> provider, WebRequest request) {
+	public void preConnect(ConnectionFactory<TwitterApi> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAMETER))) {
 			request.setAttribute(POST_TWEET_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}
 	}
 
-	public void postConnect(ServiceProviderConnection<TwitterApi> connection, WebRequest request) {
+	public void postConnect(Connection<TwitterApi> connection, WebRequest request) {
 		if (request.getAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
-			connection.getServiceApi().timelineOperations().updateStatus("Join me at the Greenhouse! " + AccountUtils.getCurrentAccount().getProfileUrl());
+			connection.getApi().timelineOperations().updateStatus("Join me at the Greenhouse! " + AccountUtils.getCurrentAccount().getProfileUrl());
 			request.removeAttribute(POST_TWEET_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		}
 	}

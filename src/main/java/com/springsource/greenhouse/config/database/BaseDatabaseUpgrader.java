@@ -26,7 +26,7 @@ import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 import org.springframework.jdbc.versioned.DatabaseUpgrader;
 import org.springframework.jdbc.versioned.DatabaseVersion;
 import org.springframework.jdbc.versioned.GenericDatabaseUpgrader;
-import org.springframework.social.connect.jdbc.JdbcMultiUserServiceProviderConnectionRepository;
+import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 
 /**
  * Performs migrations against the Greenhouse database.
@@ -85,7 +85,7 @@ class BaseDatabaseUpgrader {
 		builder.addChange(databaseResource("install/Invite.sql"));		
 		builder.addChange(databaseResource("install/Venue.sql"));
 		builder.addChange(databaseResource("install/Event.sql"));
-		builder.addChange(new ClassPathResource("JdbcMultiUserServiceProviderConnectionRepository.sql", JdbcMultiUserServiceProviderConnectionRepository.class));
+		builder.addChange(new ClassPathResource("JdbcUsersConnectionRepository.sql", JdbcUsersConnectionRepository.class));
 		addInstallChanges(builder);
 		upgrader.addChangeSet(builder.getChangeSet());
 	}
