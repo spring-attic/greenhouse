@@ -150,6 +150,32 @@ public class JdbcEventRepository implements EventRepository {
 		jdbcTemplate.update(INSERT_LEADER , event.getId(), id, form.getLeaderID());
 	}
 		
+	/*  public void createSession(Long accountId, Event event, EventSessionForm form) {
+	    int venue = jdbcTemplate.queryForInt(SELECT_VENUE_ID);
+	    int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
+	    id = id +1;
+	    if (form.getLeaderID()== null){
+	       jdbcTemplate.update(INSERT_LEADER, form.getLeaderName());
+	       int leaderId = jdbcTemplate.queryForInt(SELECT_LEADER_ID);
+	       jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
+	      jdbcTemplate.update(INSERT_LEADER_ID , event.getId(), id, leaderId);
+	      
+	    }else
+	    {
+	    jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
+	    jdbcTemplate.update(INSERT_LEADER_ID , event.getId(), id, form.getLeaderID());
+	    }
+	}*/
+	
+	@Transactional
+	public void createRoom(Long accountId, Event event, EventRoomForm form) {
+		int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID, event.getId());
+		int id = jdbcTemplate.queryForInt(SELECT_ROOM_ID, venue);
+		id = id + 1;
+		jdbcTemplate.update(INSERT_ROOM, venue, id, form.getName(), form.getCapacity(), form.getLocationHint());
+	}
+	
+	
 	@Transactional
 	public String createTrack(Long accountId, Event event, EventTrackForm form) throws DuplicateKeyException {
 		String slug = event.getSlug();
@@ -170,6 +196,9 @@ public class JdbcEventRepository implements EventRepository {
 	}
 	public EventTrackForm getNewTrackForm(){
 		return new EventTrackForm();
+	}
+	public EventRoomForm getNewRoomForm(){
+		return new EventRoomForm();
 	}
 	
 	public EventTrackForm getTrackForm(Long eventId, String trackcode) {
@@ -309,7 +338,9 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String INSERT_VENUE = "insert into venue (Name, postaladdress, latitude, longitude, locationhint, createdby) values (?, ?, ?, ?, ?, ?)";
 	
-	private static final String INSERT_TRACK = "insert into eventtrack (event, code, name, description, chair) values (?, ?, ?, ?, ?)";
+	private static final String INSERT_TRACK = "INSERT INTO EVENTTRACK(EVENT, CODE, NAME, DESCRIPTION, CHAIR) VALUES (?, ?, ?, ?, ?)";
+	
+	private static final String INSERT_ROOM = "insert into venueroom (venue, id, name, capacity, locationhint) values (?, ?, ?, ?, ?)";
 	
 	private static final String INSERT_SESSION = "insert into eventsession (event, id, title, description, starttime, endtime, venue) values (?, ?, ?, ?, ?, ?, ?)";
 		
@@ -322,6 +353,10 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String SELECT_SESSION_ID = "SELECT MAX(ID) FROM EVENTSESSION WHERE EVENT = ?";
 	
 	private static final String SELECT_VENUE_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM VENUE)";
+	
+	private static final String FIND_VENUE_ID = "SELECT VENUE FROM EVENTVENUE WHERE EVENT = ?";
+		
+	private static final String SELECT_ROOM_ID = "SELECT MAX(ID) FROM VENUEROOM WHERE VENUE = ?";
 	
 	private static final String INSERT_EVENT_VENUE = "insert into eventvenue (event, venue) values (?, ?)";
 	

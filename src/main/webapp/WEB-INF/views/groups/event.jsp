@@ -10,7 +10,14 @@
 	<dt>When</dt>
 	<dd><d:dateRange startTime="${event.startTime}" endTime="${event.endTime}" timeZone="${event.timeZone}" /></dd>
 	<dt>Where</dt>
-	<dd><c:out value="${event.location}" /></dd>
+	<dd><c:out value="${event.location}" />
+	 	<s:url value="/groups/{group}/events/{year}/{month}/{slug}/rooms/new" var="roomsUrl">
+		<s:param name="group" value="${event.groupSlug}" />
+		<s:param name="year" value="${event.startTime.year}" />
+		<s:param name="month" value="${event.startTime.monthOfYear}" />
+		<s:param name="slug" value="${event.slug}" />
+	</s:url><a href="${roomsUrl}">Add a Room</a>
+	</dd>
 	<dt>Description</dt>
 	<dd><c:out value="${event.description}" escapeXml="true" /></dd>
 	<dt>Sessions:</dt>

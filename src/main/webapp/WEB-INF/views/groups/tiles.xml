@@ -20,7 +20,11 @@
 		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewSession.jsp"/>
 	</definition>
 	
-	 <definition name="groups/event/track" extends="page">
+	<definition name="groups/event/newroom" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewRoom.jsp"/>
+ 	</definition>
+
+	<definition name="groups/event/track" extends="page">
 		<put-attribute name ="content"  value="/WEB-INF/views/groups/track.jsp"/>
 	</definition>
 	

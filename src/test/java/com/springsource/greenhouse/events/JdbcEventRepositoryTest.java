@@ -165,6 +165,18 @@ public class JdbcEventRepositoryTest {
     	eventRepository.createSession(2L, event, form);
    	}
     
+    @Test
+    @Transactional
+    public void createRoom(){
+       	Event event = new Event(2L, null, null, null, null, null, null, null, null);
+     	EventRoomForm form = new EventRoomForm();
+     	form.setName("Test");
+     	form.setCapacity(400);
+     	form.setLocationHint("This is a test");
+       	
+      	eventRepository.createRoom(2L, event, form);
+    }
+    
 	// internal helpers
 	
 	private void assertMobile(EventSession session, boolean favorite) {

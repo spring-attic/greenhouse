@@ -112,11 +112,15 @@ public interface EventRepository {
 	
 	String createTrack(Long accountId, Event event, EventTrackForm form);
 	
+	void createRoom(Long accountId, Event event, EventRoomForm form);
+	
 	EventForm getNewEventForm();
 	
 	EventSessionForm getNewSessionForm();
 	
 	EventTrackForm getNewTrackForm();
+	
+	EventRoomForm getNewRoomForm();
 	
 	public String[] selectSpeakerNames();
 	

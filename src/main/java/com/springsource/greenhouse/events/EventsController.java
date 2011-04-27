@@ -227,11 +227,27 @@ public class EventsController {
 	return "redirect:/events";
 	}
 
-	/*@RequestMapping(value="/groups/NewSession", method=RequestMethod.GET) 
-	public EventSessionForm NewSessionForm(Model model) {
-		String speakerList[] = eventRepository.selectSpeakerNames();
-		model.addAttribute("speakerList", speakerList);
-		return eventRepository.getNewSessionForm();}*/
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/rooms/new", method=RequestMethod.GET, headers="Accept=text/html") 
+	public String NewRoomForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
+			model.addAttribute(eventRepository.getNewRoomForm());
+			Event event = eventRepository.findEventBySlug(group, year, month, slug);
+			model.addAttribute(event);
+			return "groups/event/newroom";
+	}
+		
+	
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/rooms", method=RequestMethod.POST) 
+	public String createRoom (@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @Valid EventRoomForm form, BindingResult bindingResult, Account account, Model model){
+			if (bindingResult.hasErrors()) {
+				Event event = eventRepository.findEventBySlug(group, year, month, slug);
+				model.addAttribute(event);
+				return "groups/event/newroom";
+			}
+			Event event = eventRepository.findEventBySlug(group, year, month, slug);
+			eventRepository.createRoom(account.getId(), event, form);
+			return "redirect:/groups/" + group + "/events/" + year + "/" + month + "/" + slug;
+	}
+	
 	
 	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/sessions/new", method=RequestMethod.GET, headers="Accept=text/html")
 	public String NewSessionForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model){
