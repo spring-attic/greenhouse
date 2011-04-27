@@ -39,6 +39,7 @@ public class EventRoomForm {
 	@NotEmpty
 	private String name;
 	
+	@NotNull
 	private int capacity;
 	
 	private String locationHint;
