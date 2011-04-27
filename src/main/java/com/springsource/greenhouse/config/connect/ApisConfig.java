@@ -26,7 +26,7 @@ import org.springframework.social.twitter.api.TwitterApi;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 
 @Configuration
-public class ServiceApisConfig {
+public class ApisConfig {
 
 	@Bean
 	@Scope(value="request")	

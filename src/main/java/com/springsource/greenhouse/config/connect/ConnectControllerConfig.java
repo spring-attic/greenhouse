@@ -15,9 +15,6 @@
  */
 package com.springsource.greenhouse.config.connect;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -30,7 +27,6 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.signin.web.ProviderSignInController;
 import org.springframework.social.connect.signin.web.SignInService;
 import org.springframework.social.connect.web.ConnectController;
-import org.springframework.social.connect.web.ConnectInterceptor;
 
 import com.springsource.greenhouse.connect.FacebookConnectInterceptor;
 import com.springsource.greenhouse.connect.TwitterConnectInterceptor;
@@ -46,10 +42,8 @@ public class ConnectControllerConfig {
 	public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator, 
 			Provider<ConnectionRepository> connectionRepositoryProvider, ProfilePictureService profilePictureService) {
 		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator, connectionRepositoryProvider);
-		List<ConnectInterceptor<?>> interceptors = new ArrayList<ConnectInterceptor<?>>();
-		interceptors.add(new FacebookConnectInterceptor(profilePictureService));
-		interceptors.add(new TwitterConnectInterceptor());
-		controller.setInterceptors(interceptors);
+		controller.addInterceptor(new FacebookConnectInterceptor(profilePictureService));
+		controller.addInterceptor(new TwitterConnectInterceptor());
 		return controller;
 	}
 	
