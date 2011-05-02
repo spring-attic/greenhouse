@@ -2,7 +2,9 @@
 <beans:beans xmlns="http://www.springframework.org/schema/integration"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:si-redis="http://www.springframework.org/schema/integration/redis"
 	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
+	    http://www.springframework.org/schema/integration/redis http://www.springframework.org/schema/integration/redis/spring-integration-redis-2.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- Gateway that publishes signed up messages -->
@@ -38,6 +40,6 @@
 	<!-- RecentActivity Channel Adapter -->
 	<publish-subscribe-channel id="recentActivity" />
 	
-	<logging-channel-adapter channel="recentActivity" />
+	<si-redis:outbound-channel-adapter channel="recentActivity" message-converter="jsonConverter" topic="notifications"/>
 			
 </beans:beans>
