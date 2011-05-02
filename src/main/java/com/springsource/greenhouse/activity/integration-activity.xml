@@ -38,6 +38,14 @@
 	<!-- RecentActivity Channel Adapter -->
 	<publish-subscribe-channel id="recentActivity" />
 	
-	<logging-channel-adapter channel="recentActivity" />
+	<!-- <logging-channel-adapter channel="recentActivity" /> -->
+	
+	<outbound-channel-adapter channel="recentActivity" ref="redisOutbound"/>
+	
+	<beans:bean id="redisOutbound" class="org.springframework.integration.redis.outbound.RedisPublishingMessageHandler" >
+		<beans:constructor-arg ref="redisConnectionFactory"/>
+		<beans:constructor-arg ref="jsonConverter"/>
+		<beans:property name="defaultRedisChannel" value="notifications"/>
+	</beans:bean>
 			
 </beans:beans>

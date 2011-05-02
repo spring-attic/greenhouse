@@ -338,11 +338,33 @@
 			</exclusions>			
 		</dependency>
 		
-		<!-- Comet -->
+		<!-- Redis / Spring Key-Value -->
+	    <dependency>
+	      <groupId>redis.clients</groupId>
+	      <artifactId>jedis</artifactId>
+	      <version>1.5.2</version>
+	    </dependency>
 		<dependency>
-			<groupId>org.atmosphere</groupId>
-			<artifactId>atmosphere-runtime</artifactId>
-			<version>0.7</version>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.0.0.M3</version>
+		</dependency>
+		<dependency>
+  			<groupId>org.springframework.integration</groupId>
+  			<artifactId>spring-integration-redis</artifactId>
+  			<version>2.1.0.BUILD-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+  			<groupId>org.springframework.integration</groupId>
+  			<artifactId>spring-integration-event</artifactId>
+  			<version>2.0.3.RELEASE</version>
+		</dependency>
+		
+		<!-- CloudFoundry runtime support -->
+		<dependency>	
+			<groupId>org.cloudfoundry</groupId>
+			<artifactId>cloudfoundry-runtime</artifactId>
+			<version>0.6.0</version>
 		</dependency>
 
 		<!-- Test -->
@@ -541,6 +563,17 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                	<useProjectReferences>false</useProjectReferences>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+					<wtpversion>2.0</wtpversion>
+				</configuration>
+            </plugin>
 		</plugins>		
 	</build>
 

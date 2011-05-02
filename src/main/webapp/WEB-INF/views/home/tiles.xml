@@ -12,7 +12,7 @@
             <add-attribute value="/recent/recentActivity.css"/>
         </put-list-attribute>
 		<put-list-attribute name="scripts">
-            <add-attribute value="/jquery-atmosphere/0.7/jquery.atmosphere.js"/>
+            <add-attribute value="/socket-io/0.6.2/socket.io.js"/>
             <add-attribute value="/recent/recentActivity.js"/>
         </put-list-attribute>
 	</definition>
