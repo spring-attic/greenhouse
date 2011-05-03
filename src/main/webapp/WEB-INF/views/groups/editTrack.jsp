@@ -23,12 +23,15 @@
 	<fieldset>
 	<form:label path="name">Track Name <form:errors path="name" cssClass="error" /></form:label>
 		<form:input path="name" />
-	<form:label path="code">Track Code <form:errors path="code" cssClass="error" /></form:label>
-		<form:input path="code" />
-		
-		<form:label path="description">Track Description <form:errors path="description" cssClass="error" /></form:label>
+	<form:label path="description">Track Description <form:errors path="description" cssClass="error" /></form:label>
 		<form:textarea cols="55" rows="8" path="description" />
-		
+	<form:label path="roomID">Assign to Room <form:errors path="roomID" cssClass="error" /></form:label>
+	<form:select path="roomID">
+		<form:option value="">Room</form:option>
+			<c:forEach var="room" items="${roomList}" varStatus="status">
+		<form:option value="${status.index+1}">${room}</form:option>
+			</c:forEach>
+	</form:select>
 		
 	</fieldset>
 	

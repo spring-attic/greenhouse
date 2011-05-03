@@ -268,6 +268,14 @@ public class EventsController {
 				model.addAttribute(event);
 				return "groups/event/newsession";
 			}
+			if (form.getStartTime().getMillis() >= form.getEndTime().getMillis()){
+				bindingResult.rejectValue("endDate", "start date must be before end date", "start date must be before end date");
+				String speakerList[] = eventRepository.selectSpeakerNames();
+				model.addAttribute("speakerList", speakerList);
+				Event event = eventRepository.findEventBySlug(group, year, month, slug);
+				model.addAttribute(event);
+				return "groups/event/newsession";
+			}
 			Event event = eventRepository.findEventBySlug(group, year, month, slug);
 			eventRepository.createSession(account.getId(), event, form);
 			return "redirect:/groups/" + event.getGroupSlug() + "/events/" + event.getStartTime().getYear() + "/" + event.getStartTime().getMonthOfYear() + "/" + event.getSlug();
@@ -276,7 +284,6 @@ public class EventsController {
 	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/new", method=RequestMethod.GET, headers="Accept=text/html") 
 	public String NewTrackForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
 		model.addAttribute(eventRepository.getNewTrackForm());
-		//return eventRepository.getNewTrackForm();
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(event);
 		return "groups/event/newtrack";
@@ -290,6 +297,11 @@ public class EventsController {
 			return "groups/event/newtrack";
 		}
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
+		if (form.getCode().isEmpty()){ //this is necessary because @NotEmpty cannot be added to form if the edit form doesnt allow user to edit the code once it is made
+			bindingResult.rejectValue("code", "code must be entered", "code must be entered");
+			model.addAttribute(event);
+			return "groups/event/newtrack";
+		}
 		try {
 		eventRepository.createTrack(account.getId(), event, form);
 		} catch (DuplicateKeyException e){
@@ -322,9 +334,11 @@ public class EventsController {
 	}
 	
 	@RequestMapping(value="/greenhouse/groups/{group}/events/{year}/{month}/{slug}/tracks/edit/{trackcode}", method=RequestMethod.GET, headers="Accept=text/html")
-	public String editForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, Account account, Model model) {
+	public String editTrackForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(eventRepository.getTrackForm(event.getId(), trackcode));
+		String roomList[] = eventRepository.selectRoomNames(event.getVenues().iterator().next().getId());
+		model.addAttribute("roomList", roomList);
 		model.addAttribute("event", event);
 		model.addAttribute("trackcode", trackcode);
 		return "groups/event/track/edit";
@@ -338,14 +352,14 @@ public class EventsController {
 			return "groups/event/track/edit";
 		}
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		try {
+		//try {
 		eventRepository.updateTrack(event, form, trackcode);
-		} catch (DuplicateKeyException e){
-			bindingResult.rejectValue("code", "code already exists for this event", "code already exists for this event");
-			model.addAttribute(event);
-			return "groups/event/track/edit";
-		}
-		return "redirect:/groups/" + group + "/events/" + year + "/" + month + "/" + slug + "tracks/" + eventRepository.updateTrack(event, form, trackcode);
+		//}catch (DuplicateKeyException e){
+		//bindingResult.rejectValue("code", "code already exists for this event", "code already exists for this event");
+		//model.addAttribute(event);
+		//return "groups/event/track/edit";
+		//}
+		return "redirect:/groups/" + group + "/events/" + year + "/" + month + "/" + slug + "/tracks/" + trackcode;
 	}
 
 }

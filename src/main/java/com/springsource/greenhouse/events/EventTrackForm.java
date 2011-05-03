@@ -18,7 +18,7 @@ package com.springsource.greenhouse.events;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * Model backing the "Register New Event" form.
+ * Model backing the "Register New Event Track" form.
  * @author UA Team
  */
 
@@ -29,8 +29,10 @@ public class EventTrackForm {
 
 	private String description;
 	
-	@NotEmpty
+	//@NotEmpty
 	private String code;
+	
+	private Integer roomID;
 	
 	/**
 	 * The title of the event.
@@ -58,6 +60,12 @@ public class EventTrackForm {
 	public void setCode(String code) {
 		this.code = code;
 	}
-
 	
+	public Integer getRoomID() {
+		return roomID;
+	}
+	public void setRoomID(Integer roomID) {
+		this.roomID = roomID;
+	}
+
 }

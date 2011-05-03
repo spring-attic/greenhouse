@@ -208,9 +208,10 @@ public class JdbcEventRepository implements EventRepository {
 		return jdbcTemplate.queryForObject(SELECT_TRACK_FORM, trackFormMapper, eventId, trackcode);
 	}
 	
-	public String updateTrack(Event event, EventTrackForm form, String originalcode) {
-		jdbcTemplate.update(UPDATE_TRACK_FORM, form.getName(), form.getCode(), form.getDescription(), event.getId(), originalcode);
-		return form.getCode();
+	public String updateTrack(Event event, EventTrackForm form, String trackcode) {
+		jdbcTemplate.update(UPDATE_TRACK_FORM, form.getName(), trackcode, form.getDescription(), event.getId(), trackcode);
+		jdbcTemplate.update(UPDATE_TRACK_ROOMS, form.getRoomID(), trackcode, event.getId());
+		return trackcode;
 	}
 	
 	public String[] selectSpeakerNames() {
@@ -249,7 +250,14 @@ public class JdbcEventRepository implements EventRepository {
 		return hints;
 	}
 	
-	
+	public String[] selectRoomNames(Long venueID) {
+		int num = jdbcTemplate.queryForInt(SELECT_NUM_ROOMS, venueID);
+		String[] rooms = new String[num];
+		for (int i=1; i<=num; i++){
+			rooms[i-1] = jdbcTemplate.queryForObject(SELECT_ROOM_NAMES, String.class, i, venueID);
+		}
+		return rooms;
+	}
 	
 //	public String[] selectTracks(Long event) {
 //		int num = jdbcTemplate.queryForInt(SELECT_NUM_TRACK);
@@ -316,12 +324,13 @@ public class JdbcEventRepository implements EventRepository {
 		}
 	};
 	
+	/*
 	private final RowMapper<EventTrack> trackMapper = new RowMapper<EventTrack>() {
 		public EventTrack mapRow(ResultSet rs, int row) throws SQLException {
 			EventTrack track = new EventTrack(rs.getString("code"), rs.getString("name"), rs.getString("description"));
 			return track;
 		}
-	};
+	};*/
 	
 	private RowMapper<EventTrackForm> trackFormMapper = new RowMapper<EventTrackForm>() {
 		public EventTrackForm mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -381,7 +390,11 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String SELECT_VENUE_LOCATIONHINTS = "SELECT LOCATIONHINT FROM VENUE where ID  = ?";
 	
+	private static final String SELECT_ROOM_NAMES = "SELECT NAME FROM VENUEROOM where ID  = ? and VENUE = ?";
+		
 	private static final String SELECT_NUM_VENUE = "SELECT MAX(ID) FROM VENUE";
+	
+	private static final String SELECT_NUM_ROOMS = "SELECT MAX(ID) FROM VENUEROOM WHERE VENUE = ?";
 	
 	//private static final String SELECT_NUM_TRACK = "SELECT COUNT(1) FROM EVENTTRACK";
 	
@@ -398,6 +411,8 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String SELECT_TRACK_FORM = "select name, code, description from EVENTTRACK where event = ? and code = ?";
 	
 	private static final String UPDATE_TRACK_FORM = "update EVENTTRACK set name = ?, code = ?, description = ? where event = ? and code = ?";
+	
+	private static final String UPDATE_TRACK_ROOMS = "update EVENTSESSION set room = ? where track = ? and event = ?";
 	
 	private static final String SELECT_EVENT_SESSIONS = SELECT_FROM_EVENT_SESSION +
 		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
