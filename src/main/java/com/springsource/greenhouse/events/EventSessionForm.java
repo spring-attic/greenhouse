@@ -47,12 +47,22 @@ public class EventSessionForm {
 	@NotEmpty
 	private String endAmPm;
 	
-	@NotNull
 	private Integer leaderID;
 	
+	private String name;
 	
+	private String company;
 	
-	 /**
+	private String companyTitle;
+	
+	private String companyURL;
+	
+	private String twitterName;
+	
+	private String track;
+		
+ 
+	/**
 	 * The title of the event.
 	 */
 	public String getTitle() {
@@ -190,5 +200,36 @@ public class EventSessionForm {
 	public void setLeaderID(Integer leaderID) {
 		this.leaderID = leaderID;
 	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	public String getCompanyTitle() {
+		return companyTitle;
+	}
+	public void setCompanyTitle(String companyTitle) {
+		this.companyTitle = companyTitle;
+	}
+	public String getCompanyURL() {
+		return companyURL;
+	}
+	public void setCompanyURL(String companyURL) {
+		this.companyURL = companyURL;
+	}
+	public String getTwitterName() {
+		return twitterName;
+	}
+	public void setTwitterName(String twitterName) {
+		this.twitterName = twitterName;
+	}
+
 	
 }

@@ -263,7 +263,7 @@ public class EventsController {
 	public String createsessions (@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @Valid EventSessionForm form, BindingResult bindingResult, Account account, Model model){
 			if (bindingResult.hasErrors()) {
 				String speakerList[] = eventRepository.selectSpeakerNames();
-					model.addAttribute("speakerList", speakerList);
+				model.addAttribute("speakerList", speakerList);
 				Event event = eventRepository.findEventBySlug(group, year, month, slug);
 				model.addAttribute(event);
 				return "groups/event/newsession";

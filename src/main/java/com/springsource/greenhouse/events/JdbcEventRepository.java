@@ -142,30 +142,33 @@ public class JdbcEventRepository implements EventRepository {
 		return slug;
 	}
 	
-	public void createSession(Long accountId, Event event, EventSessionForm form) {
-		int venue = 1;
+/*	public void createSession(Long accountId, Event event, EventSessionForm form) {
+		int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID, event.getId()); ;
 		int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
 		id = id +1;
 		jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
-		jdbcTemplate.update(INSERT_LEADER , event.getId(), id, form.getLeaderID());
-	}
+		jdbcTemplate.update(INSERT_LEADER, form.getLeaderID(),form.getName(),form.getCompany(),form.getCompanyTitle(),form.getCompanyURL(),form.getTwitterName() );
 		
-	/*  public void createSession(Long accountId, Event event, EventSessionForm form) {
-	    int venue = jdbcTemplate.queryForInt(SELECT_VENUE_ID);
+		jdbcTemplate.update(INSERT_SESSION_LEADER , event.getId(), id, form.getLeaderID());
+		
+	}*/
+		
+	  public void createSession(Long accountId, Event event, EventSessionForm form) {
+	    int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID,event.getId());
 	    int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
 	    id = id +1;
 	    if (form.getLeaderID()== null){
-	       jdbcTemplate.update(INSERT_LEADER, form.getLeaderName());
+	       jdbcTemplate.update(INSERT_LEADER ,form.getName(),form.getCompany(),form.getCompanyTitle(),form.getCompanyURL(),form.getTwitterName());
 	       int leaderId = jdbcTemplate.queryForInt(SELECT_LEADER_ID);
 	       jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
-	      jdbcTemplate.update(INSERT_LEADER_ID , event.getId(), id, leaderId);
+	      jdbcTemplate.update(INSERT_SESSION_LEADER, event.getId(), id, leaderId);
 	      
 	    }else
 	    {
 	    jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
-	    jdbcTemplate.update(INSERT_LEADER_ID , event.getId(), id, form.getLeaderID());
+	    jdbcTemplate.update(INSERT_SESSION_LEADER , event.getId(), id, form.getLeaderID());
 	    }
-	}*/
+	}
 	
 	@Transactional
 	public void createRoom(Long accountId, Event event, EventRoomForm form) {
@@ -245,6 +248,8 @@ public class JdbcEventRepository implements EventRepository {
 		}
 		return hints;
 	}
+	
+	
 	
 //	public String[] selectTracks(Long event) {
 //		int num = jdbcTemplate.queryForInt(SELECT_NUM_TRACK);
@@ -342,9 +347,11 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String INSERT_ROOM = "insert into venueroom (venue, id, name, capacity, locationhint) values (?, ?, ?, ?, ?)";
 	
-	private static final String INSERT_SESSION = "insert into eventsession (event, id, title, description, starttime, endtime, venue) values (?, ?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_SESSION = "insert into eventsession (event, id, title, description, hashtag, starttime, endtime, venue) values (?, ?, ?,?, ?, ?, ?, ?)";
 		
-	private static final String INSERT_LEADER = "insert into eventsessionleader (event, session, leader) values (?, ?, ?)";
+	private static final String INSERT_SESSION_LEADER = "insert into eventsessionleader (event, session, leader) values (?, ?, ?)";
+	
+	private static final String INSERT_LEADER= "insert into leader(name, company, title,companyurl,twitterusername)values(?,?,?,?,?) ";
 	
 	//private static final String SELECT_LEADER_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM LEADER)";
 
@@ -367,6 +374,8 @@ public class JdbcEventRepository implements EventRepository {
 	//private static final String SELECT_EVENT_SESSIONS = "SELECT ID, STARTTIME, ENDTIME, TITLE, DESCRIPTION, HASHTAG, RATING, VENUE, ROOM FROM EVENTSESSION where EVENT  = ?";
 	
 	private static final String SELECT_LEADER= "SELECT NAME FROM LEADER where ID  = ?";
+	
+	private static final String SELECT_LEADER_ID="SELECT MAX(ID) FROM LEADER";
 	
 	private static final String SELECT_VENUE_ADDRESSES = "SELECT POSTALADDRESS FROM VENUE where ID  = ?";
 	

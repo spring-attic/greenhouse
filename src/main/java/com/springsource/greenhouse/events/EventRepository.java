@@ -124,6 +124,8 @@ public interface EventRepository {
 	
 	public String[] selectSpeakerNames();
 	
+	
+	
 	public String[] selectVenueNames();
 	
 	public String[] selectVenueAddresses();

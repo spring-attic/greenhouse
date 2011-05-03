@@ -8,6 +8,8 @@
 <form:label path="title">Title <form:errors path="title" cssClass="error" /></form:label>
 		<form:input path="title" />
 		
+		<form:label path="hashtag">Hashtag<form:errors path="hashtag" cssclass="error"/></form:label>
+		<form:input path="hashtag"/>
 
 		<form:label path="startDate">Start Date <form:errors path="startDate" cssClass="error" /><form:errors path="startHour" cssClass="error" /></form:label>
 		<div class="multiple">
