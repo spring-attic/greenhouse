@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+	<definition name="signin" extends="page">
+		<put-attribute name="title" value="Sign In | Greenhouse" />
+		<put-attribute name="content" value="/WEB-INF/views/signin/signin.jsp" />
+	</definition>
+
+</tiles-definitions>

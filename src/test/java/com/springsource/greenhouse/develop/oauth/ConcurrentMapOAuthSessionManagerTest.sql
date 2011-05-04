@@ -1,0 +1,3 @@
+insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Roy', 'Clarkson', 'rclarkson@vmware.com', 'atlanta', 'rclarkson', 'M', '1977-12-01');
+insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for the iPhone', 'greenhouse-for-the-iphone', 'Awesome', 'SpringSource', 'http://www.springsource.com', '123456789', '987654321', 'x-com-springsource-greenhouse://oauth-response');
+insert into AppDeveloper (app, member) values (1, 1);

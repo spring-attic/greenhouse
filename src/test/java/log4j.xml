@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.springsource.greenhouse.api">
+	<logger name="com.springsource.greenhouse">
 		<level value="debug" />
 	</logger>
 	

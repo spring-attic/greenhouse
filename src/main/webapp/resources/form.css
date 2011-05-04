@@ -1,0 +1,123 @@
+form {
+	font-size: 1em;
+	width: 40em;
+	color: #1b1b1b;
+	text-align: left;
+	position: relative;
+	margin: 1em auto
+}
+
+/* Elements */
+form label, form legend {
+	padding: 0;
+	margin: 0.3em 0;
+}
+
+form fieldset {
+	padding: 0.7em;
+	margin: 0 0 0.5em 0;
+}
+
+div .checkbox {
+	padding: 0.7em;
+	margin: 0 0 0.5em 0;
+}
+
+form label {
+	font-weight: bold;
+}
+
+form input {
+	width: 70%;
+	line-height: 1.5em;
+	padding: 0.15em;
+}
+
+form input, form textarea, form select {
+	display: block;
+	margin-bottom: 1em;
+	font-size: 1em;
+	border: 1px solid #bbb;
+	padding: 0.15em;
+	margin-right: 1em
+}
+
+form .radio input, form .checkbox input {
+	width: auto;
+	border: none;
+}
+
+form .radio label, form .radio input, form .checkbox label, form .checkbox input {
+	display: inline;
+	margin: 0 1.5em 0 0
+}
+
+form .radio input, form .checkbox input {
+	margin: 0 0.3em 0 0
+}
+
+form input[type='submit'], form input[type='image'] {
+	width: auto;
+}
+
+form .multiple label {
+	float: left;
+	width: 29%;
+	overflow: hidden;
+	padding-left: 1px;
+}
+
+form .multiple input {
+	cursor: pointer;
+}
+
+form .multiple select {
+	display: inline;
+	margin: 0 1.5em 0 0
+}
+
+/* Button */
+form button {
+	margin: 0.3em 0;
+	border: 1px solid #ccc;
+	background-color: #eee;
+	font-size: 1em;
+	cursor: pointer;
+	padding: 0.5em
+}
+
+form button:hover {
+	background-color: #E6EFC2;
+	border: 1px solid #C6D880;
+	color: #529214;
+}
+
+form button:active {
+	background-color: #333;
+	color: white;
+	border: 1px solid #000;
+}
+
+/* information */
+form .formInfo {
+	margin-bottom: 1em;
+	padding-bottom: 0.5em;
+	border-bottom: 0.1em solid #ddd;
+}
+
+form .formInfo h2 {
+	color: #6DB33F;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-bottom: 1em
+}
+
+form .formInfo p {
+	text-align: justify
+}
+
+form .required {
+	color: #ff3838;
+	font-weight: bold;
+	font-size: 0.8em;
+}

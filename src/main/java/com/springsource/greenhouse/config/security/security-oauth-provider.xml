@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:oauth="http://www.springframework.org/schema/security/oauth"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security/oauth http://www.springframework.org/schema/security/spring-security-oauth-1.0.xsd">
+
+	<!-- Steps of OAuth 1.0
+		POST /oauth/request_token?oauth_consumer_key&oauth_callback (returns unauthorized token)
+		GET /oauth/confirm_access?oauth_token (returns secure authorization form)
+		(User) POST /oauth/authorize?requestToken&callbackUrl (authorizes oauth token, redirect to callbackUrl)
+		POST /oauth/access_token?oauth_consumer_key&oauth_token&oauth_verifier
+	 -->
+	 
+	<!-- Spring Security OAuth 1.0 Provider Configuration -->	
+	<oauth:provider consumer-details-service-ref="appConsumerDetailsService" token-services-ref="OAuthSessionManagerProviderTokenServices"
+		request-token-url="/oauth/request_token" authenticate-token-url="/oauth/authorize"
+		authentication-failed-url="/oauth/confirm_access" access-token-url="/oauth/access_token" require10a="false" />
+
+	<!-- Sends a UNAUTHORIZED response back to clients attempting to access protected resources but who have not yet authenticated via OAuth -->
+	<bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
+		<property name="realmName" value="Greenhouse" />
+	</bean>
+    	
+</beans>

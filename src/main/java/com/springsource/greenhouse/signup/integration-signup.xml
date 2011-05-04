@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:mail="http://www.springframework.org/schema/integration/mail"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
+		http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail-2.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- Gateway that publishes signed up messages -->
+	<gateway id="signedUpGateway" service-interface="com.springsource.greenhouse.signup.SignedUpGateway" default-request-channel="signedUpChannel" />
+	
+	<!-- Channel for signed up messages -->		 		
+	<publish-subscribe-channel id="signedUpChannel" />
+
+	<!-- ACTION PROCESSING -->
+	
+	<!-- The actionRepository saves a 'SignedUp' action to the database and outputs it to the actionChannel for us -->
+	<service-activator input-channel="signedUpChannel" expression="@actionRepository.saveSimpleAction('SignedUp', payload)" output-channel="nullChannel" />
+	
+	<!-- WELCOME MAIL -->
+	
+	<!-- Bridges to the asynchronous welcome mailer -->
+	<bridge input-channel="signedUpChannel" output-channel="welcomeMailerChannel" />
+	
+	<!-- Asynchronously dispatches welcome mails -->
+	<channel id="welcomeMailerChannel">
+		<dispatcher task-executor="taskExecutor" />
+	</channel>
+
+	<!-- Transforms a new Account to a welcome SimpleMailMessage -->
+	<transformer input-channel="welcomeMailerChannel" output-channel="welcomeMail">
+		<beans:bean class="com.springsource.greenhouse.signup.WelcomeMailTransformer" />
+	</transformer>
+
+	<!-- Sends the welcome SimpleMailMessage -->
+	<mail:outbound-channel-adapter id="welcomeMail" mail-sender="mailSender" />	
+
+</beans:beans>

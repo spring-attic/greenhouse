@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:si-redis="http://www.springframework.org/schema/integration/redis"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
+	    http://www.springframework.org/schema/integration/redis http://www.springframework.org/schema/integration/redis/spring-integration-redis-2.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<!-- Gateway that publishes signed up messages -->
+	<gateway id="actionGateway" service-interface="com.springsource.greenhouse.activity.action.ActionGateway" default-request-channel="actionChannel" />
+
+	<!-- For persisting simple actions -->
+	<beans:bean id="actionRepository" class="com.springsource.greenhouse.activity.action.JdbcActionRepository" />
+
+	<!-- Channel for Member Action messages -->
+	<publish-subscribe-channel id="actionChannel" />
+	
+	<!-- BADGE AWARDING -->
+
+	<beans:bean id="badgeSystem" class="com.springsource.greenhouse.activity.badge.BadgeSystemFactoryBean" />
+	
+	<beans:bean id="badgeRepository" class="com.springsource.greenhouse.activity.badge.JdbcBadgeRepository" />
+		
+	<!-- Sends Member Actions to the badging system for processing -->		 		
+	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="awardedBadgeChannel" />
+
+	<!-- AwardedBadge channel -->
+	<publish-subscribe-channel id="awardedBadgeChannel" />
+
+	<!-- TODO AwardedBadge Mail Notifier -->
+	
+	<!-- RECENT ACTIVITY -->
+	<transformer input-channel="actionChannel" output-channel="recentActivity" ref="recentActivityTransformer" />
+		
+	<transformer input-channel="awardedBadgeChannel" output-channel="recentActivity" ref="recentActivityTransformer" />
+	
+	<beans:bean id="recentActivityTransformer" class="com.springsource.greenhouse.activity.recent.RecentActivityTransformer" />
+	  	
+	<!-- RecentActivity Channel Adapter -->
+	<publish-subscribe-channel id="recentActivity" />
+
+	<logging-channel-adapter channel="recentActivity" />
+			
+	<beans:beans profile="standard">
+		<si-redis:outbound-channel-adapter channel="recentActivity" message-converter="jsonConverter" topic="notifications" />
+	</beans:beans>
+	
+</beans:beans>
