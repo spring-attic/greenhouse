@@ -10,7 +10,7 @@
 
 	<context-param>
     	<param-name>contextConfigLocation</param-name>
-    	<param-value>com.springsource.greenhouse.config</param-value>
+    	<param-value>com.springsource.greenhouse.api.config</param-value>
 	</context-param>
 	
 	<context-param>
@@ -22,28 +22,6 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
-	<!-- Allows attributes to be accessed on the next request -->
-	<filter>
-		<filter-name>flashMapFilter</filter-name>
-		<filter-class>org.springframework.web.flash.FlashMapFilter</filter-class>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>flashMapFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-	<!-- Enables support for DELETE and PUT request methods with web browser clients -->
-	<filter>
-		<filter-name>hiddenHttpMethodFilter</filter-name>
-		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>hiddenHttpMethodFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
 
 	<!-- Secures the application -->
 	<filter>
@@ -59,22 +37,6 @@
 		<filter-name>securityFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
-	<!-- H2 Database Console for managing the app's database -->
-	<servlet>
-		<servlet-name>H2Console</servlet-name>
-		<servlet-class>org.h2.server.web.WebServlet</servlet-class>
-		<init-param>
-			<param-name>-webAllowOthers</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>H2Console</servlet-name>
-		<url-pattern>/admin/h2/*</url-pattern>
-	</servlet-mapping>
 
 	<!-- Handles requests into the application -->
 	<servlet>

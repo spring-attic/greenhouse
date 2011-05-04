@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.springsource</groupId>
-	<artifactId>greenhouse</artifactId>
-	<name>greenhouse</name>
-	<description>The social destination for Spring developers</description>
+	<groupId>com.springsource.greenhouse</groupId>
+	<artifactId>greenhouse-api</artifactId>
+	<name>greenhouse-api</name>
+	<description>The social destination for Spring developers: REST API</description>
 	<url>http://greenhouse.springsource.org</url>
 	<inceptionYear>2010</inceptionYear>
 	<organization>
@@ -67,18 +67,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-			<version>${org.springframework.security-version}</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${org.springframework.security-version}</version>
 			<exclusions>
@@ -100,33 +88,8 @@
 			<version>1.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-core</artifactId>
-			<version>${org.springframework.integration-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-http</artifactId>
-			<version>${org.springframework.integration-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-mail</artifactId>
-			<version>${org.springframework.integration-version}</version>
-		</dependency>				
-		<dependency>
-			<groupId>org.springframework.mobile</groupId>
-			<artifactId>spring-mobile-device</artifactId>
-        	<version>1.0.0.M3</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-core</artifactId>
-        	<version>${org.springframework.social-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-facebook</artifactId>
         	<version>${org.springframework.social-version}</version>
 		</dependency>
 		<dependency>
@@ -134,21 +97,6 @@
 			<artifactId>spring-social-twitter</artifactId>
         	<version>${org.springframework.social-version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-linkedin</artifactId>
-        	<version>${org.springframework.social-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-tripit</artifactId>
-        	<version>${org.springframework.social-version}</version>
-		</dependency>						
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-web</artifactId>
-        	<version>${org.springframework.social-version}</version>
-		</dependency>	
 		
 		<!-- Aspect J -->
 		<dependency>
@@ -206,25 +154,12 @@
 			<version>1.2.16</version>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- Declared to exclude commons-logging (would be resolved transitively otherwise) TODO look to upgrade to 4.x -->
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>			
-			</exclusions>
-		</dependency>
 	
 		<!-- Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.2.143</version>
+			<version>1.3.154</version>
 		</dependency>
 		<!-- For MapMaker -->
 		<dependency>
@@ -232,20 +167,6 @@
 			<artifactId>guava</artifactId>
 			<version>r08</version>
 		</dependency>				
-
-		<!-- JavaMail -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.1</version>
-		</dependency>
-
-		<!-- String Template -->
-		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>stringtemplate</artifactId>
-			<version>3.2.1</version>
-		</dependency>
 
 		<!-- Servlet -->
 		<dependency>
@@ -266,25 +187,6 @@
 			<version>1.2</version>
 		</dependency>
 
-		<!-- Apache Tiles -->
-		<dependency>
-			<groupId>org.apache.tiles</groupId>
-			<artifactId>tiles-jsp</artifactId>
-			<version>2.2.2</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tiles</groupId>
-			<artifactId>tiles-el</artifactId>
-			<version>2.2.2</version>
-		</dependency>
-
 		<!-- JSR 303 with Hibernate Validator -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -303,73 +205,12 @@
 			<artifactId>joda-time</artifactId>
 			<version>1.6.2</version>
 		</dependency>
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time-jsptags</artifactId>
-			<version>1.0.2</version>
-			<scope>runtime</scope>
-		</dependency>
 
 		<!-- Jackson JSON Mapper -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.7.2</version>
-		</dependency>
-
-		<!-- File Upload -->
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.4</version>
-		</dependency>
-
-		<!-- S3 -->
-		<dependency>
-			<groupId>net.java.dev.jets3t</groupId>
-			<artifactId>jets3t</artifactId>
-			<version>0.7.4</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>				
-			</exclusions>			
-		</dependency>
-		
-		<!-- Redis / Spring Key-Value -->
-	    <dependency>
-	      <groupId>redis.clients</groupId>
-	      <artifactId>jedis</artifactId>
-	      <version>1.5.2</version>
-	    </dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-redis</artifactId>
-			<version>1.0.0.M3</version>
-		</dependency>
-		<dependency>
-  			<groupId>org.springframework.integration</groupId>
-  			<artifactId>spring-integration-redis</artifactId>
-  			<version>1.0.0.BUILD-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-  			<groupId>org.springframework.integration</groupId>
-  			<artifactId>spring-integration-event</artifactId>
-  			<version>2.0.3.RELEASE</version>
-		</dependency>
-		
-		<!-- CloudFoundry runtime support -->
-		<dependency>	
-			<groupId>org.cloudfoundry</groupId>
-			<artifactId>cloudfoundry-runtime</artifactId>
-			<version>0.6.0</version>
+			<version>1.8.0</version>
 		</dependency>
 
 		<!-- Test -->
@@ -420,13 +261,6 @@
 			<id>org.jboss.repository.releases</id>
 			<name>JBoss Maven Release Repository</name>
 			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
-			<snapshots><enabled>false</enabled></snapshots>			
-		</repository>
-		<!-- For Rome -->
-		<repository>
-			<id>maven2-repository.dev.java.net</id>
-			<name>Java.net Repository for Maven</name>
-			<url>http://download.java.net/maven/2/</url>
 			<snapshots><enabled>false</enabled></snapshots>			
 		</repository>
 	</repositories>
