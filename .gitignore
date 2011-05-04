@@ -5,4 +5,3 @@ src/main/filters/*
 .classpath
 .project
 .settings
-src/main/webapp/META-INF
