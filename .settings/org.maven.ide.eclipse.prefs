@@ -1,9 +1,0 @@
-#Tue Nov 02 23:50:16 EDT 2010
-activeProfiles=greenhouse-embedded
-eclipse.preferences.version=1
-fullBuildGoals=process-test-resources
-includeModules=false
-resolveWorkspaceProjects=false
-resourceFilterGoals=process-resources resources\:testResources
-skipCompilerPlugin=false
-version=1
