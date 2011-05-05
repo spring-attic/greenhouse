@@ -142,18 +142,8 @@ public class JdbcEventRepository implements EventRepository {
 		return slug;
 	}
 	
-/*	public void createSession(Long accountId, Event event, EventSessionForm form) {
-		int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID, event.getId()); ;
-		int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
-		id = id +1;
-		jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
-		jdbcTemplate.update(INSERT_LEADER, form.getLeaderID(),form.getName(),form.getCompany(),form.getCompanyTitle(),form.getCompanyURL(),form.getTwitterName() );
-		
-		jdbcTemplate.update(INSERT_SESSION_LEADER , event.getId(), id, form.getLeaderID());
-		
-	}*/
-		
-	  public void createSession(Long accountId, Event event, EventSessionForm form) {
+	@Transactional
+	public void createSession(Long accountId, Event event, EventSessionForm form) {
 	    int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID, event.getId());
 	    int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
 	    id = id +1;
@@ -258,14 +248,6 @@ public class JdbcEventRepository implements EventRepository {
 		return rooms;
 	}
 	
-//	public String[] selectTracks(Long event) {
-//		int num = jdbcTemplate.queryForInt(SELECT_NUM_TRACK);
-//		String[] tracks = new String[num];
-//		for (int i=1; i<=num; i++){
-//			tracks[i-1] = jdbcTemplate.queryForObject(SELECT_TRACKS, String.class, i);
-//		}
-//		return tracks;
-//	}
 	
 	public List<EventTrack> selectEventTracks(Long eventId) {
 		return jdbcTemplate.query(SELECT_EVENT_TRACKS, eventTrackMapper.list(), eventId);
@@ -318,18 +300,10 @@ public class JdbcEventRepository implements EventRepository {
 		protected EventTrack mapRoot(String code, ResultSet rs) throws SQLException {
 			return new EventTrack(code, rs.getString("name"), rs.getString("description"));
 		}
-		protected void addChild(EventTrack track, ResultSet rs) throws SQLException {
-			//track.addLeader(new EventSessionLeader(rs.getString("name")));					
+		protected void addChild(EventTrack track, ResultSet rs) throws SQLException {					
 		}
 	};
 	
-	/*
-	private final RowMapper<EventTrack> trackMapper = new RowMapper<EventTrack>() {
-		public EventTrack mapRow(ResultSet rs, int row) throws SQLException {
-			EventTrack track = new EventTrack(rs.getString("code"), rs.getString("name"), rs.getString("description"));
-			return track;
-		}
-	};*/
 	
 	private RowMapper<EventTrackForm> trackFormMapper = new RowMapper<EventTrackForm>() {
 		public EventTrackForm mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -360,8 +334,6 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String INSERT_SESSION_LEADER = "insert into eventsessionleader (event, session, leader) values (?, ?, ?)";
 	
 	private static final String INSERT_LEADER= "insert into leader(name, company, title,companyurl,twitterusername)values(?,?,?,?,?) ";
-	
-	//private static final String SELECT_LEADER_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM LEADER)";
 
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
 	
@@ -379,8 +351,6 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String SELECT_EVENT_TRACKS = "SELECT CODE, NAME, DESCRIPTION FROM EVENTTRACK where EVENT  = ?";
 	
-	//private static final String SELECT_EVENT_SESSIONS = "SELECT ID, STARTTIME, ENDTIME, TITLE, DESCRIPTION, HASHTAG, RATING, VENUE, ROOM FROM EVENTSESSION where EVENT  = ?";
-	
 	private static final String SELECT_LEADER= "SELECT NAME FROM LEADER where ID  = ?";
 	
 	private static final String SELECT_LEADER_ID="SELECT MAX(ID) FROM LEADER";
@@ -394,8 +364,6 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String SELECT_NUM_VENUE = "SELECT MAX(ID) FROM VENUE";
 	
 	private static final String SELECT_NUM_ROOMS = "SELECT MAX(ID) FROM VENUEROOM WHERE VENUE = ?";
-	
-	//private static final String SELECT_NUM_TRACK = "SELECT COUNT(1) FROM EVENTTRACK";
 	
 	private static final String SELECT_NUM_LEADER= "SELECT MAX(ID) FROM LEADER";
 	

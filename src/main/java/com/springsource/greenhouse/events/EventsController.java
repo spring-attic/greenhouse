@@ -203,7 +203,7 @@ public class EventsController {
 	}
 	
 	/**
-	* Register a new Event for the developer.
+	* Registers a new Event for the user.
 	 * @throws IOException 
 	*/
 	@RequestMapping(value="/events", method=RequestMethod.POST)
@@ -358,13 +358,7 @@ public class EventsController {
 			return "groups/event/track/edit";
 		}
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		//try {
 		eventRepository.updateTrack(event, form, trackcode);
-		//}catch (DuplicateKeyException e){
-		//bindingResult.rejectValue("code", "code already exists for this event", "code already exists for this event");
-		//model.addAttribute(event);
-		//return "groups/event/track/edit";
-		//}
 		return "redirect:/groups/" + group + "/events/" + year + "/" + month + "/" + slug + "/tracks/" + trackcode;
 	}
 

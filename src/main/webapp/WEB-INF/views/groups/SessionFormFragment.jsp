@@ -108,7 +108,7 @@
 		</form:select> 
 		<form:label path="leaderID">Select Speaker </form:label>
 		<form:select path="leaderID" onchange='onChange(this.form.leaderID);'>
-			<form:option value="">Add Leader</form:option>
+			<form:option value="">Add New Leader</form:option>
 				<c:forEach var="speaker" items="${speakerList}" varStatus="status">
 			<form:option value="${status.index+1}">${speaker}</form:option>
 				</c:forEach>
