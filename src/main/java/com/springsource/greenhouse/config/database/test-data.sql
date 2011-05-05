@@ -9,9 +9,13 @@ insert into Member (firstName, lastName, email, password, username, gender, birt
 
 -- Greenhouse for iPhone Tester
 insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for iPhone', 'greenhouse-for-iphone', 'Our slick mobile client for the Apple iPhone ', 'SpringSource', 'http://www.springsource.com', 'a08318eb478a1ee31f69a55276f3af64', '80e7f8f7ba724aae9103f297e5fb9bdf', 'x-com-springsource-greenhouse://oauth-response');
+insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for Android', 'greenhouse-for-android', 'Our slick mobile client for the Google Android ', 'SpringSource', 'http://www.springsource.com', 'e9fbccdae98d5696', '9fa283e1eca2d4e8', 'x-com-springsource-greenhouse://oauth-response');
 insert into AppDeveloper (app, member) values (1, 1);
 insert into AppDeveloper (app, member) values (1, 2);
 insert into AppDeveloper (app, member) values (1, 3);
+insert into AppDeveloper (app, member) values (2, 1);
+insert into AppDeveloper (app, member) values (2, 2);
+insert into AppDeveloper (app, member) values (2, 3);
 
 -- Mock Upcoming Event Data: SpringOne2gx 2011
 insert into Venue (name, postalAddress, latitude, longitude, locationHint, createdBy) values ('Westin Lombard Yorktown Center', '70 Yorktown Center Lombard, IL 60148', 41.8751108905486, -88.0184300761646, 'adjacent to Shopping Center', 1);
