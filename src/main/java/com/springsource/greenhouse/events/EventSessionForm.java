@@ -59,7 +59,8 @@ public class EventSessionForm {
 	
 	private String twitterName;
 	
-	private String track;
+	@NotEmpty
+	private String trackCode;
 		
  
 	/**
@@ -230,6 +231,13 @@ public class EventSessionForm {
 	public void setTwitterName(String twitterName) {
 		this.twitterName = twitterName;
 	}
-
+	public String getTrackCode() {
+		return trackCode;
+	}
+	public void setTrackCode(String trackCode) {
+		this.trackCode = trackCode;
+	}
+	
+	
 	
 }

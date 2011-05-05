@@ -154,18 +154,17 @@ public class JdbcEventRepository implements EventRepository {
 	}*/
 		
 	  public void createSession(Long accountId, Event event, EventSessionForm form) {
-	    int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID,event.getId());
+	    int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID, event.getId());
 	    int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
 	    id = id +1;
 	    if (form.getLeaderID()== null){
 	       jdbcTemplate.update(INSERT_LEADER ,form.getName(),form.getCompany(),form.getCompanyTitle(),form.getCompanyURL(),form.getTwitterName());
 	       int leaderId = jdbcTemplate.queryForInt(SELECT_LEADER_ID);
-	       jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
+	       jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue, form.getTrackCode());
 	      jdbcTemplate.update(INSERT_SESSION_LEADER, event.getId(), id, leaderId);
 	      
-	    }else
-	    {
-	    jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue);
+	    } else {
+	    jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue, form.getTrackCode());
 	    jdbcTemplate.update(INSERT_SESSION_LEADER , event.getId(), id, form.getLeaderID());
 	    }
 	}
@@ -356,7 +355,7 @@ public class JdbcEventRepository implements EventRepository {
 	
 	private static final String INSERT_ROOM = "insert into venueroom (venue, id, name, capacity, locationhint) values (?, ?, ?, ?, ?)";
 	
-	private static final String INSERT_SESSION = "insert into eventsession (event, id, title, description, hashtag, starttime, endtime, venue) values (?, ?, ?,?, ?, ?, ?, ?)";
+	private static final String INSERT_SESSION = "insert into eventsession (event, id, title, description, hashtag, starttime, endtime, venue, track) values (?, ?, ?,?, ?, ?, ?, ?, ?)";
 		
 	private static final String INSERT_SESSION_LEADER = "insert into eventsessionleader (event, session, leader) values (?, ?, ?)";
 	

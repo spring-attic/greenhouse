@@ -256,6 +256,8 @@ public class EventsController {
 		model.addAttribute("speakerList", speakerList);
 		Event event= eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(event);
+		List<EventTrack> trackList = eventRepository.selectEventTracks(event.getId());
+		model.addAttribute("trackList", trackList);
 		return "groups/event/newsession";
 	}
 	
@@ -266,6 +268,8 @@ public class EventsController {
 				model.addAttribute("speakerList", speakerList);
 				Event event = eventRepository.findEventBySlug(group, year, month, slug);
 				model.addAttribute(event);
+				List<EventTrack> trackList = eventRepository.selectEventTracks(event.getId());
+				model.addAttribute("trackList", trackList);
 				return "groups/event/newsession";
 			}
 			if (form.getStartTime().getMillis() >= form.getEndTime().getMillis()){
@@ -274,6 +278,8 @@ public class EventsController {
 				model.addAttribute("speakerList", speakerList);
 				Event event = eventRepository.findEventBySlug(group, year, month, slug);
 				model.addAttribute(event);
+				List<EventTrack> trackList = eventRepository.selectEventTracks(event.getId());
+				model.addAttribute("trackList", trackList);
 				return "groups/event/newsession";
 			}
 			Event event = eventRepository.findEventBySlug(group, year, month, slug);

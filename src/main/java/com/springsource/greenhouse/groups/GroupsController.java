@@ -73,8 +73,6 @@ public class GroupsController {
 		List<EventTrack> trackList = eventRepository.selectEventTracks(event.getId());
 		model.addAttribute("trackList", trackList);
 		List<EventSession> sessionList = eventRepository.selectEventSessions(event.getId());
-		//Long lo = (long) 1;
-		//List<EventSession> sessionList = eventRepository.findSessionsOnDay(event.getId(), event.getEndTime().toLocalDate(), lo);
 		model.addAttribute("sessionList", sessionList);
 		return "groups/event";
 	}	
