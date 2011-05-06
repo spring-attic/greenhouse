@@ -224,7 +224,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.2.143</version>
+			<version>1.3.154</version>
 		</dependency>
 		<!-- For MapMaker -->
 		<dependency>
@@ -314,7 +314,7 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.7.2</version>
+			<version>1.7.6</version>
 		</dependency>
 
 		<!-- File Upload -->
