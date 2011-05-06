@@ -12,6 +12,7 @@
 	<dt>Description</dt>
 	<dd><c:out value="${track.description}"  /></dd>
 </dl>
+
 <s:url value="/groups/{group}/events/{year}/{month}/{slug}/tracks/edit/{trackcode}" var="trackEditUrl">
 	<s:param name="group" value="${event.groupSlug}" />
 	<s:param name="year" value="${event.startTime.year}" />
@@ -19,4 +20,4 @@
 	<s:param name="slug" value="${event.slug}" />
 	<s:param name="trackcode" value="${track.code}" />
 </s:url>
-<a href="<c:url value="${trackEditUrl}" />">Edit details</a>
+<a href="${trackEditUrl}">Edit details</a>
