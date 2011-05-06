@@ -21,7 +21,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -35,12 +34,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.account.EmailAlreadyOnFileException;
-import com.springsource.greenhouse.develop.AppForm;
-import com.springsource.greenhouse.events.Event;
-import com.springsource.greenhouse.events.EventForm;
-import com.springsource.greenhouse.events.GeoLocation;
-import com.springsource.greenhouse.groups.Group;
+import com.springsource.greenhouse.utils.GeoLocation;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.utils.ResourceReference;
 import com.springsource.greenhouse.utils.SlugUtils;
@@ -128,69 +122,49 @@ public class JdbcEventRepository implements EventRepository {
 	}
    
 	@Transactional
-	public String createEvent(Long accountId, EventForm form) throws IOException {
+	public String createEvent(EventForm form, Long accountId) {
 		String slug = createSlug(form.getTitle());
-		int membergroup = 1;
-		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimezone() , membergroup);
-		if (form.getVenueID() == null){
-			GeoLocation loc = GeoLocation.getGeoLocation(form.getVenueAddress());
-			jdbcTemplate.update(INSERT_VENUE, form.getVenueName(), form.getVenueAddress(), loc.toLatitude(), loc.toLongitude(), form.getLocationHint(), membergroup);
-			jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), jdbcTemplate.queryForInt(SELECT_VENUE_ID));
-		} else {
-			jdbcTemplate.update(INSERT_EVENT_VENUE, jdbcTemplate.queryForInt(SELECT_EVENT_ID), form.getVenueID());
+		Long eventId = insertEvent(slug, form);
+		VenueFields venueFields = form.getVenueFields();
+		Long venueId = venueFields.getId();
+		if (venueId == null) {
+			venueId = insertVenue(venueFields, accountId);
 		}
+		jdbcTemplate.update(INSERT_EVENT_VENUE, eventId, venueId);		
 		return slug;
 	}
-	
+
 	@Transactional
 	public void createSession(Long accountId, Event event, EventSessionForm form) {
-	    int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID, event.getId());
-	    int id = jdbcTemplate.queryForInt(SELECT_SESSION_ID, event.getId());
-	    id = id +1;
-	    if (form.getLeaderID()== null){
-	       jdbcTemplate.update(INSERT_LEADER ,form.getName(),form.getCompany(),form.getCompanyTitle(),form.getCompanyURL(),form.getTwitterName());
-	       int leaderId = jdbcTemplate.queryForInt(SELECT_LEADER_ID);
-	       jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue, form.getTrackCode());
-	      jdbcTemplate.update(INSERT_SESSION_LEADER, event.getId(), id, leaderId);
-	      
-	    } else {
-	    jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(),form.getHashtag(), form.getStartTime().toDate(), form.getEndTime().toDate(), venue, form.getTrackCode());
-	    jdbcTemplate.update(INSERT_SESSION_LEADER , event.getId(), id, form.getLeaderID());
-	    }
+		Long venue = jdbcTemplate.queryForLong(SELECT_EVENTVENUE_ID, event.getId());
+		Long id = jdbcTemplate.queryForLong(SELECT_MAX_SESSION_ID, event.getId()) + 1;
+		LeaderFields leaderFields = form.getLeaderFields();
+		Long leaderId = leaderFields.getId();
+		if (leaderId == null) {
+			leaderId = insertLeader(leaderFields);
+		}
+		jdbcTemplate.update(INSERT_SESSION, event.getId(), id, form.getTitle(), form.getDescription(), form.getHashtag(),
+				form.getStartTime(event.getTimeZone()).toDate(), form.getEndTime(event.getTimeZone()).toDate(), venue, form.getTrackCode());
+		jdbcTemplate.update(INSERT_SESSION_LEADER , event.getId(), id, leaderId);
 	}
 	
 	@Transactional
 	public void createRoom(Long accountId, Event event, EventRoomForm form) {
-		int venue = jdbcTemplate.queryForInt(FIND_VENUE_ID, event.getId());
-		int id = jdbcTemplate.queryForInt(SELECT_ROOM_ID, venue);
-		id = id + 1;
+		Long venue = jdbcTemplate.queryForLong(SELECT_EVENTVENUE_ID, event.getId());
+		Long id = jdbcTemplate.queryForLong(SELECT_ROOM_ID, venue) + 1;
 		jdbcTemplate.update(INSERT_ROOM, venue, id, form.getName(), form.getCapacity(), form.getLocationHint());
 	}
-	
 	
 	@Transactional
 	public String createTrack(Long accountId, Event event, EventTrackForm form) throws DuplicateKeyException {
 		String slug = event.getSlug();
 		int chair = 1;
 		try {
-		jdbcTemplate.update(INSERT_TRACK, event.getId(), form.getCode(), form.getName(), form.getDescription(), chair);
+			jdbcTemplate.update(INSERT_TRACK, event.getId(), form.getCode(), form.getName(), form.getDescription(), chair);
 		} catch (DuplicateKeyException e) {
 			throw new DuplicateKeyException(form.getCode());
 		}
 		return slug;
-	}
-	
-	public EventForm getNewEventForm() {
-		return new EventForm();
-	}
-	public EventSessionForm getNewSessionForm(){
-		return new EventSessionForm();
-	}
-	public EventTrackForm getNewTrackForm(){
-		return new EventTrackForm();
-	}
-	public EventRoomForm getNewRoomForm(){
-		return new EventRoomForm();
 	}
 	
 	public EventTrackForm getTrackForm(Long eventId, String trackcode) {
@@ -248,7 +222,6 @@ public class JdbcEventRepository implements EventRepository {
 		return rooms;
 	}
 	
-	
 	public List<EventTrack> selectEventTracks(Long eventId) {
 		return jdbcTemplate.query(SELECT_EVENT_TRACKS, eventTrackMapper.list(), eventId);
 	}
@@ -258,8 +231,40 @@ public class JdbcEventRepository implements EventRepository {
 	}
 	
 	// internal helpers
+
+	private Long insertEvent(String slug, EventForm form) {
+		// TODO the group organizing the event is currently hard-coded
+		int group = 1;		
+		jdbcTemplate.update(INSERT_EVENT, form.getTitle(), slug, form.getDescription(), form.getStartTime().toDate(), form.getEndTime().toDate(), form.getTimeZone(), group);
+		// TODO eliminate the extra query here
+		return jdbcTemplate.queryForLong(SELECT_EVENT_ID);
+	}
+	
+	private Long insertVenue(VenueFields venueFields, Long accountId) {
+		Location location = getLocation(venueFields.getAddress());
+		jdbcTemplate.update(INSERT_VENUE, venueFields.getName(), venueFields.getAddress(), location.getLatitude(), location.getLongitude(), venueFields.getLocationHint(), accountId);
+		// TODO eliminate the extra query here
+		return jdbcTemplate.queryForLong(SELECT_VENUE_ID);
+	}
+
+	private Long insertLeader(LeaderFields fields) {
+		jdbcTemplate.update(INSERT_LEADER, fields.getName(), fields.getCompany(), fields.getCompanyTitle(), fields.getCompanyURL(), fields.getTwitterName());
+		// TODO eliminate the extra query here
+		return jdbcTemplate.queryForLong(SELECT_LEADER_ID);
+	}
+	
+	private Location getLocation(String address) {
+		try {
+			GeoLocation location = GeoLocation.getGeoLocation(address);
+			return new Location(location.toLatitude(), location.toLongitude());
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to geocode address " + address);
+		}		
+	}
+	
 	private String createSlug(String eventName) {
-		return SlugUtils.toSlug(eventName);}
+		return SlugUtils.toSlug(eventName);
+	}
 
 	private boolean isSessionEnded(Long eventId, Integer sessionId) {
 		Date endTime = jdbcTemplate.queryForObject("select endTime from EventSession where event = ? and id = ?", Date.class, eventId, sessionId);
@@ -337,11 +342,11 @@ public class JdbcEventRepository implements EventRepository {
 
 	private static final String SELECT_EVENT_ID = "SELECT ID FROM EVENT WHERE ID = (SELECT MAX(ID) FROM EVENT)";
 	
-	private static final String SELECT_SESSION_ID = "SELECT MAX(ID) FROM EVENTSESSION WHERE EVENT = ?";
+	private static final String SELECT_MAX_SESSION_ID = "SELECT MAX(ID) FROM EVENTSESSION WHERE EVENT = ?";
 	
 	private static final String SELECT_VENUE_ID = "SELECT ID FROM VENUE WHERE ID = (SELECT MAX(ID) FROM VENUE)";
 	
-	private static final String FIND_VENUE_ID = "SELECT VENUE FROM EVENTVENUE WHERE EVENT = ?";
+	private static final String SELECT_EVENTVENUE_ID = "SELECT VENUE FROM EVENTVENUE WHERE EVENT = ?";
 		
 	private static final String SELECT_ROOM_ID = "SELECT MAX(ID) FROM VENUEROOM WHERE VENUE = ?";
 	
@@ -382,21 +387,21 @@ public class JdbcEventRepository implements EventRepository {
 	private static final String UPDATE_TRACK_ROOMS = "update EVENTSESSION set room = ? where track = ? and event = ?";
 	
 	private static final String SELECT_EVENT_SESSIONS = SELECT_FROM_EVENT_SESSION +
-		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session " +
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
 		"where s.event = ?";
 	
 	private static final String SELECT_SESSION_BY_ID = SELECT_FROM_EVENT_SESSION +
-		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session " +
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
 		"where s.id = ? and s.event = ?";
 	
 	private static final String SELECT_SESSIONS_ON_DAY = SELECT_FROM_EVENT_SESSION +
-		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
@@ -405,7 +410,7 @@ public class JdbcEventRepository implements EventRepository {
 
 	private static final String SELECT_EVENT_FAVORITES = SELECT_FROM_EVENT_SESSION +
 		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.id = top.session " +
-		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
@@ -413,7 +418,7 @@ public class JdbcEventRepository implements EventRepository {
 		"order by top.favoriteCount desc, s.id, sl.rank";
 
 	private static final String SELECT_ATTENDEE_FAVORITES = SELECT_FROM_EVENT_SESSION +
-		"inner join VenueRoom r on s.venue = r.venue and s.room = r.id " +
+		"left outer join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"inner join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +	
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 

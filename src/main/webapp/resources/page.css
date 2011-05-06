@@ -74,6 +74,11 @@ h5 {
 	position: relative;
 }
 
+dl {
+	list-style-type: none;
+	margin: 0 0 20px 0;
+}
+
 dt {
 	float: left;
 	clear: left;

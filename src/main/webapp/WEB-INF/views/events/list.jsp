@@ -5,7 +5,6 @@
 
 <h2>Upcoming Events </h2>
 
-
 <c:if test="${not empty eventList}">
 <dl class="listings">
 <c:forEach items="${eventList}" var="event">
@@ -27,4 +26,6 @@
 
 </c:if>
 
-<h4 align="center"><a href="<c:url value="/events/new" />">Create an Event</a></h4>
+<ul class="listings">
+ <li class="listing"><a href="<c:url value="/events/new" />">Create an Event</a></li>
+</ul>

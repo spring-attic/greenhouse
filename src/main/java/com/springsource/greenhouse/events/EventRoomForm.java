@@ -14,34 +14,22 @@
  * limitations under the License.
  */
 package com.springsource.greenhouse.events;
-import java.util.Date;
-
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-
-
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 /**
  * Model backing the "Register New Event" form.
  * @author UA Team
  */
-
 public class EventRoomForm {
 	
 	@NotEmpty
 	private String name;
 	
 	@NotNull
-	private int capacity;
-	
+	private Integer capacity;
+	 
 	private String locationHint;
 	
 	public String getName() {
@@ -52,11 +40,11 @@ public class EventRoomForm {
 		this.name = name;
 	}
 
-	public int getCapacity() {
+	public Integer getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacity(int capacity) {
+	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
 

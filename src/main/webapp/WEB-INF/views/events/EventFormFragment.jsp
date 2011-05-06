@@ -7,23 +7,23 @@
 		<form:label path="title">Title <form:errors path="title" cssClass="error" /></form:label>
 		<form:input path="title" />
 		
-		<form:label path="timezone">Time Zone</form:label>
-		<form:select path="timezone">
+		<form:label path="timeZone">Time Zone</form:label>
+		<form:select path="timeZone">
 			<form:option value="">Select One</form:option>
-				<c:forEach var="zones" items="${timezoneList}">
+			<c:forEach var="zones" items="${timeZones}">
 			<form:option value="${zones}">${zones}</form:option>
 			</c:forEach>
 		</form:select> 
-		<form:label path="startDate">Start Date <form:errors path="startDate" cssClass="error" /><form:errors path="startHour" cssClass="error" /></form:label>
+		<form:label path="startTimeFields.day">Start Date <form:errors path="startTimeFields.day" cssClass="error" /><form:errors path="startTimeFields.day" cssClass="error" /></form:label>
 		<div class="multiple">
 		<table>
 		<tr>
 		<td>
-		<form:input path="startDate" />
+		<form:input id="startDate" path="startTimeFields.day" />
 		</td>
 		<td VALIGN="top">
 		
-			<form:select path="startHour">
+			<form:select path="startTimeFields.hour">
 				<form:option value="">Hour</form:option>
 				<form:option value="1">1</form:option>
 				<form:option value="2">2</form:option>
@@ -39,7 +39,7 @@
 				<form:option value="12">12</form:option>
 			</form:select>
 			
-			<form:select path="startMinute">
+			<form:select path="startTimeFields.minute">
 				<form:option value="">Minute</form:option>		
 				<form:option value="00" />
 				<form:option value="15" />
@@ -47,7 +47,7 @@
 				<form:option value="45" />
 			</form:select>
 			
-			<form:select path="startAmPm">
+			<form:select path="startTimeFields.halfDay">
 				<form:option value="">AM/PM</form:option>
 				<form:option value="AM" />
 				<form:option value="PM" />
@@ -58,16 +58,16 @@
 		
 		</table>
 		</div>
-		<form:label path="endDate">End Date <form:errors path="endDate" cssClass="error" /></form:label>
+		<form:label path="endTimeFields.day">End Date <form:errors path="endTimeFields.day" cssClass="error" /></form:label>
 		<div class="multiple">
 		<table>
 		<tr>
 		<td>
-		<form:input path="endDate" />
+		<form:input id="endDate" path="endTimeFields.day" />
 		</td>
 		<td VALIGN="top">
 		
-			<form:select path="endHour">
+			<form:select path="endTimeFields.hour">
 			<form:option value="">Hour</form:option>
 				<form:option value="1">1</form:option>
 				<form:option value="2">2</form:option>
@@ -82,14 +82,14 @@
 				<form:option value="11">11</form:option>
 				<form:option value="12">12</form:option>
 			</form:select>
-			<form:select path="endMinute">
+			<form:select path="endTimeFields.minute">
 				<form:option value="">Minute</form:option>
 				<form:option value="00" />	
 				<form:option value="15" />
 				<form:option value="30" />
 				<form:option value="45" />
 			</form:select>
-			<form:select path="endAmPm">
+			<form:select path="endTimeFields.halfDay">
 				<form:option value="">AM/PM</form:option>
 				<form:option value="AM" />
 				<form:option value="PM" />
@@ -105,9 +105,6 @@
 		<jsp:include page="venueFragment.jsp" />
 		
 		</fieldset>
-		
-		
-		
 		
 		<script type="text/javascript">
 		

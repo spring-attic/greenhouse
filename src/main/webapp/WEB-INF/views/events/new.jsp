@@ -12,10 +12,10 @@
 		<div class="error">Unable to create an Event. Please fix the errors below and resubmit.</div>
 		</c:if>
 		</s:bind>
-		<p>Create an Event to display on Greenhouse.</p>  		
+		<p>Create a new Event your group is organizing.</p>  		
 	</div>
 	
-	<jsp:include page="EventFormFragment.jsp" />
+	<jsp:include page="eventFormFragment.jsp" />
 	
 	<p><button type="submit">Create Event</button></p>
 </form:form>

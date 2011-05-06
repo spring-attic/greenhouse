@@ -11,5 +11,6 @@
 	</s:url>
 <form:form action="${actionUrl}" method="post" modelAttribute="eventRoomForm">
 
-<jsp:include page="RoomFormFragment.jsp" />
+<jsp:include page="roomFormFragment.jsp" />
+
 </form:form>

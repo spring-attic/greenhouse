@@ -14,121 +14,86 @@
  * limitations under the License.
  */
 package com.springsource.greenhouse.events;
-import java.util.Date;
-
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-
-
-
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 /**
- * Model backing the "Register New Event" form.
+ * Model backing the "Create New Event" form.
  * @author UA Team
  */
-
 public class EventForm {
 
 	@NotEmpty
 	private String title;
 
-	private DateTimeZone timezone;
+	private DateTimeZone timeZone;
 	
-	private DateTime startTime;
+	private DateFields startTimeFields = new DateFields();
 	
-	private DateTime endTime;
-	
+	private DateFields endTimeFields = new DateFields();
+
+	private VenueFields venueFields = new VenueFields();
+
 	private String description;
-	
-	@DateTimeFormat(pattern="M/dd/yy")
-	private LocalDate startDate;
-	
-	@DateTimeFormat(pattern="M/dd/yy")
-	private LocalDate endDate;
-	
-	@NotNull
-	private Integer startHour;
-	
-	@NotNull
-	private Integer startMinute;
-	
-	@NotEmpty
-	private String startAmPm;
-	
-	@NotNull
-	private Integer endHour;
-	
-	@NotNull
-	private Integer endMinute;
-	
-	@NotEmpty
-	private String endAmPm;
-	
-	private Integer venueID;
-	@NotEmpty
-	private String venueName;
-	@NotEmpty
-	private String venueAddress;
-	
-	private String locationHint;
-	
+
 	/**
 	 * The title of the event.
 	 */
 	public String getTitle() {
 		return title;
 	}
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}
 	
 	/**
-	 * The time zone the conference takes place in.
+	 * The time zone the event takes place in.
 	 */
-	public String getTimezone() {
-		return timezone != null ? timezone.getID() : "";
-	}
-	public void setTimezone(String tz) {
-		this.timezone = DateTimeZone.forID(tz);
+	public String getTimeZone() {
+		return timeZone != null ? timeZone.getID() : "";
 	}
 	
-	/**
-	 * The start time of the conference.
-	 */
-	public DateTime getStartTime() {
-		if (startAmPm.compareTo("AM") == 0) {
-		return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour, startMinute, 0, 0, timezone);
-		}
-		else {
-			return startTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), startHour+12, startMinute, 0, 0, timezone);
-		}
+	public void setTimeZone(String timeZone) {
+		this.timeZone = DateTimeZone.forID(timeZone);
 	}
 
-	public void setStartTime(DateTime startTime) {
-		this.startTime = startTime;
+	/**
+	 * Fields to complete to enter the time the event starts.
+	 * @see #getStartTime()
+	 */
+	public DateFields getStartTimeFields() {
+		return startTimeFields;
+	}
+
+	/**
+	 * Fields to complete to enter the time the event ends.
+	 * @see #getEndTime()
+	 */
+	public DateFields getEndTimeFields() {
+		return endTimeFields;
 	}
 	
 	/**
-	 * The end time of the conference.
+	 * The start time of the event, calculated from the completed field values.
+	 */
+	public DateTime getStartTime() {
+		return startTimeFields.getDateTime(timeZone);
+	}
+
+	/**
+	 * The end time of the event, calculated from the completed field values.
 	 */
 	public DateTime getEndTime() {
-		if (endAmPm.compareTo("AM") == 0) {
-		return endTime  = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour, endMinute, 0, 0, timezone);
-		}
-		else {
-			return endTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), endHour+12, endMinute, 0, 0, timezone);
-		}
+		return endTimeFields.getDateTime(timeZone);
 	}
-	
-	public void setEndTime(DateTime endTime) {
-		this.endTime = endTime;
+
+	/**
+	 * Fields to complete to indicate where the event is held.
+	 */
+	public VenueFields getVenueFields() {
+		return venueFields;
 	}
 
 	/**
@@ -137,113 +102,9 @@ public class EventForm {
 	public String getDescription() {
 		return description;
 	}
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	/**
-	 * The StartDate of the event.
-	 */
-	public LocalDate getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
-	/**
-	 * The EndDate of the event.
-	 */
-	public LocalDate getEndDate() {
-		return endDate;
-	}
-	
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-	/**
-	 * The StartHour for the event.
-	 */
-	public Integer getStartHour() {
-		return startHour;
-	}
-	
-	public void setStartHour(Integer startHour) {
-		this.startHour = startHour;
-	}
-	/**
-	 * The StartMinute for the event.
-	 */
-	public Integer getStartMinute() {
-		return startMinute;
-	}
-	
-	public void setStartMinute(Integer startMinute) {
-		this.startMinute = startMinute;
-	}
-	/**
-	 * The startAmPm for the event.
-	 */
-	public String getStartAmPm() {
-		return startAmPm;
-	}
-	
-	public void setStartAmPm(String startAmPm) {
-		this.startAmPm = startAmPm;
-	}
-	/**
-	 * The endHour for the event.
-	 */
-	public Integer getEndHour() {
-		return endHour;
-	}
-	
-	public void setEndHour(Integer endHour) {
-		this.endHour = endHour;
-	}
-	/**
-	 * The endMinute for the event.
-	 */
-	public Integer getEndMinute() {
-		return endMinute;
-	}
-	
-	public void setEndMinute(Integer endMinute) {
-		this.endMinute = endMinute;
-	}
-	/**
-	 * The endAmPm for the event.
-	 */
-	public String getEndAmPm() {
-		return endAmPm;
-	}
-	
-	public void setEndAmPm(String endAmPm) {
-		this.endAmPm = endAmPm;
-	}
-
-	public Integer getVenueID() {
-		return venueID;
-	}
-	public void setVenueID(Integer venueID) {
-		this.venueID = venueID;
-	}
-	public String getVenueName() {
-		return venueName;
-	}
-	public void setVenueName(String venueName) {
-		this.venueName = venueName;
-	}
-	public String getVenueAddress() {
-		return venueAddress;
-	}
-	public void setVenueAddress(String venueAddress) {
-		this.venueAddress = venueAddress;
-	}
-	public String getLocationHint() {
-		return locationHint;
-	}
-	public void setLocationHint(String locationHint) {
-		this.locationHint = locationHint;
-	}
-	
 	
 }

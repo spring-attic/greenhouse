@@ -11,29 +11,29 @@
 		<put-attribute name="title" expression="${group.name} | Greenhouse" />
 		<put-attribute name="content" value="/WEB-INF/views/groups/view.jsp" />
 	</definition>
-	
-	<definition name="groups/event/newtrack" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewTrack.jsp"/>
- 	</definition>
- 	
- 	<definition name="groups/event/newsession" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewSession.jsp"/>
-	</definition>
-	
-	<definition name="groups/event/newroom" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/NewRoom.jsp"/>
+
+	<definition name="groups/event/newTrack" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/groups/newTrack.jsp" />
  	</definition>
 
 	<definition name="groups/event/track" extends="page">
 		<put-attribute name ="content"  value="/WEB-INF/views/groups/track.jsp"/>
 	</definition>
 	
-	<definition name="groups/event/session" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/session.jsp"/>
-	</definition>
-
 	<definition name="groups/event/track/edit" extends="page">
 		<put-attribute name ="content"  value="/WEB-INF/views/groups/editTrack.jsp"/>
+	</definition>
+
+	<definition name="groups/event/newRoom" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/newRoom.jsp"/>
+ 	</definition>
+ 		
+ 	<definition name="groups/event/newSession" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/newSession.jsp"/>
+	</definition>
+	
+	<definition name="groups/event/session" extends="page">
+		<put-attribute name ="content"  value="/WEB-INF/views/groups/session.jsp"/>
 	</definition>
 
 </tiles-definitions>

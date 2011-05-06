@@ -151,17 +151,16 @@ public class JdbcEventRepositoryTest {
     	Event event = new Event(2L, null, null, null, null, null, null, null, null);
     	EventSessionForm form = new EventSessionForm();
     	form.setTitle("Cool");
-    	form.setStartDate(new LocalDate(2012,8,20));
-    	form.setStartHour(6);
-    	form.setStartMinute(00);
-    	form.setStartAmPm("PM");
-    	form.setEndDate(new LocalDate(2012,9,20));
-    	form.setEndHour(7);
-    	form.setEndMinute(00);
-    	form.setEndAmPm("PM");
+    	form.getStartTimeFields().setDay(new LocalDate(2012,8,20));
+    	form.getStartTimeFields().setHour(6);
+    	form.getStartTimeFields().setMinute(00);
+    	form.getStartTimeFields().setHalfDay("PM");
+    	form.getEndTimeFields().setDay(new LocalDate(2012,9,20));
+    	form.getEndTimeFields().setHour(7);
+    	form.getEndTimeFields().setMinute(00);
+    	form.getEndTimeFields().setHalfDay("PM");
     	form.setDescription("google");
-    	form.setLeaderID(2);
-    
+    	form.getLeaderFields().setId(2L);
     	eventRepository.createSession(2L, event, form);
    	}
     
