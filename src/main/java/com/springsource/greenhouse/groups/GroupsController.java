@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventRepository;
-import com.springsource.greenhouse.events.EventSession;
 import com.springsource.greenhouse.events.EventTrack;
 
 /**
@@ -72,8 +71,6 @@ public class GroupsController {
 		model.addAttribute(event);
 		List<EventTrack> trackList = eventRepository.selectEventTracks(event.getId());
 		model.addAttribute("trackList", trackList);
-		List<EventSession> sessionList = eventRepository.selectEventSessions(event.getId());
-		model.addAttribute("sessionList", sessionList);
 		return "groups/event";
 	}	
 

@@ -295,7 +295,7 @@ public class EventsController {
 	}
 
 	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/sessions/{sessionid}", method=RequestMethod.GET, headers="Accept=text/html") 
-	public String viewTrack(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable Integer sessionid, Account account, Model model) {
+	public String viewSession(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable Integer sessionid, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		EventSession session = eventRepository.findSessionById(sessionid, event.getId());
 		String roomName = session.getRoom().getLabel();
@@ -305,7 +305,7 @@ public class EventsController {
 		return "groups/event/session";
 	}
 	
-	@RequestMapping(value="/greenhouse/groups/{group}/events/{year}/{month}/{slug}/tracks/edit/{trackcode}", method=RequestMethod.GET, headers="Accept=text/html")
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/edit/{trackcode}", method=RequestMethod.GET, headers="Accept=text/html")
 	public String editTrackForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(eventRepository.getTrackForm(event.getId(), trackcode));
