@@ -15,6 +15,7 @@
  */
 package com.springsource.greenhouse.events;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.joda.time.LocalDate;
@@ -104,5 +105,44 @@ public interface EventRepository {
 	 * @throws RatingPeriodClosedException the rating period for the session is not open
 	 */
 	Float rate(Long eventId, Integer sessionId, Long attendeeId, Rating rating) throws RatingPeriodClosedException;
+	
+	
+	String createEvent(Long accountId, EventForm form) throws IOException;
+	
+	void createSession(Long accountId, Event event, EventSessionForm form );
+	
+	String createTrack(Long accountId, Event event, EventTrackForm form);
+	
+	String updateTrack(Event event, EventTrackForm form, String trackcode);
+	
+	void createRoom(Long accountId, Event event, EventRoomForm form);
+	
+	EventForm getNewEventForm();
+	
+	EventSessionForm getNewSessionForm();
+	
+	EventTrackForm getNewTrackForm();
+	
+	Object getTrackForm(Long eventId, String trackcode);
+	
+	EventRoomForm getNewRoomForm();
+	
+	public String[] selectSpeakerNames();
+	
+	public String[] selectVenueNames();
+	
+	public String[] selectVenueAddresses();
+	
+	public String[] selectVenueLocationHints();
+	
+	public String[] selectRoomNames(Long venueID);
+	
+	public List<EventTrack> selectEventTracks(Long event);
+	
+	public List<EventSession> selectEventSessions(Long eventId);
+	
+	public EventTrack findTrackByCode(String trackcode, Long eventId);
+
+	public EventSession findSessionById(Integer sessionId, Long eventId);
 	
 }

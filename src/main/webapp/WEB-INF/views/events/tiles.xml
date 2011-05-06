@@ -11,4 +11,7 @@
 		<put-attribute name="content" value="/WEB-INF/views/events/list.jsp" />
 	</definition>
 	
+	<definition name="events/new" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/events/new.jsp" />
+	</definition>
 </tiles-definitions>
