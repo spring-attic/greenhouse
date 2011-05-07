@@ -15,18 +15,12 @@
  */
 package com.springsource.greenhouse.config.database;
 
-import org.springframework.context.annotation.Feature;
-import org.springframework.context.annotation.FeatureConfiguration;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.config.AdviceMode;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.config.TxAnnotationDriven;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@FeatureConfiguration
-public class TransactionalFeatureConfig {
-
-	@Feature
-	public TxAnnotationDriven txAnnotationDriven(PlatformTransactionManager txManager) {
-		return new TxAnnotationDriven(txManager).mode(AdviceMode.ASPECTJ);
-	}
+@Configuration
+@EnableTransactionManagement(mode=AdviceMode.ASPECTJ)
+public class TransactionalConfig {
 
 }

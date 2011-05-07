@@ -17,7 +17,7 @@
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.0.BUILD-SNAPSHOT</org.springframework-version>		
-		<org.springframework.security-version>3.1.0.RC1</org.springframework.security-version>		
+		<org.springframework.security-version>3.1.0.RC2</org.springframework.security-version>		
 		<org.springframework.integration-version>2.0.3.RELEASE</org.springframework.integration-version>
 		<org.springframework.social-version>1.0.0.M3</org.springframework.social-version>			
 		<org.aspectj-version>1.6.10</org.aspectj-version>
@@ -88,11 +88,6 @@
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-crypto</artifactId>
-			<version>${org.springframework.security-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>

@@ -47,8 +47,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMethodAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMethodMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.home.DateTimeZoneHandlerInterceptor;
@@ -64,15 +64,15 @@ public class AnnotatedControllerConfig {
 
 	@Bean
 	public HandlerMapping annotatedControllerMapping() {
-		RequestMappingHandlerMethodMapping handlerMapping = new RequestMappingHandlerMethodMapping();
+		RequestMappingHandlerMapping handlerMapping = new RequestMappingHandlerMapping();
 		handlerMapping.setInterceptors(interceptors());
 		handlerMapping.setOrder(1);
 		return handlerMapping;
 	}
 
 	@Bean
-	public RequestMappingHandlerMethodAdapter annotatedControllerAdapter() {
-		RequestMappingHandlerMethodAdapter handlerAdapter = new RequestMappingHandlerMethodAdapter();
+	public RequestMappingHandlerAdapter annotatedControllerAdapter() {
+		RequestMappingHandlerAdapter handlerAdapter = new RequestMappingHandlerAdapter();
 
 		ConfigurableWebBindingInitializer bindingInitializer = new ConfigurableWebBindingInitializer();
 		bindingInitializer.setConversionService(conversionService());
