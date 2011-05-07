@@ -15,19 +15,26 @@
  */
 package com.springsource.greenhouse.config;
 
+import java.util.concurrent.Executor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.core.task.TaskExecutor;
+import org.springframework.context.config.AdviceMode;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
-@ImportResource("classpath:com/springsource/greenhouse/config/task-annotation-driven.xml")
-public class TaskConfig {
+@EnableAsync(mode=AdviceMode.ASPECTJ)
+public class TaskConfig implements AsyncConfigurer {
 
-	@Bean
-	public TaskExecutor taskExecutor() {
-		return new ThreadPoolTaskExecutor();
+	public Executor getExecutor() {
+		return taskExecutor();
 	}
 	
+	@Bean
+	public Executor taskExecutor() {
+		return new ThreadPoolTaskExecutor();
+	}
+
 }
