@@ -18,11 +18,9 @@ package com.springsource.greenhouse.config;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 
