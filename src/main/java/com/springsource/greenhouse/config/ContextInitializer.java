@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 
 public class ContextInitializer implements ApplicationContextInitializer<ConfigurableWebApplicationContext> {
@@ -50,11 +51,8 @@ public class ContextInitializer implements ApplicationContextInitializer<Configu
 	}
 	
 	private Properties applicationProperties() {
-		PropertiesFactoryBean propertiesFactory = new PropertiesFactoryBean();
-		propertiesFactory.setLocation(new ClassPathResource("application.properties"));
 		try {
-			propertiesFactory.afterPropertiesSet();
-			return propertiesFactory.getObject();
+			return PropertiesLoaderUtils.loadAllProperties("application.properties");
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
