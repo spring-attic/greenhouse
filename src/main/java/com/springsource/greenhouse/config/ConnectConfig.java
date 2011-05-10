@@ -87,31 +87,29 @@ public class ConnectConfig {
 	
 	@Bean
 	@Scope(value="request")	
-	public Facebook facebook(ConnectionRepository connectionRepository) {
-		Connection<Facebook> connection = connectionRepository.findPrimaryConnectionToApi(Facebook.class);
+	public Facebook facebook() {
+		Connection<Facebook> connection = connectionRepository().findPrimaryConnectionToApi(Facebook.class);
 		return connection != null ? connection.getApi() : null;
 	}
 
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
-	public Twitter twitter(ConnectionRepository connectionRepository) {
-		Connection<Twitter> connection = connectionRepository.findPrimaryConnectionToApi(Twitter.class);
+	public Twitter twitter() {
+		Connection<Twitter> connection = connectionRepository().findPrimaryConnectionToApi(Twitter.class);
 		return connection != null ? connection.getApi() : new TwitterTemplate();
 	}
 	
 	@Bean
-	public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator, 
-			Provider<ConnectionRepository> connectionRepositoryProvider, ProfilePictureService profilePictureService) {
-		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator, connectionRepositoryProvider);
+	public ConnectController connectController(Provider<ConnectionRepository> connectionRepositoryProvider, ProfilePictureService profilePictureService) {
+		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator(), connectionRepositoryProvider);
 		controller.addInterceptor(new FacebookConnectInterceptor(profilePictureService));
 		controller.addInterceptor(new TwitterConnectInterceptor());
 		return controller;
 	}
 	
 	@Bean
-	public ProviderSignInController providerSignInController(Provider<ConnectionFactoryLocator> connectionFactoryLocatorProvider,
-			UsersConnectionRepository usersConnectionRepository, Provider<ConnectionRepository> connectionRepositoryProvider, SignInService signInService) {
-		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocatorProvider, usersConnectionRepository, connectionRepositoryProvider, signInService);
+	public ProviderSignInController providerSignInController(Provider<ConnectionFactoryLocator> connectionFactoryLocatorProvider, Provider<ConnectionRepository> connectionRepositoryProvider, SignInService signInService) {
+		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocatorProvider, usersConnectionRepository(), connectionRepositoryProvider, signInService);
 	}
 	
 	private String getSecureUrl() {
