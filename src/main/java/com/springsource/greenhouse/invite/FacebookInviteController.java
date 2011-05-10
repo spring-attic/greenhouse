@@ -26,7 +26,7 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.facebook.api.FacebookApi;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +46,7 @@ import com.springsource.greenhouse.account.ProfileReference;
 @Controller
 public class FacebookInviteController {
 
-	private final Provider<FacebookApi> facebookApiProvider;
+	private final Provider<Facebook> facebookProvider;
 	
 	private final UsersConnectionRepository connectionRepository;
 	
@@ -58,8 +58,8 @@ public class FacebookInviteController {
 	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
 	 */
 	@Inject
-	public FacebookInviteController(Provider<FacebookApi> facebookApiProvider, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
-		this.facebookApiProvider = facebookApiProvider;
+	public FacebookInviteController(Provider<Facebook> facebookProvider, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
+		this.facebookProvider = facebookProvider;
 		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
 	}
@@ -71,9 +71,9 @@ public class FacebookInviteController {
 	 */
 	@RequestMapping(value="/invite/facebook", method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
-		FacebookApi facebookApi = facebookApiProvider.get();
-		if (facebookApi != null) {
-			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(account.getId(), facebookApi));
+		Facebook facebook = facebookProvider.get();
+		if (facebook != null) {
+			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(account.getId(), facebook));
 			model.addAttribute("friends", profileReferences);
 		} else {
 			model.addAttribute("friends", Collections.emptySet());
@@ -103,8 +103,8 @@ public class FacebookInviteController {
 
 	// internal helpers
 	
-	private List<Long> friendAccountIds(Long accountId, FacebookApi facebookApi) {
-		List<Reference> friends = facebookApi.friendOperations().getFriends();
+	private List<Long> friendAccountIds(Long accountId, Facebook facebook) {
+		List<Reference> friends = facebook.friendOperations().getFriends();
 		if (friends.isEmpty()) {
 			return Collections.emptyList();
 		}

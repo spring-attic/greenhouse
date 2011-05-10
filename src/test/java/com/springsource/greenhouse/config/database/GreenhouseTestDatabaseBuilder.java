@@ -11,42 +11,42 @@ public class GreenhouseTestDatabaseBuilder {
 	private ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 
 	public GreenhouseTestDatabaseBuilder member() {
-		populator.addScript(new ClassPathResource("install/Member.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/Member.sql", Embedded.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder group() {
-		populator.addScript(new ClassPathResource("install/Group.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/Group.sql", Embedded.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder activity() {
-		populator.addScript(new ClassPathResource("install/Activity.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/Activity.sql", Embedded.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder invite() {
-		populator.addScript(new ClassPathResource("install/Invite.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/Invite.sql", Embedded.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder venue() {
-		populator.addScript(new ClassPathResource("install/Venue.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/Venue.sql", Embedded.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder event() {
-		populator.addScript(new ClassPathResource("install/Event.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/Event.sql", Embedded.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder connectedAccount() {
-		populator.addScript(new ClassPathResource("install/ConnectedAccount.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/ConnectedAccount.sql", Embedded.class));
 		return this;
 	}
 
 	public GreenhouseTestDatabaseBuilder connectedApp() {
-		populator.addScript(new ClassPathResource("install/ConnectedApp.sql", EmbeddedDataSourceConfig.class));
+		populator.addScript(new ClassPathResource("install/ConnectedApp.sql", Embedded.class));
 		return this;
 	}
 

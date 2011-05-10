@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.springsource.greenhouse.config.database;
+package com.springsource.greenhouse.database;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -23,7 +23,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.versioned.DatabaseChangeSet;
 import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
-import org.springframework.jdbc.versioned.DatabaseUpgrader;
 import org.springframework.jdbc.versioned.DatabaseVersion;
 import org.springframework.jdbc.versioned.GenericDatabaseUpgrader;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
@@ -37,12 +36,12 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
  * This migration model was adapted from the <a href="http://www.liquibase.org/tutorial-using-oracle">LiquiBase Oracle tutorial</a>.
  * @author Keith Donald
  */
-class BaseDatabaseUpgrader {
+public class DatabaseUpgrader {
 	
-	private final DatabaseUpgrader upgrader;
+	private final org.springframework.jdbc.versioned.DatabaseUpgrader upgrader;
 
 	@Autowired
-	public BaseDatabaseUpgrader(DataSource dataSource) {		
+	public DatabaseUpgrader(DataSource dataSource) {		
 		this.upgrader = createUpgrader(dataSource);
 	}
 	
@@ -55,17 +54,13 @@ class BaseDatabaseUpgrader {
 	
 	protected void addInstallChanges(DatabaseChangeSetBuilder builder) {}
 
-	protected Resource databaseResource(String resource) {
-		return new ClassPathResource(resource, getClass());
-	}
-
 	protected DatabaseChangeSet singletonChangeSet(String version, Resource resource) {
 		return new DatabaseChangeSetBuilder(DatabaseVersion.valueOf(version)).addChange(resource).getChangeSet();
 	}
 	
 	// internal helpers
 	
-	private DatabaseUpgrader createUpgrader(DataSource dataSource) {
+	private org.springframework.jdbc.versioned.DatabaseUpgrader createUpgrader(DataSource dataSource) {
 		GenericDatabaseUpgrader upgrader = new GenericDatabaseUpgrader(dataSource);
 		if (upgrader.getCurrentDatabaseVersion().equals(DatabaseVersion.zero())) {
 			addInstallChangeSet(upgrader);			
@@ -77,21 +72,29 @@ class BaseDatabaseUpgrader {
 
 	private void addInstallChangeSet(GenericDatabaseUpgrader upgrader) {
 		DatabaseChangeSetBuilder builder = new DatabaseChangeSetBuilder(DatabaseVersion.valueOf("2"));
-		builder.addChange(databaseResource("install/Member.sql"));
-		builder.addChange(databaseResource("install/Group.sql"));
-		builder.addChange(databaseResource("install/Activity.sql"));
-		builder.addChange(databaseResource("install/ConnectedApp.sql"));
-		builder.addChange(databaseResource("install/Reset.sql"));
-		builder.addChange(databaseResource("install/Invite.sql"));		
-		builder.addChange(databaseResource("install/Venue.sql"));
-		builder.addChange(databaseResource("install/Event.sql"));
+		builder.addChange(installScript("Member.sql"));
+		builder.addChange(installScript("Group.sql"));
+		builder.addChange(installScript("Activity.sql"));
+		builder.addChange(installScript("ConnectedApp.sql"));
+		builder.addChange(installScript("Reset.sql"));
+		builder.addChange(installScript("Invite.sql"));		
+		builder.addChange(installScript("Venue.sql"));
+		builder.addChange(installScript("Event.sql"));
 		builder.addChange(new ClassPathResource("JdbcUsersConnectionRepository.sql", JdbcUsersConnectionRepository.class));
 		addInstallChanges(builder);
 		upgrader.addChangeSet(builder.getChangeSet());
 	}
 
-	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
-		upgrader.addChangeSet(singletonChangeSet("2", databaseResource("upgrade/475.sql")));
+	private Resource installScript(String resource) {
+		return new ClassPathResource("install/" + resource, DatabaseUpgrader.class);
 	}
-	
+
+	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
+		upgrader.addChangeSet(singletonChangeSet("2", upgradeScript("475.sql")));
+	}
+
+	private Resource upgradeScript(String resource) {
+		return new ClassPathResource("upgrade/" + resource, DatabaseUpgrader.class);
+	}
+
 }

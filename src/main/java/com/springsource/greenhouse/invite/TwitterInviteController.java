@@ -23,7 +23,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.twitter.api.TwitterApi;
+import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -41,15 +41,15 @@ import com.springsource.greenhouse.account.ProfileReference;
 @Controller
 public class TwitterInviteController {
 	
-	private final TwitterApi twitterApi;
+	private final Twitter twitter;
 	
 	private final UsersConnectionRepository connectionRepository;
 
 	private final AccountRepository accountRepository;
 	
 	@Inject
-	public TwitterInviteController(TwitterApi twitterApi, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
-		this.twitterApi = twitterApi;
+	public TwitterInviteController(Twitter twitter, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
+		this.twitter = twitter;
 		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
 	}
@@ -60,8 +60,8 @@ public class TwitterInviteController {
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Model model) {
-		if (twitterApi.isAuthorizedForUser()) {
-			model.addAttribute("username", twitterApi.userOperations().getScreenName());
+		if (twitter.isAuthorizedForUser()) {
+			model.addAttribute("username", twitter.userOperations().getScreenName());
 		}
 	}
 
@@ -82,7 +82,7 @@ public class TwitterInviteController {
 	}
 	
 	private List<Long> friendAccountIds(String username) {
-		List<Long> friendIds = twitterApi.friendOperations().getFriendIds(username);
+		List<Long> friendIds = twitter.friendOperations().getFriendIds(username);
 		Set<String> providerUserIds = new HashSet<String>(friendIds.size());
 		for (Object friendId : friendIds) {
 			providerUserIds.add(friendId.toString());

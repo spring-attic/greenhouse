@@ -21,5 +21,7 @@
 	<bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
 		<property name="realmName" value="Greenhouse" />
 	</bean>
-    	
+    
+    <import resource="security-oauth-provider.xml" />
+    
 </beans>

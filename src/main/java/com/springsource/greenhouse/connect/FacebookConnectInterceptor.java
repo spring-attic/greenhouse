@@ -4,14 +4,12 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import org.springframework.http.client.CommonsClientHttpRequestFactory;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
-import org.springframework.social.facebook.api.FacebookApi;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.FacebookLink;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.flash.FlashMap;
 
@@ -24,21 +22,16 @@ import com.springsource.greenhouse.members.ProfilePictureService;
  * Also supports using the user's Facebook profile picture as their local profile picture.
  * @author Keith Donald
  */
-public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookApi> {
+public class FacebookConnectInterceptor implements ConnectInterceptor<Facebook> {
 
 	private final ProfilePictureService profilePictureService;
-
-	private final RestTemplate restTemplate;
 
 	@Inject
 	public FacebookConnectInterceptor(ProfilePictureService profilePictureService) {
 		this.profilePictureService = profilePictureService;
-		restTemplate = new RestTemplate();
-		// the default connection factory doesn't follow redirects, which the image request returns
-		restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
 	}
 
-	public void preConnect(ConnectionFactory<FacebookApi> provider, WebRequest request) {
+	public void preConnect(ConnectionFactory<Facebook> provider, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TO_WALL_PARAMETER))) {
 			request.setAttribute(POST_TO_WALL_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}
@@ -47,36 +40,31 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 		}
 	}
 
-	public void postConnect(Connection<FacebookApi> connection, WebRequest request) {
-		FacebookApi facebook = connection.getApi();
+	public void postConnect(Connection<Facebook> connection, WebRequest request) {
 		Account account = AccountUtils.getCurrentAccount();
-		postToWall(facebook, account, request);
+		postToWall(connection, account, request);
 		useFacebookProfileImage(connection, account, request);
 	}
 
 	// internal helpers
 	
-	private void postToWall(FacebookApi facebook, Account account, WebRequest request) {
+	private void postToWall(Connection<Facebook> connection, Account account, WebRequest request) {
 		if (request.getAttribute(POST_TO_WALL_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
-			facebook.feedOperations().postLink("Join me at the Greenhouse!", new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.",
+			connection.getApi().feedOperations().postLink("Join me at the Greenhouse!", new FacebookLink(account.getProfileUrl(), "Greenhouse", "Where Spring developers hang out.",
 				"We help you connect with fellow application developers and take advantage of everything the Spring community has to offer."));
 			request.removeAttribute(POST_TO_WALL_ATTRIBUTE, WebRequest.SCOPE_SESSION);
 		}
 	}
 
-	private void useFacebookProfileImage(Connection<FacebookApi> facebook, Account account, WebRequest request) {
+	private void useFacebookProfileImage(Connection<Facebook> connection, Account account, WebRequest request) {
 		if (request.getAttribute(USE_FACEBOOK_IMAGE_ATTRIBUTE, WebRequest.SCOPE_SESSION) != null) {
 			try {
-				profilePictureService.saveProfilePicture(account.getId(), getProfilePicture(facebook.getKey().getProviderUserId()));
+				profilePictureService.saveProfilePicture(account.getId(), connection.getApi().userOperations().getUserProfileImage());
 			} catch (IOException e) {
 				FlashMap.setWarningMessage("Greenhouse was unable to use your Facebook profile picture.");
 			}
 			request.removeAttribute(USE_FACEBOOK_IMAGE_ATTRIBUTE, WebRequest.SCOPE_SESSION);			
 		}
-	}
-
-	private byte[] getProfilePicture(String profileId) {
-		return restTemplate.getForEntity(PROFILE_LARGE_PICTURE_URL, byte[].class, profileId).getBody();
 	}
 
 	private static final String POST_TO_WALL_PARAMETER = "postToWall";
@@ -86,7 +74,5 @@ public class FacebookConnectInterceptor implements ConnectInterceptor<FacebookAp
 	private static final String USE_FACEBOOK_IMAGE_PARAMETER = "useProfilePicture";
 
 	private static final String USE_FACEBOOK_IMAGE_ATTRIBUTE = "facebookConnect." + USE_FACEBOOK_IMAGE_PARAMETER;
-
-	private static final String PROFILE_LARGE_PICTURE_URL = "https://graph.facebook.com/{profileId}/picture?type=large";
 
 }
