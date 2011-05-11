@@ -15,10 +15,7 @@
  */
 package com.springsource.greenhouse.config;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -28,11 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.format.datetime.joda.JodaTimeContextHolder;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
@@ -41,24 +35,18 @@ import org.springframework.social.facebook.web.FacebookHandlerMethodArgumentReso
 import org.springframework.social.mobile.device.DeviceHandlerMethodArgumentResolver;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
 import org.springframework.web.bind.support.WebDataBinderFactory;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor;
-import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
-import org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
@@ -70,42 +58,34 @@ import com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor;
 import com.springsource.greenhouse.utils.Location;
 
 @Configuration
-public class WebConfig {
-
-	@Inject
-	private WebApplicationContext context;
+@EnableWebMvc
+public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Inject
 	private Environment environment;
 
-	@Bean
-	public HandlerMapping annotatedControllerMapping() {
-		RequestMappingHandlerMapping handlerMapping = new RequestMappingHandlerMapping();
-		handlerMapping.setInterceptors(interceptors());
-		handlerMapping.setOrder(1);
-		return handlerMapping;
+	// implementing WebMvcConfigurer
+
+	public void configureInterceptors(InterceptorConfigurer interceptorConfigurer) {
+		interceptorConfigurer.addInterceptor(new AccountExposingHandlerInterceptor());
+		interceptorConfigurer.addInterceptor(new DateTimeZoneHandlerInterceptor());
+		interceptorConfigurer.addInterceptor(new UserLocationHandlerInterceptor());
+		interceptorConfigurer.addInterceptor(new DeviceResolverHandlerInterceptor());
 	}
 
-	@Bean
-	public RequestMappingHandlerAdapter annotatedControllerAdapter() {
-		RequestMappingHandlerAdapter handlerAdapter = new RequestMappingHandlerAdapter();
-
-		ConfigurableWebBindingInitializer bindingInitializer = new ConfigurableWebBindingInitializer();
-		bindingInitializer.setConversionService(conversionService());
-		bindingInitializer.setValidator(validator());
-		handlerAdapter.setWebBindingInitializer(bindingInitializer);
-		
-		handlerAdapter.setMessageConverters(messageConverters());
-		handlerAdapter.setCustomArgumentResolvers(customArgumentResolvers());
-		return handlerAdapter;
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(new MappingJacksonHttpMessageConverter());
 	}
 
-	public ConversionService conversionService() {
-		return new DefaultFormattingConversionService();
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+		argumentResolvers.add(new AccountHandlerMethodArgumentResolver());
+		argumentResolvers.add(new DateTimeZoneHandlerMethodArgumentResolver());
+		argumentResolvers.add(new LocationHandlerMethodArgumentResolver());
+		argumentResolvers.add(new FacebookHandlerMethodArgumentResolver(environment.getProperty("facebook.appId"), environment.getProperty("facebook.appSecret")));
+		argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());		
 	}
-	
-	@Bean
-	public Validator validator() {
+
+	public Validator getValidator() {
 		LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename("/WEB-INF/messages/validation");
@@ -116,30 +96,12 @@ public class WebConfig {
 		return factory;
 	}
 
-	// resource handling
-	
-	@Bean
-	public HandlerMapping resourceHttpRequestHandlerMapping() {
-		SimpleUrlHandlerMapping resourceMapping = new SimpleUrlHandlerMapping();
-		Map<String, ResourceHttpRequestHandler> urlMap = Collections.singletonMap("/resources/**", resourceHttpRequestHandler());
-		resourceMapping.setUrlMap(urlMap);
-		resourceMapping.setOrder(0);
-		return resourceMapping;
-	}
-	
-	@Bean
-	public ResourceHttpRequestHandler resourceHttpRequestHandler() {
-		ResourceHttpRequestHandler handler = new ResourceHttpRequestHandler();
-		List<Resource> locations = new ArrayList<Resource>(1);
-		locations.add(context.getResource("/resources/"));
-		handler.setLocations(locations);
-		return handler;
+	public void configureResourceHandling(ResourceConfigurer resourceConfigurer) {
+		resourceConfigurer.addPathMapping("/resources/**");
+		resourceConfigurer.addResourceLocation("/resources/");
 	}
 
-	@Bean
-	public HttpRequestHandlerAdapter httpRequestHandlerAdapter() {
-		return new HttpRequestHandlerAdapter();
-	}
+	// additional webmvc-related beans
 	
 	@Bean
 	public ViewResolver viewResolver() {
@@ -178,32 +140,6 @@ public class WebConfig {
 	
 	// internal helpers
 
-	private List<HttpMessageConverter<?>> messageConverters() {
-		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>(1);
-		converters.add(new MappingJacksonHttpMessageConverter());
-		return converters;
-	}
-
-	private List<HandlerMethodArgumentResolver> customArgumentResolvers() {
-		List<HandlerMethodArgumentResolver> argumentResolvers = new ArrayList<HandlerMethodArgumentResolver>();
-		argumentResolvers.add(new AccountHandlerMethodArgumentResolver());
-		argumentResolvers.add(new DateTimeZoneHandlerMethodArgumentResolver());
-		argumentResolvers.add(new LocationHandlerMethodArgumentResolver());
-		argumentResolvers.add(new FacebookHandlerMethodArgumentResolver(environment.getProperty("facebook.appId"), environment.getProperty("facebook.appSecret")));
-		argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());
-		return argumentResolvers;
-	}
-	
-	private HandlerInterceptor[] interceptors() {
-		return new HandlerInterceptor[] {
-			new ConversionServiceExposingInterceptor(conversionService()),
-			new AccountExposingHandlerInterceptor(),
-			new DateTimeZoneHandlerInterceptor(),
-			new UserLocationHandlerInterceptor(),
-			new DeviceResolverHandlerInterceptor()
-		};
-	}
-	
 	private static class AccountHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
 		public boolean supportsParameter(MethodParameter parameter) {

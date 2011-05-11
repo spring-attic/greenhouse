@@ -29,9 +29,6 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
-import com.springsource.greenhouse.config.SecurityConfig.Embedded;
-import com.springsource.greenhouse.config.SecurityConfig.Standard;
-
 @Configuration
 @ImportResource("classpath:com/springsource/greenhouse/config/security.xml")
 @Import({Standard.class, Embedded.class})

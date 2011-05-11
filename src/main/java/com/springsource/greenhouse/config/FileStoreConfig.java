@@ -27,9 +27,6 @@ import org.springframework.data.FileStorage;
 import org.springframework.data.LocalFileStorage;
 import org.springframework.data.S3FileStorage;
 
-import com.springsource.greenhouse.config.FileStoreConfig.Embedded;
-import com.springsource.greenhouse.config.FileStoreConfig.Standard;
-
 @Configuration
 @Import({Standard.class, Embedded.class})
 public class FileStoreConfig {

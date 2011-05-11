@@ -35,8 +35,6 @@ import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.springsource.greenhouse.config.DataConfig.Embedded;
-import com.springsource.greenhouse.config.DataConfig.Standard;
 import com.springsource.greenhouse.database.DatabaseUpgrader;
 
 @Configuration
