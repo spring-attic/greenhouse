@@ -29,7 +29,7 @@ import com.springsource.greenhouse.account.AccountMapper;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.JdbcAccountRepository;
 import com.springsource.greenhouse.account.StubFileStorage;
-import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
 import com.springsource.greenhouse.develop.NoSuchAccountConnectionException;

@@ -1,4 +1,4 @@
-package com.springsource.greenhouse.config.database;
+package com.springsource.greenhouse.database;
 
 import org.junit.Test;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;

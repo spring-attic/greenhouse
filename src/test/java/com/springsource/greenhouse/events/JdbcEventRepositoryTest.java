@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.utils.Location;
 import com.springsource.greenhouse.events.EventTrackForm;
 

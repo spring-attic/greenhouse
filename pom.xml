@@ -87,6 +87,11 @@
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
+				<!-- Seems to be a bug in 3.1.0.RC2 -->
+				<exclusion>
+					<artifactId>openid4java-nodeps</artifactId>
+					<groupId>org.openid4java</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>

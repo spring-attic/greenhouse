@@ -11,7 +11,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.oauth.common.signature.SharedConsumerSecret;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 
-import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.JdbcAppRepository;
 

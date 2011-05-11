@@ -19,7 +19,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
-import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.invite.InviteRepository;
 import com.springsource.greenhouse.invite.Invitee;
 import com.springsource.greenhouse.invite.JdbcInviteRepository;

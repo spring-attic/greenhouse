@@ -17,7 +17,7 @@ import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.activity.action.Action;
 import com.springsource.greenhouse.activity.action.ActionGateway;
 import com.springsource.greenhouse.activity.action.JdbcActionRepository;
-import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcInviteRepositoryTest {
 	

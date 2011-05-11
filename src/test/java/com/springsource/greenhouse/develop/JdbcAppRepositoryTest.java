@@ -16,7 +16,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.test.transaction.TransactionalMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springsource.greenhouse.config.database.GreenhouseTestDatabaseBuilder;
+import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAppRepositoryTest {
 
