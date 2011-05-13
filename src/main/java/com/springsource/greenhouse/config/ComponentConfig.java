@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackages="com.springsource.greenhouse", excludeFilters={ @Filter(Configuration.class)} )
-/* TODO remove once inner @Configuration classes are auto-detected */ @Import({ComponentConfig.Standard.class, ComponentConfig.Embedded.class})
+@Import({ComponentConfig.Standard.class, ComponentConfig.Embedded.class})
 public class ComponentConfig {
 	
 	/**

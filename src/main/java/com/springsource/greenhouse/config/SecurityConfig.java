@@ -38,7 +38,7 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
  */
 @Configuration
 @ImportResource("classpath:com/springsource/greenhouse/config/security.xml")
-/* TODO remove once inner @Configuration classes are auto-detected */  @Import({SecurityConfig.Standard.class, SecurityConfig.Embedded.class})
+@Import({SecurityConfig.Standard.class, SecurityConfig.Embedded.class})
 public class SecurityConfig {
 
 	/**
