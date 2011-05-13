@@ -41,21 +41,12 @@ public class MailConfig extends EnvironmentAwareConfig {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setDefaultEncoding("UTF-8");
 		mailSender.setHost(environment.getProperty("mail.host"));
-		Integer port = environment.getProperty("mail.port", Integer.class);
-		if (port != null) {
-			mailSender.setPort(port);
-		}
+		mailSender.setPort(environment.getProperty("mail.port", Integer.class, 25));
 		mailSender.setUsername(environment.getProperty("mail.username"));
 		mailSender.setPassword(environment.getProperty("mail.password"));
 		Properties properties = new Properties();
-		Boolean mailSmtpAuth = environment.getProperty("mail.smtp.auth", Boolean.class);
-		if (mailSmtpAuth != null) {
-			properties.put("mail.smtp.auth", mailSmtpAuth);
-		}
-		Boolean mailSmtpStartTls = environment.getProperty("mail.smtp.starttls.enable", Boolean.class);
-		if (mailSmtpAuth != null) {
-			properties.put("mail.smtp.auth", mailSmtpStartTls);
-		}
+		properties.put("mail.smtp.auth", environment.getProperty("mail.smtp.auth", Boolean.class, false));
+		properties.put("mail.smtp.starttls.enable", environment.getProperty("mail.smtp.starttls.enable", Boolean.class, false));
 		mailSender.setJavaMailProperties(properties);
 		return mailSender;
 	}
