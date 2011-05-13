@@ -34,7 +34,7 @@ import org.springframework.data.S3FileStorage;
  * @author Keith Donald
  */
 @Configuration
-@Import({FileStoreConfig.Standard.class, FileStoreConfig.Embedded.class})
+@Import({FileStoreConfig.Embedded.class, FileStoreConfig.Standard.class})
 public class FileStoreConfig {
 
 	/**

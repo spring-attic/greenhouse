@@ -48,7 +48,7 @@ import com.springsource.greenhouse.database.DatabaseUpgrader;
  */
 @Configuration
 @EnableTransactionManagement(mode=AdviceMode.ASPECTJ)
-@Import({DataConfig.Standard.class, DataConfig.Embedded.class})
+@Import({DataConfig.Embedded.class, DataConfig.Standard.class})
 public class DataConfig {
 
 	@Inject
