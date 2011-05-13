@@ -206,19 +206,6 @@
 			<version>1.2.16</version>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- Declared to exclude commons-logging (would be resolved transitively otherwise) TODO look to upgrade to 4.x -->
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>			
-			</exclusions>
-		</dependency>
 	
 		<!-- Database -->
 		<dependency>
@@ -233,6 +220,19 @@
 			<version>r08</version>
 		</dependency>				
 
+		<!-- Apache Http Client -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>			
+			</exclusions>
+		</dependency>
+		
 		<!-- JavaMail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -333,7 +333,8 @@
 		<dependency>
 			<groupId>net.java.dev.jets3t</groupId>
 			<artifactId>jets3t</artifactId>
-			<version>0.7.4</version>
+			<!-- The next release of jets3t should have support for HttpComponents 4.1 and HttpClient 3.1 will be removed from the classpath -->
+			<version>0.8.1</version>
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>

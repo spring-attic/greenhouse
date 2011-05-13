@@ -67,12 +67,10 @@ public class EventsController {
 	 * Only matches 'GET /events' requests for JSON content; a 404 is sent otherwise.
 	 * TODO send a 406 if an unsupported representation, such as XML, is requested.  See SPR-7353.
 	 */
-	/*
 	@RequestMapping(value="/events", method=RequestMethod.GET, headers="Accept=application/json") 
 	public @ResponseBody List<Event> upcomingEvents(@RequestParam(value="after", required=false) @DateTimeFormat(iso=ISO.DATE_TIME) Long afterMillis) {
 		return eventRepository.findUpcomingEvents(afterMillis);
 	}
-	*/
 
 	/**
 	 * Write the list of event favorites to the body of the response.

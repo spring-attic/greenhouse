@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.config.AdviceMode;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -34,27 +33,47 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.database.DatabaseUpgrader;
 
+/**
+ * Greenhouse RDBMS access configuration.
+ * A RDBMS provides the system of record for transactional data in the Greenhouse application.
+ * We use {@link JdbcTemplate} to access that data.
+ * We use compile-time-woven AspectJ-advice around {@link Transactional} methods to apply transaction management.
+ * In "embedded mode", we use an embedded database to ease setup of a developer testing environment.
+ * In "standard mode", we connect to a file-based H2 database via a connection pool.
+ * @author Keith Donald
+ */
 @Configuration
 @EnableTransactionManagement(mode=AdviceMode.ASPECTJ)
-@Import({Standard.class, Embedded.class})
+/* TODO remove once inner @Configuration classes are auto-detected */ @Import({DataConfig.Standard.class, DataConfig.Embedded.class})
 public class DataConfig {
 
 	@Inject
 	private DataSource dataSource;
 	
+	/**
+	 * Allows repositories to access RDBMS data using the JDBC API.
+	 */
 	@Bean
 	public JdbcTemplate jdbcTemplate() {
 		return new JdbcTemplate(dataSource);
 	}
 	
+	/**
+	 * Allows transactions to be managed against the RDBMS using the JDBC API.
+	 */
 	@Bean
 	public PlatformTransactionManager transactionManager() {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
+	/**
+	 * Embedded DataSoure configuration.
+	 * @author Keith Donald
+	 */
 	@Configuration
 	@Profile("embedded")
 	static class Embedded {
@@ -78,13 +97,14 @@ public class DataConfig {
 
 	}
 	
+	/**
+	 * Standard DataSource configuration.
+	 * @author Keith Donald
+	 */
 	@Configuration
 	@Profile("standard")
-	static class Standard {
+	static class Standard extends EnvironmentAwareConfig {
 
-		@Inject
-		private Environment environment;
-		
 		@Bean(destroyMethod="dispose")
 		public DataSource dataSource() {
 			JdbcConnectionPool dataSource = JdbcConnectionPool.create(environment.getProperty("database.url"),

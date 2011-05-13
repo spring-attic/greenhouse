@@ -20,18 +20,30 @@ import java.util.concurrent.Executor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.config.AdviceMode;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+/**
+ * Asynchronous task execution configuration.
+ * We apply compile-time AspectJ-advice to enable {@link Async} methods to run in separate threads.
+ * The Executor that carries out asynchrnous task execution is a {@link ThreadPoolTaskExecutor}.
+ * It is used to execute {@link Async} methods as well as handle asynchronous work initiated by Spring Integration. 
+ * @author Keith Donald
+ */
 @Configuration
 @EnableAsync(mode=AdviceMode.ASPECTJ)
 public class TaskConfig implements AsyncConfigurer {
 
+	// implementing AsyncConfigurer
 	public Executor getAsyncExecutor() {
 		return taskExecutor();
 	}
 	
+	/**
+	 * The asynchronous task executor used by the Greenhouse application.
+	 */
 	@Bean
 	public Executor taskExecutor() {
 		return new ThreadPoolTaskExecutor();

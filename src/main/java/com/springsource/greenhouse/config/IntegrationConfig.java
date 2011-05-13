@@ -18,6 +18,16 @@ package com.springsource.greenhouse.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+/**
+ * Imports the Spring Integration pipelines defined in the Greenhouse application.
+ * This includes:
+ * <ul>
+ * <li>A "signup" pipeline for sending welcome emails to new users</li>
+ * <li>An "activity" pipeline for sending recent activity notifications and awarding badges.</li>
+ * </ul>
+ * Spring Integration pipelines are components best defined in XML so there's very little here other than some imports.
+ * @author Keith Donald
+ */
 @Configuration
 @ImportResource({
 	"classpath:com/springsource/greenhouse/activity/integration-activity.xml",

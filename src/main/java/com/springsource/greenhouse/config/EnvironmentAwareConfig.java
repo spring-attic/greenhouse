@@ -15,12 +15,22 @@
  */
 package com.springsource.greenhouse.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.context.annotation.Configuration;
+import javax.inject.Inject;
 
-@Configuration
-@ComponentScan(basePackages="com.springsource.greenhouse", excludeFilters={ @Filter(Configuration.class)} )
-public class ComponentScanConfig {
+import org.springframework.core.env.Environment;
+
+/**
+ * Base class that simply exposes a protected field referencing the current Environment.
+ * Allows subclasses to access environment properties when constructing beans.
+ * @author Keith Donald
+ * @see Environment
+ */
+abstract class EnvironmentAwareConfig {
+	
+	/**
+	 * The current environment.
+	 */
+	@Inject
+	protected Environment environment;
 	
 }

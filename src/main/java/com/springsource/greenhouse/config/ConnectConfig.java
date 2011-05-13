@@ -23,9 +23,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -48,8 +48,13 @@ import com.springsource.greenhouse.connect.FacebookConnectInterceptor;
 import com.springsource.greenhouse.connect.TwitterConnectInterceptor;
 import com.springsource.greenhouse.members.ProfilePictureService;
 
+/**
+ * Spring Social Configuration.
+ * Allows Greenhouse users to connect to SaaS providers such as Twitter and Facebook.
+ * @author Keith Donald
+ */
 @Configuration
-public class ConnectConfig {
+public class ConnectConfig extends EnvironmentAwareConfig {
 
 	@Inject
 	private DataSource dataSource;
@@ -57,9 +62,11 @@ public class ConnectConfig {
 	@Inject
 	private TextEncryptor textEncryptor;
 	
-	@Inject
-	private Environment environment;
-
+	/**
+	 * The locator for SaaS provider connection factories.
+	 * When support for a new provider is added to Greenhouse, simply register the corresponding {@link ConnectionFactory} here.
+	 * The current Environment is used to lookup the credentials assigned to the Greenhouse application by each provider during application registration.
+	 */
 	@Bean
 	public ConnectionFactoryLocator connectionFactoryLocator() {
 		ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
@@ -70,11 +77,21 @@ public class ConnectConfig {
 		return registry;
 	}
 	
+	/**
+	 * THe shared store for users' connection information.
+	 * Uses a RDBMS-based store accessed with Spring's JdbcTemplate.
+	 * The returned repository encrypts the data using the configured {@link TextEncryptor}.
+	 */
 	@Bean
 	public UsersConnectionRepository usersConnectionRepository() {
 		return new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator(), textEncryptor);
 	}
 
+	/**
+	 * A request-scoped bean that provides the data access interface to the current user's connections
+	 * Note this bean is not a scoped-proxy, so it is NOT instantiated at application startup and may only be obtained in the context of a web request.
+	 * This is achieved by injecting a reference to javax.inject.Provider&lt;ConnectionRepository&gt; into other objects that need a {@link ConnectionRepository}.
+	 */
 	@Bean
 	@Scope(value="request")
 	public ConnectionRepository connectionRepository() {
@@ -84,7 +101,13 @@ public class ConnectConfig {
 		}
 		return usersConnectionRepository().createConnectionRepository(account.getName());
 	}
-	
+
+	/**
+	 * A request-scoped bean representing the API binding to Facebook for the current user.
+	 * Note this bean is not a scoped-proxy, so it is NOT instantiated at application startup and may only be obtained in the context of a web request.
+	 * This is achieved by injecting a reference to javax.inject.Provider&lt;Facebook&gt; into other objects.
+	 * Returns null if the current user is not connected to Facebook.
+	 */
 	@Bean
 	@Scope(value="request")	
 	public Facebook facebook() {
@@ -92,13 +115,24 @@ public class ConnectConfig {
 		return connection != null ? connection.getApi() : null;
 	}
 
+	/**
+	 * A proxy to the request-scoped API binding to Twitter for the current user.
+	 * Since it is a scoped-proxy, references to this bean MAY be injected at application startup time.
+	 * The target is an authorized {@link Twitter} instance if the current user has connected his or her account with a Twitter account.
+	 * Otherwise, the target is a new TwitterTemplate that can invoke operations that do not require authorization.
+	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	public Twitter twitter() {
 		Connection<Twitter> connection = connectionRepository().findPrimaryConnectionToApi(Twitter.class);
 		return connection != null ? connection.getApi() : new TwitterTemplate();
 	}
-	
+
+	/**
+	 * The Spring MVC Controller that coordinates connections to service providers on behalf of users.
+	 * @param connectionRepositoryProvider needed to persist new connections
+	 * @param profilePictureService needed by the {@link FacebookConnectInterceptor} to make the user's Facebook profile picture their Greenhouse profile picture.
+	 */
 	@Bean
 	public ConnectController connectController(Provider<ConnectionRepository> connectionRepositoryProvider, ProfilePictureService profilePictureService) {
 		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator(), connectionRepositoryProvider);
@@ -106,11 +140,19 @@ public class ConnectConfig {
 		controller.addInterceptor(new TwitterConnectInterceptor());
 		return controller;
 	}
-	
+
+	/**
+	 * The Spring MVC Controller that coordinates "sign-in with {provider}" attempts.
+	 * @param connectionFactoryLocatorProvider needed to create connections and restore them from their persistent form.
+	 * @param connectionRepositoryProvider needed to persist new connections
+	 * @param profilePictureService needed by the {@link FacebookConnectInterceptor} to make the user's Facebook profile picture their Greenhouse profile picture.
+	 */
 	@Bean
 	public ProviderSignInController providerSignInController(Provider<ConnectionFactoryLocator> connectionFactoryLocatorProvider, Provider<ConnectionRepository> connectionRepositoryProvider, SignInService signInService) {
 		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocatorProvider, usersConnectionRepository(), connectionRepositoryProvider, signInService);
 	}
+	
+	// internal helpers
 	
 	private String getSecureUrl() {
 		return environment.getProperty("application.secureUrl");

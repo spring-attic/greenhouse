@@ -11,10 +11,12 @@
 		<put-list-attribute name="styles">
             <add-attribute value="/recent/recentActivity.css"/>
         </put-list-attribute>
+        <!-- TODO: pending more extensive testing
 		<put-list-attribute name="scripts">
             <add-attribute value="/socket-io/0.6.2/socket.io.js"/>
             <add-attribute value="/recent/recentActivity.js"/>
         </put-list-attribute>
+         -->
 	</definition>
 	
 	<definition name="homeSignedIn" extends="page">

@@ -14,8 +14,8 @@
 	</context-param>
 	
 	<context-param>
-    	<param-name>contextInitializerClasses</param-name>
-    	<param-value>com.springsource.greenhouse.config.ContextInitializer</param-value>
+    	<param-name>spring.profiles.default</param-name>
+    	<param-value>embedded</param-value>
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->

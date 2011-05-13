@@ -21,36 +21,29 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.FileStorage;
 import org.springframework.data.LocalFileStorage;
 import org.springframework.data.S3FileStorage;
 
+/**
+ * Greenhouse file store configuration.
+ * Used to store user profile pictures.
+ * In embedded mode, we use local file storage with "delete on VM exit".
+ * In standard mode, we use Amazon S3's file storage service.
+ * @author Keith Donald
+ */
 @Configuration
-@Import({Standard.class, Embedded.class})
+/* TODO remove once inner @Configuration classes are auto-detected */ @Import({FileStoreConfig.Standard.class, FileStoreConfig.Embedded.class})
 public class FileStoreConfig {
 
-	@Configuration
-	@Profile("standard")
-	static class Standard {
-
-		@Inject
-		private Environment environment;
-
-		@Bean
-		public FileStorage pictureStorage() {
-			return new S3FileStorage(environment.getProperty("s3.accessKey"), environment.getProperty("s3.secretKey"), "images.greenhouse.springsource.org");
-		}
-		
-	}
-
+	/**
+	 * Local.
+	 * @author Keith Donald
+	 */
 	@Configuration
 	@Profile("embedded")
-	static class Embedded {
-
-		@Inject
-		private Environment environment;
+	static class Embedded extends EnvironmentAwareConfig {
 
 		@Inject
 		private ResourceLoader resourceLoader;
@@ -61,6 +54,21 @@ public class FileStoreConfig {
 			LocalFileStorage pictureStorage = new LocalFileStorage(applicationUrl + "/resources/", resourceLoader.getResource("/resources/"));
 			pictureStorage.setDeleteOnExit(true);
 			return pictureStorage;
+		}
+		
+	}
+	
+	/**
+	 * S3.
+	 * @author Keith Donald
+	 */
+	@Configuration
+	@Profile("standard")
+	static class Standard extends EnvironmentAwareConfig {
+
+		@Bean
+		public FileStorage pictureStorage() {
+			return new S3FileStorage(environment.getProperty("s3.accessKey"), environment.getProperty("s3.secretKey"), "images.greenhouse.springsource.org");
 		}
 		
 	}

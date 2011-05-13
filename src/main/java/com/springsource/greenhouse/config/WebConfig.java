@@ -46,6 +46,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
@@ -57,6 +58,13 @@ import com.springsource.greenhouse.home.UserLocationHandlerInterceptor;
 import com.springsource.greenhouse.signin.AccountExposingHandlerInterceptor;
 import com.springsource.greenhouse.utils.Location;
 
+/**
+ * Spring MVC Configuration.
+ * Implements {@link WebMvcConfigurer}, which provides convenient callbacks that allow us to customize aspects of the Spring Web MVC framework.
+ * These callbacks allow us to register custom interceptors, message converters, argument resovlers, a validator, resource handling, and other things.
+ * @author Keith Donald
+ * @see WebMvcConfigurer
+ */
 @Configuration
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -97,19 +105,26 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	public void configureResourceHandling(ResourceConfigurer resourceConfigurer) {
+		// requests for /resources/** are mapped to files in ${webappRoot}/resources.
 		resourceConfigurer.addPathMapping("/resources/**");
 		resourceConfigurer.addResourceLocation("/resources/");
 	}
 
 	// additional webmvc-related beans
-	
+
+	/**
+	 * ViewResolver configuration required to work with Tiles2-based views.
+	 */
 	@Bean
 	public ViewResolver viewResolver() {
 		UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
 		viewResolver.setViewClass(TilesView.class);
 		return viewResolver;
 	}
-	
+
+	/**
+	 * Configures Tiles at application startup.
+	 */
 	@Bean
 	public TilesConfigurer tilesConfigurer() {
 		TilesConfigurer configurer = new TilesConfigurer();
@@ -121,6 +136,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return configurer;
 	}
 	
+	/**
+	 * Messages to support internationalization/localization.
+	 */
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -130,7 +148,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		}
 		return messageSource;
 	}
-	
+
+	/**
+	 * Supports FileUploads.
+	 */
 	@Bean
 	public MultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
@@ -138,7 +159,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return multipartResolver;
 	}
 	
-	// internal helpers
+	// custom argument resolver inner classes
 
 	private static class AccountHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
