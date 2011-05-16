@@ -15,11 +15,14 @@
  */
 package com.springsource.greenhouse.config;
 
+import javax.inject.Inject;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -66,7 +69,10 @@ public class SecurityConfig {
 	 */
 	@Configuration
 	@Profile("standard")
-	static class Standard extends EnvironmentAwareConfig {
+	static class Standard {
+
+		@Inject
+		private Environment environment;
 
 		@Bean
 		public PasswordEncoder passwordEncoder() {

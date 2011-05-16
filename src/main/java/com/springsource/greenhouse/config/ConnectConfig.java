@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
@@ -54,13 +55,16 @@ import com.springsource.greenhouse.members.ProfilePictureService;
  * @author Keith Donald
  */
 @Configuration
-public class ConnectConfig extends EnvironmentAwareConfig {
+public class ConnectConfig {
 
 	@Inject
 	private DataSource dataSource;
 	
 	@Inject
 	private TextEncryptor textEncryptor;
+
+	@Inject
+	private Environment environment;
 	
 	/**
 	 * The locator for SaaS provider connection factories.

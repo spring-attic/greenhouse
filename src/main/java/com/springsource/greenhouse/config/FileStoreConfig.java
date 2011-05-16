@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.FileStorage;
 import org.springframework.data.LocalFileStorage;
@@ -43,7 +44,10 @@ public class FileStoreConfig {
 	 */
 	@Configuration
 	@Profile("embedded")
-	static class Embedded extends EnvironmentAwareConfig {
+	static class Embedded {
+
+		@Inject
+		private Environment environment;
 
 		@Inject
 		private ResourceLoader resourceLoader;
@@ -64,7 +68,10 @@ public class FileStoreConfig {
 	 */
 	@Configuration
 	@Profile("standard")
-	static class Standard extends EnvironmentAwareConfig {
+	static class Standard {
+
+		@Inject
+		private Environment environment;
 
 		@Bean
 		public FileStorage pictureStorage() {

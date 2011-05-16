@@ -17,8 +17,11 @@ package com.springsource.greenhouse.config;
 
 import java.util.Properties;
 
+import javax.inject.Inject;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -29,7 +32,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
  * @author Keith Donald
  */
 @Configuration
-public class MailConfig extends EnvironmentAwareConfig {
+public class MailConfig {
+
+	@Inject
+	private Environment environment;
 
 	/**
 	 * The Java Mail sender.
