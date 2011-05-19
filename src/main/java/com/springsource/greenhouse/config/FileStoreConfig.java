@@ -19,7 +19,6 @@ import javax.inject.Inject;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
@@ -35,7 +34,6 @@ import org.springframework.data.S3FileStorage;
  * @author Keith Donald
  */
 @Configuration
-@Import({FileStoreConfig.Embedded.class, FileStoreConfig.Standard.class})
 public class FileStoreConfig {
 
 	/**
