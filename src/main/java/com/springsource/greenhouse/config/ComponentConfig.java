@@ -16,11 +16,10 @@
 package com.springsource.greenhouse.config;
 
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * Configuration for Greenhouse application @Components such as @Services, @Repositories, and @Controllers.
@@ -30,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackages="com.springsource.greenhouse", excludeFilters={ @Filter(Configuration.class)} )
-@Import({ComponentConfig.Embedded.class, ComponentConfig.Standard.class})
 public class ComponentConfig {
 	
 	/**

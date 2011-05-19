@@ -19,7 +19,6 @@ import javax.inject.Inject;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
@@ -41,7 +40,6 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
  */
 @Configuration
 @ImportResource("classpath:com/springsource/greenhouse/config/security.xml")
-@Import({SecurityConfig.Embedded.class, SecurityConfig.Standard.class})
 public class SecurityConfig {
 
 	/**

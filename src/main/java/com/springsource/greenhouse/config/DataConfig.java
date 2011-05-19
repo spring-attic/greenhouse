@@ -21,7 +21,6 @@ import javax.sql.DataSource;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.config.AdviceMode;
 import org.springframework.core.env.Environment;
@@ -49,7 +48,6 @@ import com.springsource.greenhouse.database.DatabaseUpgrader;
  */
 @Configuration
 @EnableTransactionManagement(mode=AdviceMode.ASPECTJ)
-@Import({DataConfig.Embedded.class, DataConfig.Standard.class})
 public class DataConfig {
 
 	@Inject
