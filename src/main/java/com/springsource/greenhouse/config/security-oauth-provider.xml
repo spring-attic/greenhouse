@@ -22,6 +22,4 @@
 		<property name="realmName" value="Greenhouse" />
 	</bean>
     
-    <import resource="security-oauth-provider.xml" />
-    
 </beans>

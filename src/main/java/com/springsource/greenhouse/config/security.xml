@@ -29,4 +29,6 @@
 		<authentication-provider ref="usernamePasswordAuthenticationProvider" />
 	</authentication-manager>
 
+    <beans:import resource="security-oauth-provider.xml" />
+    
 </beans:beans>
