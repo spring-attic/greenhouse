@@ -37,11 +37,19 @@ import com.springsource.greenhouse.develop.oauth.RedisOAuthSessionManager;
 /**
  * Spring Security Configuration.
  * Applies the policies that secure the Greenhouse web application.
- * Spring Security is currently best configured using its XML namespace, so this class imports a XML file containing most of the configuration information.
- * The password encoder and text encryptor are configured in Java.
+ * <p>
  * In embedded mode, we don't bother with any password encoding or data encryption for developer convenience and ease of developer testing.
+ * We also store temporary OAuth sessions in an in-memory ConcurrentHashMap.
+ * </p>
+ * <p>
  * In standard mode, we apply standard password encoding (SHA-256 1024 iteration hashing + random salting)
  * and encryption (Password-based 256-Bit AES + site-global salt + secure random 16-byte iV handling).
+ * We store temporary OAuth sessions in the Redis key-value store.
+ * </p>
+ * <p>
+ * Spring Security is currently best configured using its XML namespace, so this class imports a XML file containing most of the configuration information.
+ * The PasswordEncoder, TextEncryptor, and OAuthSessionManager are configured in Java.
+ * </p>
  * @author Keith Donald
  */
 @Configuration
