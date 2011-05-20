@@ -25,9 +25,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.config.AdviceMode;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.keyvalue.redis.connection.RedisConnectionFactory;
-import org.springframework.data.keyvalue.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.keyvalue.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -73,7 +70,7 @@ public class DataConfig {
 	}
 
 	/**
-	 * Embedded DataSoure configuration.
+	 * Embedded Data configuration.
 	 * @author Keith Donald
 	 */
 	@Configuration
@@ -102,7 +99,7 @@ public class DataConfig {
 	}
 	
 	/**
-	 * Standard DataSource configuration.
+	 * Standard Data configuration.
 	 * @author Keith Donald
 	 */
 	@Configuration
@@ -118,20 +115,6 @@ public class DataConfig {
 					environment.getProperty("database.username"), environment.getProperty("database.password"));
 			new DatabaseUpgrader(dataSource).run();
 			return dataSource;
-		}
-		
-		@Bean
-		public RedisConnectionFactory redisConnectionFactory() {
-			JedisConnectionFactory redis = new JedisConnectionFactory();
-			redis.setHostName(environment.getProperty("redis.hostName"));
-			redis.setPort(environment.getProperty("redis.port", Integer.class));
-			redis.setPassword(environment.getProperty("redis.password"));
-			return redis;
-		}
-		
-		@Bean
-		public StringRedisTemplate redisTemplate() {
-			return new StringRedisTemplate(redisConnectionFactory());
 		}
 		
 	}
