@@ -35,7 +35,7 @@ import com.springsource.greenhouse.develop.NoSuchAccountConnectionException;
  * Allows for the {@link OAuthSessionManager} to be used with Spring Security OAuth-based Provider to store OAuth request state and establish OAuth connections.
  * @author Keith Donald
  */
-@Service
+@Service("oauthProviderTokenServices")
 public class OAuthSessionManagerProviderTokenServices implements OAuthProviderTokenServices {
 	
 	private OAuthSessionManager sessionManager;

@@ -13,7 +13,7 @@
 	 -->
 	 
 	<!-- Spring Security OAuth 1.0 Provider Configuration -->	
-	<oauth:provider consumer-details-service-ref="appConsumerDetailsService" token-services-ref="OAuthSessionManagerProviderTokenServices"
+	<oauth:provider consumer-details-service-ref="appConsumerDetailsService" token-services-ref="oauthProviderTokenServices"
 		request-token-url="/oauth/request_token" authenticate-token-url="/oauth/authorize"
 		authentication-failed-url="/oauth/confirm_access" access-token-url="/oauth/access_token" require10a="false" />
 
