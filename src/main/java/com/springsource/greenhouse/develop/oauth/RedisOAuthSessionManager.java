@@ -54,6 +54,12 @@ public class RedisOAuthSessionManager extends AbstractOAuthSessionManager {
 	}
 
 	@Override
+	protected void authorized(StandardOAuthSession session) {
+		RedisMap<String, String> sessionHash = sessionHash(session.getRequestToken());
+		sessionHash.putAll(toAuthorizedHash(session));
+	}
+	
+	@Override
 	protected void remove(String requestToken) {
 		redisTemplate.delete(key(requestToken));
 	}
@@ -73,13 +79,19 @@ public class RedisOAuthSessionManager extends AbstractOAuthSessionManager {
 		map.put("apiKey", session.getApiKey());
 		map.put("callbackUrl", session.getCallbackUrl());
 		map.put("secret", session.getSecret());
+		return map;
+	}
+
+	private Map<String, String> toAuthorizedHash(StandardOAuthSession session) {
+		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("authorizingAccountId", session.getAuthorizingAccountId().toString());
 		map.put("verifer", session.getVerifier());
 		return map;
 	}
 
 	private StandardOAuthSession fromHash(String requestToken, Map<String, String> hash) {
-		return new StandardOAuthSession(hash.get("apiKey"), hash.get("callbackUrl"), requestToken, hash.get("secret"), Long.valueOf(hash.get("authorizingAccountId")), hash.get("verifier"));
+		Long authorizingAccountId = hash.get("authorizingAccountId") != null ? Long.valueOf(hash.get("authorizingAccountId")) : null;
+		return new StandardOAuthSession(hash.get("apiKey"), hash.get("callbackUrl"), requestToken, hash.get("secret"), authorizingAccountId, hash.get("verifier"));
 	}
 
 }

@@ -56,6 +56,7 @@ public abstract class AbstractOAuthSessionManager implements OAuthSessionManager
 			throw new IllegalStateException("OAuthSession is already authorized");
 		}
 		session.authorize(authorizingAccountId, verifier);
+		authorized(session);
 		return session;
 	}
 
@@ -79,6 +80,10 @@ public abstract class AbstractOAuthSessionManager implements OAuthSessionManager
 
 	protected abstract StandardOAuthSession get(String requestToken);
 
+	protected void authorized(StandardOAuthSession session) {
+		
+	}
+	
 	protected abstract void remove(String requestToken);
 	
 }

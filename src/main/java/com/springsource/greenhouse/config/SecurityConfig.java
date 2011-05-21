@@ -99,7 +99,7 @@ public class SecurityConfig {
 
 		@Bean
 		public TextEncryptor textEncryptor() {
-			return Encryptors.text(getEncryptPassword(), environment.getProperty("security.encryptSalt"));
+			return Encryptors.queryableText(getEncryptPassword(), environment.getProperty("security.encryptSalt"));
 		}
 		
 		@Bean
