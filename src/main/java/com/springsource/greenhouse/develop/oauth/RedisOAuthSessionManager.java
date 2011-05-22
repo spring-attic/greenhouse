@@ -15,15 +15,16 @@
  */
 package com.springsource.greenhouse.develop.oauth;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import org.springframework.data.keyvalue.redis.core.BoundHashOperations;
 import org.springframework.data.keyvalue.redis.core.StringRedisTemplate;
-import org.springframework.data.keyvalue.redis.support.collections.DefaultRedisMap;
-import org.springframework.data.keyvalue.redis.support.collections.RedisMap;
 
 import com.springsource.greenhouse.develop.AppRepository;
 
@@ -43,20 +44,34 @@ public class RedisOAuthSessionManager extends AbstractOAuthSessionManager {
 
 	@Override
 	protected void put(StandardOAuthSession session) {
-		RedisMap<String, String> sessionHash = sessionHash(session.getRequestToken());
-		sessionHash.putAll(toHash(session));
-		sessionHash.expire(2, TimeUnit.MINUTES);
+		BoundHashOperations<String, String, String> hashOps = redisTemplate.boundHashOps(key(session.getRequestToken()));
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("apiKey", session.getApiKey());
+		data.put("callbackUrl", session.getCallbackUrl());
+		data.put("secret", session.getSecret());		
+		hashOps.putAll(data);
+		hashOps.expire(2, TimeUnit.MINUTES);
 	}
 
 	@Override
 	protected StandardOAuthSession get(String requestToken) {
-		return fromHash(requestToken, sessionHash(requestToken));
+		BoundHashOperations<String, String, String> hashOps = redisTemplate.boundHashOps(key(requestToken));
+		Collection<String> values = hashOps.multiGet(Arrays.asList("apiKey", "callbackUrl", "secret", "authorizingAccountId", "verifier"));
+		Iterator<String> it = values.iterator();
+		String apiKey = it.next();
+		if (apiKey == null) {
+			return null;
+		}
+		return new StandardOAuthSession(apiKey, it.next(), requestToken, it.next(), toLong(it.next()), it.next());
 	}
 
 	@Override
 	protected void authorized(StandardOAuthSession session) {
-		RedisMap<String, String> sessionHash = sessionHash(session.getRequestToken());
-		sessionHash.putAll(toAuthorizedHash(session));
+		BoundHashOperations<String, String, String> hashOps = redisTemplate.boundHashOps(key(session.getRequestToken()));
+		HashMap<String, String> data = new HashMap<String, String>();
+		data.put("authorizingAccountId", session.getAuthorizingAccountId().toString());
+		data.put("verifer", session.getVerifier());
+		hashOps.putAll(data);		
 	}
 	
 	@Override
@@ -66,32 +81,12 @@ public class RedisOAuthSessionManager extends AbstractOAuthSessionManager {
 	
 	// internal helpers
 
-	private RedisMap<String, String> sessionHash(String requestToken) {
-		return new DefaultRedisMap<String, String>(key(requestToken), redisTemplate);
-	}
-
 	private String key(String requestToken) {
 		return "oauthSession:" + requestToken;
 	}
-
-	private Map<String, String> toHash(StandardOAuthSession session) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("apiKey", session.getApiKey());
-		map.put("callbackUrl", session.getCallbackUrl());
-		map.put("secret", session.getSecret());
-		return map;
-	}
-
-	private Map<String, String> toAuthorizedHash(StandardOAuthSession session) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("authorizingAccountId", session.getAuthorizingAccountId().toString());
-		map.put("verifer", session.getVerifier());
-		return map;
-	}
-
-	private StandardOAuthSession fromHash(String requestToken, Map<String, String> hash) {
-		Long authorizingAccountId = hash.get("authorizingAccountId") != null ? Long.valueOf(hash.get("authorizingAccountId")) : null;
-		return new StandardOAuthSession(hash.get("apiKey"), hash.get("callbackUrl"), requestToken, hash.get("secret"), authorizingAccountId, hash.get("verifier"));
+	
+	private Long toLong(String value) {
+		return value != null ? Long.valueOf(value) : null;
 	}
 
 }
