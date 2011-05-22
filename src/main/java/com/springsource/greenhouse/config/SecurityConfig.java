@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.keyvalue.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.PatchedEncryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -99,7 +100,7 @@ public class SecurityConfig {
 
 		@Bean
 		public TextEncryptor textEncryptor() {
-			return Encryptors.noOpText();
+			return PatchedEncryptors.queryableText(getEncryptPassword(), environment.getProperty("security.encryptSalt"));
 		}
 		
 		@Bean

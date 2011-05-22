@@ -47,7 +47,7 @@ public class AppConsumerDetailsService implements ConsumerDetailsService {
 		this.appRepository = appRepository;
 	}
 
-	public ConsumerDetails loadConsumerByConsumerKey(final String key) throws OAuthException {
+	public ConsumerDetails loadConsumerByConsumerKey(String key) throws OAuthException {
 		try {
 			return consumerDetailsFor(appRepository.findAppByApiKey(key));
 		} catch (InvalidApiKeyException e) {
