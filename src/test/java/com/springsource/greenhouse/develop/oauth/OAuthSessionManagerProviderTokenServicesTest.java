@@ -62,7 +62,7 @@ public class OAuthSessionManagerProviderTokenServicesTest {
 	public void oAuth10SessionLifecycle() throws InvalidRequestTokenException, NoSuchAccountConnectionException {
 		executeOAuthSessionLifecycle(2);
 	}
-
+	
 	private void executeOAuthSessionLifecycle(int numberOfTimes) throws InvalidRequestTokenException,
 			NoSuchAccountConnectionException {
 		for (int i = 0; i < numberOfTimes; i++) {
