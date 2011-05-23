@@ -29,7 +29,7 @@
 	</logger>
 
 	<logger name="org.springframework.jdbc">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 		
 	<logger name="org.springframework.web">

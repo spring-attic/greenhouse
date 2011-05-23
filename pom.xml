@@ -17,7 +17,7 @@
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.0.BUILD-SNAPSHOT</org.springframework-version>		
-		<org.springframework.security-version>3.1.0.RC2</org.springframework.security-version>		
+		<org.springframework.security-version>3.1.0.CI-SNAPSHOT</org.springframework.security-version>		
 		<org.springframework.integration-version>2.0.4.RELEASE</org.springframework.integration-version>
 		<org.springframework.social-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social-version>			
 		<org.aspectj-version>1.6.10</org.aspectj-version>
@@ -86,11 +86,6 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<!-- Seems to be a bug in 3.1.0.RC2 -->
-				<exclusion>
-					<artifactId>openid4java-nodeps</artifactId>
-					<groupId>org.openid4java</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
