@@ -110,7 +110,7 @@ public class GreenhousePasswordEncoder implements PasswordEncoder {
 		public byte[] digest(byte[] value) {
 			// at least 1024 iterations should be applied here for additional security against brute-force attacks.
 			// Unfortunately this was not done when the password database was populated.
-			// Thus, we need to preserve compatible digest behavior until we have users reset their passwords.
+			// Thus, we need to preserve compatible digest behavior.
 			synchronized (messageDigest) {
 				return messageDigest.digest(value);
 			}
