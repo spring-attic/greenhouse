@@ -30,7 +30,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
+import org.springframework.jdbc.versioned.DatabaseChangeSet;
+import org.springframework.jdbc.versioned.SqlDatabaseChange;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -96,8 +97,8 @@ public class DataConfig {
 		
 		private EmbeddedDatabase populateDatabase(EmbeddedDatabase database) {
 			new DatabaseUpgrader(database, environment, textEncryptor) {
-				protected void addInstallChanges(DatabaseChangeSetBuilder builder) {
-					builder.addChange(new ClassPathResource("test-data.sql", getClass()));
+				protected void addInstallChanges(DatabaseChangeSet changeSet) {
+					changeSet.add(SqlDatabaseChange.inResource(new ClassPathResource("test-data.sql", getClass())));
 				}
 			}.run();
 			return database;

@@ -19,9 +19,8 @@ import javax.sql.DataSource;
 
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.springframework.jdbc.versioned.DatabaseChange;
 import org.springframework.jdbc.versioned.DatabaseChangeSet;
-import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 import org.springframework.jdbc.versioned.DatabaseVersion;
 import org.springframework.jdbc.versioned.GenericDatabaseUpgrader;
 import org.springframework.jdbc.versioned.SqlDatabaseChange;
@@ -59,12 +58,8 @@ public class DatabaseUpgrader {
 
 	// subclassing hooks
 	
-	protected void addInstallChanges(DatabaseChangeSetBuilder builder) {}
+	protected void addInstallChanges(DatabaseChangeSet changeSet) {}
 
-	protected DatabaseChangeSet singletonChangeSet(String version, Resource resource) {
-		return new DatabaseChangeSetBuilder(DatabaseVersion.valueOf(version)).addChange(resource).getChangeSet();
-	}
-	
 	// internal helpers
 	
 	private org.springframework.jdbc.versioned.DatabaseUpgrader createUpgrader(DataSource dataSource) {
@@ -78,40 +73,47 @@ public class DatabaseUpgrader {
 	}
 
 	private void addInstallChangeSet(GenericDatabaseUpgrader upgrader) {
-		DatabaseChangeSetBuilder builder = new DatabaseChangeSetBuilder(DatabaseVersion.valueOf("3"));
-		builder.addChange(installScript("Member.sql"));
-		builder.addChange(installScript("Group.sql"));
-		builder.addChange(installScript("Activity.sql"));
-		builder.addChange(installScript("ConnectedApp.sql"));
-		builder.addChange(installScript("Reset.sql"));
-		builder.addChange(installScript("Invite.sql"));		
-		builder.addChange(installScript("Venue.sql"));
-		builder.addChange(installScript("Event.sql"));
-		builder.addChange(new ClassPathResource("JdbcUsersConnectionRepository.sql", JdbcUsersConnectionRepository.class));
-		addInstallChanges(builder);
-		upgrader.addChangeSet(builder.getChangeSet());
+		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("3"));
+		changeSet.add(installScript("Member.sql"));
+		changeSet.add(installScript("Group.sql"));
+		changeSet.add(installScript("Activity.sql"));
+		changeSet.add(installScript("ConnectedApp.sql"));
+		changeSet.add(installScript("Reset.sql"));
+		changeSet.add(installScript("Invite.sql"));		
+		changeSet.add(installScript("Venue.sql"));
+		changeSet.add(installScript("Event.sql"));
+		changeSet.add(SqlDatabaseChange.inResource(new ClassPathResource("JdbcUsersConnectionRepository.sql", JdbcUsersConnectionRepository.class)));
+		addInstallChanges(changeSet);
+		upgrader.addChangeSet(changeSet);
 	}
 
-	private Resource installScript(String resource) {
-		return new ClassPathResource("install/" + resource, DatabaseUpgrader.class);
+	private DatabaseChange installScript(String resource) {
+		return SqlDatabaseChange.inResource(new ClassPathResource("install/" + resource, DatabaseUpgrader.class));
 	}
 
 	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
-		upgrader.addChangeSet(singletonChangeSet("2", upgradeScript("v2/AlterServiceProviderTable.sql")));
+		upgrader.addChangeSet(version2ChangeSet());
 		// upgrader.addChangeSet(version3ChangeSet());
 	}
 
-	private Resource upgradeScript(String resource) {
-		return new ClassPathResource("upgrade/" + resource, DatabaseUpgrader.class);
+	private DatabaseChangeSet version2ChangeSet() {		
+		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("2"));
+		changeSet.add(upgradeScript("v2/AlterServiceProviderTable.sql"));
+		return changeSet;
 	}
 	
+	@SuppressWarnings("unused")
 	private DatabaseChangeSet version3ChangeSet() {
 		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("3"));
 		changeSet.add(new UpdateEncryptionMethod(environment, textEncryptor));
-		changeSet.add(SqlDatabaseChange.inResource(upgradeScript("v3/CreateUserConnectionTable.sql")));
-		changeSet.add(SqlDatabaseChange.inResource(upgradeScript("v3/PopulateUserConnectionTable.sql")));
-		changeSet.add(SqlDatabaseChange.inResource(upgradeScript("v3/DropAccountConnectionTables.sql")));
+		changeSet.add(upgradeScript("v3/CreateUserConnectionTable.sql"));
+		changeSet.add(upgradeScript("v3/PopulateUserConnectionTable.sql"));
+		changeSet.add(upgradeScript("v3/DropAccountConnectionTables.sql"));
 		return changeSet;
 	}
 
+	private DatabaseChange upgradeScript(String resource) {
+		return SqlDatabaseChange.inResource(new ClassPathResource("upgrade/" + resource, DatabaseUpgrader.class));
+	}
+	
 }
