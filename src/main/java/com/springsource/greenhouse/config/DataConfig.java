@@ -31,6 +31,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +78,12 @@ public class DataConfig {
 	@Profile("embedded")
 	static class Embedded {
 
+		@Inject
+		private Environment environment;
+
+		@Inject
+		private TextEncryptor textEncryptor;
+
 		@Bean(destroyMethod="shutdown")
 		public DataSource dataSource() {
 			EmbeddedDatabaseFactory factory = new EmbeddedDatabaseFactory();
@@ -88,7 +95,7 @@ public class DataConfig {
 		// internal helpers
 		
 		private EmbeddedDatabase populateDatabase(EmbeddedDatabase database) {
-			new DatabaseUpgrader(database) {
+			new DatabaseUpgrader(database, environment, textEncryptor) {
 				protected void addInstallChanges(DatabaseChangeSetBuilder builder) {
 					builder.addChange(new ClassPathResource("test-data.sql", getClass()));
 				}
@@ -109,11 +116,14 @@ public class DataConfig {
 		@Inject
 		private Environment environment;
 
+		@Inject
+		private TextEncryptor textEncryptor;
+
 		@Bean(destroyMethod="dispose")
 		public DataSource dataSource() {
 			JdbcConnectionPool dataSource = JdbcConnectionPool.create(environment.getProperty("database.url"),
 					environment.getProperty("database.username"), environment.getProperty("database.password"));
-			new DatabaseUpgrader(dataSource).run();
+			new DatabaseUpgrader(dataSource, environment, textEncryptor).run();
 			return dataSource;
 		}
 		

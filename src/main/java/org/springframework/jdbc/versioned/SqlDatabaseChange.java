@@ -17,64 +17,48 @@ package org.springframework.jdbc.versioned;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.util.StringUtils;
 
-/**
- * A fluent builder for constructing a DatabaseChangeSet programatically.
- * Changes are applied in the order they are {@link #addChange(Resource) added} to the change set.
- * @author Keith Donald
- */
-public class DatabaseChangeSetBuilder {
+public class SqlDatabaseChange extends AbstractDatabaseChange {
 	
-	private final DatabaseChangeSet changeSet;
+	private final String sql;
 	
-	/**
-	 * Constructs a builder that builds a change set that upgrades the database to the version specified.
-	 * @param version the target database version
-	 */
-	public DatabaseChangeSetBuilder(DatabaseVersion version) {
-		changeSet = new DatabaseChangeSet(version);
+	public SqlDatabaseChange(String sql) {
+		this.sql = sql;
 	}
 
-	/**
-	 * Adds a change to the change set under construction that applies the SQL contained in the resource.
-	 * @param resource the SQL resource
-	 * @return this, for fluent call chaining
-	 */
-	public DatabaseChangeSetBuilder addChange(Resource resource) {
-		changeSet.add(new SqlDatabaseChange(readSql(resource)));
-		return this;
+	@Override
+	protected Statement doCreateStatement(Connection connection) throws SQLException {
+		return connection.createStatement();
 	}
 
-	/**
-	 * Called at the end of construction to get the fully-built ChangeSet.
-	 */
-	public DatabaseChangeSet getChangeSet() {
-		return changeSet;
+	@Override
+	protected void doExecuteStatement(Statement statement) throws SQLException {
+		statement.execute(sql);
 	}
 
-	// internal helpers
-
-	private String readSql(Resource resource) {
+	public static DatabaseChange inResource(Resource resource) {
 		try {
-			return readScript(resource);
+			return new SqlDatabaseChange(readScript(resource));
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Could not read sql resource: " + resource, e);
-		}		
+		}				
 	}
 	
 	// TODO this code is duplicated from ResourceDatabasePopulator as well
-	private String readScript(Resource resource) throws IOException {
+	private static String readScript(Resource resource) throws IOException {
 		EncodedResource encoded = resource instanceof EncodedResource ? (EncodedResource) resource : new EncodedResource(resource);
 		LineNumberReader lnr = new LineNumberReader(encoded.getReader());
 		String currentStatement = lnr.readLine();
 		StringBuilder scriptBuilder = new StringBuilder();
 		while (currentStatement != null) {
-			if (StringUtils.hasText(currentStatement) &&
-					(SQL_COMMENT_PREFIX != null && !currentStatement.startsWith(SQL_COMMENT_PREFIX))) {
+			if (StringUtils.hasText(currentStatement) && (SQL_COMMENT_PREFIX != null && !currentStatement.startsWith(SQL_COMMENT_PREFIX))) {
 				if (scriptBuilder.length() > 0) {
 					scriptBuilder.append('\n');
 				}
@@ -85,6 +69,5 @@ public class DatabaseChangeSetBuilder {
 		return scriptBuilder.toString();
 	}
 	
-	private static String SQL_COMMENT_PREFIX = "--";
-	
+	private static final String SQL_COMMENT_PREFIX = "--";
 }

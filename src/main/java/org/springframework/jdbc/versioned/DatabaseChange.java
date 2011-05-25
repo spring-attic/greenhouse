@@ -16,44 +16,17 @@
 package org.springframework.jdbc.versioned;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * A single change within a change set.
- * Never applied indepently, always applied as part of an atomic {@link DatabaseChangeSet}.
+ * Never applied independently, always applied as part of an atomic {@link DatabaseChangeSet}.
  * @author Keith Donald
  */
-public class DatabaseChange {
-	
-	private String sql;
-	
-	public DatabaseChange(String sql) {
-		this.sql = sql;
-	}
+public interface DatabaseChange {
 
 	/**
 	 * Apply this change.
 	 */
-	public void apply(Connection connection) {
-		Statement statement = getStatement(connection);
-		try {
-			statement.execute(sql);
-		} catch (SQLException e) {
-			throw new RuntimeException("Failed to apply", e);
-		} finally {
-			try {
-				statement.close();
-			} catch (SQLException e) {
-			}
-		}
-	}
-	
-	private Statement getStatement(Connection connection) {
-		try {
-			return connection.createStatement();
-		} catch (SQLException e) {
-			throw new IllegalStateException("Could not create statement", e);
-		}		
-	}
+	void apply(Connection connection);
+
 }

@@ -15,17 +15,20 @@
  */
 package com.springsource.greenhouse.database;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.versioned.DatabaseChangeSet;
 import org.springframework.jdbc.versioned.DatabaseChangeSetBuilder;
 import org.springframework.jdbc.versioned.DatabaseVersion;
 import org.springframework.jdbc.versioned.GenericDatabaseUpgrader;
+import org.springframework.jdbc.versioned.SqlDatabaseChange;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+
+import com.springsource.greenhouse.database.upgrade.v3.UpdateEncryptionMethod;
 
 /**
  * Performs migrations against the Greenhouse database.
@@ -38,14 +41,18 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
  */
 public class DatabaseUpgrader {
 	
+	private final Environment environment;
+	
+	private final TextEncryptor textEncryptor;
+
 	private final org.springframework.jdbc.versioned.DatabaseUpgrader upgrader;
 
-	@Autowired
-	public DatabaseUpgrader(DataSource dataSource) {		
+	public DatabaseUpgrader(DataSource dataSource, Environment environment, TextEncryptor textEncryptor) {		
+		this.environment = environment;
+		this.textEncryptor = textEncryptor;
 		this.upgrader = createUpgrader(dataSource);
 	}
 	
-	@PostConstruct
 	public void run() {
 		upgrader.run();		
 	}
@@ -71,7 +78,7 @@ public class DatabaseUpgrader {
 	}
 
 	private void addInstallChangeSet(GenericDatabaseUpgrader upgrader) {
-		DatabaseChangeSetBuilder builder = new DatabaseChangeSetBuilder(DatabaseVersion.valueOf("2"));
+		DatabaseChangeSetBuilder builder = new DatabaseChangeSetBuilder(DatabaseVersion.valueOf("3"));
 		builder.addChange(installScript("Member.sql"));
 		builder.addChange(installScript("Group.sql"));
 		builder.addChange(installScript("Activity.sql"));
@@ -90,11 +97,21 @@ public class DatabaseUpgrader {
 	}
 
 	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
-		upgrader.addChangeSet(singletonChangeSet("2", upgradeScript("475.sql")));
+		upgrader.addChangeSet(singletonChangeSet("2", upgradeScript("v2/AlterServiceProviderTable.sql")));
+		// upgrader.addChangeSet(version3ChangeSet());
 	}
 
 	private Resource upgradeScript(String resource) {
 		return new ClassPathResource("upgrade/" + resource, DatabaseUpgrader.class);
+	}
+	
+	private DatabaseChangeSet version3ChangeSet() {
+		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("3"));
+		changeSet.add(new UpdateEncryptionMethod(environment, textEncryptor));
+		changeSet.add(SqlDatabaseChange.inResource(upgradeScript("v3/CreateUserConnectionTable.sql")));
+		changeSet.add(SqlDatabaseChange.inResource(upgradeScript("v3/PopulateUserConnectionTable.sql")));
+		changeSet.add(SqlDatabaseChange.inResource(upgradeScript("v3/DropAccountConnectionTables.sql")));
+		return changeSet;
 	}
 
 }
