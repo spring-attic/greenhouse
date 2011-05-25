@@ -19,10 +19,6 @@ import static com.springsource.greenhouse.database.upgrade.v3.CipherUtils.doFina
 import static com.springsource.greenhouse.database.upgrade.v3.CipherUtils.initCipher;
 import static com.springsource.greenhouse.database.upgrade.v3.CipherUtils.newCipher;
 import static com.springsource.greenhouse.database.upgrade.v3.CipherUtils.newSecretKey;
-import static com.springsource.greenhouse.database.upgrade.v3.EncodingUtils.hexDecode;
-import static com.springsource.greenhouse.database.upgrade.v3.EncodingUtils.hexEncode;
-import static com.springsource.greenhouse.database.upgrade.v3.EncodingUtils.utf8Decode;
-import static com.springsource.greenhouse.database.upgrade.v3.EncodingUtils.utf8Encode;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -35,6 +31,8 @@ import javax.inject.Inject;
 
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.versioned.AbstractDatabaseChange;
+import org.springframework.security.crypto.codec.Hex;
+import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 /**
@@ -99,7 +97,7 @@ public class UpdateEncryptionMethod extends AbstractDatabaseChange {
 
 		public SearchableStringEncryptor(String password, String salt) {
 			String algorithm = "PBEWithMD5AndDES";
-			byte[] saltBytes = hexDecode(salt);
+			byte[] saltBytes = Hex.decode(salt);
 			SecretKey secretKey = newSecretKey(algorithm, password);		
 			encryptor = newCipher(algorithm);
 			initCipher(encryptor, Cipher.ENCRYPT_MODE, secretKey, saltBytes, 1000);
@@ -108,11 +106,11 @@ public class UpdateEncryptionMethod extends AbstractDatabaseChange {
 		}
 
 		public String encrypt(String text) {
-			return hexEncode(doFinal(encryptor, utf8Encode(text)));
+			return new String(Hex.encode(doFinal(encryptor, Utf8.encode(text))));
 		}
 
 		public String decrypt(String encryptedText) {
-			return utf8Decode(doFinal(decryptor, hexDecode(encryptedText)));
+			return Utf8.decode(doFinal(decryptor, Hex.decode(encryptedText)));
 		}
 
 	}

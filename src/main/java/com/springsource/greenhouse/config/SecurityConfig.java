@@ -27,8 +27,8 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
+import com.springsource.greenhouse.account.GreenhousePasswordEncoder;
 import com.springsource.greenhouse.develop.AppRepository;
 import com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager;
 import com.springsource.greenhouse.develop.oauth.OAuthSessionManager;
@@ -94,7 +94,7 @@ public class SecurityConfig {
 
 		@Bean
 		public PasswordEncoder passwordEncoder() {
-			return new StandardPasswordEncoder(getEncryptPassword());
+			return new GreenhousePasswordEncoder(getEncryptPassword());
 		}
 
 		@Bean
