@@ -93,7 +93,7 @@ public class DatabaseUpgrader {
 
 	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
 		upgrader.addChangeSet(version2ChangeSet());
-		// upgrader.addChangeSet(version3ChangeSet());
+		upgrader.addChangeSet(version3ChangeSet());
 	}
 
 	private DatabaseChangeSet version2ChangeSet() {		
@@ -102,7 +102,6 @@ public class DatabaseUpgrader {
 		return changeSet;
 	}
 	
-	@SuppressWarnings("unused")
 	private DatabaseChangeSet version3ChangeSet() {
 		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("3"));
 		changeSet.add(new UpdateEncryptionMethod(environment, textEncryptor));

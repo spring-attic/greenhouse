@@ -64,16 +64,22 @@ public class UpdateEncryptionMethod extends AbstractDatabaseChange {
 		while (rs.next()) {
 			rs.updateString("apiKey", encrypt(decrypt(rs.getString("apiKey"))));
 			rs.updateString("secret", encrypt(decrypt(rs.getString("secret"))));
+			rs.updateRow();
 		}
 		rs = statement.executeQuery("select accessToken, secret from AppConnection");
 		while (rs.next()) {
 			rs.updateString("accessToken", encrypt(decrypt(rs.getString("accessToken"))));
 			rs.updateString("secret", encrypt(decrypt(rs.getString("secret"))));
+			rs.updateRow();
 		}
-		rs = statement.executeQuery("select accessToken, secret from AccountConnection");
+		rs = statement.executeQuery("select member, provider, accessToken, secret from AccountConnection");
 		while (rs.next()) {
 			rs.updateString("accessToken", encrypt(decrypt(rs.getString("accessToken"))));
-			rs.updateString("secret", encrypt(decrypt(rs.getString("secret"))));
+			String secret = rs.getString("secret");
+			if (secret != null) {
+				rs.updateString("secret", encrypt(decrypt(secret)));
+			}
+			rs.updateRow();			
 		}		
 	}
 
