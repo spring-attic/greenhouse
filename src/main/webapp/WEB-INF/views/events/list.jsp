@@ -23,9 +23,4 @@
 	</dd>	
 </c:forEach>
 </dl>
-
 </c:if>
-
-<ul class="listings">
- <li class="listing"><a href="<c:url value="/events/new" />">Create an Event</a></li>
-</ul>
