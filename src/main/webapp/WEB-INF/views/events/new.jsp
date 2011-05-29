@@ -15,7 +15,7 @@
 		<p>Create a new Event your group is organizing.</p>  		
 	</div>
 	
-	<jsp:include page="eventFormFragment.jsp" />
+	<jsp:include page="eventFragment.jsp" />
 	
 	<p><button type="submit">Create Event</button></p>
 </form:form>
