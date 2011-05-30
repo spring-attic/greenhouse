@@ -74,7 +74,7 @@ public class JdbcEventRepository implements EventRepository {
 	}
 
 	public List<EventSession> findEventFavorites(Long eventId, Long attendeeId) {
-		return jdbcTemplate.query(SELECT_EVENT_FAVORITES, eventSessionMapper.list(), attendeeId, eventId);
+		return jdbcTemplate.query(SELECT_EVENT_FAVORITES, eventSessionMapper.list(), eventId, attendeeId, eventId);
 	}
 
 	public List<EventSession> findAttendeeFavorites(Long eventId, Long attendeeId) {
@@ -163,7 +163,7 @@ public class JdbcEventRepository implements EventRepository {
 		"order by s.startTime, s.id, sl.rank";
 
 	private static final String SELECT_EVENT_FAVORITES = SELECT_FROM_EVENT_SESSION +
-		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite group by session) top on s.id = top.session " +
+		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite where event = ? group by session) top on s.id = top.session " +
 		"left outer join VenueRoom r on s.venue = r.venue and s.room = r.id " +
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
