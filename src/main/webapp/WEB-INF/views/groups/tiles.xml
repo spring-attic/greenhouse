@@ -2,38 +2,14 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 
 <tiles-definitions>
-	
-	<definition name="groups/event" extends="page">
-		<put-attribute name="content" value="/WEB-INF/views/groups/event.jsp" />
-	</definition>
 
 	<definition name="groups/view" extends="page">
 		<put-attribute name="title" expression="${group.name} | Greenhouse" />
 		<put-attribute name="content" value="/WEB-INF/views/groups/view.jsp" />
 	</definition>
-
-	<definition name="groups/event/newTrack" extends="page">
-		<put-attribute name="content" value="/WEB-INF/views/groups/newTrack.jsp" />
- 	</definition>
-
-	<definition name="groups/event/track" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/track.jsp"/>
-	</definition>
 	
-	<definition name="groups/event/track/edit" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/editTrack.jsp"/>
-	</definition>
-
-	<definition name="groups/event/newRoom" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/newRoom.jsp"/>
- 	</definition>
- 		
- 	<definition name="groups/event/newSession" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/newSession.jsp"/>
-	</definition>
-	
-	<definition name="groups/event/session" extends="page">
-		<put-attribute name ="content"  value="/WEB-INF/views/groups/session.jsp"/>
+	<definition name="groups/event" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/groups/event.jsp" />
 	</definition>
 
 </tiles-definitions>

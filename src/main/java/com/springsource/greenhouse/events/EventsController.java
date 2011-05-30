@@ -15,16 +15,13 @@
  */
 package com.springsource.greenhouse.events;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
@@ -33,7 +30,6 @@ import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -181,164 +177,4 @@ public class EventsController {
 		return "events/list";
 	}
 	
-	/**
-	 *  Renders the event form for the user.
-	 */
-	@RequestMapping(value="/events/new", method=RequestMethod.GET) 
-	public EventForm newForm(Model model) { 
-		populateEventFormModel(model);
-		return new EventForm();
-	}
-
-	/**
-	* Registers a new Event for the user.
-	 * @throws IOException 
-	*/
-	@RequestMapping(value="/events", method=RequestMethod.POST)
-	public String createEvent(@Valid EventForm form, BindingResult bindingResult, Account account, Model model) throws IOException {
-		if (bindingResult.hasErrors()) {
-			populateEventFormModel(model);
-			return "events/new";
-		}
-		if (form.getStartTime().getMillis() >= form.getEndTime().getMillis()){
-			bindingResult.rejectValue("startDate", "start date must be before end date", "start date must be before end date");
-			return "events/new";
-		}
-		eventRepository.createEvent(form, account.getId());
-		return "redirect:/events";
-	}
-
-	// TODO this URL structure belongs under /events
-	
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/sessions/new", method=RequestMethod.GET, headers="Accept=text/html")
-	public String newSessionForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model){
-		model.addAttribute(new EventSessionForm());
-		populateSessionFormModel(group, year, month, slug, model);
-		return "events/sessions/new";
-	}
-	
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/sessions", method=RequestMethod.POST) 
-	public String createSession(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @Valid EventSessionForm form, BindingResult bindingResult, Account account, Model model){
-		if (bindingResult.hasErrors()) {
-			populateSessionFormModel(group, year, month, slug, model);
-			return "events/sessions/new";
-		}
-		// TODO move the event query and validation check into the repository in a transaction
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		if (form.getStartTime(event.getTimeZone()).getMillis() >= form.getEndTime(event.getTimeZone()).getMillis()) {
-			bindingResult.rejectValue("endDate", "start date must be before end date", "start date must be before end date");
-			populateSessionFormModel(group, year, month, slug, model);
-			return "events/sessions/new";
-		}
-		eventRepository.createSession(account.getId(), event, form);
-		return "redirect:/groups/{group}/events/{year}/{month}/{slug}";
-	 }
-
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/new", method=RequestMethod.GET, headers="Accept=text/html") 
-	public String newTrackForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
-		model.addAttribute(new EventTrackForm());
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		model.addAttribute(event);
-		return "events/tracks/new";
-	}
-	
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks", method=RequestMethod.POST) 
-	public String createTrack(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @Valid EventTrackForm form, BindingResult bindingResult, Account account, Model model) {
-		if (bindingResult.hasErrors()) {
-			Event event = eventRepository.findEventBySlug(group, year, month, slug);
-			model.addAttribute(event);
-			return "events/tracks/new";
-		}
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		if (form.getCode().isEmpty()){ //this is necessary because @NotEmpty cannot be added to form if the edit form doesnt allow user to edit the code once it is made
-			bindingResult.rejectValue("code", "code must be entered", "code must be entered");
-			model.addAttribute(event);
-			return "events/tracks/new";
-		}
-		try {
-			eventRepository.createTrack(account.getId(), event, form);
-		} catch (DuplicateKeyException e){
-			bindingResult.rejectValue("code", "code already exists for this event", "code already exists for this event");
-			model.addAttribute(event);
-			return "events/tracks/new";
-		}
-		return "redirect:/groups/{group}/events/{year}/{month}/{slug}";
-	}
-	
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/{trackcode}", method=RequestMethod.GET, headers="Accept=text/html") 
-	public String viewTrack(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, Account account, Model model) {
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		EventTrack track = eventRepository.findTrackByCode(trackcode, event.getId());
-		model.addAttribute("track", track);
-		model.addAttribute("event", event);
-		return "events/tracks/view";
-	}
-
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/edit/{trackcode}", method=RequestMethod.GET, headers="Accept=text/html")
-	public String editTrackForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, Account account, Model model) {
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		model.addAttribute(eventRepository.getTrackForm(event.getId(), trackcode));
-		String roomList[] = eventRepository.selectRoomNames(event.getVenues().iterator().next().getId());
-		model.addAttribute("roomList", roomList);
-		model.addAttribute("event", event);
-		model.addAttribute("trackcode", trackcode);
-		return "events/tracks/edit";
-	}
-	
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/tracks/{trackcode}", method=RequestMethod.PUT)
-	public String updateTrack(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @PathVariable String trackcode, @Valid EventTrackForm form, BindingResult bindingResult, Account account, Model model) {
-		if (bindingResult.hasErrors()) {
-			Event event = eventRepository.findEventBySlug(group, year, month, slug);
-			model.addAttribute(event);			
-			return "events/tracks/edit";
-		}
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		eventRepository.updateTrack(event, form, trackcode);
-		return "redirect:/groups/{group}/events/{year}/{month}/{slug}/tracks/" + trackcode;
-	}
-
-	// TODO this belongs in the venue module
-	
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/rooms/new", method=RequestMethod.GET, headers="Accept=text/html") 
-	public String newRoomForm(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
-		model.addAttribute(new EventRoomForm());
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		model.addAttribute(event);
-		return "venues/rooms/new";
-	}
-		
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}/rooms", method=RequestMethod.POST) 
-	public String createRoom(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, @Valid EventRoomForm form, BindingResult bindingResult, Account account, Model model){
-		if (bindingResult.hasErrors()) {
-			Event event = eventRepository.findEventBySlug(group, year, month, slug);
-			model.addAttribute(event);
-			return "venues/rooms/new";
-		}
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		eventRepository.createRoom(account.getId(), event, form);
-		return "redirect:/groups/{group}/events/{year}/{month}/{slug}";
-	}
-	
-	// internal helpers
-	
-	private void populateEventFormModel(Model model) {
-		model.addAttribute("timeZones", DateTimeZone.getAvailableIDs());
-		// TODO combine this into one structure
-		String venueList[] = eventRepository.selectVenueNames();
-		model.addAttribute("venueList", venueList);
-		String addressList[] = eventRepository.selectVenueAddresses();
-		model.addAttribute("addressList", addressList);
-		String hintsList[] = eventRepository.selectVenueLocationHints();
-		model.addAttribute("hintsList", hintsList);
-	}
-	
-	private void populateSessionFormModel(String group, Integer year, Integer month, String slug, Model model) {
-		String speakerList[] = eventRepository.selectSpeakerNames();
-		model.addAttribute("speakerList", speakerList);
-		Event event = eventRepository.findEventBySlug(group, year, month, slug);
-		model.addAttribute(event);
-		List<EventTrack> trackList = eventRepository.selectEventTracks(event.getId());
-		model.addAttribute("trackList", trackList);
-	}
-
 }

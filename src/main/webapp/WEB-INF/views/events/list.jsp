@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib tagdir="/WEB-INF/tags/dates" prefix="d" %>
 
-<h2>Upcoming Events </h2>
+<h2>Upcoming Events</h2>
 
 <c:if test="${not empty eventList}">
 <dl class="listings">

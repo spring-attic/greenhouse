@@ -15,11 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 import com.springsource.greenhouse.utils.Location;
-import com.springsource.greenhouse.events.EventTrackForm;
 
 public class JdbcEventRepositoryTest {
 
@@ -57,27 +55,6 @@ public class JdbcEventRepositoryTest {
 		assertEquals("70 Yorktown Center Lombard, IL 60148", event.getVenues().iterator().next().getPostalAddress());
 		assertEquals(new Location(41.8751108905486, -88.0184300761646), event.getVenues().iterator().next().getLocation());
 		assertEquals("adjacent to Shopping Center", event.getVenues().iterator().next().getLocationHint());
-	}
-	
-	@Test
-	public void findTrackByCode() {
-		Event event = eventRepository.findEventBySlug("s2gx", 2010, 10, "chicago");
-		assertNotNull(event);
-		assertEquals("SpringOne2gx", event.getTitle());
-		String trackcode = "spr";
-		EventTrack track = eventRepository.findTrackByCode(trackcode, event.getId());
-		assertNotNull(track);
-		assertEquals("Essential Spring", track.getName());
-		assertEquals("Spring techniques and technologies applicable to most classes of applications", track.getDescription());
-	}
-	
-	@Test
-	public void selectEventSessions() {
-		Event event = eventRepository.findEventBySlug("s2gx", 2010, 10, "chicago");
-		assertNotNull(event);
-		assertEquals("SpringOne2gx", event.getTitle());
-		List<EventSession> sessions = eventRepository.selectEventSessions(event.getId());
-		assertNotNull(sessions);
 	}
 	
 	@Test
@@ -133,48 +110,6 @@ public class JdbcEventRepositoryTest {
 		Float rating = eventRepository.rate(2L, 1, 3L, new Rating((short)2, "Rocked"));
 		assertEquals(new Float(3.5), rating);
 	}
-
-    @Test
-    @Transactional
-    public void createTrack(){
-        EventTrackForm form = new EventTrackForm();
-        Event event = new Event(2L, null, null, null, null, null, null, null, null);
-        form.setName("Track1");
-        form.setCode("trk");
-        form.setDescription("This is a description of track1");
-        eventRepository.createTrack(2L, event, form);
-    }
-	
-    @Test
-    @Transactional
-    public void createSession(){
-    	Event event = new Event(2L, null, null, null, null, null, null, null, null);
-    	EventSessionForm form = new EventSessionForm();
-    	form.setTitle("Cool");
-    	form.getStartTimeFields().setDay(new LocalDate(2012,8,20));
-    	form.getStartTimeFields().setHour(6);
-    	form.getStartTimeFields().setMinute(00);
-    	form.getStartTimeFields().setHalfDay("PM");
-    	form.getEndTimeFields().setDay(new LocalDate(2012,9,20));
-    	form.getEndTimeFields().setHour(7);
-    	form.getEndTimeFields().setMinute(00);
-    	form.getEndTimeFields().setHalfDay("PM");
-    	form.setDescription("google");
-    	form.getLeaderFields().setId(2L);
-    	eventRepository.createSession(2L, event, form);
-   	}
-    
-    @Test
-    @Transactional
-    public void createRoom(){
-       	Event event = new Event(2L, null, null, null, null, null, null, null, null);
-     	EventRoomForm form = new EventRoomForm();
-     	form.setName("Test");
-     	form.setCapacity(400);
-     	form.setLocationHint("This is a test");
-       	
-      	eventRepository.createRoom(2L, event, form);
-    }
     
 	// internal helpers
 	

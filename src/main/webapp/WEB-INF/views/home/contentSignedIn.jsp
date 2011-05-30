@@ -11,7 +11,6 @@
 	</p>
 	<p>
 		If this is your first time here, start by <a href="<c:url value="/settings"/>">connecting your Greenhouse account</a> to your social networks, then grab the mobile client.
-		You may also use the navigation links at the top of the page to explore additional functionality.
 	</p>
 </div>
 <div id="appIcons">
