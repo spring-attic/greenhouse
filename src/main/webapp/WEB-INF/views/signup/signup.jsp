@@ -20,6 +20,6 @@
   		</s:bind>
   		<p>Join Greenhouse to connect with other application developers using Spring.</p>  		
 	</div>
-	<jsp:include page="signupFormFragment.jsp" />
+	<%@ include file="signupForm.jspf" %>
 	<p><button type="submit">Sign Up</button></p>
 </form:form>

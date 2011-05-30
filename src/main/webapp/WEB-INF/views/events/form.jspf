@@ -102,7 +102,7 @@
 		<form:label path="description">Description</form:label>
 		<form:textarea cols="55" rows="8" path="description" />
 		
-		<jsp:include page="venueFragment.jsp" />
+		<%@ include file="venueForm.jspf" %>
 		
 		</fieldset>
 		

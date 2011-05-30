@@ -14,8 +14,8 @@
 		</s:bind>
 		<p>Create a new Event your group is organizing.</p>  		
 	</div>
-	
-	<jsp:include page="eventFragment.jsp" />
+
+	<%@ include file="form.jspf" %>	
 	
 	<p><button type="submit">Create Event</button></p>
 </form:form>

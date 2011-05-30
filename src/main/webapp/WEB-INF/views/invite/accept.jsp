@@ -27,7 +27,7 @@
 			Accept your invitation by completing the signup form below.
 		</p>
 	</div>
-	<jsp:include page="../signup/signupFormFragment.jsp" />
+	<%@ include file="../signup/signupForm.jspf" %>
 	<input type="hidden" name="token" value="${token}" />
 	<p><button type="submit">Accept Invite and Sign Up</button></p>
 </form:form>

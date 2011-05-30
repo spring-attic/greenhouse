@@ -12,6 +12,6 @@
 
 <form:form action="${actionUrl}" method="post" modelAttribute="eventSessionForm">
 
-<jsp:include page="sessionFormFragment.jsp" />
+	<%@ include file="form.jspf" %>
 
 </form:form>
