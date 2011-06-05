@@ -6,43 +6,30 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.joda.time.LocalDate;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.test.transaction.TransactionalMethodRule;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.transaction.Transactional;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAccountRepositoryTest {
 
-	private EmbeddedDatabase db;
-
 	private JdbcAccountRepository accountRepository;
 
 	private JdbcTemplate jdbcTemplate;
 
-	@Before
-	public void setup() {
-		db = new GreenhouseTestDatabaseBuilder().member().testData(getClass()).getDatabase();
+	public JdbcAccountRepositoryTest() {
+		EmbeddedDatabase db = new GreenhouseTestDatabaseBuilder().member().testData(getClass()).getDatabase();
+		transactional = new Transactional(db);
 		jdbcTemplate = new JdbcTemplate(db);
 		AccountMapper accountMapper = new AccountMapper(new StubFileStorage(), "http://localhost:8080/members/{profileKey}");
 		accountRepository = new JdbcAccountRepository(jdbcTemplate, NoOpPasswordEncoder.getInstance(), accountMapper);
 	}
 
-	@After
-	public void destroy() {
-		if (db != null) {
-			db.shutdown();
-		}
-	}
-
 	@Test
-	@Transactional
 	public void create() throws EmailAlreadyOnFileException {
 		Person person = new Person("Jack", "Black", "jack@black.com", "foobie", Gender.MALE, new LocalDate(1977, 12, 1));
 		Account account = accountRepository.createAccount(person);
@@ -106,5 +93,5 @@ public class JdbcAccountRepositoryTest {
 	}
 
 	@Rule
-	public TransactionalMethodRule transactional = new TransactionalMethodRule();
+	public Transactional transactional;
 }

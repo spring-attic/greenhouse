@@ -6,40 +6,28 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.test.transaction.TransactionalMethodRule;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.transaction.Transactional;
 
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcAppRepositoryTest {
 
-	private EmbeddedDatabase db;
-
 	private JdbcAppRepository appRepository;
 
 	private JdbcTemplate jdbcTemplate;
 
-	@Before
-	public void setup() {
-		db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
+	public JdbcAppRepositoryTest() {
+		EmbeddedDatabase db = new GreenhouseTestDatabaseBuilder().member().connectedApp().testData(getClass()).getDatabase();
+		transactional = new Transactional(db);
 		jdbcTemplate = new JdbcTemplate(db);
-		appRepository = new JdbcAppRepository(jdbcTemplate, Encryptors.noOpText());
+		appRepository = new JdbcAppRepository(jdbcTemplate, Encryptors.noOpText());		
 	}
-
-	@After
-	public void destroy() {
-		if (db != null) {
-			db.shutdown();
-		}
-	}
-
+	
 	@Test
 	public void findAppSummaries() {
 		List<AppSummary> summaries = appRepository.findAppSummaries(2L);
@@ -81,7 +69,6 @@ public class JdbcAppRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	public void createApp() {
 		AppForm form = new AppForm();
 		form.setName("My App");
@@ -115,7 +102,6 @@ public class JdbcAppRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	public void connectApp() throws InvalidApiKeyException, NoSuchAccountConnectionException {
 		AppConnection connection = appRepository.connectApp(1L, "123456789");
 		assertEquals((Long) 1L, connection.getAccountId());
@@ -162,8 +148,8 @@ public class JdbcAppRepositoryTest {
 		assertNotNull("987654321", app.getSecret());
 		assertEquals("x-com-springsource-greenhouse://oauth-response", app.getCallbackUrl());
 	}
-	
+
 	@Rule
-	public TransactionalMethodRule transactional = new TransactionalMethodRule();
+	public Transactional transactional;
 
 }

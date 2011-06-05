@@ -3,14 +3,11 @@ package com.springsource.greenhouse.invite;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.test.transaction.TransactionalMethodRule;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.transaction.Transactional;
 import org.springframework.web.util.UriTemplate;
 
 import com.springsource.greenhouse.account.Account;
@@ -21,28 +18,19 @@ import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
 public class JdbcInviteRepositoryTest {
 	
-	private EmbeddedDatabase db;
-	
 	private JdbcTemplate jdbcTemplate;
 
 	private JdbcInviteRepository inviteRepository;
 	
-	@Before
-	public void setUp() {
-		db = new GreenhouseTestDatabaseBuilder().member().activity().invite().testData(getClass()).getDatabase();
+	public JdbcInviteRepositoryTest() {
+		EmbeddedDatabase db = new GreenhouseTestDatabaseBuilder().member().activity().invite().testData(getClass()).getDatabase();
+		transactional = new Transactional(db);
 		jdbcTemplate = new JdbcTemplate(db);
 		JdbcActionRepository actionRepository = new JdbcActionRepository(jdbcTemplate, new ActionGateway() {
 			public void actionPerformed(Action action) {
 			}
 		});
 		inviteRepository = new JdbcInviteRepository(jdbcTemplate, actionRepository);
-	}
-	
-	@After
-	public void destroy() {
-		if (db != null) {
-			db.shutdown();
-		}
 	}
 	
 	@Test
@@ -66,7 +54,6 @@ public class JdbcInviteRepositoryTest {
 	}
 
 	@Test
-	@Transactional
 	public void markInviteAccepted() throws InviteException {
 		jdbcTemplate.update("insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('Keith', 'Donald', 'keith.donald@springsource.com', 'kdonald', 'melbourne', 'M', '1977-12-01')");
 		Account signedUp = new Account(3L, "Keith", "Donald", "keith.donald@springsource.com", "kdonald", "http://localhost:8080/resources/profile-pics/3.jpg", new UriTemplate("http://localhost:8080/members/{id}"));
@@ -80,6 +67,6 @@ public class JdbcInviteRepositoryTest {
 	}
 
 	@Rule
-	public TransactionalMethodRule transactional = new TransactionalMethodRule();
+	public Transactional transactional;
 
 }
