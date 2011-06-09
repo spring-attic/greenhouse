@@ -3,16 +3,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
+	<!-- Java-based annotation-driven Spring container definition -->
 	<context-param>
     	<param-name>contextClass</param-name>
     	<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 	</context-param>
 
+	<!-- Location of Java @Configuration classes that configure the components that makeup this application -->
 	<context-param>
     	<param-name>contextConfigLocation</param-name>
     	<param-value>com.springsource.greenhouse.config</param-value>
 	</context-param>
 	
+	<!-- Specifies the default mode of this application, to be activated if no other profile (or mode) is specified -->
 	<context-param>
     	<param-name>spring.profiles.default</param-name>
     	<param-value>embedded</param-value>
@@ -81,6 +84,7 @@
 		<servlet-name>appServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
+			<!-- No explicit configuration file reference here: everything is configured in the root container for simplicity -->		
 			<param-name>contextConfigLocation</param-name>
 			<param-value></param-value>
 		</init-param>

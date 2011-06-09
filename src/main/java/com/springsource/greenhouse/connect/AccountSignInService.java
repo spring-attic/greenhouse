@@ -18,7 +18,6 @@ package com.springsource.greenhouse.connect;
 import javax.inject.Inject;
 
 import org.springframework.social.connect.signin.web.SignInService;
-import org.springframework.stereotype.Service;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
@@ -29,7 +28,6 @@ import com.springsource.greenhouse.account.AccountUtils;
  * @author Keith Donald
  * @see FacebookSigninController
  */
-@Service
 public class AccountSignInService implements SignInService {
 
 	private final AccountRepository accountRepository;

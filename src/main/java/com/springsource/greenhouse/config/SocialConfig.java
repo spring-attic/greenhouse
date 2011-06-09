@@ -32,7 +32,6 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.signin.web.ProviderSignInController;
-import org.springframework.social.connect.signin.web.SignInService;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.facebook.api.Facebook;
@@ -44,7 +43,9 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
+import com.springsource.greenhouse.connect.AccountSignInService;
 import com.springsource.greenhouse.connect.FacebookConnectInterceptor;
 import com.springsource.greenhouse.connect.TwitterConnectInterceptor;
 import com.springsource.greenhouse.members.ProfilePictureService;
@@ -55,7 +56,7 @@ import com.springsource.greenhouse.members.ProfilePictureService;
  * @author Keith Donald
  */
 @Configuration
-public class ConnectConfig {
+public class SocialConfig {
 
 	@Inject
 	private DataSource dataSource;
@@ -152,8 +153,10 @@ public class ConnectConfig {
 	 * @param profilePictureService needed by the {@link FacebookConnectInterceptor} to make the user's Facebook profile picture their Greenhouse profile picture.
 	 */
 	@Bean
-	public ProviderSignInController providerSignInController(Provider<ConnectionFactoryLocator> connectionFactoryLocatorProvider, Provider<ConnectionRepository> connectionRepositoryProvider, SignInService signInService) {
-		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocatorProvider, usersConnectionRepository(), connectionRepositoryProvider, signInService);
+	public ProviderSignInController providerSignInController(Provider<ConnectionFactoryLocator> connectionFactoryLocatorProvider, Provider<ConnectionRepository> connectionRepositoryProvider,
+			AccountRepository accountRepository) {
+		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocatorProvider, usersConnectionRepository(), connectionRepositoryProvider,
+				new AccountSignInService(accountRepository));
 	}
 	
 	// internal helpers
