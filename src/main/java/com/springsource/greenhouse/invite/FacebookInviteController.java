@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -46,7 +45,7 @@ import com.springsource.greenhouse.account.ProfileReference;
 @Controller
 public class FacebookInviteController {
 
-	private final Provider<Facebook> facebookProvider;
+	private final Facebook facebook;
 	
 	private final UsersConnectionRepository connectionRepository;
 	
@@ -58,8 +57,8 @@ public class FacebookInviteController {
 	 * It is also used to lookup which of a member's Facebook friends have already joined our community.
 	 */
 	@Inject
-	public FacebookInviteController(Provider<Facebook> facebookProvider, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
-		this.facebookProvider = facebookProvider;
+	public FacebookInviteController(Facebook facebook, UsersConnectionRepository connectionRepository, AccountRepository accountRepository) {
+		this.facebook = facebook;
 		this.connectionRepository = connectionRepository;
 		this.accountRepository = accountRepository;
 	}
@@ -71,8 +70,7 @@ public class FacebookInviteController {
 	 */
 	@RequestMapping(value="/invite/facebook", method=RequestMethod.GET)
 	public void friendFinder(Model model, Account account) {
-		Facebook facebook = facebookProvider.get();
-		if (facebook != null) {
+		if (facebook.isAuthorized()) {
 			List<ProfileReference> profileReferences = accountRepository.findProfileReferencesByIds(friendAccountIds(account.getId(), facebook));
 			model.addAttribute("friends", profileReferences);
 		} else {

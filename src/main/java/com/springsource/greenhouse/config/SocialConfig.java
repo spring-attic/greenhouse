@@ -16,7 +16,6 @@
 package com.springsource.greenhouse.config;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
@@ -25,16 +24,18 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.NotConnectedException;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.connect.signin.web.ProviderSignInAttempt;
 import org.springframework.social.connect.signin.web.ProviderSignInController;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.tripit.connect.TripItConnectionFactory;
@@ -45,7 +46,7 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.AccountUtils;
-import com.springsource.greenhouse.connect.AccountSignInService;
+import com.springsource.greenhouse.connect.AccountSignInAdapter;
 import com.springsource.greenhouse.connect.FacebookConnectInterceptor;
 import com.springsource.greenhouse.connect.TwitterConnectInterceptor;
 import com.springsource.greenhouse.members.ProfilePictureService;
@@ -71,8 +72,10 @@ public class SocialConfig {
 	 * The locator for SaaS provider connection factories.
 	 * When support for a new provider is added to Greenhouse, simply register the corresponding {@link ConnectionFactory} here.
 	 * The current Environment is used to lookup the credentials assigned to the Greenhouse application by each provider during application registration.
+	 * This bean is defined as a scoped-proxy so it can be serialized in support of {@link ProviderSignInAttempt provier sign-in attempts}.
 	 */
 	@Bean
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.INTERFACES)	
 	public ConnectionFactoryLocator connectionFactoryLocator() {
 		ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
 		registry.addConnectionFactory(new TwitterConnectionFactory(environment.getProperty("twitter.consumerKey"), environment.getProperty("twitter.consumerSecret")));
@@ -98,7 +101,7 @@ public class SocialConfig {
 	 * This is achieved by injecting a reference to javax.inject.Provider&lt;ConnectionRepository&gt; into other objects that need a {@link ConnectionRepository}.
 	 */
 	@Bean
-	@Scope(value="request")
+	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	public ConnectionRepository connectionRepository() {
 		Account account = AccountUtils.getCurrentAccount();
 		if (account == null) {
@@ -109,15 +112,19 @@ public class SocialConfig {
 
 	/**
 	 * A request-scoped bean representing the API binding to Facebook for the current user.
-	 * Note this bean is not a scoped-proxy, so it is NOT instantiated at application startup and may only be obtained in the context of a web request.
-	 * This is achieved by injecting a reference to javax.inject.Provider&lt;Facebook&gt; into other objects.
-	 * Returns null if the current user is not connected to Facebook.
+	 * Since it is a scoped-proxy, references to this bean MAY be injected at application startup time.
+	 * The target is an authorized {@link Facebook} instance if the current user has connected his or her account with a Twitter account.
+	 * Otherwise, a {@link NotConnectedException} is thrown.
+	 * @throws NotConnectedException if the user is not connected to Facebook
 	 */
 	@Bean
-	@Scope(value="request")	
+	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	public Facebook facebook() {
-		Connection<Facebook> connection = connectionRepository().findPrimaryConnectionToApi(Facebook.class);
-		return connection != null ? connection.getApi() : null;
+		try {
+			return connectionRepository().findPrimaryConnection(Facebook.class).getApi();			
+		} catch (NotConnectedException e) {
+			return new FacebookTemplate();
+		}
 	}
 
 	/**
@@ -129,8 +136,11 @@ public class SocialConfig {
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	public Twitter twitter() {
-		Connection<Twitter> connection = connectionRepository().findPrimaryConnectionToApi(Twitter.class);
-		return connection != null ? connection.getApi() : new TwitterTemplate();
+		try {
+			return connectionRepository().findPrimaryConnection(Twitter.class).getApi();
+		} catch (NotConnectedException e) {
+			return new TwitterTemplate();
+		}
 	}
 
 	/**
@@ -139,8 +149,8 @@ public class SocialConfig {
 	 * @param profilePictureService needed by the {@link FacebookConnectInterceptor} to make the user's Facebook profile picture their Greenhouse profile picture.
 	 */
 	@Bean
-	public ConnectController connectController(Provider<ConnectionRepository> connectionRepositoryProvider, ProfilePictureService profilePictureService) {
-		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator(), connectionRepositoryProvider);
+	public ConnectController connectController(ProfilePictureService profilePictureService) {
+		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator(), connectionRepository());
 		controller.addInterceptor(new FacebookConnectInterceptor(profilePictureService));
 		controller.addInterceptor(new TwitterConnectInterceptor());
 		return controller;
@@ -148,15 +158,12 @@ public class SocialConfig {
 
 	/**
 	 * The Spring MVC Controller that coordinates "sign-in with {provider}" attempts.
-	 * @param connectionFactoryLocatorProvider needed to create connections and restore them from their persistent form.
-	 * @param connectionRepositoryProvider needed to persist new connections
-	 * @param profilePictureService needed by the {@link FacebookConnectInterceptor} to make the user's Facebook profile picture their Greenhouse profile picture.
+	 * @param accountRepository the account service responsible for signing Greenhouse users in.
 	 */
 	@Bean
-	public ProviderSignInController providerSignInController(Provider<ConnectionFactoryLocator> connectionFactoryLocatorProvider, Provider<ConnectionRepository> connectionRepositoryProvider,
-			AccountRepository accountRepository) {
-		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocatorProvider, usersConnectionRepository(), connectionRepositoryProvider,
-				new AccountSignInService(accountRepository));
+	public ProviderSignInController providerSignInController(AccountRepository accountRepository) {
+		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocator(), usersConnectionRepository(), connectionRepository(),
+				new AccountSignInAdapter(accountRepository));
 	}
 	
 	// internal helpers

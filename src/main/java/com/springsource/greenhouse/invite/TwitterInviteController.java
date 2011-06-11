@@ -60,7 +60,7 @@ public class TwitterInviteController {
 	 */
 	@RequestMapping(value="/invite/twitter", method=RequestMethod.GET)
 	public void friendFinder(Model model) {
-		if (twitter.isAuthorizedForUser()) {
+		if (twitter.isAuthorized()) {
 			model.addAttribute("username", twitter.userOperations().getScreenName());
 		}
 	}

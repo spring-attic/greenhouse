@@ -17,7 +17,7 @@ package com.springsource.greenhouse.connect;
 
 import javax.inject.Inject;
 
-import org.springframework.social.connect.signin.web.SignInService;
+import org.springframework.social.connect.signin.web.SignInAdapter;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
@@ -28,12 +28,12 @@ import com.springsource.greenhouse.account.AccountUtils;
  * @author Keith Donald
  * @see FacebookSigninController
  */
-public class AccountSignInService implements SignInService {
+public class AccountSignInAdapter implements SignInAdapter {
 
 	private final AccountRepository accountRepository;
 
 	@Inject
-	public AccountSignInService(AccountRepository accountRepository) {
+	public AccountSignInAdapter(AccountRepository accountRepository) {
 		this.accountRepository = accountRepository;
 	}
 
