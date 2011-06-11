@@ -86,7 +86,7 @@ public class SocialConfig {
 	}
 	
 	/**
-	 * THe shared store for users' connection information.
+	 * The shared store for users' connection information.
 	 * Uses a RDBMS-based store accessed with Spring's JdbcTemplate.
 	 * The returned repository encrypts the data using the configured {@link TextEncryptor}.
 	 */
@@ -96,9 +96,10 @@ public class SocialConfig {
 	}
 
 	/**
-	 * A request-scoped bean that provides the data access interface to the current user's connections
-	 * Note this bean is not a scoped-proxy, so it is NOT instantiated at application startup and may only be obtained in the context of a web request.
-	 * This is achieved by injecting a reference to javax.inject.Provider&lt;ConnectionRepository&gt; into other objects that need a {@link ConnectionRepository}.
+	 * A request-scoped bean that provides the data access interface to the current user's connections.
+	 * Since it is a scoped-proxy, references to this bean MAY be injected at application startup time.
+	 * If no user is authenticated when the target is resolved, an {@link IllegalStateException} is thrown.
+	 * @throws IllegalStateException when no user is authenticated.
 	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
@@ -114,8 +115,7 @@ public class SocialConfig {
 	 * A request-scoped bean representing the API binding to Facebook for the current user.
 	 * Since it is a scoped-proxy, references to this bean MAY be injected at application startup time.
 	 * The target is an authorized {@link Facebook} instance if the current user has connected his or her account with a Twitter account.
-	 * Otherwise, a {@link NotConnectedException} is thrown.
-	 * @throws NotConnectedException if the user is not connected to Facebook
+	 * Otherwise, the target is a new FacebookTemplate that can invoke operations that do not require authorization.
 	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
@@ -158,7 +158,7 @@ public class SocialConfig {
 
 	/**
 	 * The Spring MVC Controller that coordinates "sign-in with {provider}" attempts.
-	 * @param accountRepository the account service responsible for signing Greenhouse users in.
+	 * @param accountRepository the account repository that can load user Account objects given an account id.
 	 */
 	@Bean
 	public ProviderSignInController providerSignInController(AccountRepository accountRepository) {
