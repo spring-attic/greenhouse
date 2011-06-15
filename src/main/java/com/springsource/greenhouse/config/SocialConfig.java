@@ -24,16 +24,16 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.connect.NotConnectedException;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
-import org.springframework.social.connect.signin.web.ProviderSignInAttempt;
-import org.springframework.social.connect.signin.web.ProviderSignInController;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.connect.web.ProviderSignInAttempt;
+import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
@@ -114,17 +114,14 @@ public class SocialConfig {
 	/**
 	 * A request-scoped bean representing the API binding to Facebook for the current user.
 	 * Since it is a scoped-proxy, references to this bean MAY be injected at application startup time.
-	 * The target is an authorized {@link Facebook} instance if the current user has connected his or her account with a Twitter account.
+	 * The target is an authorized {@link Facebook} instance if the current user has connected his or her account with a Facebook account.
 	 * Otherwise, the target is a new FacebookTemplate that can invoke operations that do not require authorization.
 	 */
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	public Facebook facebook() {
-		try {
-			return connectionRepository().findPrimaryConnection(Facebook.class).getApi();			
-		} catch (NotConnectedException e) {
-			return new FacebookTemplate();
-		}
+		Connection<Facebook> facebook = connectionRepository().findPrimaryConnection(Facebook.class);
+		return facebook != null ? facebook.getApi() : new FacebookTemplate();
 	}
 
 	/**
@@ -136,11 +133,8 @@ public class SocialConfig {
 	@Bean
 	@Scope(value="request", proxyMode=ScopedProxyMode.INTERFACES)	
 	public Twitter twitter() {
-		try {
-			return connectionRepository().findPrimaryConnection(Twitter.class).getApi();
-		} catch (NotConnectedException e) {
-			return new TwitterTemplate();
-		}
+		Connection<Twitter> twitter = connectionRepository().findPrimaryConnection(Twitter.class);
+		return twitter != null ? twitter.getApi() : new TwitterTemplate();
 	}
 
 	/**
@@ -150,7 +144,7 @@ public class SocialConfig {
 	 */
 	@Bean
 	public ConnectController connectController(ProfilePictureService profilePictureService) {
-		ConnectController controller = new ConnectController(getSecureUrl(), connectionFactoryLocator(), connectionRepository());
+		ConnectController controller = new ConnectController(connectionFactoryLocator(), connectionRepository());
 		controller.addInterceptor(new FacebookConnectInterceptor(profilePictureService));
 		controller.addInterceptor(new TwitterConnectInterceptor());
 		return controller;
@@ -162,14 +156,7 @@ public class SocialConfig {
 	 */
 	@Bean
 	public ProviderSignInController providerSignInController(AccountRepository accountRepository) {
-		return new ProviderSignInController(getSecureUrl(), connectionFactoryLocator(), usersConnectionRepository(), connectionRepository(),
-				new AccountSignInAdapter(accountRepository));
-	}
-	
-	// internal helpers
-	
-	private String getSecureUrl() {
-		return environment.getProperty("application.secureUrl");
+		return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new AccountSignInAdapter(accountRepository));
 	}
 	
 }

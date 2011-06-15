@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.signin.web.ProviderSignInUtils;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -73,7 +73,7 @@ public class SignupController {
 		}
 		boolean result = signupHelper.signup(form, formBinding, new SignupCallback() {
 			public void postSignup(Account account) {
-				ProviderSignInUtils.handlePostSignUp(request);
+				ProviderSignInUtils.handlePostSignUp(account.getName(), request);
 			}
 		});
 		return result ? "redirect:/" : null;
