@@ -44,8 +44,8 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceConfigurer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -74,15 +74,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	// implementing WebMvcConfigurer
 
-	public void configureInterceptors(InterceptorConfigurer interceptorConfigurer) {
-		interceptorConfigurer.addInterceptor(new AccountExposingHandlerInterceptor());
-		interceptorConfigurer.addInterceptor(new DateTimeZoneHandlerInterceptor());
-		interceptorConfigurer.addInterceptor(new UserLocationHandlerInterceptor());
-		interceptorConfigurer.addInterceptor(new DeviceResolverHandlerInterceptor());
-	}
-
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		converters.add(new MappingJacksonHttpMessageConverter());
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new AccountExposingHandlerInterceptor());
+		registry.addInterceptor(new DateTimeZoneHandlerInterceptor());
+		registry.addInterceptor(new UserLocationHandlerInterceptor());
+		registry.addInterceptor(new DeviceResolverHandlerInterceptor());
 	}
 
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -93,6 +89,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());		
 	}
 
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	}
+	
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(new MappingJacksonHttpMessageConverter());
+	}
+	
 	public Validator getValidator() {
 		LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -102,12 +106,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		}
 		factory.setValidationMessageSource(messageSource);
 		return factory;
-	}
-
-	public void configureResourceHandling(ResourceConfigurer resourceConfigurer) {
-		// requests for /resources/** are mapped to files in ${webappRoot}/resources.
-		resourceConfigurer.addPathMapping("/resources/**");
-		resourceConfigurer.addResourceLocation("/resources/");
 	}
 
 	// additional webmvc-related beans

@@ -16,11 +16,10 @@
 package com.springsource.greenhouse.connect;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
+import org.springframework.web.context.request.NativeWebRequest;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
@@ -40,7 +39,7 @@ public class AccountSignInAdapter implements SignInAdapter {
 		this.accountRepository = accountRepository;
 	}
 
-	public void signIn(String userId, Connection<?> connection, HttpServletRequest request, HttpServletResponse response) {
+	public void signIn(String userId, Connection<?> connection, NativeWebRequest request) {
 		Account account = accountRepository.findById(Long.valueOf(userId));
 		AccountUtils.signin(account);
 	}
