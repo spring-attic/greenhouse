@@ -20,7 +20,7 @@
 		<org.springframework.security-version>3.1.0.CI-SNAPSHOT</org.springframework.security-version>		
 		<org.springframework.integration-version>2.0.4.RELEASE</org.springframework.integration-version>
 		<org.springframework.social-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social-version>			
-		<org.aspectj-version>1.6.10</org.aspectj-version>
+		<org.aspectj-version>1.6.11</org.aspectj-version>
 		<org.slf4j-version>1.6.1</org.slf4j-version>
 	</properties>
 	<dependencies>
@@ -335,7 +335,7 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.8.1</version>
+			<version>1.8.2</version>
 		</dependency>
 
 		<!-- File Upload -->
