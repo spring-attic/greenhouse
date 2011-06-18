@@ -133,7 +133,7 @@
         	<version>${org.springframework.social-version}</version>
 		</dependency>	
 		
-		<!-- Aspect J -->
+		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
@@ -144,6 +144,13 @@
 			<artifactId>spring-aspects</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		<!-- Remove once spring-aspects marks JPA as optional -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>	
 
 		<!-- CGLIB, only required and used for @Configuration usage -->
 		<dependency>
