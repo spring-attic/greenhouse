@@ -417,7 +417,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
-				<version>1.2</version>
+				<version>1.3.1</version>
 				<dependencies>
 					<!-- NB: You must use Maven 2.0.9 or above or these are ignored (see MNG-2972) -->
 					<dependency>
