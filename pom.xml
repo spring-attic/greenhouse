@@ -330,12 +330,6 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-redis</artifactId>
 			<version>1.0.0.BUILD-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.jredis</groupId>
-					<artifactId>jredis-anthonylauzon</artifactId>
-				</exclusion>				
-			</exclusions>
 		</dependency>
 	    <dependency>
 	      <groupId>redis.clients</groupId>
