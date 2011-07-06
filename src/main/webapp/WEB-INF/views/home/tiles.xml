@@ -5,12 +5,7 @@
 	
 	<definition name="homeNotSignedIn" extends="page">
 		<put-attribute name="header" value="/WEB-INF/views/home/header.jsp" />			
-		<put-attribute name="content">
-			<definition name="content" template="/WEB-INF/views/home/contentNotSignedIn.jsp" />
-		</put-attribute>
-		<put-list-attribute name="styles">
-            <add-attribute value="/recent/recentActivity.css"/>
-        </put-list-attribute>
+		<put-attribute name="content" value="/WEB-INF/views/home/contentNotSignedIn.jsp" />
 	</definition>
 	
 	<definition name="homeSignedIn" extends="page">

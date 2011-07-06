@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import org.springframework.data.keyvalue.redis.core.BoundHashOperations;
-import org.springframework.data.keyvalue.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.springsource.greenhouse.develop.AppRepository;
 

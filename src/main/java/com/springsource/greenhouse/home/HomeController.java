@@ -17,14 +17,9 @@ package com.springsource.greenhouse.home;
 
 import java.security.Principal;
 
-import javax.inject.Inject;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.springsource.greenhouse.activity.recent.RecentActivityRepository;
 
 /**
  * Controller for the homepage of the application.
@@ -33,24 +28,12 @@ import com.springsource.greenhouse.activity.recent.RecentActivityRepository;
 @Controller
 public class HomeController {
 
-	private RecentActivityRepository recentActivityRepository;
-	
-	@Inject
-	public HomeController(RecentActivityRepository recentActivityRepository) {
-		this.recentActivityRepository = recentActivityRepository;
-	}
-
 	/**
 	 * Renders the home page as HTML in thw web browser.
 	 * The home page is different based on whether the user is signed in or not.
 	 */
 	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String home(Principal user, Model model) {
-		if (user != null) {
-			return "homeSignedIn";
-		} else {
-			model.addAttribute("recentActivity", recentActivityRepository.findInitial());
-			return "homeNotSignedIn";
-		}
+	public String home(Principal user) {
+		return user != null ? "homeSignedIn" : "homeNotSignedIn";
 	}
 }

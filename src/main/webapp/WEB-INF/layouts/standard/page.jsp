@@ -10,7 +10,6 @@
     <meta name="description" content="A place for application developers to connect and stay on top of everything happening in the Spring community." />
     <meta name="keywords" content="Greenhouse, Spring, SpringSource, develop, web, social, mobile, cloud, conference, speakers, talk, presentation, industry, tech" />
 	<link rel="stylesheet" href="<c:url value="/resources/page.css" />" type="text/css" media="screen" />
-	<link rel="stylesheet" href="<c:url value="/resources/jquery-ui/jquery-ui-1.8.10.custom.css" />" type="text/css" media="all" />
 	<tiles:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true" />
 	<c:forEach var="style" items="${styles}">
 	<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
@@ -18,12 +17,7 @@
 	<c:forEach var="meta" items="${metadata}">
 	<meta name="${meta.key}" content="${meta.value}"/> 
 	</c:forEach>
-	<script>
-		var application = application || {};
-		application.contextPath = "${pageContext.request.contextPath}";
-	</script>
-	<script type="text/javascript" src="<c:url value="/resources/jquery/1.4/jquery.js" />"></script>
-	<script type="text/javascript" src="<c:url value="/resources/jquery-ui/jquery-ui-1.8.10.custom.min.js" />"></script>
+	<script type="text/javascript" src="<c:url value="/resources/jquery/1.6/jquery.js" />"></script>
 	<script type="text/javascript" src="<c:url value="/resources/jquery-cookie/1.0/jquery-cookie.js" />"></script>
 </head>
 <body>

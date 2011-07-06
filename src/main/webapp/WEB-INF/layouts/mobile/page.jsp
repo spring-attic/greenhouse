@@ -13,7 +13,7 @@
 	<c:forEach var="style" items="${styles}">
 		<link rel="stylesheet" href="<c:url value="/resources/${style}" />" type="text/css" media="all" />
 	</c:forEach>	
-	<script type="text/javascript" src="<c:url value="/resources/jquery/jquery-1.4.2.js" />"></script>
+	<script type="text/javascript" src="<c:url value="/resources/jquery/1.6/jquery.js" />"></script>
 	<script type="text/javascript">
 		window.scrollTo(0, 1);
 	</script>
