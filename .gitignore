@@ -6,3 +6,4 @@ src/main/filters/*
 .project
 .settings
 src/main/webapp/META-INF
+Thumbs.db
