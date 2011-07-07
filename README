@@ -26,7 +26,7 @@ By default, the app will run in 'embedded' mode which does not require any exter
 You may also launch Tomcat from the command line by invoking the Tomcat 7 Maven plugin:
 	mvn t7:run
 
-Access the deployed webapp at http://localhost:8080/greenhouse-1.0.0.BUILD-SNAPSHOT
+Access the deployed webapp at http://localhost:8080/greenhouse-1.0.0-BUILD-SNAPSHOT
 
 Building and Running from a Maven/Java Dynamic Web-project-capable IDE, such as Eclipse/SpringSource Tool Suite:
 ------------------------------------------
