@@ -11,15 +11,15 @@
 	<organization>
 		<name>SpringSource</name>
 		<url>http://www.springsource.org</url>
-	</organization>	
+	</organization>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.6</java-version>
-		<org.springframework-version>3.1.0.BUILD-SNAPSHOT</org.springframework-version>		
-		<org.springframework.security-version>3.1.0.CI-SNAPSHOT</org.springframework.security-version>		
+		<org.springframework-version>3.1.0.BUILD-SNAPSHOT</org.springframework-version>
+		<org.springframework.security-version>3.1.0.CI-SNAPSHOT</org.springframework.security-version>
 		<org.springframework.integration-version>2.0.4.RELEASE</org.springframework.integration-version>
-		<org.springframework.social-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social-version>			
+		<org.springframework.social-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social-version>
 		<org.aspectj-version>1.6.11</org.aspectj-version>
 		<org.slf4j-version>1.6.1</org.slf4j-version>
 	</properties>
@@ -51,7 +51,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>${org.springframework.security-version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -88,51 +88,51 @@
 			<version>${org.springframework.integration-version}</version>
 		</dependency>
 		<dependency>
-  			<groupId>org.springframework.integration</groupId>
-  			<artifactId>spring-integration-event</artifactId>
-  			<version>${org.springframework.integration-version}</version>
-		</dependency>						
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-event</artifactId>
+			<version>${org.springframework.integration-version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.mobile</groupId>
 			<artifactId>spring-mobile-device</artifactId>
-        	<version>1.0.0.M3</version>
+			<version>1.0.0.M3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-core</artifactId>
-        	<version>${org.springframework.social-version}</version>
+			<version>${org.springframework.social-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook</artifactId>
-        	<version>${org.springframework.social-version}</version>
+			<version>${org.springframework.social-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook-web</artifactId>
-        	<version>${org.springframework.social-version}</version>
+			<version>${org.springframework.social-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-twitter</artifactId>
-        	<version>${org.springframework.social-version}</version>
+			<version>${org.springframework.social-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-linkedin</artifactId>
-        	<version>${org.springframework.social-version}</version>
+			<version>${org.springframework.social-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-tripit</artifactId>
-        	<version>${org.springframework.social-version}</version>
-		</dependency>						
+			<version>${org.springframework.social-version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-web</artifactId>
-        	<version>${org.springframework.social-version}</version>
-		</dependency>	
-		
+			<version>${org.springframework.social-version}</version>
+		</dependency>
+
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -150,7 +150,7 @@
 			<artifactId>persistence-api</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>
-		</dependency>	
+		</dependency>
 
 		<!-- CGLIB, only required and used for @Configuration usage -->
 		<dependency>
@@ -158,7 +158,7 @@
 			<artifactId>cglib-nodep</artifactId>
 			<version>2.2</version>
 		</dependency>
-		
+
 		<!-- @Inject -->
 		<dependency>
 			<groupId>javax.inject</groupId>
@@ -189,7 +189,7 @@
 			<version>1.2.16</version>
 			<scope>runtime</scope>
 		</dependency>
-	
+
 		<!-- Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -201,7 +201,7 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>r09</version>
-		</dependency>				
+		</dependency>
 
 		<!-- Apache Http Client -->
 		<dependency>
@@ -212,10 +212,10 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				</exclusion>			
+				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- JavaMail -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -247,7 +247,7 @@
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
 			<version>1.2</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.glassfish.web</groupId>
 			<artifactId>jstl-impl</artifactId>
@@ -314,28 +314,29 @@
 		<dependency>
 			<groupId>net.java.dev.jets3t</groupId>
 			<artifactId>jets3t</artifactId>
-			<!-- The next release of jets3t should have support for HttpComponents 4.1 and HttpClient 3.1 will be removed from the classpath -->
+			<!-- The next release of jets3t should have support for HttpComponents 
+				4.1 and HttpClient 3.1 will be removed from the classpath -->
 			<version>0.8.1</version>
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				</exclusion>				
-			</exclusions>			
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
+
 		<!-- Redis / Spring Key-Value -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-redis</artifactId>
 			<version>1.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
-	    <dependency>
-	      <groupId>redis.clients</groupId>
-	      <artifactId>jedis</artifactId>
-	      <version>2.0.0</version>
-	    </dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.0.0</version>
+		</dependency>
 
 		<!-- Test -->
 		<dependency>
@@ -363,22 +364,30 @@
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
 			<url>http://maven.springframework.org/snapshot</url>
-			<releases><enabled>false</enabled></releases>			
-			<snapshots><enabled>true</enabled></snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 		<!-- For Spring releases -->
 		<repository>
 			<id>org.springframework.maven.release</id>
 			<name>Spring Maven Release Repository</name>
 			<url>http://maven.springframework.org/release</url>
-			<snapshots><enabled>false</enabled></snapshots>			
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
 			<url>http://maven.springframework.org/milestone</url>
-			<snapshots><enabled>false</enabled></snapshots>		
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 	<build>
@@ -391,7 +400,7 @@
 			<testResource>
 				<directory>src/test/java</directory>
 			</testResource>
-		</testResources>	
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -407,7 +416,7 @@
 				<artifactId>aspectj-maven-plugin</artifactId>
 				<version>1.3.1</version>
 				<dependencies>
-					<!-- NB: You must use Maven 2.0.9 or above or these are ignored (see MNG-2972) -->
+					<!-- Note: Maven 2.0.9 or > required or these are ignored (MNG-2972) -->
 					<dependency>
 						<groupId>org.aspectj</groupId>
 						<artifactId>aspectjrt</artifactId>
@@ -449,13 +458,14 @@
 						<goals>
 							<goal>write-active-profile-properties</goal>
 						</goals>
-					<configuration>
-						<!-- Writes properties defined in current active profile(s) to application.properties, which is picked up by PropertyPlaceholderConfigurer in the classpath -->
-						<outputFile>${project.build.outputDirectory}/application.properties</outputFile>
-					</configuration>
+						<configuration>
+							<!-- Writes properties defined in current active profile(s) to application.properties, 
+								which is picked up by PropertyPlaceholderConfigurer in the classpath -->
+							<outputFile>${project.build.outputDirectory}/application.properties</outputFile>
+						</configuration>
 					</execution>
-			 	</executions>
-			</plugin>			
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -463,7 +473,9 @@
 					<execution>
 						<id>install</id>
 						<phase>install</phase>
-						<goals><goal>sources</goal></goals>
+						<goals>
+							<goal>sources</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -471,7 +483,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
-			</plugin>			
+			</plugin>
 			<!-- Tomcat 7 Plugin -->
 			<plugin>
 				<groupId>com.googlecode.t7mp</groupId>
@@ -485,35 +497,27 @@
 					<execution>
 						<id>publish</id>
 						<phase>deploy</phase>
-						<goals><goal>run</goal></goals>
+						<goals>
+							<goal>run</goal>
+						</goals>
 						<configuration>
 							<tasks>
-								<!-- TODO update this to shutdown server, clear out deploy area, copy new war in, startup server: for safety with PermGen and JSP compilation -->
-								<scp file="${project.build.directory}/${project.build.finalName}.${project.packaging}" 
-									todir="${publish.username}@${publish.host}:/tmp/greenhouse.war" 
-									keyfile="${publish.keyfile}"
-									trust="true" />
-								<sshexec host="${publish.host}"
-									username="${publish.username}"
+								<scp
+									file="${project.build.directory}/${project.build.finalName}.${project.packaging}"
+									todir="${publish.username}@${publish.host}:/tmp/greenhouse.war"
+									keyfile="${publish.keyfile}" trust="true" />
+								<sshexec host="${publish.host}" username="${publish.username}"
 									command="${publish.serverPath}/bin/tcruntime-ctl.sh stop"
-									keyfile="${publish.keyfile}"
-									trust="true"
-									failonerror="false" />				
-								<sshexec host="${publish.host}"
-									username="${publish.username}"
-									command="rm -rf ${publish.serverPath}/webapps/*"
-									keyfile="${publish.keyfile}"
+									keyfile="${publish.keyfile}" trust="true" failonerror="false" />
+								<sshexec host="${publish.host}" username="${publish.username}"
+									command="rm -rf ${publish.serverPath}/webapps/*" keyfile="${publish.keyfile}"
 									trust="true" />
-								<sshexec host="${publish.host}"
-									username="${publish.username}"
+								<sshexec host="${publish.host}" username="${publish.username}"
 									command="mv /tmp/greenhouse.war ${publish.serverPath}/webapps/ROOT.war"
-									keyfile="${publish.keyfile}"
-									trust="true" />
-								<sshexec host="${publish.host}"
-									username="${publish.username}"
+									keyfile="${publish.keyfile}" trust="true" />
+								<sshexec host="${publish.host}" username="${publish.username}"
 									command="${publish.serverPath}/bin/tcruntime-ctl.sh start"
-									keyfile="${publish.keyfile}"
-									trust="true" />
+									keyfile="${publish.keyfile}" trust="true" />
 							</tasks>
 						</configuration>
 					</execution>
@@ -527,17 +531,17 @@
 				</dependencies>
 			</plugin>
 			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                	<useProjectReferences>false</useProjectReferences>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<useProjectReferences>false</useProjectReferences>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>false</downloadJavadocs>
 					<wtpversion>2.0</wtpversion>
 				</configuration>
-            </plugin>
-		</plugins>		
+			</plugin>
+		</plugins>
 	</build>
 
 	<pluginRepositories>
@@ -546,30 +550,40 @@
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
 			<url>http://maven.springframework.org/snapshot</url>
-			<releases><enabled>false</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</pluginRepository>
 		<!-- For Spring releases -->
 		<pluginRepository>
 			<id>org.springframework.maven.release</id>
 			<name>Spring Maven Release Repository</name>
 			<url>http://maven.springframework.org/release</url>
-			<snapshots><enabled>false</enabled></snapshots>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</pluginRepository>
 		<!-- For developing against latest Spring milestones -->
 		<pluginRepository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
 			<url>http://maven.springframework.org/milestone</url>
-			<snapshots><enabled>false</enabled></snapshots>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</pluginRepository>
 		<!-- For Tomcat plugin -->
 		<pluginRepository>
 			<id>sonatype-oss-repository</id>
 			<name>Sonatype Public OSS Repository</name>
 			<url>https://oss.sonatype.org/content/groups/public/</url>
-			<snapshots><enabled>true</enabled></snapshots>
-		</pluginRepository>		
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
 	</pluginRepositories>
 
 	<distributionManagement>
@@ -580,5 +594,5 @@
 			<url>file://${user.home}/local-maven-publish-repository</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
+
 </project>

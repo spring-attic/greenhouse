@@ -22,11 +22,6 @@
 	<beans:bean id="badgeRepository" class="com.springsource.greenhouse.activity.badge.JdbcBadgeRepository" />
 		
 	<!-- Sends Member Actions to the badging system for processing -->		 		
-	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="awardedBadgeChannel" />
-
-	<!-- AwardedBadge channel -->
-	<publish-subscribe-channel id="awardedBadgeChannel" />
-
-	<logging-channel-adapter channel="awardedBadgeChannel" />
+	<service-activator input-channel="actionChannel" expression="@badgeSystem.awardBadgeForAction(payload)" output-channel="nullChannel" />
 	
 </beans:beans>
