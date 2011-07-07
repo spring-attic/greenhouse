@@ -27,4 +27,6 @@
 	<!-- AwardedBadge channel -->
 	<publish-subscribe-channel id="awardedBadgeChannel" />
 
+	<logging-channel-adapter channel="awardedBadgeChannel" />
+	
 </beans:beans>
