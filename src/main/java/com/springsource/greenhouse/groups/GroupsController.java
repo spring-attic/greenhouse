@@ -63,7 +63,7 @@ public class GroupsController {
 	/**
 	 * Render the details of an event organized by the group as HTML in the web browser.
 	 */
-	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}", method=RequestMethod.GET, headers="Accept=text/html")
+	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}", method=RequestMethod.GET)
 	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(event);

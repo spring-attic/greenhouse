@@ -63,7 +63,7 @@ public class EventsController {
 	 * Only matches 'GET /events' requests for JSON content; a 404 is sent otherwise.
 	 * TODO send a 406 if an unsupported representation, such as XML, is requested.  See SPR-7353.
 	 */
-	@RequestMapping(value="/events", method=RequestMethod.GET, headers="Accept=application/json") 
+	@RequestMapping(value="/events", method=RequestMethod.GET, produces="application/json") 
 	public @ResponseBody List<Event> upcomingEvents(@RequestParam(value="after", required=false) @DateTimeFormat(iso=ISO.DATE_TIME) Long afterMillis) {
 		return eventRepository.findUpcomingEvents(afterMillis);
 	}
@@ -71,7 +71,7 @@ public class EventsController {
 	/**
 	 * Write the list of event favorites to the body of the response.
 	 */
-	@RequestMapping(value="/events/{eventId}/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/favorites", method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody List<EventSession> favorites(@PathVariable Long eventId, Account account) {
 		return eventRepository.findEventFavorites(eventId, account.getId());
 	}
@@ -80,7 +80,7 @@ public class EventsController {
 	 * Write a page of event tweet search results to the body of the response.
 	 * The page number and size may be provided by the client.  If not specified, defaults to the first page of ten results.
 	 */
-	@RequestMapping(value="/events/{eventId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/tweets", method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody SearchResults tweets(@PathVariable Long eventId,  @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findEventSearchString(eventId);
 		return searchString != null && searchString.length() > 0 ? twitter.searchOperations().search(searchString, page, pageSize) : null;
@@ -108,7 +108,7 @@ public class EventsController {
 	/**
 	 * Write the attendee's list of favorite sessions to the body of the response.
 	 */
-	@RequestMapping(value="/events/{eventId}/sessions/favorites", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/sessions/favorites", method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody List<EventSession> favoriteSessions(@PathVariable Long eventId, Account account) {
 		return eventRepository.findAttendeeFavorites(eventId, account.getId());
 	}
@@ -116,7 +116,7 @@ public class EventsController {
 	/**
 	 * Write the sessions scheduled for the day to the body of the response.
 	 */
-	@RequestMapping(value="/events/{eventId}/sessions/{day}", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/sessions/{day}", method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody List<EventSession> sessionsOnDay(@PathVariable Long eventId, @PathVariable @DateTimeFormat(iso=ISO.DATE) LocalDate day, Account account) {
 		return eventRepository.findSessionsOnDay(eventId, day, account.getId());
 	}
@@ -142,7 +142,7 @@ public class EventsController {
 	/**
 	 * Write a page of session tweet search results to the body of the response.
 	 */
-	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, headers="Accept=application/json")
+	@RequestMapping(value="/events/{eventId}/sessions/{sessionId}/tweets", method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody SearchResults sessionTweets(@PathVariable Long eventId, @PathVariable Integer sessionId, @RequestParam(defaultValue="1") Integer page, @RequestParam(defaultValue="10") Integer pageSize) {
 		String searchString = eventRepository.findSessionSearchString(eventId, sessionId);
 		return searchString != null && searchString.length() > 0 ? twitter.searchOperations().search(searchString, page, pageSize) : null;
@@ -171,7 +171,7 @@ public class EventsController {
 	/**
 	 * Render the list of upcoming events as HTML in the client's web browser. 
 	 */
-	@RequestMapping(value="/events", method=RequestMethod.GET, headers="Accept=text/html")
+	@RequestMapping(value="/events", method=RequestMethod.GET, produces="text/html")
 	public String upcomingEventsView(Model model, DateTimeZone timeZone) {
 		model.addAttribute(eventRepository.findUpcomingEvents(new DateTime(timeZone).getMillis()));
 		return "events/list";

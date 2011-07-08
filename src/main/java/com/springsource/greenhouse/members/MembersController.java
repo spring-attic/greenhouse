@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springsource.greenhouse.account.Account;
@@ -35,6 +36,7 @@ import com.springsource.greenhouse.account.Account;
  * @author Craig Walls
  */
 @Controller
+@RequestMapping("/members")
 public class MembersController {
 	
 	private final ProfileRepository profileRepository;
@@ -47,7 +49,7 @@ public class MembersController {
 	/**
 	 * Write the currently signed-in member's profile to the response as JSON.
 	 */
-	@RequestMapping(value="/members/@self", headers="Accept=application/json")
+	@RequestMapping(value="/@self", method=RequestMethod.GET, produces="application/json")
 	public @ResponseBody Profile profile(Account account) {
 		return profileRepository.findByAccountId(account.getId());
 	}
@@ -56,7 +58,7 @@ public class MembersController {
 	 * Render the requested member's profile as HTML in the user's web browser.
 	 * The profile page is accessible to the general public and does not require signin to view.
 	 */
-	@RequestMapping("/members/{profileKey}")
+	@RequestMapping(value="/{profileKey}", method=RequestMethod.GET)
 	public String profileView(@PathVariable String profileKey, Model model) {
 		Profile profile = profileRepository.findById(profileKey);
 		model.addAttribute(profile);
