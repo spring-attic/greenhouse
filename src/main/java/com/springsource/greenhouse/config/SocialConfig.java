@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionFactoryLocator;
@@ -155,8 +156,8 @@ public class SocialConfig {
 	 * @param accountRepository the account repository that can load user Account objects given an account id.
 	 */
 	@Bean
-	public ProviderSignInController providerSignInController(AccountRepository accountRepository) {
-		return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new AccountSignInAdapter(accountRepository));
+	public ProviderSignInController providerSignInController(AccountRepository accountRepository, RequestCache requestCache) {
+		return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new AccountSignInAdapter(accountRepository, requestCache));
 	}
 	
 }
