@@ -19,7 +19,7 @@
 		<org.springframework-version>3.1.0.BUILD-SNAPSHOT</org.springframework-version>
 		<org.springframework.security-version>3.1.0.CI-SNAPSHOT</org.springframework.security-version>
 		<org.springframework.integration-version>2.0.5.RELEASE</org.springframework.integration-version>
-		<org.springframework.social-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social-version>
+		<org.springframework.social-version>1.0.0.RC2</org.springframework.social-version>
 		<org.aspectj-version>1.6.11</org.aspectj-version>
 		<org.slf4j-version>1.6.1</org.slf4j-version>
 	</properties>
@@ -104,6 +104,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-web</artifactId>
+			<version>${org.springframework.social-version}</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook</artifactId>
 			<version>${org.springframework.social-version}</version>
 		</dependency>
@@ -120,17 +125,12 @@
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-linkedin</artifactId>
-			<version>${org.springframework.social-version}</version>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-tripit</artifactId>
-			<version>${org.springframework.social-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-web</artifactId>
-			<version>${org.springframework.social-version}</version>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
 		</dependency>
 
 		<!-- AspectJ -->
