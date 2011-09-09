@@ -19,6 +19,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.social.twitter.api.Twitter;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.WebRequest;
 
@@ -30,7 +31,7 @@ import com.springsource.greenhouse.account.AccountUtils;
  */
 public class TwitterConnectInterceptor implements ConnectInterceptor<Twitter> {
 
-	public void preConnect(ConnectionFactory<Twitter> connectionFactory, WebRequest request) {
+	public void preConnect(ConnectionFactory<Twitter> connectionFactory, MultiValueMap<String, String> params, WebRequest request) {
 		if (StringUtils.hasText(request.getParameter(POST_TWEET_PARAMETER))) {
 			request.setAttribute(POST_TWEET_ATTRIBUTE, Boolean.TRUE, WebRequest.SCOPE_SESSION);
 		}

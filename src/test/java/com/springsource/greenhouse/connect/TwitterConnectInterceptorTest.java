@@ -32,7 +32,7 @@ public class TwitterConnectInterceptorTest {
 	@Test
 	public void preConnect() {
 		httpServletRequest.setParameter("postTweet", "true");
-		interceptor.preConnect(null, request);
+		interceptor.preConnect(null, null, request);
 		Boolean postTweetAttributeValue = (Boolean) request.getAttribute("twitterConnect.postTweet", WebRequest.SCOPE_SESSION);
 		assertNotNull(postTweetAttributeValue);
 		assertTrue(postTweetAttributeValue);
@@ -40,7 +40,7 @@ public class TwitterConnectInterceptorTest {
 
 	@Test
 	public void preConnect_noPostTweetParameter() {
-		interceptor.preConnect(null, request);
+		interceptor.preConnect(null, null, request);
 		Boolean postTweetAttributeValue = (Boolean) request.getAttribute("twitterConnect.postTweet", WebRequest.SCOPE_SESSION);
 		assertNull(postTweetAttributeValue);
 	}
