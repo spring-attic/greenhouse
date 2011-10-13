@@ -24,13 +24,13 @@ To build, simply execute 'mvn install' and deploy the resulting .war to any Serv
 By default, the app will run in 'embedded' mode which does not require any external setup.
 
 You may also launch Tomcat from the command line by invoking the Tomcat 7 Maven plugin:
-	mvn t7:run
+	mvn clean install t7:run
 
-Access the deployed webapp at http://localhost:8080/greenhouse-1.0.0-BUILD-SNAPSHOT
+Access the deployed webapp at http://localhost:8080/greenhouse
 
 Building and Running from a Maven/Java Dynamic Web-project-capable IDE, such as Eclipse/SpringSource Tool Suite:
 ------------------------------------------
-Simply import the project into your IDE and deploy the project to your IDE's embedded servlet container.
+Simply import "as a Maven Project" into your IDE and deploy the project to your IDE's embedded servlet container.
 
 Enjoy!
 The Greenhouse Development Team
