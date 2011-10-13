@@ -25,9 +25,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.flash.FlashMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springsource.greenhouse.account.SignInNotFoundException;
+import com.springsource.greenhouse.utils.Message;
 
 /**
  * UI Controller for resetting user passwords.
@@ -59,10 +60,11 @@ public class ResetPasswordController {
 	 * The mail message will contain a request token that must be presented to continue the password reset operation. 
 	 */
 	@RequestMapping(value="/reset", method=RequestMethod.POST)
-	public String sendResetMail(@RequestParam String signin, Model model) {
+	public String sendResetMail(@RequestParam String signin, Model model, RedirectAttributes redirectAttrs) {
 		try {
 			service.sendResetMail(signin);
-			FlashMap.setInfoMessage("An email has been sent to you.  Follow its instructions to reset your password.");
+			redirectAttrs.addFlashAttribute(
+					Message.info("An email has been sent to you.  Follow its instructions to reset your password."));
 			return "redirect:/reset";
 		} catch (SignInNotFoundException e) {
 			model.addAttribute("signin", FieldModel.error("not on file", signin));
@@ -86,17 +88,18 @@ public class ResetPasswordController {
 	 * Process the change password submission and reset the user's password.
 	 */
 	@RequestMapping(value="/reset", method=RequestMethod.POST, params="token")
-	public String changePassword(@RequestParam String token, @Valid ChangePasswordForm form, BindingResult formBinding, Model model) {
+	public String changePassword(@RequestParam String token, 
+			@Valid ChangePasswordForm form, BindingResult formBinding, Model model, RedirectAttributes redirectAttrs) {
 		if (formBinding.hasErrors()) {
 			model.addAttribute("token", token);
 			return "reset/changePassword";
 		}
 		try {
 			service.changePassword(token, form.getPassword());
-			FlashMap.setSuccessMessage("Your password has been reset");
+			redirectAttrs.addFlashAttribute("Your password has been reset");
 			return "redirect:/reset";
 		} catch (InvalidResetTokenException e) {
-			FlashMap.setErrorMessage("Your reset password session has expired.  Please try again.");
+			redirectAttrs.addFlashAttribute(Message.error("Your reset password session has expired.  Please try again."));
 			return "redirect:/reset";
 		}
 	}

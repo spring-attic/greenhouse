@@ -26,12 +26,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.flash.Message;
-import org.springframework.web.flash.MessageType;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.signup.SignupHelper.SignupCallback;
+import com.springsource.greenhouse.utils.Message;
+import com.springsource.greenhouse.utils.MessageType;
 
 /**
  * UI Controller for signing up new members.

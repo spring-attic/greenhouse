@@ -32,11 +32,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.flash.FlashMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
 import com.springsource.greenhouse.account.ProfileReference;
+import com.springsource.greenhouse.utils.Message;
 
 /**
  * UI Controller for inviting Facebook friends to join our community.
@@ -85,8 +86,8 @@ public class FacebookInviteController {
 	 * @param inviteIds the invitation ids assigned by Facebook, one for each invitation sent
 	 */
 	@RequestMapping(value="/invite/facebook/request-form", method=RequestMethod.POST)
-	public String invitationsSent(@RequestParam("ids[]") String[] inviteIds) {
-		FlashMap.setSuccessMessage("Your invitations have been sent");
+	public String invitationsSent(@RequestParam("ids[]") String[] inviteIds, RedirectAttributes redirectAttrs) {
+		redirectAttrs.addFlashAttribute(Message.success("Your invitations have been sent"));
 		return "redirect:/invite";
 	}
 

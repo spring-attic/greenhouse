@@ -26,9 +26,10 @@ import org.springframework.templating.StringTemplateFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.flash.FlashMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springsource.greenhouse.account.Account;
+import com.springsource.greenhouse.utils.Message;
 
 /**
  * UI Controller for sending email invites.
@@ -62,12 +63,12 @@ public class MailInviteController {
 	 * On success, redirect back to the invite form and render a success message.
 	 */
 	@RequestMapping(value="/invite/mail", method=RequestMethod.POST)
-	public String sendInvites(@Valid MailInviteForm form, BindingResult result, Account account) {
+	public String sendInvites(@Valid MailInviteForm form, BindingResult result, Account account, RedirectAttributes redirectAttrs) {
 		if (result.hasErrors()) {
 			return null;
 		}
 		inviteService.sendInvite(account, form.getInvitees(),  form.getInvitationText());
-		FlashMap.setSuccessMessage("Your invitations have been sent");
+		redirectAttrs.addFlashAttribute(Message.success("Your invitations have been sent"));
 		return "redirect:/invite/mail";
 	}
 	

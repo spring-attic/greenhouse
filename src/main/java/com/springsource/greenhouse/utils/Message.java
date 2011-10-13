@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.web.flash;
+package com.springsource.greenhouse.utils;
 
 /**
  * A message to display to the user.
@@ -32,6 +32,34 @@ public final class Message {
 	public Message(MessageType type, String text) {
 		this.type = type;
 		this.text = text;
+	}
+
+	/**
+	 * Factory method for a success message.
+	 */
+	public static Message success(String text) {
+		return new Message(MessageType.SUCCESS, text);
+	}
+
+	/**
+	 * Factory method for an info message.
+	 */
+	public static Message info(String text) {
+		return new Message(MessageType.INFO, text);
+	}
+
+	/**
+	 * Factory method for a warning message.
+	 */
+	public static Message warning(String text) {
+		return new Message(MessageType.WARNING, text);
+	}
+
+	/**
+	 * Factory method for an error message.
+	 */
+	public static Message error(String text) {
+		return new Message(MessageType.ERROR, text);
 	}
 
 	/**

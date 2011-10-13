@@ -10,7 +10,7 @@
 <form id="signin" action="<c:url value="/signin/authenticate" />" method="post">
 	<div class="formInfo">
   		<h2>Greenhouse Sign In</h2>
-  		<c:if test="${signinError}">
+  		<c:if test="${not empty param['error']}">
   		<div class="error">
   			Your sign in information was incorrect.
   			Please try again<c:if test="${!currentDevice.mobile}"> or <a href="<c:url value="/signup" />">sign up</a></c:if>.

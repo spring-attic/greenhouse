@@ -7,7 +7,7 @@
 
 	<http use-expressions="true">
 		<!-- Authentication policy -->
-		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-handler-ref="redirectingAuthenticationFailureHandler" />
+		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-url="/signin?error=1" />
 		<logout logout-url="/signout" delete-cookies="JSESSIONID" />
 		<!-- Authorization policy definition: TODO consider replacing with @Secured on @Controllers -->
 		<intercept-url pattern="/" access="permitAll" />
