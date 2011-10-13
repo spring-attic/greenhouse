@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.events.Event;
 import com.springsource.greenhouse.events.EventRepository;
 
@@ -64,7 +63,7 @@ public class GroupsController {
 	 * Render the details of an event organized by the group as HTML in the web browser.
 	 */
 	@RequestMapping(value="/groups/{group}/events/{year}/{month}/{slug}", method=RequestMethod.GET)
-	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Account account, Model model) {
+	public String eventView(@PathVariable String group, @PathVariable Integer year, @PathVariable Integer month, @PathVariable String slug, Model model) {
 		Event event = eventRepository.findEventBySlug(group, year, month, slug);
 		model.addAttribute(event);
 		return "groups/event";
