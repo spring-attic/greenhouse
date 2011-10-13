@@ -109,7 +109,7 @@ public class SocialConfig {
 		if (account == null) {
 			throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
 		}
-		return usersConnectionRepository().createConnectionRepository(account.getName());
+		return usersConnectionRepository().createConnectionRepository(account.getId().toString());
 	}
 
 	/**

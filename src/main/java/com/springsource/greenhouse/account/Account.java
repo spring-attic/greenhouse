@@ -16,7 +16,6 @@
 package com.springsource.greenhouse.account;
 
 import java.io.Serializable;
-import java.security.Principal;
 
 import org.springframework.web.util.UriTemplate;
 
@@ -27,7 +26,7 @@ import org.springframework.web.util.UriTemplate;
  * @author Keith Donald
  */
 @SuppressWarnings("serial")
-public class Account implements Serializable, Principal {
+public class Account implements Serializable {
 	
 	private final Long id;
 	
@@ -127,9 +126,9 @@ public class Account implements Serializable, Principal {
 		return username != null ? username : id.toString(); 
 	}
 	
-	// implementing Principal
+	// for SpringSecurity to fetch Principal#getName ... TODO favor implementing Principal directly in SPR 3.1.0.RC2 and >
 	
-	public String getName() {
+	public String toString() {
 		return id.toString();
 	}
 }
