@@ -330,7 +330,7 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-redis</artifactId>
-			<version>1.0.0.M4</version>
+			<version>1.0.0.RC1</version>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
