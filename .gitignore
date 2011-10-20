@@ -7,3 +7,7 @@ src/main/filters/*
 .settings
 src/main/webapp/META-INF
 Thumbs.db
+*.iml
+*.ipr
+*.iws
+*.idea
