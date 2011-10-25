@@ -4,21 +4,6 @@
 
 <h2>Settings</h2>
 
-<div id="connectedApps">
-	<h3>Connected Apps</h3>
-	<ul class="listings">
-		<c:forEach var="app" items="${apps}">
-		<li>
-			<h4>${app.name}</h4>
-			<form action="settings/apps/${app.accessToken}" method="post">
-				<p><button type="submit">Disconnect</button></p>
-				<input type="hidden" name="_method" value="DELETE" />
-			</form>
-		</li>
-		</c:forEach>
-	</ul>
-</div>
-
 <h3>Connected Accounts</h3>
 <ul id="connectedAccounts" class="listings">
 	<li class="listing">
@@ -38,3 +23,18 @@
 		<a href="<c:url value="/connect/tripit" />">Connect to TripIt</a>	
 	</li>
 </ul>
+
+<div id="connectedApps">
+	<h3>Connected Apps</h3>
+	<ul class="listings">
+		<c:forEach var="app" items="${apps}">
+		<li>
+			<h4>${app.name}</h4>
+			<form action="settings/apps/${app.accessToken}" method="post">
+				<p><button type="submit">Disconnect</button></p>
+				<input type="hidden" name="_method" value="DELETE" />
+			</form>
+		</li>
+		</c:forEach>
+	</ul>
+</div>

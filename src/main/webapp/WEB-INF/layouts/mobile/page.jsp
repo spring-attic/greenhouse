@@ -25,6 +25,15 @@
 	<div id="content">
 		<tiles:insertAttribute name="content" />
 	</div>
+	<c:if test="${account != null}">
+	<div id="nav">
+		<ul>
+			<li><a href="<c:url value="/invite" />">Invite</a></li>
+			<li><a href="<c:url value="/settings" />">Settings</a></li>
+			<li><a href="<c:url value="/signout" />">Sign Out</a></li>
+		</ul>
+	</div>
+	</c:if>
 	<div id="footer">
 		<tiles:insertAttribute name="footer" />	
 	</div>

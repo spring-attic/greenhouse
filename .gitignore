@@ -7,3 +7,4 @@ src/main/filters/*
 .settings
 src/main/webapp/META-INF
 Thumbs.db
+attendees.csv

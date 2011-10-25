@@ -28,3 +28,16 @@ h2 {
 	font-weight: bold;
 	text-transform: uppercase;
 }
+
+ul {
+	padding: 0px;
+}
+
+li {
+	list-style-type: none;
+	margin-bottom: 2px;
+}
+
+#nav ul {
+	padding: 5px;
+}
