@@ -1,10 +1,14 @@
 *.DS_Store
+Thumbs.db
 bin
 target
 src/main/filters/*
+src/main/webapp/META-INF
 .classpath
 .project
 .settings
-src/main/webapp/META-INF
-Thumbs.db
+*.iml
+*.ipr
+*.iws
+*.idea
 attendees.csv
