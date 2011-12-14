@@ -28,7 +28,7 @@ import org.springframework.context.annotation.PropertySource;
  * @author Keith Donald
  */
 @Configuration
-@ComponentScan(basePackages="com.springsource.greenhouse", excludeFilters={ @Filter(Configuration.class)} )
+@ComponentScan(basePackages="com.springsource.greenhouse")
 public class ComponentConfig {
 	
 	/**
