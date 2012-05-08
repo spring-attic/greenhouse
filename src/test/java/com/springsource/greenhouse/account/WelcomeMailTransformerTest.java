@@ -21,6 +21,6 @@ public class WelcomeMailTransformerTest {
 		assertEquals("Greenhouse <noreply@springsource.com>", welcomeMail.getFrom());
 		assertEquals("Welcome to the Greenhouse!", welcomeMail.getSubject());
 		String mailText = welcomeMail.getText();
-		assertTrue(mailText.contains("View your member profile at:\nhttp://greenhouse.springsource.org/members/rclarkson"));
+		assertTrue(mailText.contains("View your member profile at:\r\nhttp://greenhouse.springsource.org/members/rclarkson"));
 	}
 }
