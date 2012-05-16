@@ -10,6 +10,9 @@ import org.springframework.web.util.UriTemplate;
 import com.springsource.greenhouse.signup.WelcomeMailTransformer;
 
 public class WelcomeMailTransformerTest {
+
+	private static final String NEWLINE = System.getProperty("line.separator");
+
 	@Test
 	public void welcomeMail() {
 		WelcomeMailTransformer transformer = new WelcomeMailTransformer();
@@ -21,6 +24,7 @@ public class WelcomeMailTransformerTest {
 		assertEquals("Greenhouse <noreply@springsource.com>", welcomeMail.getFrom());
 		assertEquals("Welcome to the Greenhouse!", welcomeMail.getSubject());
 		String mailText = welcomeMail.getText();
-		assertTrue(mailText.contains("View your member profile at:\nhttp://greenhouse.springsource.org/members/rclarkson"));
+		assertTrue(mailText.contains("View your member profile at:" + NEWLINE + "http://greenhouse.springsource.org/members/rclarkson"));
 	}
+
 }
