@@ -47,7 +47,7 @@ Deploy the .war to any Servlet 2.5 >, such as Tomcat. By default, the app will r
 
 2. Access the deployed webapp at 
 
-		[http://localhost:8080/greenhouse]
+		http://localhost:8080/greenhouse
 
 ## IDE Support
 
