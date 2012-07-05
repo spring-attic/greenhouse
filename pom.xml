@@ -23,7 +23,7 @@
 		<org.springframework.social-version>1.0.2.RELEASE</org.springframework.social-version>
 		<org.springframework.social.facebook-version>1.0.1.RELEASE</org.springframework.social.facebook-version>
 		<org.springframework.social.linkedin-version>1.0.0.RC1</org.springframework.social.linkedin-version>
-		<org.springframework.social.tripit-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social.tripit-version>
+		<org.springframework.social.tripit-version>1.0.0.M3</org.springframework.social.tripit-version>
 		<org.springframework.mobile-version>1.0.0.RELEASE</org.springframework.mobile-version>
 		<org.aspectj-version>1.6.11</org.aspectj-version>
 		<org.slf4j-version>1.6.2</org.slf4j-version>
