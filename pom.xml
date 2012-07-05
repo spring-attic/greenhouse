@@ -18,9 +18,13 @@
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
 		<org.springframework.security-version>3.1.0.RELEASE</org.springframework.security-version>
+		<org.springframework.security.oauth-version>1.0.0.M6</org.springframework.security.oauth-version>
 		<org.springframework.integration-version>2.0.6.RELEASE</org.springframework.integration-version>
 		<org.springframework.social-version>1.0.2.RELEASE</org.springframework.social-version>
-		<org.springframework.social-facebook-version>1.0.1.RELEASE</org.springframework.social-facebook-version>
+		<org.springframework.social.facebook-version>1.0.1.RELEASE</org.springframework.social.facebook-version>
+		<org.springframework.social.linkedin-version>1.0.0.RC1</org.springframework.social.linkedin-version>
+		<org.springframework.social.tripit-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social.tripit-version>
+		<org.springframework.mobile-version>1.0.0.RELEASE</org.springframework.mobile-version>
 		<org.aspectj-version>1.6.11</org.aspectj-version>
 		<org.slf4j-version>1.6.2</org.slf4j-version>
 	</properties>
@@ -71,7 +75,7 @@
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth</artifactId>
-			<version>1.0.0.M6</version>
+			<version>${org.springframework.security.oauth-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
@@ -96,7 +100,7 @@
 		<dependency>
 			<groupId>org.springframework.mobile</groupId>
 			<artifactId>spring-mobile-device</artifactId>
-			<version>1.0.0.M3</version>
+			<version>${org.springframework.mobile-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
@@ -107,16 +111,16 @@
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-web</artifactId>
 			<version>${org.springframework.social-version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook</artifactId>
-			<version>${org.springframework.social-facebook-version}</version>
+			<version>${org.springframework.social.facebook-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook-web</artifactId>
-			<version>${org.springframework.social-facebook-version}</version>
+			<version>${org.springframework.social.facebook-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
@@ -126,12 +130,12 @@
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-linkedin</artifactId>
-			<version>1.0.0.RC1</version>
+			<version>${org.springframework.social.linkedin-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-tripit</artifactId>
-			<version>1.0.0.M3</version>
+			<version>${org.springframework.social.tripit-version}</version>
 		</dependency>
 
 		<!-- AspectJ -->
@@ -230,7 +234,7 @@
 			<artifactId>stringtemplate</artifactId>
 			<version>3.2.1</version>
 		</dependency>
-		
+
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -363,14 +367,14 @@
 			<artifactId>opencsv</artifactId>
 			<version>2.3</version>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
 		<repository>
-			<id>org.springframework.maven.snapshot</id>
-			<name>Spring Maven Snapshot Repository</name>
-			<url>http://maven.springframework.org/snapshot</url>
+			<id>spring-snapshot</id>
+			<name>SpringSource Snapshot Repository</name>
+			<url>http://repo.springsource.org/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -380,18 +384,18 @@
 		</repository>
 		<!-- For Spring releases -->
 		<repository>
-			<id>org.springframework.maven.release</id>
-			<name>Spring Maven Release Repository</name>
-			<url>http://maven.springframework.org/release</url>
+			<id>spring-repository</id>
+			<name>SpringSource Repository</name>
+			<url>http://repo.springsource.org/release</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
-			<id>org.springframework.maven.milestone</id>
-			<name>Spring Maven Milestone Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
+			<id>spring-milestone</id>
+			<name>SpringSource Milestone Repository</name>
+			<url>http://repo.springsource.org/milestone</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -495,9 +499,9 @@
 			<plugin>
 				<groupId>com.googlecode.t7mp</groupId>
 				<artifactId>maven-t7-plugin</artifactId>
-				<version>0.9.8.M2A</version>
+				<version>0.9.9.M1</version>
 				<configuration>
-				  <contextPath>greenhouse</contextPath>
+					<contextPath>greenhouse</contextPath>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -554,7 +558,8 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -594,9 +599,9 @@
 	<pluginRepositories>
 		<!-- For testing against latest Spring snapshots -->
 		<pluginRepository>
-			<id>org.springframework.maven.snapshot</id>
-			<name>Spring Maven Snapshot Repository</name>
-			<url>http://maven.springframework.org/snapshot</url>
+			<id>spring-snapshot</id>
+			<name>SpringSource Snapshot Repository</name>
+			<url>http://repo.springsource.org/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -606,18 +611,18 @@
 		</pluginRepository>
 		<!-- For Spring releases -->
 		<pluginRepository>
-			<id>org.springframework.maven.release</id>
-			<name>Spring Maven Release Repository</name>
-			<url>http://maven.springframework.org/release</url>
+			<id>spring-repository</id>
+			<name>SpringSource Repository</name>
+			<url>http://repo.springsource.org/release</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
 		<!-- For developing against latest Spring milestones -->
 		<pluginRepository>
-			<id>org.springframework.maven.milestone</id>
-			<name>Spring Maven Milestone Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
+			<id>spring-milestone</id>
+			<name>SpringSource Milestone Repository</name>
+			<url>http://repo.springsource.org/milestone</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
