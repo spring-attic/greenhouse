@@ -19,11 +19,11 @@
 		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
 		<org.springframework.security-version>3.1.0.RELEASE</org.springframework.security-version>
 		<org.springframework.security.oauth-version>1.0.0.M6</org.springframework.security.oauth-version>
-		<org.springframework.integration-version>2.0.5.RELEASE</org.springframework.integration-version>
+		<org.springframework.integration-version>2.1.3.RELEASE</org.springframework.integration-version>
 		<org.springframework.social-version>1.0.2.RELEASE</org.springframework.social-version>
 		<org.springframework.social.facebook-version>1.0.1.RELEASE</org.springframework.social.facebook-version>
 		<org.springframework.social.linkedin-version>1.0.0.RC1</org.springframework.social.linkedin-version>
-		<org.springframework.social.tripit-version>1.0.0.BUILD-SNAPSHOT</org.springframework.social.tripit-version>
+		<org.springframework.social.tripit-version>1.0.0.M3</org.springframework.social.tripit-version>
 		<org.springframework.mobile-version>1.0.0.RELEASE</org.springframework.mobile-version>
 		<org.aspectj-version>1.6.11</org.aspectj-version>
 		<org.slf4j-version>1.6.2</org.slf4j-version>
