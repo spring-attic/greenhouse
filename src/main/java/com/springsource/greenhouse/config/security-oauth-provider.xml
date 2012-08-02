@@ -15,7 +15,7 @@
 	<!-- Spring Security OAuth 1.0 Provider Configuration -->	
 	<oauth:provider consumer-details-service-ref="appConsumerDetailsService" token-services-ref="oauthProviderTokenServices"
 		request-token-url="/oauth/request_token" authenticate-token-url="/oauth/authorize"
-		authentication-failed-url="/oauth/confirm_access" access-token-url="/oauth/access_token" require10a="false" />
+		user-approval-url="/oauth/confirm_access" access-token-url="/oauth/access_token" require10a="false" />
 
 	<!-- Sends a UNAUTHORIZED response back to clients attempting to access protected resources but who have not yet authenticated via OAuth -->
 	<bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint">
