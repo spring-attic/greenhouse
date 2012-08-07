@@ -7,6 +7,6 @@
 
 <c:url value="/oauth/authorize" var="authorize_url" />
 <form action="${authorize_url}" method="post">
-	<input name="requestToken" value="${oauth_token}" type="hidden" />
+	<input name="user_oauth_approval" value="true" type="hidden" />
 	<p><button type="submit">Authorize</button></p>
 </form>

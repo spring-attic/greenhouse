@@ -15,7 +15,6 @@
  */
 package com.springsource.greenhouse.develop.oauth;
 
-import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 /**
  * Adapts a {@link OAuthSession} returned by the {@link OAuthSessionManager} to a Spring Security {@link OAuthProviderToken}.
@@ -23,7 +22,7 @@ import org.springframework.security.oauth.provider.token.OAuthProviderToken;
  * @see OAuthSessionManagerProviderTokenServices
  */
 @SuppressWarnings("serial")
-class OAuthSessionProviderToken implements OAuthProviderToken {
+class OAuthSessionProviderToken  { //implements OAuthProviderToken {
 
 	private OAuthSession session;
 

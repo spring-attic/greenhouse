@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,26 +30,21 @@ import com.springsource.greenhouse.develop.InvalidApiKeyException;
 /**
  * The UI Controller that shows the application authorization form to the member.
  * @author Keith Donald
+ * @author Craig Walls
  */
 @Controller
 public class ConfirmAccessController {
-
-	private final OAuthSessionManager sessionManager;
 	
 	private final AppRepository appRepository;
 
 	@Inject
-	public ConfirmAccessController(OAuthSessionManager sessionManager, AppRepository appRepository) {
-		this.sessionManager = sessionManager;
+	public ConfirmAccessController(AppRepository appRepository) {
 		this.appRepository = appRepository;
 	}
 
 	@RequestMapping(value="/oauth/confirm_access", method=RequestMethod.GET)
-	protected String confirmAccessForm(@RequestParam("oauth_token") String requestToken, Model model) throws InvalidRequestTokenException, InvalidApiKeyException  {
-		String apiKey = sessionManager.getSession(requestToken).getApiKey();
-		App app = appRepository.findAppByApiKey(apiKey);
-		model.addAttribute("oauth_token", requestToken);
-		model.addAttribute("clientApp", app);
+	protected String confirmAccessForm(@RequestParam("client_id") String apiKey, Model model) throws InvalidRequestTokenException, InvalidApiKeyException  {
+		model.addAttribute("clientApp", appRepository.findAppByApiKey(apiKey));
 		return "oauth/confirmAccess";
 	}
 

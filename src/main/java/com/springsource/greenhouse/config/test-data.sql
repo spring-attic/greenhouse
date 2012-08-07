@@ -19,6 +19,10 @@ insert into AppDeveloper (app, member) values (2, 1);
 insert into AppDeveloper (app, member) values (2, 2);
 insert into AppDeveloper (app, member) values (2, 3);
 
+-- Greenhouse Sample App Tester
+insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse Sample App', 'greenhouse-sample-app', 'An application created for testing purposes ', 'SpringSource', 'http://www.springsource.com', 'testclient', 'testsecret', 'http://localhost:8080/ghsample');
+insert into AppDeveloper (app, member) values (3, 2);
+
 -- Test Upcoming Event Data: SpringOne 2GX 2012
 insert into Venue (name, postalAddress, latitude, longitude, locationHint, createdBy) values ('Washington Hilton', '1919 Connecticut Ave. NW, Washington, DC 20009', 38.9163, -77.0452, 'Washington, DC', 1);
 insert into VenueRoom (venue, id, name, capacity, locationHint) values (1, 1, 'Junior Ballroom A', 150, 'first floor');

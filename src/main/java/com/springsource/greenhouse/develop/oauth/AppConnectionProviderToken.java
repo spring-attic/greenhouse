@@ -16,8 +16,6 @@
 package com.springsource.greenhouse.develop.oauth;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
-import org.springframework.security.oauth.provider.token.OAuthProviderToken;
 
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.account.AccountRepository;
@@ -31,7 +29,7 @@ import com.springsource.greenhouse.develop.AppRepository;
  * @see OAuthSessionManagerProviderTokenServices
  */
 @SuppressWarnings("serial") 
-class AppConnectionProviderToken implements OAuthAccessProviderToken {
+class AppConnectionProviderToken { //implements OAuthAccessProviderToken {
 
 	private AppConnection connection;
 
