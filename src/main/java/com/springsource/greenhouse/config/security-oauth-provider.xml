@@ -24,11 +24,10 @@
 	<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
 
 	<!-- The following 3 elements exist solely to support parameter-based client authentication, which is
-	     discouraged by the OAuth2 spec. At this time, however, Spring Social's OAuth2Template doesn't
-	     support HTTP Basic client authentication, so these are necessary for any Spring Social-based
-	     OAuth2 client to do authorization code or password grant against Greenhouse. Once Spring Social
-	     is updated, we may want to remove them (and the corresponding entry in security.xml)...unless
-	     we want to keep them around for other clients that don't support HTTP Basic client authentication. -->
+	     discouraged by the OAuth2 spec. At this time, not all OAuth2 client implementations support
+	     HTTP Basic client authentication. Therefore, these are included to allow the client to use
+	     either form of client authentication. We may consider removing these in the future, however,
+	     when HTTP Basic client authentication is fully supported across all client implementations. -->
 	<bean id="clientCredentialsTokenEndpointFilter" class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
 		<property name="authenticationManager" ref="clientAuthenticationManager" />
 	</bean>
