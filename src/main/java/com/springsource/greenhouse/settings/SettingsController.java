@@ -21,6 +21,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +41,11 @@ public class SettingsController {
 
 	private JdbcTemplate jdbcTemplate;
 	
+	private TokenStore tokenStore;
+	
 	@Inject
-	public SettingsController(JdbcTemplate jdbcTemplate) {
+	public SettingsController(TokenStore tokenStore, JdbcTemplate jdbcTemplate) {
+		this.tokenStore = tokenStore;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
@@ -50,7 +55,8 @@ public class SettingsController {
 	 */
 	@RequestMapping(value="/settings", method=RequestMethod.GET)
 	public void settingsPage(Account account, Model model) {
-		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select a.name as name, c.accessToken from AppConnection c, App a where c.member = ? and c.app = a.id", account.getId());
+		// TODO: Fix this query
+		List<Map<String, Object>> apps = jdbcTemplate.queryForList("select a.name as name, c.token_id as accessToken from App a, oauth_access_token c where c.client_id = a.apiKey and c.user_name = ?", account.getId());
 		model.addAttribute("apps", apps);
 	}
 	
@@ -65,7 +71,7 @@ public class SettingsController {
 	 */
 	@RequestMapping(value="/settings/apps/{accessToken}", method=RequestMethod.DELETE)
 	public String disconnectApp(@PathVariable String accessToken, Account account) {
-		jdbcTemplate.update("delete from AppConnection where accessToken = ? and member = ?", accessToken, account.getId());
+		tokenStore.removeAccessToken(new DefaultOAuth2AccessToken(accessToken));
 		return "redirect:/settings";
 	}
 
