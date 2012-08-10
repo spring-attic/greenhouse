@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -16,6 +17,7 @@ import org.springframework.web.util.UriTemplate;
 import com.springsource.greenhouse.account.Account;
 import com.springsource.greenhouse.database.GreenhouseTestDatabaseBuilder;
 
+@Ignore
 public class SettingsControllerTest {
 
 	private EmbeddedDatabase db;

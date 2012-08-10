@@ -21,7 +21,11 @@
 	</oauth:authorization-server>	
 		
 	<!-- WILL NEED TO REPLACE THIS WITH JDBC OR GH-SPECIFIC IMPL -->
-	<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
+<!--  	<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" /> -->
+
+ 	<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.JdbcTokenStore">
+ 		<constructor-arg ref="dataSource" />
+	</bean>
 
 	<!-- The following 3 elements exist solely to support parameter-based client authentication, which is
 	     discouraged by the OAuth2 spec. At this time, not all OAuth2 client implementations support
