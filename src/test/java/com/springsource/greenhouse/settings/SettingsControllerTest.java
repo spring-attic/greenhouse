@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -44,9 +43,9 @@ public class SettingsControllerTest {
     	controller = new SettingsController(tokenStore, jdbcTemplate);
     	
     	AuthorizationRequest authorizationRequest = new DefaultAuthorizationRequest("a08318eb478a1ee31f69a55276f3af64", Arrays.asList("read", "write"));
-		Authentication userAuthentication = new UsernamePasswordAuthenticationToken("kdonald", "whateveryouwantittobe");
+		Authentication userAuthentication = new UsernamePasswordAuthenticationToken("1", "whateveryouwantittobe");
 		tokenStore.storeAccessToken(new DefaultOAuth2AccessToken("authme"), new OAuth2Authentication(authorizationRequest, userAuthentication));
-    	assertEquals(1, tokenStore.findTokensByUserName("kdonald").size());
+    	assertEquals(1, tokenStore.findTokensByUserName("1").size());
     }
     
     @After
@@ -55,13 +54,13 @@ public class SettingsControllerTest {
     		db.shutdown();
     	}
     }
-
+    
     @Test
-    @Ignore
     public void settingsPage() {
     	ExtendedModelMap model = new ExtendedModelMap();
     	controller.settingsPage(testAccount(), model);
-    	List<Map<String, Object>> apps = (List<Map<String, Object>>) model.get("apps");
+    	@SuppressWarnings("unchecked")
+		List<Map<String, Object>> apps = (List<Map<String, Object>>) model.get("apps");
     	assertNotNull(apps);   
     	assertEquals(1, apps.size());
     	assertEquals("Greenhouse for the iPhone", apps.get(0).get("name"));
