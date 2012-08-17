@@ -22,17 +22,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.springsource.greenhouse.account.GreenhousePasswordEncoder;
-import com.springsource.greenhouse.develop.AppRepository;
-import com.springsource.greenhouse.develop.oauth.ConcurrentMapOAuthSessionManager;
-import com.springsource.greenhouse.develop.oauth.OAuthSessionManager;
-import com.springsource.greenhouse.develop.oauth.RedisOAuthSessionManager;
 
 /**
  * Spring Security Configuration.
@@ -73,11 +68,6 @@ public class SecurityConfig {
 		public TextEncryptor textEncryptor() {
 			return Encryptors.noOpText();
 		}
-
-		@Bean
-		public OAuthSessionManager oauthSessionManager(AppRepository appRepository) {
-			return new ConcurrentMapOAuthSessionManager(appRepository);
-		}
 		
 	}
 
@@ -100,11 +90,6 @@ public class SecurityConfig {
 		@Bean
 		public TextEncryptor textEncryptor() {
 			return Encryptors.queryableText(getEncryptPassword(), environment.getProperty("security.encryptSalt"));
-		}
-		
-		@Bean
-		public OAuthSessionManager oauthSessionManager(StringRedisTemplate redisTemplate, AppRepository appRepository) {
-			return new RedisOAuthSessionManager(redisTemplate, appRepository);
 		}
 
 		// helpers
