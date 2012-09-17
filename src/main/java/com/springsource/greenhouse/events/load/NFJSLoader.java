@@ -104,7 +104,7 @@ public class NFJSLoader {
 			long sourceId = (Integer) topicMap.get("id");
 			String title = (String) topicMap.get("title");
 			String description = (String) topicMap.get("summary");
-			String hashtag = abbreviation + sourceId;
+			String hashtag = "#" + abbreviation + sourceId;
 			Long venue = null; // TODO: Figure out how to get this from event
 			Long timeslot = null; // TODO: Get this from timeslot or from feed?
 			List<Integer> speakerIds = (List<Integer>) topicMap.get("speakerIds");

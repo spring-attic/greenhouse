@@ -130,12 +130,12 @@ public class JdbcEventLoaderRepository implements EventLoaderRepository {
 						}
 					}, sessionData.getSource(), sessionData.getSourceId());
 			jdbcTemplate.update(UPDATE_SESSION, 
-					sessionData.getTitle(), sessionData.getDescription(), "#" + sessionData.getHashtag(), sessionData.getVenue(), sessionData.getTimeslot(), sessionKey[0], sessionKey[1]);
+					sessionData.getTitle(), sessionData.getDescription(), sessionData.getHashtag(), sessionData.getVenue(), sessionData.getTimeslot(), sessionKey[0], sessionKey[1]);
 			logger.info("Updated session (EVENT = " + sessionKey[0] + ", ID = " + sessionKey[1] + ")");
 			return 1;
 		} catch (IncorrectResultSizeDataAccessException e) {
 			// insert if it doesn't exist
-			jdbcTemplate.update(INSERT_SESSION, sessionData.getEvent(), sessionData.getId(), sessionData.getTitle(), sessionData.getDescription(), "#" + sessionData.getHashtag(), sessionData.getVenue(), sessionData.getTimeslot());
+			jdbcTemplate.update(INSERT_SESSION, sessionData.getEvent(), sessionData.getId(), sessionData.getTitle(), sessionData.getDescription(), sessionData.getHashtag(), sessionData.getVenue(), sessionData.getTimeslot());
 			jdbcTemplate.update(INSERT_EXTERNAL_SESSION, sessionData.getEvent(), sessionData.getId(), sessionData.getSource(), sessionData.getSourceId(), new Date());
 			
 			List<Long> leaderIds = sessionData.getLeaderIds();
