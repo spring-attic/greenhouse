@@ -64,7 +64,7 @@ public class GreenhouseTestDatabaseBuilder {
 		populator.addScript(new ClassPathResource("install/ConnectedApp.sql", DatabaseUpgrader.class));
 		return this;
 	}
-
+	
 	public GreenhouseTestDatabaseBuilder testData(Class<?> testClass) {
 		populator.addScript(new ClassPathResource(testClass.getSimpleName() + ".sql", testClass));
 		return this;
@@ -77,7 +77,7 @@ public class GreenhouseTestDatabaseBuilder {
 
 	public GreenhouseTestDatabaseBuilder testData(String script, Class<?> relativeTo) {
 		populator.addScript(new ClassPathResource(script, relativeTo));
-		return this;
+		return this; 
 	}
 	
 	public EmbeddedDatabase getDatabase() {

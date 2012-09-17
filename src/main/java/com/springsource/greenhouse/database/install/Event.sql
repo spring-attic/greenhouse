@@ -11,6 +11,14 @@ create table Leader (id identity,
 					primary key (id),
 					foreign key (member) references Member(id));
 
+create table ExternalLeader (leader bigint,
+                    sourceId bigint,
+                    source varchar,
+                    lastUpdated timestamp not null,
+                    primary key (leader, sourceId, source),
+                    foreign key (leader) references Leader(id)
+);
+
 create table Session (id identity,
 					title varchar not null,
 					slug varchar not null,
@@ -36,6 +44,14 @@ create table Event (id identity,
 					primary key (id),
 					foreign key (memberGroup) references MemberGroup(id));
 
+create table ExternalEvent (event bigint,
+                    sourceId bigint,
+                    source varchar,
+                    lastUpdated timestamp not null,
+                    primary key (event, sourceId, source),
+                    foreign key (event) references Event(id)
+);
+
 create table EventVenue (event bigint,
 					venue bigint,
 					primary key (event, venue),
@@ -51,10 +67,26 @@ create table EventTrack (event bigint,
 					foreign key (event) references Event(id),
 					foreign key (chair) references Member(id));
 
-create table EventSession (event bigint,
-					id int not null,
+create table EventTimeSlot (
+					id identity,
+					event bigint not null,
+					label varchar,
 					startTime timestamp not null,
 					endTime timestamp not null,
+					primary key (id),
+					foreign key (event) references Event(id));
+
+create table ExternalEventTimeSlot (timeSlot bigint,
+                    sourceId bigint,
+                    source varchar,
+                    lastUpdated timestamp not null,
+                    primary key (timeSlot, sourceId, source),
+                    foreign key (timeSlot) references EventTimeSlot(id)
+);
+
+
+create table EventSession (event bigint,
+					id int not null,
 					title varchar not null,
 					description varchar,
 					hashtag varchar,
@@ -63,12 +95,22 @@ create table EventSession (event bigint,
 					room varchar,
 					rating real,
 					master bigint,
+					timeslot bigint,
 					primary key (event, id),
 					foreign key (event) references Event(id),
 					foreign key (event, track) references EventTrack(event, code),
 					foreign key (venue, room) references VenueRoom(venue, id),					
-					foreign key (master) references Session(id));
-				
+					foreign key (master) references Session(id),
+					foreign key (timeslot) references EventTimeSlot(id));
+
+create table ExternalEventSession (event bigint not null,
+					sessionId int not null,
+                    sourceId bigint not null,
+                    source varchar not null,
+                    lastUpdated timestamp not null,
+                    primary key (event, sessionId, sourceId, source)
+);
+
 create table EventSessionLeader (event bigint,
 					session int,
 					leader bigint,
