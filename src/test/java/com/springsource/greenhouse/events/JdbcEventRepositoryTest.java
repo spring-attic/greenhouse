@@ -117,9 +117,9 @@ public class JdbcEventRepositoryTest {
 	
 	@Test
 	public void rate() throws RatingPeriodClosedException {
-		eventRepository.rate(2L, 1, 1L, new Rating((short)5, "Rocked"));
-		eventRepository.rate(2L, 1, 2L, new Rating((short)4, "Rocked"));
-		Float rating = eventRepository.rate(2L, 1, 3L, new Rating((short)2, "Rocked"));
+		eventRepository.rate(2L, 6, 1L, new Rating((short)5, "Rocked"));
+		eventRepository.rate(2L, 6, 2L, new Rating((short)4, "Rocked"));
+		Float rating = eventRepository.rate(2L, 6, 3L, new Rating((short)2, "Rocked"));
 		assertEquals(new Float(3.5), rating);
 	}
     

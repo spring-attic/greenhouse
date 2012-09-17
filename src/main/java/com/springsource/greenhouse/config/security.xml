@@ -35,7 +35,9 @@
 		<intercept-url pattern="/signin/*" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
 		<intercept-url pattern="/reset" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
 		<!-- TODO this would probably be better mapped to simply /invite?token={token} but not able to vary security policy here based on presence of a request parameter.  Consider @Secured on @Controller. -->               
-		<intercept-url pattern="/invite/accept" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />           
+		<intercept-url pattern="/invite/accept" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />
+		<!-- TODO this should be restricted to admin users only -->
+		<intercept-url pattern="/admin/**" access="permitAll" />           
 		<intercept-url pattern="/**" access="isAuthenticated()" requires-channel="#{environment['application.secureChannel']}" />
 		<custom-filter ref="resourceServerFilter" before="EXCEPTION_TRANSLATION_FILTER" />
 	</http>

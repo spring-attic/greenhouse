@@ -107,11 +107,16 @@ public class JdbcEventRepository implements EventRepository {
 		jdbcTemplate.update("update EventSession set rating = ? where event = ? and id = ?", newAvgRating, eventId, sessionId);
 		return newAvgRating;
 	}
+	
+	@Transactional
+	public long addEvent() {
+		return 0;
+	}
    
 	// internal helpers
 	
 	private boolean isSessionEnded(Long eventId, Integer sessionId) {
-		Date endTime = jdbcTemplate.queryForObject("select endTime from EventSession where event = ? and id = ?", Date.class, eventId, sessionId);
+		Date endTime = jdbcTemplate.queryForObject("select ts.endTime from EventTimeSlot ts, EventSession s where s.event = ? and s.id = ? and ts.id = s.timeSlot", Date.class, eventId, sessionId);
 		return new Date().after(endTime);
 	}
 
@@ -142,7 +147,7 @@ public class JdbcEventRepository implements EventRepository {
 		}
 	};
 
-	private static final String SELECT_FROM_EVENT_SESSION = "select s.id, s.title, s.startTime, s.endTime, s.description, s.hashtag, s.rating, s.venue, s.room, r.name as roomName, (f.attendee is not null) as favorite, l.name from EventSession s ";
+	private static final String SELECT_FROM_EVENT_SESSION = "select s.id, s.title, ts.startTime, ts.endTime, s.description, s.hashtag, s.rating, s.venue, s.room, r.name as roomName, (f.attendee is not null) as favorite, l.name from EventSession s ";
 	
 	private static final String SELECT_EVENT = "select e.id, e.title, e.timeZone, e.startTime, e.endTime, e.slug, e.description, g.hashtag, g.slug as groupSlug, g.name as groupName, " + 
 		"v.id as venueId, v.name as venueName, v.postalAddress as venuePostalAddress, v.latitude as venueLatitude, v.longitude as venueLongitude, v.locationHint as venueLocationHint from Event e " + 
@@ -159,8 +164,9 @@ public class JdbcEventRepository implements EventRepository {
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
-		"where s.event = ? and s.startTime >= ? and s.endTime <= ? " +
-		"order by s.startTime, s.id, sl.rank";
+		"inner join EventTimeSlot ts on ts.id = s.timeSlot " +
+		"where s.event = ? and ts.startTime >= ? and ts.endTime <= ? " +
+		"order by ts.startTime, s.id, sl.rank";
 
 	private static final String SELECT_EVENT_FAVORITES = SELECT_FROM_EVENT_SESSION +
 		"inner join (select top 10 session, count(*) as favoriteCount from EventSessionFavorite where event = ? group by session) top on s.id = top.session " +
@@ -168,6 +174,7 @@ public class JdbcEventRepository implements EventRepository {
 		"left outer join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
+		"inner join EventTimeSlot ts on ts.id = s.timeSlot " +
 		"where s.event = ? " +
 		"order by top.favoriteCount desc, s.id, sl.rank";
 
@@ -176,6 +183,7 @@ public class JdbcEventRepository implements EventRepository {
 		"inner join EventSessionFavorite f on s.event = f.event and s.id = f.session and f.attendee = ? " +	
 		"inner join EventSessionLeader sl on s.event = sl.event and s.id = sl.session " +
 		"inner join Leader l on sl.leader = l.id " + 
+		"inner join EventTimeSlot ts on ts.id = s.timeSlot " +
 		"where s.event = ? " +
 		"order by f.rank, s.id, sl.rank";
 	
