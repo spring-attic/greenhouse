@@ -116,7 +116,7 @@ public class DatabaseUpgrader {
 	
 	private DatabaseChangeSet version4ChangeSet() {
 		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("4"));
-		changeSet.add(upgradeScript("v4/CreateTimeSlotTable.sql"));
+    // changeSet.add(upgradeScript("v4/CreateTimeSlotTable.sql"));
 		return changeSet;		
 	}
 
