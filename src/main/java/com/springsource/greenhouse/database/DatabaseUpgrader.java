@@ -72,8 +72,9 @@ public class DatabaseUpgrader {
 		return upgrader;
 	}
 
+	// Called for completely fresh DB only
 	private void addInstallChangeSet(GenericDatabaseUpgrader upgrader) {
-		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("3"));
+		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("4"));
 		changeSet.add(installScript("Member.sql"));
 		changeSet.add(installScript("Group.sql"));
 		changeSet.add(installScript("Activity.sql"));
@@ -91,9 +92,11 @@ public class DatabaseUpgrader {
 		return SqlDatabaseChange.inResource(new ClassPathResource("install/" + resource, DatabaseUpgrader.class));
 	}
 
+	// Called to upgrade existing DB
 	private void addUpgradeChangeSets(GenericDatabaseUpgrader upgrader) {
 		upgrader.addChangeSet(version2ChangeSet());
 		upgrader.addChangeSet(version3ChangeSet());
+		upgrader.addChangeSet(version4ChangeSet());
 	}
 
 	private DatabaseChangeSet version2ChangeSet() {		
@@ -109,6 +112,12 @@ public class DatabaseUpgrader {
 		changeSet.add(upgradeScript("v3/PopulateUserConnectionTable.sql"));
 		changeSet.add(upgradeScript("v3/DropAccountConnectionTables.sql"));
 		return changeSet;
+	}
+	
+	private DatabaseChangeSet version4ChangeSet() {
+		DatabaseChangeSet changeSet = new DatabaseChangeSet(DatabaseVersion.valueOf("4"));
+		changeSet.add(upgradeScript("v4/CreateTimeSlotTable.sql"));
+		return changeSet;		
 	}
 
 	private DatabaseChange upgradeScript(String resource) {
