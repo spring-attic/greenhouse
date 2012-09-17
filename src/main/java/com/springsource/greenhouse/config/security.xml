@@ -5,6 +5,20 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
+
+	<!-- For S2OAuth endpoints -->
+	<http   pattern="/oauth/token" 
+			create-session="stateless" 
+			authentication-manager-ref="clientAuthenticationManager" 
+			entry-point-ref="oauthAuthenticationEntryPoint"
+			xmlns="http://www.springframework.org/schema/security">
+		<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
+		<anonymous enabled="false" />
+		<http-basic entry-point-ref="oauthAuthenticationEntryPoint" />
+		<!-- include this only if you need to authenticate clients via request parameters -->
+		<custom-filter ref="clientCredentialsTokenEndpointFilter" before="BASIC_AUTH_FILTER" />
+	</http>
+
 	<http use-expressions="true">
 		<!-- Authentication policy -->
 		<form-login login-page="/signin" login-processing-url="/signin/authenticate" authentication-failure-url="/signin?error=1" />
@@ -23,11 +37,37 @@
 		<!-- TODO this would probably be better mapped to simply /invite?token={token} but not able to vary security policy here based on presence of a request parameter.  Consider @Secured on @Controller. -->               
 		<intercept-url pattern="/invite/accept" access="permitAll" requires-channel="#{environment['application.secureChannel']}" />           
 		<intercept-url pattern="/**" access="isAuthenticated()" requires-channel="#{environment['application.secureChannel']}" />
+		<custom-filter ref="resourceServerFilter" before="EXCEPTION_TRANSLATION_FILTER" />
 	</http>
 
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider ref="usernamePasswordAuthenticationProvider" />
 	</authentication-manager>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased" xmlns="http://www.springframework.org/schema/beans">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
+				<bean class="org.springframework.security.access.vote.RoleVoter" />
+				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+
+	<!-- For S2OAuth endpoints -->
+	<authentication-manager id="clientAuthenticationManager" xmlns="http://www.springframework.org/schema/security">
+		<authentication-provider user-service-ref="clientDetailsUserService" />
+	</authentication-manager>
+
+	<beans:bean id="clientDetailsUserService" class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+		<beans:constructor-arg ref="clientDetails" />
+	</beans:bean>
+	
+	<beans:bean id="oauthAuthenticationEntryPoint" class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+		<beans:property name="realmName" value="greenhouseApi" />
+	</beans:bean>
+
 
     <beans:import resource="security-oauth-provider.xml" />
     

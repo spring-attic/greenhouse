@@ -15,11 +15,28 @@ create table AppDeveloper (app bigint,
 				foreign key (app) references App(id) on delete cascade,				
 				foreign key (member) references Member(id));
 
-create table AppConnection (app varchar,
-				member bigint,
-				accessToken varchar not null unique,					
-				secret varchar not null,
-				primary key (app, member),
-				foreign key (member) references Member(id),
-				foreign key (app) references App(id) on delete cascade);
-					
+create table oauth_client_token (
+				token_id VARCHAR(256),
+				token LONGVARBINARY,
+				authentication_id VARCHAR(256),
+				user_name VARCHAR(256),
+				client_id VARCHAR(256));
+
+create table oauth_access_token (
+				token_id VARCHAR(256),
+				token LONGVARBINARY,
+				authentication_id VARCHAR(256),
+				user_name VARCHAR(256),
+				client_id VARCHAR(256),
+				authentication LONGVARBINARY,
+				refresh_token VARCHAR(256));
+
+create table oauth_refresh_token (
+				token_id VARCHAR(256),
+				token LONGVARBINARY,
+				authentication LONGVARBINARY
+);
+
+create table oauth_code (
+				code VARCHAR(256), authentication LONGVARBINARY
+);

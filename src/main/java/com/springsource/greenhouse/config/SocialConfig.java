@@ -155,7 +155,7 @@ public class SocialConfig {
 	 * The Spring MVC Controller that coordinates "sign-in with {provider}" attempts.
 	 * @param accountRepository the account repository that can load user Account objects given an account id.
 	 */
-	@Bean
+//	@Bean
 	public ProviderSignInController providerSignInController(AccountRepository accountRepository, RequestCache requestCache) {
 		return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new AccountSignInAdapter(accountRepository, requestCache));
 	}
