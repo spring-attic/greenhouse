@@ -18,6 +18,7 @@ package com.springsource.greenhouse.events;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.joda.time.MutableDateTime;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.JoinRowMapper;
 import org.springframework.stereotype.Repository;
@@ -125,7 +127,8 @@ public class JdbcEventRepository implements EventRepository {
 			return rs.getLong("id");
 		}
 		protected Event mapRoot(Long id, ResultSet rs) throws SQLException {
-			return new Event(id, rs.getString("title"), DateTimeZone.forID(rs.getString("timeZone")), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
+			String eventTimeZone = rs.getString("timeZone");
+			return new Event(id, rs.getString("title"), DateTimeZone.forID(eventTimeZone), adjustEventTimeToUTC(rs.getTimestamp("startTime"), eventTimeZone), adjustEventTimeToUTC(rs.getTimestamp("endTime"), eventTimeZone),
 					rs.getString("slug"), rs.getString("description"), rs.getString("hashtag"), new ResourceReference<String>(rs.getString("groupSlug"), rs.getString("groupName")));
 		}
 		protected void addChild(Event event, ResultSet rs) throws SQLException {
@@ -139,13 +142,21 @@ public class JdbcEventRepository implements EventRepository {
 			return rs.getInt("id");
 		}
 		protected EventSession mapRoot(Integer id, ResultSet rs) throws SQLException {
-			return new EventSession(id, rs.getString("title"), new DateTime(rs.getTimestamp("startTime"), DateTimeZone.UTC), new DateTime(rs.getTimestamp("endTime"), DateTimeZone.UTC),
+			String eventTimeZone = "America/New_York"; // HACK: For now hard-code to S2GX 2012's value while sorting this out.			
+			return new EventSession(id, rs.getString("title"), adjustEventTimeToUTC(rs.getTimestamp("startTime"), eventTimeZone), adjustEventTimeToUTC(rs.getTimestamp("endTime"), eventTimeZone),
 					rs.getString("description"), rs.getString("hashtag"), rs.getFloat("rating"), new SubResourceReference<Long, Integer>(rs.getLong("venue"), rs.getInt("room"), rs.getString("roomName")), rs.getBoolean("favorite"));
 		}
 		protected void addChild(EventSession session, ResultSet rs) throws SQLException {
 			session.addLeader(new EventSessionLeader(rs.getString("name")));					
 		}
 	};
+	
+	private static DateTime adjustEventTimeToUTC(Timestamp timestamp, String eventTimeZone) {
+		MutableDateTime mutableDateTime = new DateTime(timestamp).toMutableDateTime();
+		mutableDateTime.setZoneRetainFields(DateTimeZone.forID(eventTimeZone));
+		DateTime utcAdjustedDateTime = mutableDateTime.toDateTime().toDateTime(DateTimeZone.UTC);
+		return utcAdjustedDateTime;
+	}
 
 	private static final String SELECT_FROM_EVENT_SESSION = "select s.id, s.title, ts.startTime, ts.endTime, s.description, s.hashtag, s.rating, s.venue, s.room, r.name as roomName, (f.attendee is not null) as favorite, l.name from EventSession s ";
 	
