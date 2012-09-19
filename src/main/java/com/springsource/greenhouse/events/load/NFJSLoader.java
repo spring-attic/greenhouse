@@ -22,6 +22,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,10 +60,15 @@ public class NFJSLoader {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> locationMap = (Map<String, Object>) eventMap.get("location");
 		String timeZone = (String) locationMap.get("timeZoneName");
+		int utcOffset = (Integer) locationMap.get("utcOffset");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss").withZoneUTC();
+		DateTimeFormatter localDateTimeFormatter = dateTimeFormatter.withZone(DateTimeZone.forOffsetHours(utcOffset));
+		String utcFirstDay = localDateTimeFormatter.parseDateTime(firstDay).toDateTime(DateTimeZone.UTC).toString(dateTimeFormatter);
+		String utcLastDay = localDateTimeFormatter.parseDateTime(lastDay).toDateTime(DateTimeZone.UTC).toString(dateTimeFormatter);
 		String locationAddress = locationMap.get("address1") + " " + locationMap.get("address2") + " " + locationMap.get("city") + ", " + locationMap.get("stateCode") + " " + locationMap.get("zip");
-		long eventId = loaderRepository.loadEvent(new EventData(MEMBER_GROUP_ID, name, null, abbreviation, firstDay, lastDay, timeZone, PROVIDER_ID, sourceId),
+		long eventId = loaderRepository.loadEvent(new EventData(MEMBER_GROUP_ID, name, null, abbreviation, utcFirstDay, utcLastDay, timeZone, PROVIDER_ID, sourceId),
 				new VenueData((String) locationMap.get("description"), (String) locationAddress, (Double) locationMap.get("latitude"), (Double) locationMap.get("longitude"), (String) locationMap.get("mapLink")));
-		loadTimeSlotData(showId, eventId);
+		loadTimeSlotData(showId, eventId, utcOffset);
 		loadLeaderData(showId);
 		loadEventSessionData(showId, eventId, abbreviation);
 	}
@@ -81,7 +89,7 @@ public class NFJSLoader {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void loadTimeSlotData(int showId, long eventId) {
+	private void loadTimeSlotData(int showId, long eventId, int utcOffset) {
 		List<Map<String, Object>> dayMapList = (List<Map<String, Object>>) restTemplate.getForObject("https://springone2gx.com/m/data/show_schedule.json?showId={showId}", List.class, showId);
 		for (Map<String, Object> dayMap : dayMapList) {
 			List<Map<String, Object>> slotMapList = (List<Map<String, Object>>) dayMap.get("slots");
@@ -90,7 +98,11 @@ public class NFJSLoader {
 				String label = (String) slotMap.get("label");
 				String startTime = (String) slotMap.get("startTime");
 				String endTime = (String) slotMap.get("endTime");
-				TimeSlotData timeSlotData = new TimeSlotData(eventId, label, startTime, endTime, PROVIDER_ID, sourceId);
+				DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss").withZoneUTC();
+				DateTimeFormatter localDateTimeFormatter = dateTimeFormatter.withZone(DateTimeZone.forOffsetHours(utcOffset));
+				String utcStartTime = localDateTimeFormatter.parseDateTime(startTime).toDateTime(DateTimeZone.UTC).toString(dateTimeFormatter);
+				String utcEndTime = localDateTimeFormatter.parseDateTime(endTime).toDateTime(DateTimeZone.UTC).toString(dateTimeFormatter);
+				TimeSlotData timeSlotData = new TimeSlotData(eventId, label, utcStartTime, utcEndTime, PROVIDER_ID, sourceId);
 				long timeSlotId = loaderRepository.loadTimeSlot(timeSlotData);	
 				timeSlotIdMap.put(sourceId, timeSlotId);
 				List<Map<String, Object>> presentations = (List<Map<String, Object>>) slotMap.get("presentations");
