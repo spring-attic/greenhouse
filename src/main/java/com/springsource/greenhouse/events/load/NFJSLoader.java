@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 @Service
 public class NFJSLoader {
 	
@@ -36,6 +35,7 @@ public class NFJSLoader {
 	private final EventLoaderRepository loaderRepository;
 	private final Map<Long, Long> timeSlotIdMap;
 	private final Map<Long, Long> leaderIdMap;
+	private final Map<Long, Long> topicSlotMap;
 
 	@Inject
 	public NFJSLoader(EventLoaderRepository loaderRepository) {
@@ -43,6 +43,7 @@ public class NFJSLoader {
 		this.restTemplate = new RestTemplate();
 		this.timeSlotIdMap = new HashMap<Long, Long>();
 		this.leaderIdMap = new HashMap<Long, Long>();
+		this.topicSlotMap = new HashMap<Long, Long>();
 	}
 
 	public void loadEventData(int showId) {
@@ -92,6 +93,14 @@ public class NFJSLoader {
 				TimeSlotData timeSlotData = new TimeSlotData(eventId, label, startTime, endTime, PROVIDER_ID, sourceId);
 				long timeSlotId = loaderRepository.loadTimeSlot(timeSlotData);	
 				timeSlotIdMap.put(sourceId, timeSlotId);
+				List<Map<String, Object>> presentations = (List<Map<String, Object>>) slotMap.get("presentations");
+				for (Map<String, Object> presentation : presentations) {
+					if (presentation.get("topicId") != null && presentation.get("slotId") != null) {
+						long topicId = (Integer) presentation.get("topicId");
+						long slotId = (Integer) presentation.get("slotId");
+						topicSlotMap.put(topicId, slotId);
+					}
+				}
 			}
 		}
 	}
@@ -106,7 +115,8 @@ public class NFJSLoader {
 			String description = (String) topicMap.get("summary");
 			String hashtag = "#" + abbreviation + sourceId;
 			Long venue = null; // TODO: Figure out how to get this from event
-			Long timeslot = null; // TODO: Get this from timeslot or from feed?
+			Long sourceTimeslot = topicSlotMap.get(sourceId);
+			Long timeslot = timeSlotIdMap.get(sourceTimeslot);
 			List<Integer> speakerIds = (List<Integer>) topicMap.get("speakerIds");
 			List<Long> leaderIds = new ArrayList<Long>();
 			for (Integer speakerId : speakerIds) {
@@ -125,8 +135,6 @@ public class NFJSLoader {
 			}
 			
 		}
-		
-		// TODO: Still need to associated leaders with sessions
 	}
 	
 	// expose getter so that we can use Spring Test MVC to mock NFJS server
