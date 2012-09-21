@@ -15,9 +15,14 @@
  */
 package com.springsource.greenhouse.signup;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
@@ -33,20 +38,27 @@ import com.springsource.greenhouse.validation.Confirm;
  * @author Keith Donald
  */
 @Confirm(field="email")
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class SignupForm {
 	
 	@NotEmpty
+	@JsonProperty("first-name")
 	private String firstName;
 
 	@NotEmpty
+	@JsonProperty("last-name")
 	private String lastName;
 
 	@NotEmpty
 	@Email
+	@JsonProperty("email")
 	private String email;
 
+	@JsonProperty("confirm-email")
 	private String confirmEmail;
 	
+	@JsonProperty("gender")
+	@JsonDeserialize(using=SignupFormDeserializers.GenderDeserializer.class)
 	private Gender gender;
 
 	@NotNull
@@ -59,6 +71,7 @@ public class SignupForm {
 	private Integer year;
 	
 	@Size(min=6, message="must be at least 6 characters")
+	@JsonProperty("password")
 	private String password;
 
 	/**
@@ -160,6 +173,15 @@ public class SignupForm {
 		this.year = year;
 	}
 
+	
+	@JsonProperty("birthdate")
+	@JsonDeserialize(using=SignupFormDeserializers.BirthdateDeserializer.class)
+	protected void setBirthdate(List<Integer> birthdateFields) {
+		this.month = birthdateFields.get(0);
+		this.day = birthdateFields.get(1);
+		this.year = birthdateFields.get(2);
+	}
+	
 	/**
 	 * Creates a Person record from this SignupForm.
 	 * A Person is used as input to {@link AccountRepository} to create a new member Account.
@@ -167,7 +189,7 @@ public class SignupForm {
 	public Person createPerson() {
 		return new Person(firstName, lastName, email, password, gender, new LocalDate(year, month, day));
 	}
-
+	
 	/**
 	 * Factory method that creates a pre-populated SignupForm from a ServiceProviderUser model obtained from a provider user sign-in attempt.
 	 * @param providerUser the providerUser model
