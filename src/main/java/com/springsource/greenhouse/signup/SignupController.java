@@ -15,14 +15,23 @@
  */
 package com.springsource.greenhouse.signup;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
@@ -78,4 +87,40 @@ public class SignupController {
 		});
 		return result ? "redirect:/" : null;
 	}
+	
+	@RequestMapping(value="/signup", method=RequestMethod.POST, consumes="application/json")
+	public ResponseEntity<Map<String, Object>> signupFromApi(@RequestBody @Valid SignupForm form, BindingResult formBinding) {
+		if (formBinding.hasErrors()) {
+			HashMap<String, Object> errorResponse = new HashMap<String, Object>();
+			errorResponse.put("message", "Validation error");
+			errorResponse.put("errors", getErrorsMap(formBinding));			
+			return new ResponseEntity<Map<String, Object>>(errorResponse, HttpStatus.BAD_REQUEST);
+		}
+		boolean result = signupHelper.signup(form, formBinding);
+		
+		if (result) {
+			HashMap<String, Object> errorResponse = new HashMap<String, Object>();
+			errorResponse.put("message", "Account created");
+			return new ResponseEntity<Map<String, Object>>(errorResponse, HttpStatus.CREATED);			
+		} else {
+			HashMap<String, Object> errorResponse = new HashMap<String, Object>();
+			errorResponse.put("message", "Account creation error");
+			errorResponse.put("errors", getErrorsMap(formBinding));			
+			return new ResponseEntity<Map<String, Object>>(errorResponse, HttpStatus.BAD_REQUEST);			
+		}
+	}
+
+	private List<Map<String, String>> getErrorsMap(BindingResult formBinding) {
+		List<FieldError> fieldErrors = formBinding.getFieldErrors();
+		List<Map<String, String>> errors = new ArrayList<Map<String,String>>(fieldErrors.size());						
+		for (FieldError fieldError : fieldErrors) {
+			Map<String, String> fieldErrorMap = new HashMap<String, String>();
+			fieldErrorMap.put("field", fieldError.getField());
+			fieldErrorMap.put("code", fieldError.getCode());
+			fieldErrorMap.put("message", fieldError.getDefaultMessage());
+			errors.add(fieldErrorMap);
+		}
+		return errors;
+	}
+	
 }
