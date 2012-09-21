@@ -37,7 +37,7 @@ import com.springsource.greenhouse.validation.Confirm;
  * The model for the new member signup form.
  * @author Keith Donald
  */
-@Confirm(field="email")
+@Confirm(field="email", message="did not match confirmation email")
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class SignupForm {
 	

@@ -93,7 +93,7 @@ public class SignupControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("message", Matchers.equalTo("Validation error")))
 				.andExpect(MockMvcResultMatchers.jsonPath("errors[0].field", Matchers.equalTo("email")))
 				.andExpect(MockMvcResultMatchers.jsonPath("errors[0].code", Matchers.equalTo("Confirm")))
-				.andExpect(MockMvcResultMatchers.jsonPath("errors[0].message", Matchers.equalTo("{com.springsource.greenhouse.validation.constraints.Confirm.message}")));
+				.andExpect(MockMvcResultMatchers.jsonPath("errors[0].message", Matchers.equalTo("did not match confirmation email")));
 	}
 
 }
