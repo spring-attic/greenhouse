@@ -109,7 +109,6 @@ public class NFJSLoader {
 	@SuppressWarnings("unchecked")
 	private void loadEventSessionData(int showId, long event, String abbreviation) {
 		List<Map<String, Object>> topicMapList = (List<Map<String, Object>>) restTemplate.getForObject("https://springone2gx.com/m/data/show_topics.json?showId={showId}", List.class, showId);
-		int sessionId = 0;
 		for (Map<String, Object> topicMap : topicMapList) {
 			long sourceId = (Integer) topicMap.get("id");
 			String title = (String) topicMap.get("title");
@@ -129,12 +128,8 @@ public class NFJSLoader {
 				}
 			}
 			
-			EventSessionData eventSessionData = new EventSessionData(event, sessionId, title, description, hashtag, venue, timeslot, PROVIDER_ID, sourceId, leaderIds);
-			int idOfInserted = loaderRepository.loadEventSession(eventSessionData);
-			if (idOfInserted >= 0) {
-				sessionId++;
-			}
-			
+			EventSessionData eventSessionData = new EventSessionData(event, -1, title, description, hashtag, venue, timeslot, PROVIDER_ID, sourceId, leaderIds);
+			loaderRepository.loadEventSession(eventSessionData);
 		}
 	}
 	
