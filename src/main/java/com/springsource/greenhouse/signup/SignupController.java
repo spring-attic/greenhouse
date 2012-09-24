@@ -23,14 +23,19 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.hibernate.validator.util.LazyValidatorFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -89,7 +94,10 @@ public class SignupController {
 	}
 	
 	@RequestMapping(value="/signup", method=RequestMethod.POST, consumes="application/json")
-	public ResponseEntity<Map<String, Object>> signupFromApi(@RequestBody @Valid SignupForm form, BindingResult formBinding) {
+	public ResponseEntity<Map<String, Object>> signupFromApi(@RequestBody SignupForm form) {
+		
+		BindingResult formBinding = validate(form); // Temporary manual validation until SPR-9826 is fixed.
+		
 		if (formBinding.hasErrors()) {
 			HashMap<String, Object> errorResponse = new HashMap<String, Object>();
 			errorResponse.put("message", "Validation error");
@@ -108,6 +116,15 @@ public class SignupController {
 			errorResponse.put("errors", getErrorsMap(formBinding));			
 			return new ResponseEntity<Map<String, Object>>(errorResponse, HttpStatus.BAD_REQUEST);			
 		}
+	}
+
+	private BindException validate(SignupForm form) {
+		BindException errors;
+		errors = new BindException(form, "signupForm");
+		LazyValidatorFactory lvf = new LazyValidatorFactory();
+		Validator validator = new SpringValidatorAdapter(lvf.getValidator());
+		ValidationUtils.invokeValidator(validator, form, errors);
+		return errors;
 	}
 
 	private List<Map<String, String>> getErrorsMap(BindingResult formBinding) {
