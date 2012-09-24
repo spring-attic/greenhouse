@@ -135,17 +135,20 @@ public class JdbcEventLoaderRepository implements EventLoaderRepository {
 			return 1;
 		} catch (IncorrectResultSizeDataAccessException e) {
 			// insert if it doesn't exist
-			jdbcTemplate.update(INSERT_SESSION, sessionData.getEvent(), sessionData.getId(), sessionData.getTitle(), sessionData.getDescription(), sessionData.getHashtag(), sessionData.getVenue(), sessionData.getTimeslot());
-			jdbcTemplate.update(INSERT_EXTERNAL_SESSION, sessionData.getEvent(), sessionData.getId(), sessionData.getSource(), sessionData.getSourceId(), new Date());
+			int newSessionId = jdbcTemplate.queryForInt("select max(id) from EventSession where event=?", sessionData.getEvent()) + 1;
+			
+			
+			jdbcTemplate.update(INSERT_SESSION, sessionData.getEvent(), newSessionId, sessionData.getTitle(), sessionData.getDescription(), sessionData.getHashtag(), sessionData.getVenue(), sessionData.getTimeslot());
+			jdbcTemplate.update(INSERT_EXTERNAL_SESSION, sessionData.getEvent(), newSessionId, sessionData.getSource(), sessionData.getSourceId(), new Date());
 			
 			List<Long> leaderIds = sessionData.getLeaderIds();
 			int rank = 1;
 			for (Long leaderId : leaderIds) {
-				jdbcTemplate.update(INSERT_SESSION_LEADER, sessionData.getEvent(), sessionData.getId(), leaderId, rank++);
+				jdbcTemplate.update(INSERT_SESSION_LEADER, sessionData.getEvent(), newSessionId, leaderId, rank++);
 			}
 			
-			logger.info("Created session (EVENT = " + sessionData.getEvent() + ", ID = " + sessionData.getId() + ")");
-			return sessionData.getId();
+			logger.info("Created session (EVENT = " + sessionData.getEvent() + ", ID = " + newSessionId + ")");
+			return newSessionId;
 		}
 	}
 
