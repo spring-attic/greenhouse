@@ -60,7 +60,7 @@ public class NFJSLoader {
 		int utcOffset = (Integer) locationMap.get("utcOffset");
 		String locationAddress = locationMap.get("address1") + " " + locationMap.get("address2") + " " + locationMap.get("city") + ", " + locationMap.get("stateCode") + " " + locationMap.get("zip");
 		long eventId = loaderRepository.loadEvent(new EventData(MEMBER_GROUP_ID, name, null, abbreviation, firstDay, lastDay, timeZone, PROVIDER_ID, sourceId),
-				new VenueData((String) locationMap.get("description"), (String) locationAddress, (Double) locationMap.get("latitude"), (Double) locationMap.get("longitude"), (String) locationMap.get("mapLink")));
+				new VenueData((String) locationMap.get("description"), (String) locationAddress, (Double) locationMap.get("latitude"), (Double) locationMap.get("longitude"), (String) locationMap.get("metroArea")));
 		loadTimeSlotData(showId, eventId, utcOffset);
 		loadLeaderData(showId);
 		loadEventSessionData(showId, eventId, abbreviation);
