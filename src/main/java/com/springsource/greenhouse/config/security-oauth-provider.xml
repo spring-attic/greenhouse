@@ -61,6 +61,7 @@
 		<property name="tokenStore" ref="tokenStore" />
 		<property name="supportRefreshToken" value="true" />
 		<property name="clientDetailsService" ref="clientDetails"/>
+		<property name="accessTokenValiditySeconds" value="604800" /> <!-- 1 week -->
 	</bean>
 
 </beans>
