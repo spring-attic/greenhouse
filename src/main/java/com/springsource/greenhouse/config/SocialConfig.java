@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
@@ -155,9 +156,10 @@ public class SocialConfig {
 	 * The Spring MVC Controller that coordinates "sign-in with {provider}" attempts.
 	 * @param accountRepository the account repository that can load user Account objects given an account id.
 	 */
-//	@Bean
-	public ProviderSignInController providerSignInController(AccountRepository accountRepository, RequestCache requestCache) {
-		return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new AccountSignInAdapter(accountRepository, requestCache));
+	@Bean
+	public ProviderSignInController providerSignInController(AccountRepository accountRepository) {
+        RequestCache requestCache = new HttpSessionRequestCache();
+        return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new AccountSignInAdapter(accountRepository, requestCache));
 	}
 	
 }
