@@ -58,7 +58,7 @@ public class JdbcAccountRepository implements AccountRepository {
 		try {
 			jdbcTemplate.update("insert into Member (firstName, lastName, email, password, gender, birthdate) values (?, ?, ?, ?, ?, ?)",
 				person.getFirstName(), person.getLastName(), person.getEmail(), passwordEncoder.encode(person.getPassword()), person.getGender().code(), person.getBirthdate().toString());
-			Long accountId = jdbcTemplate.queryForLong("call identity()");
+			Long accountId = jdbcTemplate.queryForLong("call identity()")+1;
 			return accountMapper.newAccount(accountId, person);
 		} catch (DuplicateKeyException e) {
 			throw new EmailAlreadyOnFileException(person.getEmail());
