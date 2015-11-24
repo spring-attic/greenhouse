@@ -92,7 +92,7 @@ public class JdbcAppRepository implements AppRepository {
 		String encryptedApiKey = encryptor.encrypt(keyGenerator.generateKey());
 		String encryptedSecret = encryptor.encrypt(keyGenerator.generateKey());
 		jdbcTemplate.update(INSERT_APP, form.getName(), slug, form.getDescription(), form.getOrganization(), form.getWebsite(), encryptedApiKey, encryptedSecret, form.getCallbackUrl());
-		Long appId = jdbcTemplate.queryForLong("call identity()");
+		Long appId = jdbcTemplate.queryForLong("call identity()")+1;
 		jdbcTemplate.update(INSERT_APP_DEVELOPER, appId, accountId);
 		return slug;
 	}
