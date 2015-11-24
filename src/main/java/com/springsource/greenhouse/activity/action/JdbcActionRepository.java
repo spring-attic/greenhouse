@@ -72,7 +72,7 @@ public class JdbcActionRepository implements ActionRepository {
 		Double latitude = location != null ? location.getLatitude() : null;
 		Double longitude = location != null ? location.getLongitude() : null;
 		jdbcTemplate.update("insert into MemberAction (actionType, performTime, latitude, longitude, member) values (?, ?, ?, ?, ?)", type, performTime.toDate(), latitude, longitude, account.getId());
-		return jdbcTemplate.queryForLong("call identity()");
+		return jdbcTemplate.queryForLong("call identity()")+1;
 	}
 	
 	private String actionType(Class<? extends Action> actionClass) {
