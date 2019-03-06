@@ -6,11 +6,11 @@
 	<artifactId>greenhouse</artifactId>
 	<name>greenhouse</name>
 	<description>The social destination for Spring developers</description>
-	<url>http://greenhouse.springsource.org</url>
+	<url>https://greenhouse.springsource.org</url>
 	<inceptionYear>2010</inceptionYear>
 	<organization>
 		<name>SpringSource</name>
-		<url>http://www.springsource.org</url>
+		<url>https://www.springsource.org</url>
 	</organization>
 	<packaging>war</packaging>
 	<version>1.0.0.BUILD-SNAPSHOT</version>
@@ -399,7 +399,7 @@
 		<repository>
 			<id>spring-snapshot</id>
 			<name>SpringSource Snapshot Repository</name>
-			<url>http://repo.springsource.org/snapshot</url>
+			<url>https://repo.springsource.org/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -411,7 +411,7 @@
 		<repository>
 			<id>spring-repository</id>
 			<name>SpringSource Repository</name>
-			<url>http://repo.springsource.org/release</url>
+			<url>https://repo.springsource.org/release</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -420,7 +420,7 @@
 		<repository>
 			<id>spring-milestone</id>
 			<name>SpringSource Milestone Repository</name>
-			<url>http://repo.springsource.org/milestone</url>
+			<url>https://repo.springsource.org/milestone</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -626,7 +626,7 @@
 		<pluginRepository>
 			<id>spring-snapshot</id>
 			<name>SpringSource Snapshot Repository</name>
-			<url>http://repo.springsource.org/snapshot</url>
+			<url>https://repo.springsource.org/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -638,7 +638,7 @@
 		<pluginRepository>
 			<id>spring-repository</id>
 			<name>SpringSource Repository</name>
-			<url>http://repo.springsource.org/release</url>
+			<url>https://repo.springsource.org/release</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -647,7 +647,7 @@
 		<pluginRepository>
 			<id>spring-milestone</id>
 			<name>SpringSource Milestone Repository</name>
-			<url>http://repo.springsource.org/milestone</url>
+			<url>https://repo.springsource.org/milestone</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
