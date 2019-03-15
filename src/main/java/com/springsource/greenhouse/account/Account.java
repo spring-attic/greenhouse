@@ -18,7 +18,7 @@ package com.springsource.greenhouse.account;
 import java.io.Serializable;
 
 import org.springframework.web.util.UriTemplate;
-
+//test    
 /**
  * Models the identity of a local member, or user, of the application.
  * Designed to serve as the user Principal upon authentication.
