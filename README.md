@@ -33,7 +33,7 @@ Greenhouse is a Java web application built for the Spring community that has two
 
 		$ cd greenhouse
 
-3. The project uses [Maven](http://maven.apache.org/) to build:
+3. The project uses [Maven](https://maven.apache.org/) to build:
 
 		$ mvn clean install
 

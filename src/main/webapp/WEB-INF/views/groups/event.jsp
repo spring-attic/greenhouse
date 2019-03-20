@@ -17,6 +17,6 @@
 	Grab the Greenhouse mobile client to follow this Event as it happens.
 </p>
 <div id="appIcons" style="padding: 0 0 20px 0 ;">
-	<a href="http://itunes.apple.com/us/app/greenhouse/id395862873"><img src="<c:url value="/resources/mobile/icon-apple-appstore.gif" />" /></a>
+	<a href="https://itunes.apple.com/us/app/greenhouse/id395862873"><img src="<c:url value="/resources/mobile/icon-apple-appstore.gif" />" /></a>
 	<a href="https://market.android.com/details?id=com.springsource.greenhouse"><img src="<c:url value="/resources/mobile/icon-android-marketplace.gif" />" /></a>
 </div>

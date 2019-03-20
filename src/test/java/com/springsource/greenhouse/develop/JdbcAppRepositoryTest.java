@@ -48,7 +48,7 @@ public class JdbcAppRepositoryTest {
 		AppSummary summary = summaries.get(0);
 		assertEquals("Greenhouse for Facebook", summary.getName());
 		assertEquals("Awesome", summary.getDescription());
-		assertEquals("http://images.greenhouse.springsource.org/apps/icon-default-app.png", summary.getIconUrl());
+		assertEquals("https://images.greenhouse.springsource.org/apps/icon-default-app.png", summary.getIconUrl());
 		assertEquals("greenhouse-for-facebook", summary.getSlug());
 
 		summaries = appRepository.findAppSummaries(3L);
@@ -100,12 +100,12 @@ public class JdbcAppRepositoryTest {
 	public void updateApp() {
 		AppForm form = appRepository.getAppForm(2L, "greenhouse-for-facebook");
 		form.setName("Greenhouse for Twitter");
-		form.setWebsite("http://www.twitter.com");
+		form.setWebsite("https://www.twitter.com");
 		String slug = appRepository.updateApp(2L, "greenhouse-for-facebook", form);
 		assertEquals("greenhouse-for-twitter", slug);
 		form = appRepository.getAppForm(2L, "greenhouse-for-twitter");
 		assertEquals("Greenhouse for Twitter", form.getName());
-		assertEquals("http://www.twitter.com", form.getWebsite());
+		assertEquals("https://www.twitter.com", form.getWebsite());
 	}
 
 	@Test

@@ -24,7 +24,7 @@
 <fb:serverfbml style="width: 625px;">
 	<script type="text/fbml">
 		<fb:fbml>
-			<fb:request-form action='<u:absoluteUrl value="/invite/facebook/request-form" />' method="POST" invite="true" type="Greenhouse" content="Join me in the Greenhouse! It's the best way to exchange ideas and information with other Spring application developers. <fb:req-choice url='http://greenhouse.springsource.org' label='Join the Greenhouse' />">
+			<fb:request-form action='<u:absoluteUrl value="/invite/facebook/request-form" />' method="POST" invite="true" type="Greenhouse" content="Join me in the Greenhouse! It's the best way to exchange ideas and information with other Spring application developers. <fb:req-choice url='https://greenhouse.springsource.org' label='Join the Greenhouse' />">
 				<fb:multi-friend-selector bypass="cancel" email_invite="false" import_external_friends="false" cols="4" showborder="false" actiontext="Invite your Facebook friends to join Greenhouse"></fb:multi-friend-selector>
 			</fb:request-form>
 		</fb:fbml>

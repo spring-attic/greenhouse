@@ -8,19 +8,19 @@ insert into Member (firstName, lastName, email, password, username, gender, birt
 insert into Member (firstName, lastName, email, password, username, gender, birthdate) values ('David', 'Winterfeldt', 'dwinterfeldt@vmware.com', 'sanfran', 'dwinterfeldt', 'M', '1973-11-4');
 
 -- Greenhouse for iPhone Tester
-insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for iPhone', 'greenhouse-for-iphone', 'Our slick mobile client for the Apple iPhone ', 'SpringSource', 'http://www.springsource.com', 'a08318eb478a1ee31f69a55276f3af64', '80e7f8f7ba724aae9103f297e5fb9bdf', 'x-com-springsource-greenhouse://oauth-response');
+insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for iPhone', 'greenhouse-for-iphone', 'Our slick mobile client for the Apple iPhone ', 'SpringSource', 'https://www.springsource.com', 'a08318eb478a1ee31f69a55276f3af64', '80e7f8f7ba724aae9103f297e5fb9bdf', 'x-com-springsource-greenhouse://oauth-response');
 insert into AppDeveloper (app, member) values (1, 1);
 insert into AppDeveloper (app, member) values (1, 2);
 insert into AppDeveloper (app, member) values (1, 3);
 
 -- Greenhouse for Android Tester
-insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for Android', 'greenhouse-for-android', 'Our slick mobile client for the Google Android ', 'SpringSource', 'http://www.springsource.com', 'e9fbccdae98d5696', '9fa283e1eca2d4e8', 'x-com-springsource-greenhouse://oauth-response');
+insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse for Android', 'greenhouse-for-android', 'Our slick mobile client for the Google Android ', 'SpringSource', 'https://www.springsource.com', 'e9fbccdae98d5696', '9fa283e1eca2d4e8', 'x-com-springsource-greenhouse://oauth-response');
 insert into AppDeveloper (app, member) values (2, 1);
 insert into AppDeveloper (app, member) values (2, 2);
 insert into AppDeveloper (app, member) values (2, 3);
 
 -- Greenhouse Sample App Tester
-insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse Sample App', 'greenhouse-sample-app', 'An application created for testing purposes ', 'SpringSource', 'http://www.springsource.com', 'testclient', 'testsecret', 'http://localhost:8080/ghsample');
+insert into App (name, slug, description, organization, website, apiKey, secret, callbackUrl) values ('Greenhouse Sample App', 'greenhouse-sample-app', 'An application created for testing purposes ', 'SpringSource', 'https://www.springsource.com', 'testclient', 'testsecret', 'http://localhost:8080/ghsample');
 insert into AppDeveloper (app, member) values (3, 2);
 
 -- Test Upcoming Event Data: SpringOne 2GX 2012
@@ -322,7 +322,7 @@ insert into EventSessionLeader (event, session, leader) values (1, 32, 33);
 
 insert into Leader (name) values ('Rob Woollenn');
 insert into EventSession (event, id, title, timeSlot, description, hashtag, track, venue, room) values (1, 33, 'Inside the Force.com Cloud Platform', 12, 
-	'To truly understand the sophistication and potential of the Force.com platform we are going to peek under the kimono in this session. Join salesforce.com principal architect, Rob Woollen, as he discusses the Force.com multi-tenant architecture implementation. YouÕll learn the details of how the Force.com platform maintains high performance and scalability for over 80,000 customers and thousands of cloud applications.',
+	'To truly understand the sophistication and potential of the Force.com platform we are going to peek under the kimono in this session. Join salesforce.com principal architect, Rob Woollen, as he discusses the Force.com multi-tenant architecture implementation. Youï¿½ll learn the details of how the Force.com platform maintains high performance and scalability for over 80,000 customers and thousands of cloud applications.',
 	'#inforce', 'vmw', 1, 5);
 insert into EventSessionLeader (event, session, leader) values (1, 33, 34);
 
@@ -371,7 +371,7 @@ insert into EventSessionLeader (event, session, leader) values (1, 39, 38);
 insert into Leader (name) values ('Scott Andrews');
 insert into Leader (name) values ('Jon Travis');
 insert into EventSession (event, id, title, timeSlot, description, hashtag, track, venue, room) values (1, 40, 'Diagnosing Performance Issues with Spring Insight before it''s a Problem', 14, 
-	'What if a user reports your application is slow? At that point, itÕs too late. Runtime performance is more than an ops teamÕs concern. Continuous performance profiling is an important part of the agile developerÕs bag of tools. Spring Insight enables developers to watch what their application is actually doing in real time and zero in on performance issues. Come to this session to learn about Spring Insight from its creators. Learn how to easily enhance the default instrumentation to gain even greater visibility into your application. ',
+	'What if a user reports your application is slow? At that point, itï¿½s too late. Runtime performance is more than an ops teamï¿½s concern. Continuous performance profiling is an important part of the agile developerï¿½s bag of tools. Spring Insight enables developers to watch what their application is actually doing in real time and zero in on performance issues. Come to this session to learn about Spring Insight from its creators. Learn how to easily enhance the default instrumentation to gain even greater visibility into your application. ',
 	'#insight', 'int', 1, 1);
 insert into EventSessionLeader (event, session, leader, rank) values (1, 40, 39, 2);
 insert into EventSessionLeader (event, session, leader, rank) values (1, 40, 40, 1);
@@ -888,6 +888,6 @@ insert into EventSessionLeader (event, session, leader) values (1, 115, 19);
 
  
 insert into EventSession (event, id, title, timeSlot, description, hashtag, track, venue, room) values (1, 116, 'Grails + CouchDB', 35, 
-	'"CouchDB is built of the Web. IÕve never seen software that so completely embraces the philosophies behind HTTP." Jacob Kaplan-Moss, Django Developer',
+	'"CouchDB is built of the Web. Iï¿½ve never seen software that so completely embraces the philosophies behind HTTP." Jacob Kaplan-Moss, Django Developer',
 	'#couchdb', 'grf', 1, 9);
 insert into EventSessionLeader (event, session, leader) values (1, 116, 56);

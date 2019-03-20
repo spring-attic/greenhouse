@@ -83,9 +83,9 @@ public class JdbcProfileRepositoryTest {
 	private void assertExpectedConnectedProfiles(List<ConnectedProfile> connectedProfiles) {
 	    assertEquals(2, connectedProfiles.size());
 		assertEquals("Facebook", connectedProfiles.get(0).getName());
-		assertEquals("http://www.facebook.com/profile.php?id=123456789", connectedProfiles.get(0).getUrl());
+		assertEquals("https://www.facebook.com/profile.php?id=123456789", connectedProfiles.get(0).getUrl());
 		assertEquals("Twitter", connectedProfiles.get(1).getName());
-		assertEquals("http://www.twitter.com/habuma", connectedProfiles.get(1).getUrl());
+		assertEquals("https://www.twitter.com/habuma", connectedProfiles.get(1).getUrl());
 	}	
 
 }
