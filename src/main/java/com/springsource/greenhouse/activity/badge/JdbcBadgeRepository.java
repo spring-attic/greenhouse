@@ -44,7 +44,7 @@ public class JdbcBadgeRepository implements BadgeRepository {
 		jdbcTemplate.update("insert into AwardedBadge (badge, awardTime, member, memberAction) values (?, ?, ?, ?)", badge, awardTime.toDate(), account.getId(), action.getId());
 		Long id = jdbcTemplate.queryForLong("call identity()");
 		// TODO dont hardcode
-		String imageUrl = "http://images.greenhouse.springsource.org/activity/icon-default-badge.png";
+		String imageUrl = "https://images.greenhouse.springsource.org/activity/icon-default-badge.png";
 		return new AwardedBadge(id, badge, awardTime, imageUrl, account, action);
 	}
 

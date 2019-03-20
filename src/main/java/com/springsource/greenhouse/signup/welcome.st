@@ -6,4 +6,4 @@ View your member profile at:
 $profileUrl$
 
 Download Greenhouse for iPhone:
-http://itunes.apple.com/us/app/greenhouse/id395862873
+https://itunes.apple.com/us/app/greenhouse/id395862873

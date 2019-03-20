@@ -31,14 +31,14 @@ public class WelcomeMailTransformerTest {
 	public void welcomeMail() {
 		WelcomeMailTransformer transformer = new WelcomeMailTransformer();
 
-		Account account = new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", "rclarkson", "http://foo.com/bar.jpg", new UriTemplate("http://greenhouse.springsource.org/members/{id}"));
+		Account account = new Account(1L, "Roy", "Clarkson", "rclarkson@vmware.com", "rclarkson", "http://www.foo.com/", new UriTemplate("https://greenhouse.springsource.org/members/{id}"));
 		SimpleMailMessage welcomeMail = (SimpleMailMessage) transformer.welcomeMail(account);
 
 		assertEquals("rclarkson@vmware.com", welcomeMail.getTo()[0]);
 		assertEquals("Greenhouse <noreply@springsource.com>", welcomeMail.getFrom());
 		assertEquals("Welcome to the Greenhouse!", welcomeMail.getSubject());
 		String mailText = welcomeMail.getText();
-		assertTrue(mailText.contains("View your member profile at:" + NEWLINE + "http://greenhouse.springsource.org/members/rclarkson"));
+		assertTrue(mailText.contains("View your member profile at:" + NEWLINE + "https://greenhouse.springsource.org/members/rclarkson"));
 	}
 
 }

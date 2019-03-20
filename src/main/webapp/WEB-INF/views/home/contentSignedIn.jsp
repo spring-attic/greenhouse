@@ -14,6 +14,6 @@
 	</p>
 </div>
 <div id="appIcons">
-	<a href="http://itunes.apple.com/us/app/greenhouse/id395862873"><img src="<c:url value="/resources/mobile/icon-apple-appstore.gif" />" /></a>
+	<a href="https://itunes.apple.com/us/app/greenhouse/id395862873"><img src="<c:url value="/resources/mobile/icon-apple-appstore.gif" />" /></a>
 	<a href="https://market.android.com/details?id=com.springsource.greenhouse"><img src="<c:url value="/resources/mobile/icon-android-marketplace.gif" />" /></a>
 </div>

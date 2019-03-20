@@ -35,7 +35,7 @@ import com.springsource.greenhouse.database.upgrade.v3.UpdateEncryptionMethod;
  * If the Database is at version zero(), the current version of the database will be installed.
  * If the Database is at a version less than the current version, the database will be upgraded from that version to the current version.
  * If the Database is already at the current version, no migration will be performed.
- * This migration model was adapted from the <a href="http://www.liquibase.org/tutorial-using-oracle">LiquiBase Oracle tutorial</a>.
+ * This migration model was adapted from the <a href="https://www.liquibase.org/tutorial-using-oracle">LiquiBase Oracle tutorial</a>.
  * @author Keith Donald
  */
 public class DatabaseUpgrader {

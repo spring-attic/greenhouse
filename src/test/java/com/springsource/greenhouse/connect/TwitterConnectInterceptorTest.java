@@ -61,17 +61,17 @@ public class TwitterConnectInterceptorTest {
 	@Test
 	public void postConnect() {
 		request.setAttribute("twitterConnect.postTweet", Boolean.TRUE, WebRequest.SCOPE_SESSION);
-		Account account = new Account(2L, "Craig", "Walls", "cwalls@vmware.com", "habuma", "http://picture.com/url", new UriTemplate("http://greenhouse.springsource.org/members/{profile}"));
+		Account account = new Account(2L, "Craig", "Walls", "cwalls@vmware.com", "habuma", "https://picture.com/url", new UriTemplate("https://greenhouse.springsource.org/members/{profile}"));
 		AccountUtils.signin(account);
 		//TwitterApi twitterApi = Mockito.mock(TwitterApi.class);
 		//StubServiceProviderConnection<TwitterApi> connection = new StubServiceProviderConnection<TwitterApi>(twitterApi);
 		//interceptor.postConnect(connection, request);
-		//Mockito.verify(twitterApi).timelineOperations().updateStatus("Join me at the Greenhouse! http://greenhouse.springsource.org/members/habuma");
+		//Mockito.verify(twitterApi).timelineOperations().updateStatus("Join me at the Greenhouse! https://greenhouse.springsource.org/members/habuma");
 	}
 
 	@Test
 	public void postConnect_noPostTweetAttribute() {
-		Account account = new Account(2L, "Craig", "Walls", "cwalls@vmware.com", "habuma", "http://picture.com/url", new UriTemplate("http://greenhouse.springsource.org/members/{profile}"));
+		Account account = new Account(2L, "Craig", "Walls", "cwalls@vmware.com", "habuma", "https://picture.com/url", new UriTemplate("https://greenhouse.springsource.org/members/{profile}"));
 		AccountUtils.signin(account);
 		//TwitterApi twitterApi = Mockito.mock(TwitterApi.class);
 		//StubServiceProviderConnection<TwitterApi> connection = new StubServiceProviderConnection<TwitterApi>(twitterApi);

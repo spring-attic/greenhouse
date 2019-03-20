@@ -27,7 +27,7 @@
     {
         "archived": false, 
         "bio": "Adrian Colyer is the CTO of SpringSource and has more than a dozen years of experience leading teams in Java and enterprise middleware.\r\n\r\nAdrian Colyer is the leader of the AspectJ open source project and a well-known industry expert on the topic of aspect-oriented programming (AOP). He is a co-author of the book \"Eclipse AspectJ : Aspect-Oriented Programming in Eclipse with AspectJ and AJDT,\" and has also published numerous book chapters, articles and published papers. His short essay, \"AOP without the buzzwords\" has been described as \"the best explanation of AOP, ever.\"\r\n\r\nIn 2004, Adrian was recognized as one of the top 100 young innovators in the world by MIT Technology Review for his contributions to the development and adoption of aspect-oriented programming in industry.\r\n\r\nAdrian founded the AspectJ Development Tools project (AJDT) on Eclipse.org in 2003, a project that continues to lead the world in providing IDE support for AOP. As leader of the AspectJ project, Adrian has overseen several releases of the compiler and designed and implemented many of the AspectJ 5 language extensions to support Java 5 features.\r\nPrior to joining SpringSource, Adrian gained over a decade of experience in building enterprise middleware at IBM. Whilst there he oversaw the introduction of aspect-oriented programming to many IBM development teams.\r\n\r\nAdrian holds a BSc, Computer Science from University of Southampton.", 
-        "blogLink": "http://blog.interface21.com/main/author/adrianc", 
+        "blogLink": "https://spring.io/blog", 
         "cacheName": "adrian_colyer", 
         "customImage": null, 
         "displayTweets": true, 
@@ -102,8 +102,8 @@
     }, 
     {
         "archived": false, 
-        "bio": "Andres is a Java/Groovy developer and Java Champion, with more than 11 years of experience in software design and development. He has been involved in web and desktop application developments since the early days of Java. He has also been teacher of computer science courses in the most prestigious education institute in Mexico. His current interests include Groovy and Swing. He is a true believer of open source and has participated in popular projects like Groovy, Griffon, JMatter and DbUnit, as well as starting his own projects (Json-lib, EZMorph, GraphicsBuilder, JideBuilder). Founding member and current project lead of the Griffon framework. He blogs periodically at http://jroller.com/aalmiray. You can find him on twitter too as @aalmiray. He likes to spend time with his beloved wife, Ixchel, when not hacking around. ", 
-        "blogLink": "http://jroller.com/aalmiray", 
+        "bio": "Andres is a Java/Groovy developer and Java Champion, with more than 11 years of experience in software design and development. He has been involved in web and desktop application developments since the early days of Java. He has also been teacher of computer science courses in the most prestigious education institute in Mexico. His current interests include Groovy and Swing. He is a true believer of open source and has participated in popular projects like Groovy, Griffon, JMatter and DbUnit, as well as starting his own projects (Json-lib, EZMorph, GraphicsBuilder, JideBuilder). Founding member and current project lead of the Griffon framework. He blogs periodically at https://jroller.com/aalmiray. You can find him on twitter too as @aalmiray. He likes to spend time with his beloved wife, Ixchel, when not hacking around. ", 
+        "blogLink": "https://jroller.com/aalmiray", 
         "cacheName": "andres_almiray", 
         "customImage": null, 
         "displayTweets": true, 
@@ -141,7 +141,7 @@
     {
         "archived": false, 
         "bio": "Andrew Eisenberg is the lead of the Groovy-Eclipse project and also works on the Grails tooling portion of the SpringSource Tool Suite.  He is also the prooject lead for the AspectJ Development Tools (AJDT) at Eclipse.org.  Andrew creates IDE tools that ease the cognitive burden of creating complex programs. He will not rest and not be happy until programming is as fun and easy as playing with legos.  Andrew has a PhD in Computer Science from the University of British Columbia where he researched the intersection between programming languages and tools.", 
-        "blogLink": "http://contraptionsforprogramming.blogspot.com/", 
+        "blogLink": "https://contraptionsforprogramming.blogspot.com/", 
         "cacheName": "andrew_eisenberg", 
         "customImage": null, 
         "displayTweets": false, 
@@ -216,8 +216,8 @@
     }, 
     {
         "archived": false, 
-        "bio": "Dr Ben Alex is a Principal Software Engineer with SpringSource, and has been working professionally in software since 1995. Ben founded the Spring Security project in 2003 and led its development into a popular, open-source security framework that is used in numerous government, banking and military installations. More recently Ben founded and serves as lead of the Spring Roo and Spring Shell projects, both of which deliver significant productivity and usability benefits to those using Spring technologies.\r\n\r\nBen's career history also includes other roles in software development and business. From 2005 until 2008, he led the establishment and exponential growth of SpringSource's operations in Asia-Pacific. Prior to SpringSource, Ben founded and grew a successful Australian software company, Acegi Technology Pty Limited. He has been a director and advisor to businesses in diverse industries including business services, intellectual property licensing and ecommerce.\r\n\r\nIn recent years, Ben has presented at technology conferences including JavaOne, The Server Side Java Symposium, JAOO, Oredev, SpringOne and The Spring Experience. He is a regular guest presenter at user groups across the world, with recent appearances in Sydney, Melbourne, Brisbane, Canberra, Perth, Singapore, Wellington, Auckland, Christchurch and Stockholm. He also authored the security chapter of the Wiley book, \"Professional J2EE Development with Spring Framework,\" and maintains a blog at http://blog.springsource.com/main/author/bena/.", 
-        "blogLink": "http://blog.springsource.com/author/bena/", 
+        "bio": "Dr Ben Alex is a Principal Software Engineer with SpringSource, and has been working professionally in software since 1995. Ben founded the Spring Security project in 2003 and led its development into a popular, open-source security framework that is used in numerous government, banking and military installations. More recently Ben founded and serves as lead of the Spring Roo and Spring Shell projects, both of which deliver significant productivity and usability benefits to those using Spring technologies.\r\n\r\nBen's career history also includes other roles in software development and business. From 2005 until 2008, he led the establishment and exponential growth of SpringSource's operations in Asia-Pacific. Prior to SpringSource, Ben founded and grew a successful Australian software company, Acegi Technology Pty Limited. He has been a director and advisor to businesses in diverse industries including business services, intellectual property licensing and ecommerce.\r\n\r\nIn recent years, Ben has presented at technology conferences including JavaOne, The Server Side Java Symposium, JAOO, Oredev, SpringOne and The Spring Experience. He is a regular guest presenter at user groups across the world, with recent appearances in Sydney, Melbourne, Brisbane, Canberra, Perth, Singapore, Wellington, Auckland, Christchurch and Stockholm. He also authored the security chapter of the Wiley book, \"Professional J2EE Development with Spring Framework,\" and maintains a blog at https://spring.io/blog/.", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "ben_alex", 
         "customImage": null, 
         "displayTweets": true, 
@@ -305,7 +305,7 @@
     {
         "archived": false, 
         "bio": "Burt Beckwith is a Java and Groovy developer with over ten years of experience in a variety of industries including biotech, travel, e-learning, social networking, and financial services. For the past three years he's been working with Grails and Groovy full-time. Along the way he's created over fifteen Grails plugins and made significant contributions to several others. He was the technical editor for Grails in Action.", 
-        "blogLink": "http://burtbeckwith.com/blog/", 
+        "blogLink": "https://burtbeckwith.com/blog/", 
         "cacheName": "burt_beckwith", 
         "customImage": null, 
         "displayTweets": true, 
@@ -343,7 +343,7 @@
     {
         "archived": false, 
         "bio": "Chris is an engineer for SpringSource and a member of the core Spring Framework development team.  Chris joined SpringSource (then Interface21) in 2007, focused on training, consulting and leading the development effort to bring code-based configuration to the core Spring container.  In 2010, Chris transitioned to full-time engineering, and continues to focus on Spring Framework development.  You can find him online as @cbeams at both GitHub and Twitter.", 
-        "blogLink": "http://blog.springsource.com/author/cbeams", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "chris_beams", 
         "customImage": null, 
         "displayTweets": false, 
@@ -469,7 +469,7 @@
     {
         "archived": false, 
         "bio": "Colin Harrington is a Senior Consultant at Object Partners, Inc with over 3.5 years of Grails experience. Based in Minnesota, Colin has 10+ years of experience developing web-based applications.  \r\n\r\nColin is an agile practitioner and has been a key component of many powerful fast-paced local and remote teams with varying levels of composition and ability.  He is a Technical leader and a forward thinker with a knack for delivering potent and engaging web-applications.\r\n\r\nColin is an active member of the Groovy and Grails community and an active speaker at local user groups, events and conferences such as MinneBar, GUM, GR8Conf in the US, etc.  ", 
-        "blogLink": "http://www.colinharrington.net/blog", 
+        "blogLink": "https://www.colinharrington.net/blog", 
         "cacheName": "colin_harrington", 
         "customImage": null, 
         "displayTweets": true, 
@@ -519,7 +519,7 @@
     {
         "archived": false, 
         "bio": "Costin Leau is an engineer within the SpringSource. His interests include data access and aspect oriented programming. With significant development experience, Costin has worked on various Spring Framework features (cache abstraction, JPA, java config), led the Spring Dynamic Modules (Spring OSGi probject) and the Spring-inspired, OSGi 4.2 Blueprint Service RI. Currently Costin is working in the NOSQL and Big Data area, leading the Spring integration with GemFire, Hadoop and Redis.", 
-        "blogLink": "http://blog.springsource.com/author/costinl/", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "costin_leau", 
         "customImage": null, 
         "displayTweets": true, 
@@ -569,7 +569,7 @@
     {
         "archived": false, 
         "bio": "Craig Walls is the Spring Social Project Lead.", 
-        "blogLink": "http://blog.springsource.com/author/cwalls/", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "craig_walls", 
         "customImage": null, 
         "displayTweets": true, 
@@ -631,8 +631,8 @@
     }, 
     {
         "archived": false, 
-        "bio": "Dave is a consultant helping organizations of all sizes to develop applications more quickly (and have more fun doing it) with Grails.  Dave has been involved in enterprise software development for the past 15 years. He has worked as a developer, architect, project manager, mentor and trainer. Dave has presented at user groups and national conferences. He is also the founder of the Capital Java User Group in Madison, Wisconsin, the Gateway Groovy Users in St. Louis, MO, and the author of <a href=\"http://www.pragprog.com/titles/dkgrails/grails\">Grails: A Quick-Start Guide</a>, published by the Pragmatic Programmers. . Dave's Groovy and Grails related thoughts can be found at <a href=\"http://dave-klein.blogspot.com\" >http://dave-klein.blogspot.com</a>", 
-        "blogLink": "http://dave-klein.blogspot.com", 
+        "bio": "Dave is a consultant helping organizations of all sizes to develop applications more quickly (and have more fun doing it) with Grails.  Dave has been involved in enterprise software development for the past 15 years. He has worked as a developer, architect, project manager, mentor and trainer. Dave has presented at user groups and national conferences. He is also the founder of the Capital Java User Group in Madison, Wisconsin, the Gateway Groovy Users in St. Louis, MO, and the author of <a href=\"https://www.pragprog.com/titles/dkgrails/grails\">Grails: A Quick-Start Guide</a>, published by the Pragmatic Programmers. . Dave's Groovy and Grails related thoughts can be found at <a href=\"https://dave-klein.blogspot.com\" >https://dave-klein.blogspot.com</a>", 
+        "blogLink": "https://dave-klein.blogspot.com", 
         "cacheName": "dave_klein", 
         "customImage": null, 
         "displayTweets": true, 
@@ -821,7 +821,7 @@
     {
         "archived": false, 
         "bio": "Derek Henninger is the director of R&D for the SpringSource tools, including STS, Roo, and WaveMaker. Derek joined VMware through the acquisition of WaveMaker Software.  At WaveMaker Derek led the development and definition of the WaveMaker Studio development product.  Derek has over 20 years of experience in development tools, including Progress Software, Persistence Software, and Metaphor.", 
-        "blogLink": "http://dev.wavemaker.com/blog/", 
+        "blogLink": "https://dev.wavemaker.com/blog/", 
         "cacheName": "derek_henninger", 
         "customImage": null, 
         "displayTweets": true, 
@@ -1010,7 +1010,7 @@
     }, 
     {
         "archived": true, 
-        "bio": "As a Solutions Architect on the Field Engineering Team for Terracotta, Eric Mizell helps enterprise IT organizations improve their service availability and application performance through the application of the industry leading Terracotta Java Scalability Technology. Prior to Terracotta, Eric was the lead architect for a large scale insurance application. He has over 15 years of experience designing and developing enterprise systems where performance and scalability were essential. Eric has presented at NFJS, AJUG, SUG, and blogs about Java and caching at http://javaquip.blogspot.com/.", 
+        "bio": "As a Solutions Architect on the Field Engineering Team for Terracotta, Eric Mizell helps enterprise IT organizations improve their service availability and application performance through the application of the industry leading Terracotta Java Scalability Technology. Prior to Terracotta, Eric was the lead architect for a large scale insurance application. He has over 15 years of experience designing and developing enterprise systems where performance and scalability were essential. Eric has presented at NFJS, AJUG, SUG, and blogs about Java and caching at https://javaquip.blogspot.com/.", 
         "blogLink": null, 
         "cacheName": "eric_mizell", 
         "customImage": null, 
@@ -1225,7 +1225,7 @@
     {
         "archived": false, 
         "bio": "Graeme Rocher is the project lead and co-founder of the Grails web application framework. He's a member of the JSR-241 Expert Group which standardizes the Groovy language. Graeme authored the Definitive Guide to Grails for Apress and is a frequent speaker at JavaOne, JavaPolis, NoFluffJustStuff, JAOO, the Sun TechDays and more. Graeme joined SpringSource in late 2008 upon the acquisition of G2One Inc.  Before founding G2One, Graeme was the CTO of SkillsMatter, a skills transfer company specializing in open source technology and agile software development, where Graeme was in charge of the company's courseware development strategy and general technical direction.", 
-        "blogLink": "http://graemerocher.blogspot.com", 
+        "blogLink": "https://graemerocher.blogspot.com", 
         "cacheName": "graeme_rocher", 
         "customImage": null, 
         "displayTweets": true, 
@@ -1275,7 +1275,7 @@
     {
         "archived": false, 
         "bio": "As Head of Groovy Development for SpringSource, Guillaume Laforge is the official Groovy Project Manager, and the spec lead of JSR-241, the Java Specification Request that standardizes the Groovy dynamic language. He is also a frequent conference speaker presenting Groovy and Grails at JavaOne, SpringOne, QCon, the Sun TechDays, and JavaPolis. Guillaume also co-authored Groovy in Action along with Dierk K\u00c3\u00b6nig. Before founding G2One, which was acquired by SpringSource in late 2008, and taking the role of VP Technology, Guillaume worked for OCTO Technology, a consultancy focusing on architecture and agile methodologies. While at OCTO, Guillaume developed new offerings around Groovy and Grails for its customers.", 
-        "blogLink": "http://glaforge.appspot.com", 
+        "blogLink": "https://glaforge.appspot.com", 
         "cacheName": "guillaume_laforge", 
         "customImage": null, 
         "displayTweets": true, 
@@ -1312,7 +1312,7 @@
     }, 
     {
         "archived": false, 
-        "bio": "Hans Dockter is the founder and project lead of the <a href=\"http://www.gradle.org\">Gradle</a> build system and the CEO of <a href=\"http://www.gradleware.com\">Gradleware</a>, a company that provides training, support and consulting for Gradle and all forms of enterprise software project automation in general. \r\n\r\nHans has 13 years of experience as a software developer, team leader, architect, trainer, and technical mentor. Hans is a thought leader in the field of project automation and has successfully been in charge of numerous large-scale enterprise builds. He is also an advocate of Domain Driven Design, having taught classes and delivered presentations on this topic together with Eric Evans. In the earlier days, Hans was also a committer for the JBoss project and founded the JBoss-IDE.", 
+        "bio": "Hans Dockter is the founder and project lead of the <a href=\"https://www.gradle.org\">Gradle</a> build system and the CEO of <a href=\"https://www.gradleware.com\">Gradleware</a>, a company that provides training, support and consulting for Gradle and all forms of enterprise software project automation in general. \r\n\r\nHans has 13 years of experience as a software developer, team leader, architect, trainer, and technical mentor. Hans is a thought leader in the field of project automation and has successfully been in charge of numerous large-scale enterprise builds. He is also an advocate of Domain Driven Design, having taught classes and delivered presentations on this topic together with Eric Evans. In the earlier days, Hans was also a committer for the JBoss project and founded the JBoss-IDE.", 
         "blogLink": null, 
         "cacheName": "hans_dockter", 
         "customImage": null, 
@@ -1400,8 +1400,8 @@
     }, 
     {
         "archived": false, 
-        "bio": "James Ward (<a href=\"http://www.jamesward.com\">www.jamesward.com</a>) is a Principal Developer Evangelist at Heroku. Today he focuses on teaching developers how to deploy Java, Play! and Scala apps to the cloud. James frequently presents at conferences around the world such as JavaOne, Devoxx, and many other Java get-togethers. Along with Bruce Eckel, James co-authored First Steps in Flex. He has also published numerous screencasts, blogs, and technical articles. Starting with Pascal and Assembly in the 80\u2032s, James found his passion for writing code. Beginning in the 90\u2032s he began doing web development with HTML, Perl/CGI, then Java. After building a Flex and Java based customer service portal in 2004 for Pillar Data Systems he became a Technical Evangelist for Flex at Adobe. You can find him tweeting as <a href=\"http://twitter.com/_JamesWard\">@_JamesWard</a>, answering questions on <a href=\"http://stackoverflow.com/users/77409/james-ward\">StackOverflow.com</a> and posting code at <a href=\"http://github.com/jamesward\">github.com/jamesward</a>.", 
-        "blogLink": "http://www.jamesward.com/", 
+        "bio": "James Ward (<a href=\"https://www.jamesward.com\">www.jamesward.com</a>) is a Principal Developer Evangelist at Heroku. Today he focuses on teaching developers how to deploy Java, Play! and Scala apps to the cloud. James frequently presents at conferences around the world such as JavaOne, Devoxx, and many other Java get-togethers. Along with Bruce Eckel, James co-authored First Steps in Flex. He has also published numerous screencasts, blogs, and technical articles. Starting with Pascal and Assembly in the 80\u2032s, James found his passion for writing code. Beginning in the 90\u2032s he began doing web development with HTML, Perl/CGI, then Java. After building a Flex and Java based customer service portal in 2004 for Pillar Data Systems he became a Technical Evangelist for Flex at Adobe. You can find him tweeting as <a href=\"https://twitter.com/_JamesWard\">@_JamesWard</a>, answering questions on <a href=\"https://stackoverflow.com/users/77409/james-ward\">StackOverflow.com</a> and posting code at <a href=\"https://github.com/jamesward\">github.com/jamesward</a>.", 
+        "blogLink": "https://www.jamesward.com/", 
         "cacheName": "james_ward", 
         "customImage": null, 
         "displayTweets": true, 
@@ -1438,7 +1438,7 @@
     }, 
     {
         "archived": false, 
-        "bio": "James Williams is a Senior Software Engineer for Taulia based in Silicon Valley and a frequent conference speaker. He is a co-creator of the Griffon project, a rich desktop framework for Java applications. He and his team WalkIN, created a product on a coach bus while riding to SXSW, and were crowned winners of StartupBus 2011. He is the author of the upcoming book \"Learning HTML5 Game Programming...\" for Addison-Wesley. He blogs at http://jameswilliams.be/blog and tweets as @ecspike.", 
+        "bio": "James Williams is a Senior Software Engineer for Taulia based in Silicon Valley and a frequent conference speaker. He is a co-creator of the Griffon project, a rich desktop framework for Java applications. He and his team WalkIN, created a product on a coach bus while riding to SXSW, and were crowned winners of StartupBus 2011. He is the author of the upcoming book \"Learning HTML5 Game Programming...\" for Addison-Wesley. He blogs at https://jameswilliams.be/blog and tweets as @ecspike.", 
         "blogLink": null, 
         "cacheName": "james_williams1", 
         "customImage": null, 
@@ -1527,7 +1527,7 @@
     {
         "archived": false, 
         "bio": "Core member of the Grails development team, Jeff Brown, is a Senior Software Engineer with SpringSource. Jeff has been involved in designing and building object oriented systems for over 15 years. Jeff's areas of expertise include web development with Groovy & Grails, Java and agile development.", 
-        "blogLink": "http://javajeff.blogspot.com", 
+        "blogLink": "https://javajeff.blogspot.com", 
         "cacheName": "jeff_brown", 
         "customImage": null, 
         "displayTweets": true, 
@@ -1665,7 +1665,7 @@
     {
         "archived": false, 
         "bio": "Jeremy Grelle is an open source software engineer with SpringSource, a division of VMware, who specializes in bringing the cutting-edge techniques of web application development to the Java and Spring ecosystems. He is the creator of the Spring JavaScript, Spring Faces, and Spring BlazeDS Integration projects, and he represented SpringSource on the JSR-314 Expert Group for JSF 2.0. He is a software artisan with extensive experience in combining server-side Java with the latest web browser technologies to deliver a rich and usable experience for the end user on the web.\r\n\r\nJeremy is a frequent speaker at industry conferences such as JavaOne, The Spring Experience, SpringOne, JSFOne, TheServerSide Java Symposium, and Java and Flex user group events, and always enjoys getting out and showing his fellow developers how to bend web browsers to their will and the possibilities of what can be created with Spring and its wealth of complimentary web technologies.", 
-        "blogLink": "http://blog.springsource.com/author/jgrelle/", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "jeremy_grelle", 
         "customImage": null, 
         "displayTweets": true, 
@@ -1703,7 +1703,7 @@
     {
         "archived": false, 
         "bio": "Jim is the Lead Technical Architect for Big Lots (a nationwide retailer base in Columbus, Ohio), an international speaker, an open source evangelist, coauthor of \"Beginning Groovy and Grails\" (2008 Apress), coauthor of \"Griffon In Action\" (2011 Manning).   The focus of his career has been using cutting-edge technology to develop IT solutions for the retail, insurance, financial services, and manufacturing industries. He has 14 years of large-scale Java experience and significant experience in distributed and relational technologies.", 
-        "blogLink": "http://jshingler.blogspot.com", 
+        "blogLink": "https://jshingler.blogspot.com", 
         "cacheName": "jim_shingler1", 
         "customImage": null, 
         "displayTweets": false, 
@@ -1779,7 +1779,7 @@
     {
         "archived": false, 
         "bio": "John has been a member of the Spring Insight team since May 2010. Prior to joining Insight he worked on complex application deployment and management projects at VMware, EMC and at a startup called SourceLabs (acquired by EMC).\r\n\r\nAt SourceLabs John also worked on various open source projects and a search engine for open source mailing list and issue trackers. John also spent some time in Microsoft's Open Source Labs and at Natural Selection, a company in San Diego which specializes in evolutionary computation for medical and military applications.\r\n\r\nJohn Kew lives in Seattle, WA with his three fish and a wife.", 
-        "blogLink": "http://blogs.vmware.com/insight/", 
+        "blogLink": "https://blogs.vmware.com/insight/", 
         "cacheName": "john_kew", 
         "customImage": null, 
         "displayTweets": true, 
@@ -1842,7 +1842,7 @@
     {
         "archived": false, 
         "bio": "Jon works with the Spring Data, Grails, RabbitMQ, and other teams to provide next-generation data and messaging capabilities for modern Ajax and mobile applications. He's been working with Spring Data to provide mapping capabilities for NoSQL databases like MongoDB and Riak and he's working with RabbitMQ and NoSQL to provide modern evented and message-driven data utilities. He authored the Grails support for Riak as well as contributes Erlang-based utilities for the Riak and RabbitMQ communities.\r\n\r\nPrior to SpringSource, Jon developed private cloud architectures at the world's largets Pizza Hut franchisee, developed Lotus Domino, J2EE, PHP and even Perl CGI applications in BBEdit on an aged Mac, and got his start in web-based development 15 years ago, as an intelligence analyst for the US Air Force, when NCSA Mosaic 1.0 was cool.\r\n\r\n", 
-        "blogLink": "http://jbrisbin.com/web2/", 
+        "blogLink": "http://blog.jbrisbin.com/web2/", 
         "cacheName": "jon_brisbin", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2055,7 +2055,7 @@
     {
         "archived": true, 
         "bio": "Keith Donald is a principal and founding partner at SpringSource, the company behind Spring and a division of VMware.  At SpringSource, Keith is a full-time member of the Spring development team focusing on web application development productivity.  He is also the architect behind SpringSource's state-of-the-art training curriculum, which has provided practical Spring training to over 10,000 students worldwide.\r\n\r\nOver his career, Keith, an experienced enterprise software developer and mentor, has built business applications for customers spanning a diverse set of industries including banking, network management, information assurance, education, retail, and healthcare. He is particularly skilled at translating business requirements into technical solutions.", 
-        "blogLink": "http://blog.springsource.com/main/author/keithd", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "keith_donald", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2093,7 +2093,7 @@
     {
         "archived": false, 
         "bio": "Ken Kousen is the President of Kousen IT, Inc., through which he does technical training, mentoring, and consulting in all areas of Java and XML.  He is the author of the O'Reilly screencast \"Up and Running Groovy\", and the upcoming Manning book about Java/Groovy integration, entitled \"Making Java Groovy\".\r\n\r\nHe has been a tech reviewer for several books on software development.  Over the past decade he's taught thousands of developers in business and industry.  He is also an adjunct professor at the Rensselaer Polytechnic Institute site in Hartford, CT.  His academic background includes two BS degrees from M.I.T., an MS and a Ph.D. from Princeton, and an MS in Computer Science from R.P.I.", 
-        "blogLink": "http://kousenit.wordpress.com", 
+        "blogLink": "https://kousenit.wordpress.com", 
         "cacheName": "kenneth_kousen", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2193,7 +2193,7 @@
     }, 
     {
         "archived": false, 
-        "bio": "Luke Daley is a member of the <a href=\"http://www.gradleware.com/\">Gradleware</a> engineering team. At Gradleware Luke works on <a href=\"http://gradle.org/\" title=\"q\">Gradle</a> (A JVM based build automation tool) and helps teams reach new levels of project automation and quality. \r\n\r\nLuke is the lead of the <a href=\"http://www.gebish.org/\">Geb project</a> (a productivity focussed Groovy browser automation/web testing tool) project which he created in 2010. You'll also find Luke contributing to other Open Source projects such as <a href=\"http://grails.org/\">Grails</a> (a Groovy web development framework), <a href=\"http://spockframework.org\">Spock</a> (a next generation testing framework for the JVM) and anything else that catches his attention. With a \u201cresults over rhetoric\u201d ethos, Luke's focus is on tools that empower software professionals to deliver and innovate, not try to save them from themselves. \r\n\r\nOriginally from Australia, Luke now resides in London where he spreads his time among work, software crafstmanship, musicianship and cursing the local weather.", 
+        "bio": "Luke Daley is a member of the <a href=\"https://www.gradleware.com/\">Gradleware</a> engineering team. At Gradleware Luke works on <a href=\"https://gradle.org/\" title=\"q\">Gradle</a> (A JVM based build automation tool) and helps teams reach new levels of project automation and quality. \r\n\r\nLuke is the lead of the <a href=\"http://www.gebish.org/\">Geb project</a> (a productivity focussed Groovy browser automation/web testing tool) project which he created in 2010. You'll also find Luke contributing to other Open Source projects such as <a href=\"https://grails.org/\">Grails</a> (a Groovy web development framework), <a href=\"http://spockframework.org\">Spock</a> (a next generation testing framework for the JVM) and anything else that catches his attention. With a \u201cresults over rhetoric\u201d ethos, Luke's focus is on tools that empower software professionals to deliver and innovate, not try to save them from themselves. \r\n\r\nOriginally from Australia, Luke now resides in London where he spreads his time among work, software crafstmanship, musicianship and cursing the local weather.", 
         "blogLink": null, 
         "cacheName": "luke_daley", 
         "customImage": null, 
@@ -2270,7 +2270,7 @@
     {
         "archived": false, 
         "bio": "Mark Fisher is an engineer within the SpringSource division of VMware and lead of the Spring Integration project. He is also a committer on the core Spring Framework and the Spring BlazeDS Integration project. Mark has provided consulting services for clients across numerous industries, and he has trained hundreds of developers how to use the Spring Framework and related projects effectively. Mark speaks regularly at conferences and user groups in America and Europe.\r\n", 
-        "blogLink": "http://blog.interface21.com/main/author/markf/", 
+        "blogLink": "https://spring.io/blog", 
         "cacheName": "mark_fisher", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2320,7 +2320,7 @@
     {
         "archived": false, 
         "bio": "Mark Johnson is a Staff System Engineer at VMware where he focuses on helping people learn more about SpringSource technologies and they can aid enterprise applications. \r\n\r\nMark has worked on a wide range of technology during his career. Most recently he has focused on Groovy, Grails, and Scala as technologies which enable high quality applications quickly. \r\n\r\nMark is active in the software community as the President of the New England Java Users Group (NEJUG) and a regular presenter to user groups and various conferenes. When not working, Mark can be found riding his mountain bike on local trails and playing with his family", 
-        "blogLink": "http://markfjohnson.blogspot.com/", 
+        "blogLink": "https://markfjohnson.blogspot.com/", 
         "cacheName": "mark_johnson", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2432,7 +2432,7 @@
     {
         "archived": false, 
         "bio": "Matthew McCullough is an energetic 15 year veteran of enterprise software development, open source education, and co-founder of Ambient Ideas, LLC, a Denver consultancy. Matthew currently is VP of Training at GitHub.com, author of the Git Master Class series for O'Reilly, speaker at over 30 national and international conferences, author of three of the top 10 DZone RefCards, and President of the Denver Open Source Users Group. His current topics of research center around project automation: build tools (Gradle), distributed version control (Git, GitHub), Continuous Integration (Jenkins, Travis) and Quality Metrics (Sonar). Matthew resides in Denver, Colorado with his beautiful wife and two young daughters, who are active in nearly every outdoor activity Colorado has to offer.", 
-        "blogLink": "http://ambientideas.com/blog/", 
+        "blogLink": "https://ambientideas.com/blog/", 
         "cacheName": "matthew_mccullough", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2462,7 +2462,7 @@
         "originalImage": "/s/images/bio/9793_McCullough_20110408_052438.jpg", 
         "ranking": 7, 
         "s2gxImage": "/s/images/bio/s2gx/9793_McCullough_20120421_141627.png", 
-        "shortBio": "VP of Training, <a href=\"http://github.com/training\">GitHub</a>", 
+        "shortBio": "VP of Training, <a href=\"https://github.com/training\">GitHub</a>", 
         "smallImage": "/s/images/bio/9793_McCullough_20110408_052438_small.jpg", 
         "smallImageSq": "/s/images/bio/9793_McCullough_20110408_052438_small_sq.jpg", 
         "twitterId": "matthewmccull"
@@ -2546,7 +2546,7 @@
     {
         "archived": false, 
         "bio": "Oleg is a Sr. Software Engineer with SpringSource/VMWare and a core developer of Spring Integration framework. He has 16+ years of experience in software engineering across multiple disciplines including software architecture and design, consulting, business analysis and application development. After starting his career in the world of COBOL & CICS, Oleg has been focusing on professional Java and Java EE development since 1999. Since 2004 he has been heavily involved in using several open source technologies and platforms with Spring Framework at the forefront, while working on a number of projects around the world and spanning industries such as Telecommunication, Banking, Law Enforcement, US DOD and others. \r\nYou can regularly spot Oleg on the Spring Forums contributing to a number of topics. \r\n\r\nA resident of the Philadelphia area, Oleg enjoys windsurfing, scuba diving, snowboarding, hockey and traveling when he can find some spare time.\r\n", 
-        "blogLink": "http://blog.springsource.com/2009/07/28/spring-integration-103-samples-just-add-osgi/", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "oleg_zhurakousky", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2596,7 +2596,7 @@
     {
         "archived": false, 
         "bio": "Oliver Gierke is engineer at SpringSource, a division of VMware, project lead of the Spring Data JPA module and involved into other Spring Data modules (e.g. MongoDB) as well. He has been into developing enterprise applications and open source projects for over 6 years now. His working focus is centered around software architecture, Spring and persistence technologies. He is regularly speaking at German and international conferences as well as author of technology articles.", 
-        "blogLink": "http://blog.springsource.com/author/ogierke", 
+        "blogLink": "https://spring.io/blog/", 
         "cacheName": "oliver_gierke", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2721,7 +2721,7 @@
     }, 
     {
         "archived": false, 
-        "bio": "Peter Niederwieser is a computer language enthusiast from Linz, Austria. Having used Java since 1997, Peter nowadays prefers to work with more flexible languages - in particular Groovy, Scala, and Clojure. Peter is the creator of <href a=\"http://spockframework.org\">Spock</href> and a Groovy committer. \r\n\r\nIn his day job, Peter is a Principal Software Engineer at <href a=\"http://gradleware.com\">Gradleware</href>.", 
+        "bio": "Peter Niederwieser is a computer language enthusiast from Linz, Austria. Having used Java since 1997, Peter nowadays prefers to work with more flexible languages - in particular Groovy, Scala, and Clojure. Peter is the creator of <href a=\"http://spockframework.org\">Spock</href> and a Groovy committer. \r\n\r\nIn his day job, Peter is a Principal Software Engineer at <href a=\"https://gradleware.com\">Gradleware</href>.", 
         "blogLink": null, 
         "cacheName": "peter_niederwieser", 
         "customImage": null, 
@@ -2759,8 +2759,8 @@
     }, 
     {
         "archived": false, 
-        "bio": "Ramnivas Laddad is a <a href=\"http://springsource.com\" target=\"new\">SpringSource</a> Principal Enginner. He has over a decade of experience in applying his enterprise Java and aspect-oriented programming (AOP) expertise to middleware, design automation, networking, web application, user interface, and security projects.\r\n\r\nRamnivas Laddad is a well-known expert in enterprise Java, especially in the area of AOP and Spring. He is the author of AspectJ in Action, the best-selling book on AOP and AspectJ that has been lauded by industry experts for its presentation of practical and innovative AOP applications to solve real-world problems. Ramnivas, a Spring framework committer, is also an active presenter at leading industry events such as JavaOne, JavaPolis, No Fluff Just Stuff, SpringOne, Software Development, and has been an active member of both the AspectJ and Spring communities from their beginnings.", 
-        "blogLink": "http://ramnivas.com/blog/", 
+        "bio": "Ramnivas Laddad is a <a href=\"https://springsource.com\" target=\"new\">SpringSource</a> Principal Enginner. He has over a decade of experience in applying his enterprise Java and aspect-oriented programming (AOP) expertise to middleware, design automation, networking, web application, user interface, and security projects.\r\n\r\nRamnivas Laddad is a well-known expert in enterprise Java, especially in the area of AOP and Spring. He is the author of AspectJ in Action, the best-selling book on AOP and AspectJ that has been lauded by industry experts for its presentation of practical and innovative AOP applications to solve real-world problems. Ramnivas, a Spring framework committer, is also an active presenter at leading industry events such as JavaOne, JavaPolis, No Fluff Just Stuff, SpringOne, Software Development, and has been an active member of both the AspectJ and Spring communities from their beginnings.", 
+        "blogLink": "https://blog.ramnivas.com/", 
         "cacheName": "ramnivas_laddad", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2798,7 +2798,7 @@
     {
         "archived": false, 
         "bio": "Rob Harrop is a respected speaker, author, entrepreneur and technologist.\r\n\r\nAs Lead Engineer of SpringSource dm Server, Rob is driving SpringSource's enterprise middleware product line and ensuring that the company continues to deliver high-performance, highly scalable\r\nenterprise soutions. With a thorough knowledge of both Java and .NET, Rob has successfully deployed projects across both platforms. He has\r\nextensive experience across a variety of sectors, in particular banking,retail and government. Prior to joining SpringSource, he co-founded UK-based software company Cake Solutions Limited and worked as Lead Developer for a successful dotcom start-up.\r\n\r\nRob is the author of five books, including Pro Spring, a widely acclaimed, comprehensive resource on the Spring Framework.\r\n\r\nRob is a member of the JCP and is involved in the JSR-255 Expert Group for JMX 2.0. Rob is an experienced, highly-sought after, technical speaker who can communicate complex topics in a way that any developer can understand. Over the past 3-4 years, Rob has also presented at JavaOne, QCon, AOSD, The Spring Experience, SpringONE, OSCon, and OreDev on a variety of topics to rave reviews.", 
-        "blogLink": "http://blog.interface21.com/main/author/robh", 
+        "blogLink": "https://spring.io/blog", 
         "cacheName": "rob_harrop", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2848,7 +2848,7 @@
     {
         "archived": false, 
         "bio": "Rob Winch is currently a Senior Software Engineer at VMware and is the project lead of the Spring Security framework. In the past he has worked as a Software Architect at Cerner, the largest provider of electronic medical systems in the US, securing health care applications. Throughout his career he has developed hands on experience integrating Spring Security with an array of security standards (i.e. LDAP, SAML, CAS, OAuth, etc). Before his focus was security he worked as an independent web contractor, in proteomics research at Loyola University Chicago, and on the Globus Toolkit at Argonne National Laboratory. His interests include web security and identity management, high performance computing, and ALM tooling. When he is not sitting in front of a computer he enjoys participating in a variety of intramural sports and playing guitar.", 
-        "blogLink": "http://rwinch.blogspot.com", 
+        "blogLink": "https://rwinch.blogspot.com", 
         "cacheName": "rob_winch", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2886,7 +2886,7 @@
     {
         "archived": false, 
         "bio": "Rod Johnson is the father of Spring, which grew out of his influential book, \u201cExpert One-on-One J2EE Design and Development,\u201d which initiated the \u201clightweight\u201d transformation of enterprise Java.  Rod co-founded SpringSource, where he served as CEO until its 2009 acquisition by VMware, where he is now a Senior Vice President.\r\n\r\nRod is an authority on enterprise Java architecture, a thought leader on open source development and business models, and a popular speaker at conferences around the world.\r\n\r\nRod has over 15 years technology, management and business experience. He holds a BA with Honors in Computer Science, Mathematics and Musicology as well as a PhD from the University of Sydney.\r\n\r\n", 
-        "blogLink": "http://blog.interface21.com/main/author/rodj", 
+        "blogLink": "https://spring.io/blog", 
         "cacheName": "rod_johnson", 
         "customImage": null, 
         "displayTweets": true, 
@@ -2924,7 +2924,7 @@
     {
         "archived": false, 
         "bio": "I began my career as a C/C++ programmer working on VINES, a distributed directory services product at Banyan Systems. Over the years I've worked on various Java Web applications including a set of multi-tenant e-commerce web applications, an investment accounting system, a trading and risk management system, and others. \r\n\r\nI've been using Spring and many of the Spring projects since 2006. I've helped many to learn or to use Spring more effectively through teaching and consulting. Presently I am a comitter on the Spring MVC and the Spring Web Flow projects. My current home is New York city.", 
-        "blogLink": "http://rossenstoyanchev.org/blog/", 
+        "blogLink": "https://sarah.runtnc.net/tr?id=01590f6d355ab4406e80de1175ab872d909998d6ce.r&tk=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWIiOiI1MjJjNjE1YTlhODQ4MGNhYjhiMTA0MTIiLCJ0cyI6IjAzMjAyMTMxIiwiZCI6InJvc3NlbnN0b3lhbmNoZXYub3JnIn0.H4xHH_cPDVEROAWWBON57EACa2eqJymF7RZliLtsHwA", 
         "cacheName": "rossen_stoyanchev", 
         "customImage": null, 
         "displayTweets": true, 
@@ -3037,7 +3037,7 @@
     }, 
     {
         "archived": false, 
-        "bio": "Scott is a member of the web products team at SpringSource, where he focuses on creating and sustaining rich web applications and frameworks.  Scott is the creator of the <a href=\"http://www.springsource.com/repository\">SpringSource Enterprise Bundle Repository</a>, a production web application built on Spring 2.5, Spring MVC, and Spring JavaScript.  He is also an expert in UI design, style, accessibility, and particularly skilled in interacting with customers to map business requirements to innovative software solutions.  Over the course of his career, Scott has lead the successful development of mission-critical web applications in the areas of academia and technology infrastructure.", 
+        "bio": "Scott is a member of the web products team at SpringSource, where he focuses on creating and sustaining rich web applications and frameworks.  Scott is the creator of the <a href=\"https://www.springsource.com/repository\">SpringSource Enterprise Bundle Repository</a>, a production web application built on Spring 2.5, Spring MVC, and Spring JavaScript.  He is also an expert in UI design, style, accessibility, and particularly skilled in interacting with customers to map business requirements to innovative software solutions.  Over the course of his career, Scott has lead the successful development of mission-critical web applications in the areas of academia and technology infrastructure.", 
         "blogLink": null, 
         "cacheName": "scott_andrews", 
         "customImage": null, 
@@ -3062,7 +3062,7 @@
     }, 
     {
         "archived": true, 
-        "bio": "Scott Davis is the founder of <a href=\"http://thirstyhead.com\">ThirstyHead.com</a>, a training company that specializes in Groovy and Grails training.\r\n\r\nScott published one of the first public websites implemented in Grails in 2006 and has been actively working with the technology ever since. Author of the book <a href=\"http://www.pragprog.com/titles/sdgrvr/groovy-recipes\">Groovy Recipes: Greasing the Wheels of Java</a> and two ongoing IBM developerWorks article series (<a href=\"http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mastering+grails\">Mastering Grails</a> and in 2009, <a href=\"http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=practically+groovy\">Practically Groovy</a>), Scott writes extensively about how Groovy and Grails are the future of Java development. \r\n\r\n", 
+        "bio": "Scott Davis is the founder of <a href=\"https://thirstyhead.com\">ThirstyHead.com</a>, a training company that specializes in Groovy and Grails training.\r\n\r\nScott published one of the first public websites implemented in Grails in 2006 and has been actively working with the technology ever since. Author of the book <a href=\"https://www.pragprog.com/titles/sdgrvr/groovy-recipes\">Groovy Recipes: Greasing the Wheels of Java</a> and two ongoing IBM developerWorks article series (<a href=\"https://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=mastering+grails\">Mastering Grails</a> and in 2009, <a href=\"https://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=practically+groovy\">Practically Groovy</a>), Scott writes extensively about how Groovy and Grails are the future of Java development. \r\n\r\n", 
         "blogLink": null, 
         "cacheName": "scott_davis", 
         "customImage": null, 
@@ -3101,7 +3101,7 @@
     {
         "archived": false, 
         "bio": "Shawn Hartsock consults on Java technologies like Groovy/Grails and the Spring Framework providing expertise as an experienced Java developer and architect. Shawn discovered Groovy in 2007 and began working in Grails development for deployment to Java Enterprise environments and integration with Existing Java Enterprise software. He has contributed several Grails plugins to the Grails community and has had several articles published in Groovy Magazine on various topics including Enterprise Integration with Grails. \r\n", 
-        "blogLink": "http://hartsock.blogspot.com/", 
+        "blogLink": "https://hartsock.blogspot.com/", 
         "cacheName": "shawn_hartsock", 
         "customImage": null, 
         "displayTweets": true, 
@@ -3252,7 +3252,7 @@
     {
         "archived": false, 
         "bio": "Thomas has been a developer on the Spring Framework project since early 2003, contributing to enhancements of the JDBC framework portion.\r\n\r\nThomas currently works as a consultant for SpringSource specializing in Java EE and database projects. He has been involved with developing database applications, both as a DBA and as an application developer for over 20 years, using a wide variety of languages and databases. \r\n\r\nThomas is co-author of \"Professional Java Development with the Spring Framework\" together with Rod Johnson, Juergen Hoeller, Alef Arendsen, and Colin Sampaleanu, published by Wrox in 2005.", 
-        "blogLink": "http://jroller.com/buggybean/", 
+        "blogLink": "https://jroller.com/buggybean/", 
         "cacheName": "thomas_risberg", 
         "customImage": null, 
         "displayTweets": true, 
@@ -3301,7 +3301,7 @@
     }, 
     {
         "archived": false, 
-        "bio": "Tim is a full-stack generalist and passionate teacher who loves coding, presenting, and working with people. He believes the best developer is one who is well-informed of specifics and can also make deep connections between software development and the broader world. He has recently been exploring non-relational data stores, continuous deployment, and how software architecture should resemble an ant colony.\r\n\r\nHis firm, the <a href=\"http://augusttechgroup.com\">August Technology Group</a>, helps clients with product development, technology consulting, and technology upgrade projects atop the JVM. The August Group's technology preferences reflect the generalist sensibilities of its founder, and its development practices are always lightweight, self-improving, and humanizing by design.\r\n\r\nTim is a speaker internationally and on the <a href=\"http://nofluffjuststuff.com\">No Fluff Just Stuff</a> tour in the United States, and is co-president of the <a href=\"http://denveropensource.org\">Denver Open Source User Group</a> in the Denver area, co-author of the <a href=\"http://refcardz.dzone.com/refcardz/functional-programming-clojure\">DZone Clojure RefCard</a>, co-presenter of the best-selling <a href=\"http://bit.ly/ogitvid\">O'Reilly Git Master Class</a>, co-author of <a href=\"http://oreilly.com/catalog/0636920019909/\">Building and Testing with Gradle</a>, and a member of the <a href=\"http://oreilly.com/pub/expert/timberglund\">O'Reilly Expert Network</a>.\r\n\r\nHe lives in Littleton, CO with the wife of his youth and their three children.\r\n", 
+        "bio": "Tim is a full-stack generalist and passionate teacher who loves coding, presenting, and working with people. He believes the best developer is one who is well-informed of specifics and can also make deep connections between software development and the broader world. He has recently been exploring non-relational data stores, continuous deployment, and how software architecture should resemble an ant colony.\r\n\r\nHis firm, the <a href=\"http://www.augusttechgroup.com/?from=@\">August Technology Group</a>, helps clients with product development, technology consulting, and technology upgrade projects atop the JVM. The August Group's technology preferences reflect the generalist sensibilities of its founder, and its development practices are always lightweight, self-improving, and humanizing by design.\r\n\r\nTim is a speaker internationally and on the <a href=\"https://nofluffjuststuff.com\">No Fluff Just Stuff</a> tour in the United States, and is co-president of the <a href=\"http://denveropensource.org\">Denver Open Source User Group</a> in the Denver area, co-author of the <a href=\"https://dzone.com/refcardz/functional-programming-clojure\">DZone Clojure RefCard</a>, co-presenter of the best-selling <a href=\"https://bit.ly/ogitvid\">O'Reilly Git Master Class</a>, co-author of <a href=\"https://oreilly.com/catalog/0636920019909/\">Building and Testing with Gradle</a>, and a member of the <a href=\"https://oreilly.com/pub/expert/timberglund\">O'Reilly Expert Network</a>.\r\n\r\nHe lives in Littleton, CO with the wife of his youth and their three children.\r\n", 
         "blogLink": null, 
         "cacheName": "tim_berglund", 
         "customImage": null, 
@@ -3364,7 +3364,7 @@
     {
         "archived": false, 
         "bio": "Tom McCuch is a Senior Sales Engineer for SpringSource with over twenty years of experience in software engineering. Tom specializes in the architecture, implementation, and deployment of distributed systems requiring high Reliability, Availability, and Scalability (RAS) features. Before joining SpringSource, Tom consulted enterprise clients across multiple industries in the architecture of mission-critical solutions based on open source software as well as led the engineering of enterprise Java middleware supporting next-generation telecommunications products deployed at tier-1 telcos both in the U.S. and Europe.", 
-        "blogLink": "http://tom-mccuch.blogspot.com/", 
+        "blogLink": "https://tom-mccuch.blogspot.com/", 
         "cacheName": "tom_mccuch", 
         "customImage": null, 
         "displayTweets": true, 

@@ -122,7 +122,7 @@ public class JdbcAppRepository implements AppRepository {
 	private RowMapper<AppSummary> appSummaryMapper = new RowMapper<AppSummary>() {
 		public AppSummary mapRow(ResultSet rs, int rowNum) throws SQLException {
 			// TODO this is currently hardcoded
-			String iconUrl = "http://images.greenhouse.springsource.org/apps/icon-default-app.png";
+			String iconUrl = "https://images.greenhouse.springsource.org/apps/icon-default-app.png";
 			return new AppSummary(rs.getString("name"), iconUrl, rs.getString("description"), rs.getString("slug"));
 		}
 	};

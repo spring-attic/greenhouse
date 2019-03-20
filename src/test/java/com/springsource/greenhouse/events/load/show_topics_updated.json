@@ -118,7 +118,7 @@
         "blipDownload": "Benellingson-EnterTheGradle943.m4v", 
         "blipDownloadSize": 1283899, 
         "blipDownloadSizeMB": "1.28", 
-        "bliptvCode": "<embed src=\"http://blip.tv/play/gvoFgq7veAA\" type=\"application/x-shockwave-flash\" width=\"480\" height=\"360\" allowscriptaccess=\"always\" allowfullscreen=\"true\"></embed>", 
+        "bliptvCode": "<embed src=\"https://blip.tv/play/gvoFgq7veAA\" type=\"application/x-shockwave-flash\" width=\"480\" height=\"360\" allowscriptaccess=\"always\" allowfullscreen=\"true\"></embed>", 
         "cacheName": "enter_the_gradle", 
         "created": "2010-01-12T18:29:33", 
         "detail": "We'll go through such powerful concepts as: advantages of declarative over imperative build systems, convention over configuration without rigidity, task definitions and dependencies, the benefits of plugins, deep multi-project support, runtime optimizations through partial builds and harvesting existing functionality through Ant and Maven integration as well as strategies for migrating from these build tools. We will demonstrate some of the innovative goodies that come with Gradle out-of-the-box, like smart incremental builds, the Gradle Daemon and the Gradle Wrapper. We show also many of the new features like Eclipse integration, Sonar integration, Heroku integration, C/C++ support and other new plugins.", 
@@ -309,7 +309,7 @@
         "blipDownload": "Benellingson-ImproveYourJavaWithGroovy364.m4v", 
         "blipDownloadSize": 2112518, 
         "blipDownloadSizeMB": "2.11", 
-        "bliptvCode": "<embed src=\"http://blip.tv/play/gvoFgq6mAQA\" type=\"application/x-shockwave-flash\" width=\"480\" height=\"360\" allowscriptaccess=\"always\" allowfullscreen=\"true\"></embed>", 
+        "bliptvCode": "<embed src=\"https://blip.tv/play/gvoFgq6mAQA\" type=\"application/x-shockwave-flash\" width=\"480\" height=\"360\" allowscriptaccess=\"always\" allowfullscreen=\"true\"></embed>", 
         "cacheName": "improve_your_java_with_groovy", 
         "created": "2010-11-02T23:49:54", 
         "detail": "Among the topics we'll cover are: parsing and generating XML, simplifying your build, making testing easier, quick database access, working with Spring, and mixing Groovy and Java at the code level.", 
@@ -1531,7 +1531,7 @@
                 "id": 189, 
                 "name": "Gaelyk website", 
                 "topicId": 2897, 
-                "url": "http://gaelyk.appspot.com"
+                "url": "https://gaelyk.appspot.com"
             }
         ], 
         "workshop": false, 
@@ -3138,7 +3138,7 @@
                 "id": 203, 
                 "name": "Demo App Github Repo", 
                 "topicId": 3028, 
-                "url": "http://github.com/springsource/spring-interop-samples"
+                "url": "https://github.com/springsource/spring-interop-samples"
             }
         ], 
         "workshop": false, 
@@ -3673,7 +3673,7 @@
                 "id": 196, 
                 "name": "Slide deck", 
                 "topicId": 3038, 
-                "url": "http://www.slideshare.net/olivergierke/an-introduction-into-spring-data"
+                "url": "https://www.slideshare.net/olivergierke/an-introduction-into-spring-data"
             }
         ], 
         "workshop": false, 
@@ -3884,31 +3884,31 @@
                 "id": 200, 
                 "name": "GORM Plugin", 
                 "topicId": 3043, 
-                "url": "http://spring.neo4j.org/grails"
+                "url": "https://neo4j.com/developer/java/"
             }, 
             {
                 "id": 201, 
                 "name": "JIRA", 
                 "topicId": 3043, 
-                "url": "http://spring.neo4j.org/issues"
+                "url": "https://neo4j.com/developer/java/"
             }, 
             {
                 "id": 202, 
                 "name": "Forum", 
                 "topicId": 3043, 
-                "url": "http://spring.neo4j.org/discussions"
+                "url": "https://neo4j.com/developer/java/"
             }, 
             {
                 "id": 199, 
                 "name": "Source", 
                 "topicId": 3043, 
-                "url": "http://spring.neo4j.org/source"
+                "url": "https://neo4j.com/developer/java/"
             }, 
             {
                 "id": 198, 
                 "name": "Spring Data Neo4j", 
                 "topicId": 3043, 
-                "url": "http://spring.neo4j.org"
+                "url": "https://neo4j.com/developer/java/"
             }
         ], 
         "workshop": false, 
@@ -5380,7 +5380,7 @@
                 "id": 255, 
                 "name": "Slide deck @ Slideshare", 
                 "topicId": 3084, 
-                "url": "http://www.slideshare.net/olivergierke/whoops-where-did-my-architecture-go"
+                "url": "https://www.slideshare.net/olivergierke/whoops-where-did-my-architecture-go"
             }
         ], 
         "workshop": false, 
